@@ -15,7 +15,7 @@ const TIERS = {
     8: 'sun eater',
 }
 
-const DEV_SPEED = 1;
+var DEV_SPEED = 1;
 
 const START_PLAYER = {
     corpses: new Decimal(10),
@@ -844,4 +844,12 @@ function startInterval() {
         }
         player.lastUpdate = currentUpdate;
     }, 50);
+}
+
+function changeDevSpeed(num) {
+    DEV_SPEED = num;
+}
+
+function resetDevSpeed() {
+    DEV_SPEED = 1;
 }
