@@ -529,7 +529,7 @@ function allDisplay() {
 function getWorldsBonus() {
     var b = new Decimal(player.worlds)
     var e = 1.5 + getCUpgEffect(4);
-    return Decimal.max(b.div(2).pow(e).plus(1), 1);
+    return Decimal.max(b.div(1.5).pow(e).plus(1), 1);
 }
 
 function importToggle() {
