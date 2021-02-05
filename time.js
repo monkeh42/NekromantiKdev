@@ -255,7 +255,7 @@ function timePrestige() {
 function calculateCrystalGain() {
     if (canTimePrestige()) {
         var div = 20;
-        var ret = Decimal.pow(10, (player.corpses.e/div) - 0.45);
+        var ret = Decimal.pow(10, (player.corpses.e/div) - 0.65);
         return Decimal.floor(ret);
     } else {
         return new Decimal(0);
