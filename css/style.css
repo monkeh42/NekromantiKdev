@@ -1,0 +1,621 @@
+@font-face {
+    font-family: 'Cinzel';
+    src: url(/fonts/Cinzel-Medium.otf);
+    font-variant-numeric: tabular-nums;
+}
+@font-face {
+    font-family: 'Cinzel';
+    src: url(/fonts/Cinzel-ExtraBold.otf);
+    font-variant-numeric: tabular-nums;
+    font-weight: bold;
+}
+
+body {
+    color: white;
+    background-color: black;
+    font-family: 'Cinzel', serif;
+    font-size: 13pt;
+    margin-bottom: 200px;
+}
+
+#game {
+    width: 1024px;
+    margin: auto;
+}
+
+#help {
+    width: 1024px;
+    margin: auto;
+    text-align: center;
+}
+
+#helpDiv {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 14pt;
+    line-height: 120%;
+    text-align: center;
+    border: 1px solid white;
+    max-height: 400px;;
+    overflow-y: auto;
+    padding: 10px;
+}
+
+.helpPageDiv {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 14pt;
+    line-height: 120%;
+    text-align: center;
+}
+
+h1 {
+    font-family: 'Cinzel', serif;
+    font-weight: bold;
+    font-size: 13pt;
+}
+
+h2 {
+    font-family: 'Cinzel', serif;
+    font-weight: bold;
+    font-size: 16pt;
+    margin-top: 0.4em;
+    margin-bottom: 0.4em;
+}
+
+h3 {
+    font-family: 'Cinzel', serif;
+    font-weight: bold;
+    font-size: 18pt;
+}
+
+h4 {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    font-size: 13pt;
+}
+
+button:focus {
+    outline: none;
+}
+
+.unitBut {
+    color: white;
+    background-color: #170424;
+    font-style: bold;
+    width: 180px;
+    height: 35px;
+    border: 1px solid #460573;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.unitMax {
+    color: white;
+    background-color: #170424;
+    font-style: bold;
+    width: 120px;
+    height: 35px;
+    border: 1px solid #460573;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.unitBut:hover, .unitMax:hover {
+    background-color: #460573;
+} 
+
+.unitButT {
+    color: white;
+    background-color: #006ba0;
+    font-style: bold;
+    width: 180px;
+    height: 35px;
+    border: 1px solid white;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.unitMaxT {
+    color: white;
+    background-color: #006ba0;
+    font-style: bold;
+    width: 120px;
+    height: 35px;
+    border: 1px solid white;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.unitButT:hover, .unitMaxT:hover {
+    background-color: white;
+    color: #006ba0;
+} 
+
+.helpBut {
+    color: white;
+    background-color: #1f1f1f;
+    font-style: bold;
+    width: 75px;
+    height: 25px;
+    border: 1px solid #525252;
+    cursor: pointer;
+    border-radius: 4px;
+    font-family: 'Cinzel', serif;
+    font-size: 10pt;
+    margin: 10px;
+}
+
+.tabBut {
+    color: white;
+    background-color: #1f1f1f;
+    font-style: bold;
+    width: 180px;
+    height: 50px;
+    border: 1px solid #525252;
+    cursor: pointer;
+    border-radius: 4px;
+    font-family: 'Cinzel', serif;
+    
+    font-size: 15pt;
+}
+
+.tabBut:hover {
+    background-color: #525252;
+}
+
+.optBut {
+    color: white;
+    background-color: #1f1f1f;
+    font-style: bold;
+    width: 150px;
+    height: 50px;
+    border: 1px solid #525252;
+    cursor: pointer;
+    border-radius: 4px;
+    font-family: 'Cinzel', serif;
+    
+    font-size: 12pt;
+}
+
+.optBut:hover {
+    background-color: #525252;
+}
+
+.subTabBut {
+    color: white;
+    background-color: #1f1f1f;
+    font-style: bold;
+    width: 180px;
+    height: 35px;
+    border: 1px solid #525252;
+    cursor: pointer;
+    border-radius: 4px;
+    font-family: 'Cinzel', serif;
+    
+    font-size: 13pt;
+}
+
+.subTabBut:hover {
+    background-color: #525252;
+}
+
+.helpPageBut {
+    color: white;
+    background-color:black;
+    font-style: bold;
+    width: 350px;
+    height: 100px;
+    border: 1px solid#e8000d;
+    margin: 10px;
+    cursor: pointer;
+    font-family: 'Cinzel', serif;
+    
+    font-size: 24pt;
+    border-radius: 4px;
+}
+
+.helpPageButSelected {
+    color: white;
+    background-color:#e8000d;
+    font-style: bold;
+    width: 350px;
+    height: 100px;
+    border: 1px solid#e8000d;
+    margin: 10px;
+    cursor: pointer;
+    font-family: 'Cinzel', serif;
+    
+    font-size: 24pt;
+    border-radius: 4px;
+}
+
+.helpPageBut:hover {
+    background-color: #e8000d;
+}
+
+.helpPageButSelected:hover {
+    background-color:black;
+}
+
+.buildBut {
+    color: white;
+    background-color: #042e0b;
+    font-style: bold;
+    width: 350px;
+    height: 100px;
+    border: 1px solid #085e16;
+    margin: 10px;
+    cursor: pointer;
+    font-family: 'Cinzel', serif;
+    
+    font-size: 13pt;
+    border-radius: 4px;
+}
+
+.buildBut:hover {
+    background-color: #085e16;
+} 
+
+.unclickableBuildBut {
+    color: white;
+    background-color: #4b4b4b;
+    font-style: bold;
+    width: 350px;
+    height: 100px;
+    border: 1px solid #4b4b4b;
+    margin: 10px;
+    font-family: 'Cinzel', serif;
+    
+    font-size: 13pt;
+    border-radius: 4px;
+}
+
+.astralBut {
+    color: white;
+    background-color: #0b4014;
+    width: 200px;
+    height: 200px;
+    border: 1px solid #085e16;
+    cursor: pointer;
+    border-radius: 4px;
+    font-family: 'Cinzel', serif;
+    
+}
+
+.astralOn {
+    color: white;
+    background-color: #085e16;
+    width: 200px;
+    height: 200px;
+    border: 1px solid #0b4014;
+    cursor: pointer;
+    border-radius: 4px;
+    font-family: 'Cinzel', serif;
+    
+}
+
+.astralBut:hover {
+    background-color: #085e16;
+}
+
+.astralOn:hover {
+    background-color:  #0b4014;
+}
+
+.buildingUpg, .factoryUpg, .necropolisUpg, .sunUpg {
+    color: white;
+    background-color: #042e0b;
+    width: 200px;
+    height: 120px;
+    border: 1px solid #085e16;
+    cursor: pointer;
+    border-radius: 4px;
+    margin: 10px;
+}
+
+.unclickableBuildingUpg, .unclickFactoryUpg, .unclickNecropolisUpg, .unclickSunUpg {
+    color: white;
+    background-color: #4b4b4b;
+    width: 200px;
+    height: 120px;
+    border: 1px solid #4b4b4b;
+    border-radius: 4px;
+    margin: 10px;
+}
+
+.boughtBuildingUpg, .boughtFactoryUpg, .boughtNecropolisUpg, .boughtSunUpg {
+    color: white;
+    background-color:black;
+    width: 200px;
+    height: 120px;
+    border: 1px solid #042e0b;
+    border-radius: 4px;
+    margin: 10px;
+}
+
+.buildingUpg:hover, .factoryUpg:hover, .necropolisUpg:hover, .sunUpg:hover {
+    background-color: #085e16;
+} 
+
+.buttonTD {
+    text-align: right;
+}
+
+.unclickableUnit {
+    color: white;
+    background-color: #4b4b4b;
+    font-style: bold;
+    width: 180px;
+    height: 35px;
+    border: 1px solid #4b4b4b;
+    border-radius: 4px;
+}
+
+.unclickableMax {
+    color: white;
+    background-color: #4b4b4b;
+    font-style: bold;
+    width: 120px;
+    height: 35px;
+    border: 1px solid #4b4b4b;
+    border-radius: 4px;
+}
+
+.unclickableUnitT {
+    color: white;
+    background-color: #4b4b4b;
+    font-style: bold;
+    width: 180px;
+    height: 35px;
+    border: 1px solid #4b4b4b;
+    border-radius: 4px;
+}
+
+.unclickableMaxT {
+    color: white;
+    background-color: #4b4b4b;
+    font-style: bold;
+    width: 120px;
+    height: 35px;
+    border: 1px solid #4b4b4b;
+    border-radius: 4px;
+}
+
+.prestigeBut {
+    color: white;
+    background-color: #170424;
+    width: 500px;
+    height: 175px;
+    border: 1px solid #460573;
+    cursor: pointer;
+    border-radius: 4px;
+    font-family: 'Cinzel', serif;
+    
+}
+
+.prestigeBut:hover {
+    background-color: #460573;
+}
+
+.timePrestigeBut {
+    color: white;
+    background-color: #006ba0;
+    width: 500px;
+    height: 175px;
+    border: 1px solid white;
+    cursor: pointer;
+    border-radius: 4px;
+    font-family: 'Cinzel', serif;
+    
+}
+
+.timePrestigeBut:hover {
+    background-color: white;
+    color: #006ba0;
+}
+
+.unclickablePrestige {
+    color: white;
+    background-color: #4b4b4b;
+    width: 500px;
+    height: 175px;
+    border: 1px solid #4b4b4b;
+    border-radius: 4px;
+    font-family: 'Cinzel', serif;
+    
+}
+
+.constrUpg {
+    color: white;
+    background-color: #7b3f00;
+    width: 200px;
+    height: 120px;
+    border: 1px solid #db9448;
+    cursor: pointer;
+    border-radius: 4px;
+    margin: 10px;
+}
+
+.unclickableConstrUpg {
+    color: white;
+    background-color: #4b4b4b;
+    width: 200px;
+    height: 120px;
+    border: 1px solid #4b4b4b;
+    border-radius: 4px;
+    margin: 10px;
+}
+
+.constrUpg:hover {
+    background-color: #db9448;
+} 
+
+.constrMax {
+    color: white;
+    background-color: #7b3f00;
+    font-style: bold;
+    width: 120px;
+    height: 35px;
+    border: 1px solid #db9448;
+    cursor: pointer;
+    border-radius: 4px;
+    margin: 10px;
+}
+
+.constrMax:hover {
+    background-color: #db9448;
+} 
+
+.buildingsTable {
+    border: 1px solid #085e16;
+}
+
+#cUpgHeaderRow {
+    border-left: 1px solid #7b3f00;
+    border-top: 1px solid #7b3f00;
+    border-right: 1px solid #7b3f00;
+}
+
+#cUpgRow {
+    border-left: 1px solid #7b3f00;
+    border-bottom: 1px solid #7b3f00;
+    border-right: 1px solid #7b3f00;
+}
+
+.noticeText {
+    font-size: 15pt;
+    font-weight: bold;
+    color: #1c8a2e;
+    text-align: center;
+}
+
+#exportText {
+    width: 80%;
+    height: 300px;
+    margin: 100px auto 0;
+    background-color: #525252;
+    overflow: auto;
+    display: none;
+}
+
+.timeLabelLeft {
+    width: 100px;
+    height: 100px;
+    line-height: 50px;
+    border: 1px solid #006ba0;
+    margin-bottom: 5px;
+    color: #006ba0;
+    font-size: 22pt;
+    font-weight: bold;
+    text-align: center;
+    float: left;
+}
+
+.timeLabelRight {
+    width: 100px;
+    height: 100px;
+    line-height: 50px;
+    border: 1px solid #006ba0;
+    margin-bottom: 5px;
+    color: #006ba0;
+    font-size: 22pt;
+    font-weight: bold;
+    text-align: center;
+    float: right;
+}
+
+.slider {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 25px;
+    background: #525252;
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+    border: 1px solid white;
+}
+
+.slider:hover {
+    opacity: 1;
+}
+
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 25px;
+    height: 25px;
+    background: #006ba0;
+    cursor: pointer;
+    border: 1px solid white;
+}
+
+.slider::-moz-range-thumb {
+    width: 25px;
+    height: 25px;
+    background: #006ba0;
+    cursor: pointer;
+    border: 1px solid white;
+}
+
+.sliderLocked {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 25px;
+    background: #525252;
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+    border: 1px solid white;
+}
+
+.sliderLocked::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 25px;
+    height: 25px;
+    background: #525252;
+    cursor: pointer;
+    border: 1px solid white;
+}
+
+.sliderLocked::-moz-range-thumb {
+    width: 25px;
+    height: 25px;
+    background: #525252;
+    cursor: pointer;
+    border: 1px solid white;
+}
+
+.slideContainer {
+    width: 70%;
+}
+
+.timeSliderBut {
+    color: white;
+    background-color: #006ba0;
+    font-style: bold;
+    width: 250px;
+    height: 35px;
+    border: 1px solid white;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.timeSliderBut:hover {
+    background-color: white;
+    color: #006ba0;
+}
+
+.unclickSliderBut {
+    color: white;
+    background-color: #4b4b4b;
+    font-style: bold;
+    width: 250px;
+    height: 35px;
+    border: 1px solid #4b4b4b;
+    cursor: pointer;
+    border-radius: 4px;
+}
