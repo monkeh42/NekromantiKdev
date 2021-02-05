@@ -1,6 +1,6 @@
 const GAME_DATA = {
     author: 'monkeh42',
-    version: 'v0.2.4',
+    version: 'v0.2.5d',
 }
 
 const NUM_UNITS = 8;
