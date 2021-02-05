@@ -8,6 +8,7 @@ const UNITS_DATA = {
         cost: function() {
             var c = this.baseCost;
             c = c.times(this.baseCostMult.pow(player.units[this.tier].bought));
+            if (c.gte(new Decimal(1e21))) { c = c.times(Decimal.pow(10, addFactorial(player.units[this.tier].bought.minus(10)))); }
             return c;
         },
         corpseMult: function() {
