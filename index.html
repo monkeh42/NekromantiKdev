@@ -17,7 +17,14 @@
 </head>
 
 <body onload="init()">
-    <div id="game">
+    <div id="calcPopupContainer" width="100%" height="100%" style="background-color: black; display: block;">
+        <div class="bpopup" id="offlineCalcPopup">
+            <div>
+                <h2>Calculating offline production...</h2>
+            </div>
+        </div>
+    </div>
+    <div id="game" style="display: none;">
         <div id="helpDiv" style="display: none;">
             <div id="helpText">
             </div>
@@ -619,6 +626,20 @@
             </table>
             <div style="width: 100%; text-align: center;"><img src="NekromantiK_Logo.png" width="250px"></div>
             <div style="height: 50px; width: 100%; text-align: center;"><a href="https://discord.gg/H2V7FfT4Rt" target="_blank"><img src="discord.png" width="50px"></a></div>
+        </div>
+        <div class="popup" id="offlineGainPopup">
+            <div>
+                <h2>Offline Production</h2>
+                You gained:<br>
+                <span id="offlineZero" style="display: none;">Nothing.<br></span>
+                <span id="offlineCorpse" style="display: none;"><span id="offlineCorpseGain" style="font-size: 15pt; font-weight: bold; white-space: pre; color: #6c00b4;"> 0 </span> corpses.<br></span>
+                <span id="offlineBrick" style="display: none;"><span id="offlineBrickGain" style="font-size: 15pt; font-weight: bold; white-space: pre; color: #1c8a2e;"> 0 </span> astral bricks.<br></span>
+                <span id="offlineArmament" style="display: none;"><span id="offlineArmamentGain" style="font-size: 15pt; font-weight: bold; white-space: pre;"> 0 </span> armaments.<br></span>
+                <span id="offlineAcolyte" style="display: none;"><span id="offlineAcolyteGain" style="font-size: 15pt; font-weight: bold; white-space: pre;"> 0 </span> acolytes.<br></span>
+                <span id="offlinePhoton" style="display: none;"><span id="offlinePhotonGain" style="font-size: 15pt; font-weight: bold; white-space: pre;"> 0 </span> nekro-photons. <br></span>
+                <span id="offlineEssence" style="display: none;"><span id="offlineTrueGain" style="font-size: 15pt; font-weight: bold; white-space: pre; color: #006ba0;"> 0 </span> true time essence and <span id="offlineAntiGain" style="font-size: 15pt; font-weight: bold; white-space: pre; color: #006ba0;"> 0 </span> anti time essence.<br></span>
+            </div>
+            <button class="optBut" id="closeOfflinePopup" style="margin: 10px;" onclick="closeOfflinePopup()">CLOSE</button>
         </div>
     </div>
 </body>
