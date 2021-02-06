@@ -170,7 +170,9 @@ const START_PLAYER = {
         'timeTab': {
             'mainTab': false,
         },
-    }
+    },
+
+    tooltipsEnabled: false,
 };
 
 var player = {};
@@ -424,9 +426,9 @@ function updateHTML() {
         else { document.getElementById(BUILDS_DATA[b].buildingButtonID).className = BUILDS_DATA[b].buildingButtonUnclick; }
         if (isBuilt(b)) {
             for (var u in BUILDS_DATA[b].upgrades) {
-                if (hasUpgrade(b, u)) { document.getElementById(BUILDS_DATA[b].upgrades[u].buttonID).className = BUILDS_DATA[b].upgradeBtnBought }
-                else if (canAffordBUpg(b, u)) { document.getElementById(BUILDS_DATA[b].upgrades[u].buttonID).className = BUILDS_DATA[b].upgradeBtnClass }
-                else { document.getElementById(BUILDS_DATA[b].upgrades[u].buttonID).className = BUILDS_DATA[b].upgradeBtnUnclick }
+                if (hasUpgrade(b, u)) { document.getElementById(BUILDS_DATA[b].upgrades[u].buttonID).className = BUILDS_DATA[b].upgradeBtnBought + ((player.tooltipsEnabled && BUILDS_DATA[b].upgrades[u].displayTooltip) ? ' tooltip' : '') }
+                else if (canAffordBUpg(b, u)) { document.getElementById(BUILDS_DATA[b].upgrades[u].buttonID).className = BUILDS_DATA[b].upgradeBtnClass + ((player.tooltipsEnabled && BUILDS_DATA[b].upgrades[u].displayTooltip) ? ' tooltip' : '') }
+                else { document.getElementById(BUILDS_DATA[b].upgrades[u].buttonID).className = BUILDS_DATA[b].upgradeBtnUnclick + ((player.tooltipsEnabled && BUILDS_DATA[b].upgrades[u].displayTooltip) ? ' tooltip' : '') }
                 document.getElementById(BUILDS_DATA[b].upgrades[u].buttonID).innerHTML = "<span style=\"font-weight: 900;\">" + getUpgName(b, u) + "</span><br>" + getUpgDesc(b, u) + "<br>Cost: " + formatWhole(getUpgCost(b, u)) + " " + BUILDS_DATA[b].upgResource + (isDisplayEffect(b, u) ? ("<br>Currently: " + formatDefault2(getUpgEffect(b, u)) + "x") : "");
             }
         }
@@ -478,7 +480,7 @@ function updatePrestige() {
         }
     } else { document.getElementById('spacePresDesc').style.display = 'none'; }
     document.getElementById('prestigeReq').innerHTML = "Requires <span style=\"font-size: 17pt; white-space: pre;\"> " + formatWhole(player.nextSpaceReset[0]) + " </span> " + unitSingulizer(player.nextSpaceReset[1], player.nextSpaceReset[0]);
-    document.getElementById('timePrestige').className =  (canTimePrestige() ? 'timePrestigeBut' : 'unclickablePrestige');
+    document.getElementById('timePrestige').className = (player.tooltipsEnabled ? (canTimePrestige() ? 'timePrestigeBut tooltip' : 'unclickablePrestige tooltip') : (canTimePrestige() ? 'timePrestigeBut' : 'unclickablePrestige'));
     if (canTimePrestige()) {
         document.getElementById('timePrestigeReq').style.display = 'none';
         document.getElementById('timePrestigeGainDesc').style.display = 'block';
@@ -534,10 +536,12 @@ function getWorldsBonus() {
 }
 
 function importToggle() {
-    document.getElementById('exportText').innerHTML = 'Paste your save here...';
+    document.getElementById('exportTextLabel').style.display = 'block';
+    document.getElementById('exportText').value = '';
     document.getElementById('exportText').style.display = 'block';
-    document.getElementById('importConfirm').style.display = 'block';
-    document.getElementById('closeText').style.display = 'block';
+    document.getElementById('importConfirm').style.display = 'table-cell';
+    document.getElementById('closeText').style.display = 'table-cell';
+    document.getElementById('closeText').removeAttribute('colspan');
 }
 
 function exportSave() {
@@ -546,7 +550,8 @@ function exportSave() {
     document.getElementById('exportText').value = str;
     document.getElementById('exportText').style.display = 'block';
     document.getElementById('importConfirm').style.display = 'none';
-    document.getElementById('closeText').style.display = 'block';
+    document.getElementById('closeText').style.display = 'table-cell';
+    document.getElementById('closeText').setAttribute('colspan', '2');
 }
 
 function importSave() {
@@ -565,9 +570,11 @@ function importSave() {
 }
 
 function closeText() {
+    document.getElementById('exportTextLabel').style.display = 'none';
     document.getElementById('exportText').style.display = 'none';
     document.getElementById('importConfirm').style.display = 'none';
     document.getElementById('closeText').style.display = 'none';
+    document.getElementById('closeText').removeAttribute('colspan');
 }
 
 function save() {
@@ -582,6 +589,10 @@ function loadGame() {
     } else {
         player = Object.assign({}, JSON.parse(window.atob(savePlayer)));
         fixData(player, START_PLAYER);
+    }
+    if (player.tooltipsEnabled) {
+        player.tooltipsEnabled = false;
+        toggleTooltips();
     }
     allDisplay();
 }
@@ -958,4 +969,14 @@ function rewindTime() {
     player.lastUpdate = player.lastUpdate - (3600*1000);
     save();
     window.location.reload();
+}
+
+function toggleTooltips() {
+    document.getElementById('brickTooltip').classList.toggle('tooltip');
+    document.getElementById('trueTooltip').classList.toggle('tooltip');
+    document.getElementById('antiTooltip').classList.toggle('tooltip');
+    document.getElementById('factoryTooltip').classList.toggle('tooltip');
+    document.getElementById('necropolisTooltip').classList.toggle('tooltip');
+    document.getElementById('sunTooltip').classList.toggle('tooltip');
+    player.tooltipsEnabled = !player.tooltipsEnabled;
 }
