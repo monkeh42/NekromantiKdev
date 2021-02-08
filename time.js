@@ -215,10 +215,15 @@ function lockInTime() {
 function timePrestigeReset() {
     if (player.astralFlag) { toggleAstral(); }
     clearInterval(mainLoop);
+    console.log('clearinterval done');
     resetUnits();
+    console.log('resetUnits done');
     resetBuildingResources();
+    console.log('resetBuildingResources done');
     resetBuildings();
+    console.log('resetBuildingResources done');
     resetSpaceCounts();
+    console.log('resetSpaceCounts done');
     for (var i=1; i<=NUM_TIMEDIMS; i++) { player.timeDims[i].amount = player.timeDims[i].bought; }
     player.trueEssence = new Decimal(START_PLAYER.trueEssence);
     player.antiEssence = new Decimal(START_PLAYER.antiEssence);

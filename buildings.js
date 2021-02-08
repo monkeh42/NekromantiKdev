@@ -64,7 +64,7 @@ const BUILDS_DATA = {
             },
             13: {
                 title: 'Digitize',
-                desc: 'Improve the unit multiplier formula<br>(corpse mult ^0.5 -> ^0.9)',
+                desc: 'Each unit tier\'s base unit multiplier is equal to its corpse multiplier, instead of the square root.',
                 cost: new Decimal(10000),
                 buttonID: 'factoryUpg13',
                 displayEffect: false,
