@@ -503,9 +503,9 @@ function resetBuildingResources() {
 
 function resetBuildings() {
     if (player.astralFlag) { toggleAstral(); }
-    player.buildings = Object.assign({}, START_PLAYER.buildings);
+    copyData(player.buildings, START_PLAYER.buildings);
     fixData(player.buildings, START_PLAYER.buildings);
-    player.construction = Object.assign({}, START_PLAYER.construction);
+    copyData(player.construction, START_PLAYER.construction);
     fixData(player.construction, START_PLAYER.construction);
     for (var b in BUILDS_DATA) {
         document.getElementById(BUILDS_DATA[b].buildingRowID).style.display = 'table-row';

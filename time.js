@@ -229,8 +229,8 @@ function timePrestigeReset() {
     player.antiEssence = new Decimal(START_PLAYER.antiEssence);
     player.corpses = new Decimal(START_PLAYER.corpses);
     player.timeLocked = false;
-    player.unlocks['unitsTab'] = Object.assign({}, START_PLAYER.unlocks['unitsTab']);
-    player.unlocks['buildingsTab'] = Object.assign({}, START_PLAYER.unlocks['buildingsTab']);
+    copyData(player.unlocks['unitsTab'], START_PLAYER.unlocks['unitsTab']);
+    copyData(player.unlocks['buildingsTab'], START_PLAYER.unlocks['buildingsTab']);
     fixData(player.unlocks['unitsTab'], START_PLAYER.unlocks['unitsTab']);
     fixData(player.unlocks['buildingsTab'], START_PLAYER.unlocks['buildingsTab']);
     document.getElementById('timeSlider').removeAttribute('disabled');
