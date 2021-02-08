@@ -1,6 +1,6 @@
 const GAME_DATA = {
     author: 'monkeh42',
-    version: 'v0.2.7',
+    version: 'v0.2.8_d.1',
 }
 
 const NUM_UNITS = 8;
@@ -100,6 +100,9 @@ const START_PLAYER = {
                 11: false,
                 12: false,
                 13: false,
+                21: false,
+                22: false,
+                23: false,
             }
         },
     },
@@ -134,6 +137,72 @@ const START_PLAYER = {
         },
     },
 
+    timeUpgs: {
+        11: false,
+        12: false,
+        13: false,
+        14: false,
+        21: false,
+        22: false,
+        23: false,
+        24: false,
+        31: false,
+        32: false,
+        33: false,
+        34: false,
+    },
+
+    autobuyers: {
+        1: {
+            on: false,
+            fast: false,
+            bulk: false,
+        },
+        2: {
+            on: false,
+            fast: false,
+            bulk: false,
+        },
+        3: {
+            on: false,
+            fast: false,
+            bulk: false,
+        },
+        4: {
+            on: false,
+            fast: false,
+            bulk: false,
+        },
+        5: {
+            on: false,
+            fast: false,
+            bulk: false,
+        },
+        6: {
+            on: false,
+            fast: false,
+            bulk: false,
+        },
+        7: {
+            on: false,
+            fast: false,
+            bulk: false,
+        },
+        8: {
+            on: false,
+            fast: false,
+            bulk: false,
+        },
+        9: {
+            on: false,
+            fast: false,
+            amount: new Decimal(0),
+            type: 'atx',
+            autolock: true,
+        },
+        priority: [1, 2, 3, 4, 5, 6, 7, 8],
+    },
+
     bricks: new Decimal(0),
     brickGainExp: 0.2,
     astralFlag: false,
@@ -144,21 +213,86 @@ const START_PLAYER = {
     antiPercent: 50,
     antiEssence: new Decimal(0),
     timeResets: new Decimal(0),
-    totalTimeResets: new Decimal(0),
-    totalCrystals: new Decimal(0),
     timeLocked: false,
     
     totalCorpses: new Decimal(0),
     totalWorlds: new Decimal(0),
     totalSpaceResets: new Decimal(0),
+    totalTimeResets: new Decimal(0),
+    totalCrystals: new Decimal(0),
+
+    pastRuns: {
+        lastRun: {
+            crystalGain: new Decimal(0),
+            timeSpent: 0,
+            timeSacrificed: new Date(0),
+        },
+        lastTen: [
+            {
+                crystalGain: new Decimal(0),
+                timeSpent: 0,
+                timeSacrificed: new Date(0),
+            },
+            {
+                crystalGain: new Decimal(0),
+                timeSpent: 0,
+                timeSacrificed: new Date(0),
+            },
+            {
+                crystalGain: new Decimal(0),
+                timeSpent: 0,
+                timeSacrificed: new Date(0),
+            },
+            {
+                crystalGain: new Decimal(0),
+                timeSpent: 0,
+                timeSacrificed: new Date(0),
+            },
+            {
+                crystalGain: new Decimal(0),
+                timeSpent: 0,
+                timeSacrificed: new Date(0),
+            },
+            {
+                crystalGain: new Decimal(0),
+                timeSpent: 0,
+                timeSacrificed: new Date(0),
+            },
+            {
+                crystalGain: new Decimal(0),
+                timeSpent: 0,
+                timeSacrificed: new Date(0),
+            },
+            {
+                crystalGain: new Decimal(0),
+                timeSpent: 0,
+                timeSacrificed: new Date(0),
+            },
+            {
+                crystalGain: new Decimal(0),
+                timeSpent: 0,
+                timeSacrificed: new Date(0),
+            },
+            {
+                crystalGain: new Decimal(0),
+                timeSpent: 0,
+                timeSacrificed: new Date(0),
+            },
+        ],
+    },
     
     lastUpdate: new Date(),
     lastAutoSave: new Date(),
+    lastAutobuy: new Date(),
 
     unlocks: {
         'unitsTab': {
             'mainTab': true, 
             'spacePrestige': false,  
+            'autobuyers': false,
+            'fastBuyers': false,
+            'BulkBuyers': false,
+            'advancedBuyer': false,
         },
         'buildingsTab': {
             'mainTab': false,
@@ -167,10 +301,12 @@ const START_PLAYER = {
             'necropolis': false,
             'necropolisRow2':false,
             'sun': false,
+            'sunRow2': false,
             'construction': false,
         },
         'timeTab': {
             'mainTab': false,
+            'timeUpgrades': false,
         },
     },
 
@@ -181,7 +317,9 @@ var player = {};
 
 function init() {
     showTab('unitsTab');
-    showSubTab('buildingsSubTab');
+    showUnitSubTab('unitsSubTab');
+    showBuildingSubTab('buildingsSubTab');
+    showTimeSubTab('timeDimSubTab');
     
     loadGame();
 
@@ -228,8 +366,34 @@ function showTab(tabName) {
     }
 }
 
-function showSubTab(subTabName) {
-    var allSubTabs = document.getElementsByClassName('subTab');
+function showUnitSubTab(subTabName) {
+    var allSubTabs = document.getElementsByClassName('unitSubTab');
+    var tab;
+    for (var i=0; i<allSubTabs.length; i++) {
+        tab = allSubTabs.item(i);
+        if (tab.id === subTabName) {
+            tab.style.display = 'block';
+        } else {
+            tab.style.display = 'none';
+        }
+    }
+}
+
+function showBuildingSubTab(subTabName) {
+    var allSubTabs = document.getElementsByClassName('buildingSubTab');
+    var tab;
+    for (var i=0; i<allSubTabs.length; i++) {
+        tab = allSubTabs.item(i);
+        if (tab.id === subTabName) {
+            tab.style.display = 'block';
+        } else {
+            tab.style.display = 'none';
+        }
+    }
+}
+
+function showTimeSubTab(subTabName) {
+    var allSubTabs = document.getElementsByClassName('timeSubTab');
     var tab;
     for (var i=0; i<allSubTabs.length; i++) {
         tab = allSubTabs.item(i);
@@ -374,6 +538,7 @@ function updateUnlocks() {
 
 function updateHTML() {
     var element;
+    var elements;
     var bUpgs;
     document.getElementById('versionNumber').innerHTML = GAME_DATA.version;
     for (var tab in UNLOCKS_DATA) {
@@ -383,24 +548,38 @@ function updateHTML() {
                     if (id !== undefined) {    
                         element = document.getElementById(UNLOCKS_DATA[tab][key].idsToShow[id]);
                         if (element.tagName == 'TR') { element.style.display = 'table-row'; } 
-                    if (element.tagName == 'TR') { element.style.display = 'table-row'; } 
-                        if (element.tagName == 'TR') { element.style.display = 'table-row'; } 
                         else if (element.tagName == 'TD') { element.style.display = 'table-cell'; }
                         else { element.style.display = 'block'; }
                     }
                 }
                 for (var idd in UNLOCKS_DATA[tab][key].idsToHide) {
-                    document.getElementById(UNLOCKS_DATA[tab][key].idsToHide[idd]).style.display = 'none';
+                    if (UNLOCKS_DATA[tab][key].classNotID) {
+                        document.documentElement.style.setProperty(UNLOCKS_DATA[tab][key].cssVar, 'none');
+                        elements = document.getElementsByClassName(UNLOCKS_DATA[tab][key].classToEnable);
+                        for (var q=0; q<elements.length; q++) {
+                            elements[q].removeAttribute('disabled');
+                        }
+                    } else {
+                        document.getElementById(UNLOCKS_DATA[tab][key].idsToHide[idd]).style.display = 'none';
+                    }
                 }
             } else {
                 for (var id in UNLOCKS_DATA[tab][key].idsToShow) {
                     document.getElementById(UNLOCKS_DATA[tab][key].idsToShow[id]).style.display = 'none';
                 }
                 for (var idd in UNLOCKS_DATA[tab][key].idsToHide) {
-                    element = document.getElementById(UNLOCKS_DATA[tab][key].idsToHide[idd]);
-                    if (element.tagName == 'TR') { element.style.display = 'table-row'; } 
-                    else if (element.tagName == 'TD') { element.style.display = 'table-cell'; }
-                    else { element.style.display = 'block'; }
+                    if (UNLOCKS_DATA[tab][key].classNotID) {
+                        document.documentElement.style.setProperty(UNLOCKS_DATA[tab][key].cssVar, 'block');
+                        elements = document.getElementsByClassName(UNLOCKS_DATA[tab][key].classToEnable);
+                        for (var q=0; q<elements.length; q++) {
+                            elements[q].setAttribute('disabled', true);
+                        }
+                    } else {
+                        element = document.getElementById(UNLOCKS_DATA[tab][key].idsToHide[idd]);
+                        if (element.tagName == 'TR') { element.style.display = 'table-row'; } 
+                        else if (element.tagName == 'TD') { element.style.display = 'table-cell'; }
+                        else { element.style.display = 'block'; }
+                    }
                 }
             }
         }
@@ -444,6 +623,12 @@ function updateHTML() {
         else { document.getElementById(CONSTR_DATA[c].buttonID).className = 'unclickableConstrUpg' }
         if (CONSTR_DATA[c].isTimes) { document.getElementById(CONSTR_DATA[c].buttonID).innerHTML = "<span style=\"font-weight: 900;\">" + getCUpgName(c) + "</span><br>" + getCUpgDesc(c) + "<br>Cost: " + formatWhole(getCUpgCost(c)) + " astral bricks" + "<br>Current level: " + formatWhole(player.construction[c]) + (isDisplayEffectC(c) ? ("<br>Currently: " + formatDefault2(getCUpgEffect(c)) + "x") : ""); }
         else { document.getElementById(CONSTR_DATA[c].buttonID).innerHTML = "<span style=\"font-weight: 900;\">" + getCUpgName(c) + "</span><br>" + getCUpgDesc(c) + "<br>Cost: " + formatWhole(getCUpgCost(c)) + " astral bricks" + "<br>Current level: " + formatWhole(player.construction[c]) + (isDisplayEffectC(c) ? ("<br>Currently: +" + formatDefault2(getCUpgEffect(c))) : ""); }
+    }
+    for (var t in TIME_DATA.upgrades) {
+        if (hasTUpgrade(t)) { document.getElementById(TIME_DATA.upgrades[t].buttonID).className = 'boughtTimeUpg' }
+        else if (canAffordTUpg(t)) { document.getElementById(TIME_DATA.upgrades[t].buttonID).className = 'timeUpg' }
+        else { document.getElementById(TIME_DATA.upgrades[t].buttonID).className = 'unclickableTimeUpg' }
+        document.getElementById(TIME_DATA.upgrades[t].buttonID).innerHTML = "<span style=\"font-weight: 900;\">" + getTUpgName(t) + "</span><br>" + getTUpgDesc(t) + ((TIME_DATA.upgrades[t].preReq != null) ? "<br>Requires <span style=\"font-weight: 800;\">" + TIME_DATA.upgrades[TIME_DATA.upgrades[t].preReq].title + "</span>": "") + "<br>Cost: " + formatWhole(getTUpgCost(t)) + " time crystals" + (isDisplayEffectT(t) ? ("<br>Currently: " + formatDefault2(getTUpgEffect(t)) + "x") : "");
     }
     if (player.astralFlag) {
         document.getElementById('brickGainDiv').style.display = 'block';
@@ -525,6 +710,7 @@ function allDisplay() {
     updateTimeDisplay();
     updatePrestige();
     updateBuildings();
+    updateAutobuyers();
     updateHTML();
     document.getElementById('sliderValueRight').innerHTML = player.antiPercent;
     document.getElementById('sliderValueLeft').innerHTML = player.truePercent;
@@ -534,7 +720,9 @@ function allDisplay() {
 function getWorldsBonus() {
     var b = new Decimal(player.worlds)
     var e = 1.5 + getCUpgEffect(4);
-    return Decimal.max(b.div(1.5).pow(e).plus(1), 1);
+    var boost = Decimal.max(b.div(1.5).pow(e).plus(1), 1);
+    if (hasTUpgrade(32)) { boost = boost.times(getTUpgEffect(32)); }
+    return boost;
 }
 
 function importToggle() {
@@ -598,6 +786,22 @@ function loadGame() {
         player.tooltipsEnabled = false;
         toggleTooltips();
     }
+    for (var i=1; i<10; i++) {
+        
+        if (i<9) { 
+            document.getElementById(player.autobuyers.priority[i-1].toString() + (i).toString()).selected = true;
+            var unitName = UNITS_DATA[i].single.replace(' ', '');
+            if (player.autobuyers[i].on) { document.getElementById(unitName + 'BuyerOn').checked = true; }
+            if (player.autobuyers[i].fast) { document.getElementById(unitName + 'BuyerFast').checked = true; }
+            if (player.autobuyers[i].bulk) { document.getElementById(unitName + 'BuyerBulkOn').checked = true; }
+        } else {
+            if (player.autobuyers[i].on) { document.getElementById('sacrificeBuyerOn').checked = true; }
+            if (player.autobuyers[i].fast) { document.getElementById('sacrificeBuyerFast').checked = true; }
+            document.getElementById('sacrificeBuyerAmount').value = formatWholeNoComma(player.autobuyers[i].amount);
+            document.getElementById('sacrificeBuyerOptionsList').options.namedItem(player.autobuyers[i].type).selected = true;
+            if (player.autobuyers[i].autolock) { document.getElementById('sacrificeBuyerAutolock').checked = true; }
+        }
+    }
     allDisplay();
 }
 
@@ -610,7 +814,7 @@ function fixData(data, start) {
         } else if (Array.isArray(start[item])) {
             if (data[item] === undefined) {
                 data[item] = [];
-            } 
+            }
             fixData(data[item], start[item]);
         } else if (start[item] instanceof Decimal) {
             if (data[item] === undefined) {
@@ -793,6 +997,132 @@ function fixResetBug() {
         },
     });
 
+    copyData(START_PLAYER.timeUpgs, {
+        11: false,
+        12: false,
+        13: false,
+        14: false,
+        21: false,
+        22: false,
+        23: false,
+        24: false,
+        31: false,
+        32: false,
+        33: false,
+        34: false,
+    });
+
+    copyData(START_PLAYER.autobuyers, {
+        1: {
+            on: false,
+            fast: false,
+            bulk: false,
+        },
+        2: {
+            on: false,
+            fast: false,
+            bulk: false,
+        },
+        3: {
+            on: false,
+            fast: false,
+            bulk: false,
+        },
+        4: {
+            on: false,
+            fast: false,
+            bulk: false,
+        },
+        5: {
+            on: false,
+            fast: false,
+            bulk: false,
+        },
+        6: {
+            on: false,
+            fast: false,
+            bulk: false,
+        },
+        7: {
+            on: false,
+            fast: false,
+            bulk: false,
+        },
+        8: {
+            on: false,
+            fast: false,
+            bulk: false,
+        },
+        9: {
+            on: false,
+            fast: false,
+            amount: new Decimal(0),
+            type: 'atx',
+            autolock: true,
+        },
+        priority: [1, 2, 3, 4, 5, 6, 7, 8],
+    });
+
+    copyData(START_PLAYER.pastRuns, {
+        lastRun: {
+            crystalGain: new Decimal(0),
+            timeSpent: 0,
+            timeSacrificed: new Date(0),
+        },
+        lastTen: [
+            {
+                crystalGain: new Decimal(0),
+                timeSpent: 0,
+                timeSacrificed: new Date(0),
+            },
+            {
+                crystalGain: new Decimal(0),
+                timeSpent: 0,
+                timeSacrificed: new Date(0),
+            },
+            {
+                crystalGain: new Decimal(0),
+                timeSpent: 0,
+                timeSacrificed: new Date(0),
+            },
+            {
+                crystalGain: new Decimal(0),
+                timeSpent: 0,
+                timeSacrificed: new Date(0),
+            },
+            {
+                crystalGain: new Decimal(0),
+                timeSpent: 0,
+                timeSacrificed: new Date(0),
+            },
+            {
+                crystalGain: new Decimal(0),
+                timeSpent: 0,
+                timeSacrificed: new Date(0),
+            },
+            {
+                crystalGain: new Decimal(0),
+                timeSpent: 0,
+                timeSacrificed: new Date(0),
+            },
+            {
+                crystalGain: new Decimal(0),
+                timeSpent: 0,
+                timeSacrificed: new Date(0),
+            },
+            {
+                crystalGain: new Decimal(0),
+                timeSpent: 0,
+                timeSacrificed: new Date(0),
+            },
+            {
+                crystalGain: new Decimal(0),
+                timeSpent: 0,
+                timeSacrificed: new Date(0),
+            },
+        ],
+    });
+
     START_PLAYER.bricks = new Decimal(0);
     START_PLAYER.brickGainExp = 0.2;
     START_PLAYER.astralFlag = false;
@@ -803,21 +1133,26 @@ function fixResetBug() {
     START_PLAYER.antiPercent = 50;
     START_PLAYER.antiEssence = new Decimal(0);
     START_PLAYER.timeResets = new Decimal(0);
-    START_PLAYER.totalTimeResets = new Decimal(0);
-    START_PLAYER.totalCrystals = new Decimal(0);
     START_PLAYER.timeLocked = false;
     
     START_PLAYER.totalCorpses = new Decimal(0);
     START_PLAYER.totalWorlds = new Decimal(0);
     START_PLAYER.totalSpaceResets = new Decimal(0);
+    START_PLAYER.totalTimeResets = new Decimal(0);
+    START_PLAYER.totalCrystals = new Decimal(0);
     
     START_PLAYER.lastUpdate = new Date();
     START_PLAYER.lastAutoSave = new Date();
+    START_PLAYER.lastAutobuy = new Date();
 
     copyData(START_PLAYER.unlocks, {
         'unitsTab': {
             'mainTab': true, 
             'spacePrestige': false,  
+            'autobuyers': false,
+            'fastBuyers': false,
+            'BulkBuyers': false,
+            'advancedBuyer': false,
         },
         'buildingsTab': {
             'mainTab': false,
@@ -826,12 +1161,17 @@ function fixResetBug() {
             'necropolis': false,
             'necropolisRow2':false,
             'sun': false,
+            'sunRow2': false,
             'construction': false,
         },
         'timeTab': {
             'mainTab': false,
+            'timeUpgrades': false,
         },
     });
+
+    START_PLAYER.tooltipsEnabled = false;
+
     fixData(player, START_PLAYER);
     save();
 }
@@ -840,183 +1180,213 @@ function exportGameState() {
     document.getElementById('exportText').value = window.btoa(JSON.stringify(player) + '\n') + window.btoa(JSON.stringify(START_PLAYER) + '\n') + window.btoa(JSON.stringify(UNITS_DATA) + '\n') + window.btoa(JSON.stringify(BUILDS_DATA) + '\n') + window.btoa(JSON.stringify(CONSTR_DATA) + '\n') + window.btoa(JSON.stringify(TIME_DATA) + '\n');
     document.getElementById('exportText').style.display = 'block';
     document.getElementById('importConfirm').style.display = 'none';
-    document.getElementById('closeText').style.display = 'block';
+    document.getElementById('closeText').style.display = 'table-cell';
+    document.getElementById('closeText').setAttribute('colspan', '2');
 }
 
 function gameLoop(diff=new Decimal(0), offline=false) {
-    var currentUpdate = new Date().getTime();
-    if (diff.eq(0)) { var diff = new Decimal(currentUpdate - player.lastUpdate); }
-    if (DEV_SPEED>0) { diff = diff.times(DEV_SPEED); }
-    var timeBuff = player.astralFlag ? getAntiTimeBuff().div(10) : getTrueTimeBuff();
-    diff = timeBuff.times(diff);
-    var realDiff = diff.div(timeBuff);
-    if (player.astralFlag) {
-        player.bricks = player.bricks.plus(getBricksPerSecond().times(diff.div(1000)));
-    } else {
-        player.corpses = player.corpses.plus(getCorpsesPerSecond().times(diff.div(1000)));
-    }
-    player.totalCorpses = player.totalCorpses.plus(getCorpsesPerSecond().times(diff.div(1000)));
-    for (var i=1; i<NUM_UNITS; i++) {
-        player.units[i].amount = player.units[i].amount.plus(getUnitProdPerSecond(i).times(diff.div(1000)));
-    }
-    if (player.timeLocked) {
-        for (var i=1; i<=NUM_TIMEDIMS; i++) {
-            if (i==1) {
-                player.trueEssence = player.trueEssence.plus(getEssenceProdPerSecond().times(realDiff.div(1000)).times(player.truePercent/100));
-                player.antiEssence = player.antiEssence.plus(getEssenceProdPerSecond().times(realDiff.div(1000)).times(player.antiPercent/100));
+        var currentUpdate = new Date().getTime();
+        if (diff.eq(0)) { var diff = new Decimal(currentUpdate - player.lastUpdate); }
+        if (DEV_SPEED>0) { diff = diff.times(DEV_SPEED); }
+        var timeBuff = player.astralFlag ? getAntiTimeBuff().div(10) : getTrueTimeBuff();
+        diff = timeBuff.times(diff);
+        var realDiff = diff.div(timeBuff);
+        if (player.astralFlag) {
+            player.bricks = player.bricks.plus(getBricksPerSecond().times(diff.div(1000)));
+        } else {
+            player.corpses = player.corpses.plus(getCorpsesPerSecond().times(diff.div(1000)));
+        }
+        player.totalCorpses = player.totalCorpses.plus(getCorpsesPerSecond().times(diff.div(1000)));
+        for (var i=1; i<NUM_UNITS; i++) {
+            player.units[i].amount = player.units[i].amount.plus(getUnitProdPerSecond(i).times(diff.div(1000)));
+        }
+        if (player.timeLocked) {
+            for (var i=1; i<=NUM_TIMEDIMS; i++) {
+                if (i==1) {
+                    player.trueEssence = player.trueEssence.plus(getEssenceProdPerSecond().times(realDiff.div(1000)).times(player.truePercent/100));
+                    player.antiEssence = player.antiEssence.plus(getEssenceProdPerSecond().times(realDiff.div(1000)).times(player.antiPercent/100));
+                }
+                else { player.timeDims[i-1].amount = player.timeDims[i-1].amount.plus(getTimeDimProdPerSecond(i).times(realDiff.div(1000))); }
             }
-            else { player.timeDims[i-1].amount = player.timeDims[i-1].amount.plus(getTimeDimProdPerSecond(i).times(realDiff.div(1000))); }
+        }
+        for (var b in BUILDS_DATA) {
+            if (isBuilt(b)) {
+                player.buildings[b].amount = player.buildings[b].amount.plus(getBuildingProdPerSec(b).times(diff.div(1000)));
+            }
+        }
+        if (!offline && player.unlocks['unitsTab']['autobuyers']) {
+            var slowAutoBuy = (currentUpdate - player.lastAutobuy)>=(15000/DEV_SPEED);
+            autobuyerTick(slowAutoBuy);
+            if (slowAutoBuy) { player.lastAutobuy = (new Date).getTime(); }
+        }
+        if (!offline) {
+            allDisplay();
+            if ((currentUpdate-player.lastAutoSave)>5000) { 
+                player.lastAutoSave = currentUpdate;
+                save();
+            }
+            player.lastUpdate = currentUpdate;
         }
     }
-    for (var b in BUILDS_DATA) {
-        if (isBuilt(b)) {
-            player.buildings[b].amount = player.buildings[b].amount.plus(getBuildingProdPerSec(b).times(diff.div(1000)));
+
+    function autobuyerTick(slow) {
+        var tier;
+        for (var i=0; i<player.autobuyers.priority.length; i++) {
+            tier = player.autobuyers.priority[i];
+            if (player.autobuyers[tier].on && (player.autobuyers[tier].fast || slow)) {
+                if (player.autobuyers[tier].bulk) {
+                    buyMaxUnits(tier);
+                } else {
+                    buySingleUnit(tier);
+                }
+            }
+        }
+        if (player.autobuyers[9].on && (player.autobuyers[9].fast || slow)) {
+            if (isAutoSacTriggered()) { timePrestigeNoConfirm(true); }
         }
     }
-    if (!offline) {
-        allDisplay();
-        if ((currentUpdate-player.lastAutoSave)>5000) { 
-            player.lastAutoSave = currentUpdate;
-            save();
+
+    function calculateOfflineTime(seconds) {
+        document.getElementById('offlineCalcPopup').style.display = 'block';
+        var ticks = seconds * 20;
+        var extra = new Decimal(0);
+        var simMilliseconds = 0;
+        if (ticks>1000) {
+            extra = new Decimal((ticks-1000)/20);
+            ticks = 1000;
         }
-        player.lastUpdate = currentUpdate;
-    }
-}
-
-function calculateOfflineTime(seconds) {
-    document.getElementById('offlineCalcPopup').style.display = 'block';
-    var ticks = seconds * 20;
-    var extra = new Decimal(0);
-    if (ticks>1000) {
-        extra = new Decimal((ticks-1000)/20);
-        ticks = 1000;
-    }
-
-    var startCorpses = new Decimal(player.corpses);
-    var startBricks = new Decimal(player.bricks);
-    var startArms = new Decimal(player.buildings[1].amount);
-    var startAcolytes = new Decimal(player.buildings[2].amount);
-    var startPhotons = new Decimal(player.buildings[3].amount);
-    var startTrue = new Decimal(player.trueEssence);
-    var startAnti = new Decimal(player.antiEssence);
-
-    for (var done=0; done<ticks; done++) {
-        gameLoop(extra.plus(50), true);
-        console.log(done);
-    }
-    save();
-
-    var allZero = true;
-    if (player.corpses.gt(startCorpses)) {
-        document.getElementById('offlineCorpseGain').innerHTML = formatDefault(player.corpses.minus(startCorpses));
-        document.getElementById('offlineCorpse').style.display = 'block';
-        allZero = false;
-    } else {
-        document.getElementById('offlineCorpse').style.display = 'none';
-    }
-    if (player.bricks.gt(startBricks)) {
-        document.getElementById('offlineBrickGain').innerHTML = formatDefault(player.bricks.minus(startBricks));
-        document.getElementById('offlineBrick').style.display = 'block';
-        allZero = false;
-    } else {
-        document.getElementById('offlineBrick').style.display = 'none';
-    }
-    if (player.buildings[1].amount.gt(startArms)) {
-        document.getElementById('offlineArmamentGain').innerHTML = formatDefault(player.buildings[1].amount.minus(startArms));
-        document.getElementById('offlineArmament').style.display = 'block';
-        allZero = false;
-    } else {
-        document.getElementById('offlineArmament').style.display = 'none';
-    }
-    if (player.buildings[2].amount.gt(startAcolytes)) {
-        document.getElementById('offlineAcolyteGain').innerHTML = formatDefault(player.buildings[2].amount.minus(startAcolytes));
-        document.getElementById('offlineAcolyte').style.display = 'block';
-        allZero = false;
-    } else {
-        document.getElementById('offlineAcolyte').style.display = 'none';
-    }
-    if (player.buildings[3].amount.gt(startPhotons)) {
-        document.getElementById('offlinePhotonGain').innerHTML = formatDefault(player.buildings[3].amount.minus(startPhotons));
-        document.getElementById('offlinePhoton').style.display = 'block';
-        allZero = false;
-    } else {
-        document.getElementById('offlinePhoton').style.display = 'none';
-    }
-    if (player.trueEssence.gt(startTrue) || player.antiEssence.gt(startAnti)) {
-        document.getElementById('offlineTrueGain').innerHTML = formatDefault(player.trueEssence.minus(startTrue).gte(1) ? player.trueEssence.minus(startTrue) : '0');
-        document.getElementById('offlineAntiGain').innerHTML = formatDefault(player.antiEssence.minus(startAnti).gte(1) ? player.antiEssence.minus(startAnti) : '0');
-        document.getElementById('offlineEssence').style.display = 'block';
-        allZero = false;
-    } else {
-        document.getElementById('offlineEssence').style.display = 'none';
-    }
-
-    if (allZero) {
-        document.getElementById('offlineZero');
-    }
-    document.getElementById('offlineCalcPopup').style.display = 'none';
-    document.getElementById('offlineGainPopup').style.display = 'block';
-    player.lastUpdate = (new Date).getTime();
-    player.lastAutoSave = (new Date).getTime();
-}
-
-function closeOfflinePopup() {
-    document.getElementById('offlineGainPopup').style.display = 'none';
-}
-
-function startGame() {
-    var diff = (new Date).getTime() - player.lastUpdate;
-    if ((diff)>(1000*1000)) { calculateOfflineTime(new Decimal(diff/1000)); }
-    else {
+    
+        var startCorpses = new Decimal(player.corpses);
+        var startBricks = new Decimal(player.bricks);
+        var startArms = new Decimal(player.buildings[1].amount);
+        var startAcolytes = new Decimal(player.buildings[2].amount);
+        var startPhotons = new Decimal(player.buildings[3].amount);
+        var startTrue = new Decimal(player.trueEssence);
+        var startAnti = new Decimal(player.antiEssence);
+    
+        for (var done=0; done<ticks; done++) {
+            gameLoop(extra.plus(50), true);
+            simMilliseconds += extra.plus(50);
+            autobuyerTick(simMilliseconds>=15000);
+            if (simMilliseconds>=15000) { simMilliseconds = 0; }
+        }
+        save();
+    
+        var allZero = true;
+        if (player.corpses.gt(startCorpses)) {
+            document.getElementById('offlineCorpseGain').innerHTML = formatDefault(player.corpses.minus(startCorpses));
+            document.getElementById('offlineCorpse').style.display = 'block';
+            allZero = false;
+        } else {
+            document.getElementById('offlineCorpse').style.display = 'none';
+        }
+        if (player.bricks.gt(startBricks)) {
+            document.getElementById('offlineBrickGain').innerHTML = formatDefault(player.bricks.minus(startBricks));
+            document.getElementById('offlineBrick').style.display = 'block';
+            allZero = false;
+        } else {
+            document.getElementById('offlineBrick').style.display = 'none';
+        }
+        if (player.buildings[1].amount.gt(startArms)) {
+            document.getElementById('offlineArmamentGain').innerHTML = formatDefault(player.buildings[1].amount.minus(startArms));
+            document.getElementById('offlineArmament').style.display = 'block';
+            allZero = false;
+        } else {
+            document.getElementById('offlineArmament').style.display = 'none';
+        }
+        if (player.buildings[2].amount.gt(startAcolytes)) {
+            document.getElementById('offlineAcolyteGain').innerHTML = formatDefault(player.buildings[2].amount.minus(startAcolytes));
+            document.getElementById('offlineAcolyte').style.display = 'block';
+            allZero = false;
+        } else {
+            document.getElementById('offlineAcolyte').style.display = 'none';
+        }
+        if (player.buildings[3].amount.gt(startPhotons)) {
+            document.getElementById('offlinePhotonGain').innerHTML = formatDefault(player.buildings[3].amount.minus(startPhotons));
+            document.getElementById('offlinePhoton').style.display = 'block';
+            allZero = false;
+        } else {
+            document.getElementById('offlinePhoton').style.display = 'none';
+        }
+        if (player.trueEssence.gt(startTrue) || player.antiEssence.gt(startAnti)) {
+            document.getElementById('offlineTrueGain').innerHTML = formatDefault(player.trueEssence.minus(startTrue).gte(1) ? player.trueEssence.minus(startTrue) : '0');
+            document.getElementById('offlineAntiGain').innerHTML = formatDefault(player.antiEssence.minus(startAnti).gte(1) ? player.antiEssence.minus(startAnti) : '0');
+            document.getElementById('offlineEssence').style.display = 'block';
+            allZero = false;
+        } else {
+            document.getElementById('offlineEssence').style.display = 'none';
+        }
+    
+        if (allZero) {
+            document.getElementById('offlineZero');
+        }
+        document.getElementById('offlineCalcPopup').style.display = 'none';
+        document.getElementById('offlineGainPopup').style.display = 'block';
         player.lastUpdate = (new Date).getTime();
         player.lastAutoSave = (new Date).getTime();
+        player.lastAutobuy = (new Date).getTime();
+    }
+    
+    function closeOfflinePopup() {
+        document.getElementById('offlineGainPopup').style.display = 'none';
+    }
+    
+    function startGame() {
+        var diff = (new Date).getTime() - player.lastUpdate;
+        if ((diff)>(1000*1000)) { calculateOfflineTime(new Decimal(diff/1000)); }
+        else {
+            player.lastUpdate = (new Date).getTime();
+            player.lastAutoSave = (new Date).getTime();
+            player.lastAutobuy = (new Date).getTime();
+            save();
+        }
+
+        if (player.pastRuns.lastRun.timeSacrificed == 0) { player.pastRuns.lastRun.timeSacrificed = (new Date).getTime(); }
+    
+        document.getElementById('calcPopupContainer').style.display = 'none';
+        document.getElementById('game').style.display = 'block';
+    
+        startInterval();
+    }
+    
+    function startInterval() {
+        mainLoop = setInterval(gameLoop, 50);
+    }
+    
+    function changeDevSpeed(num) {
+        DEV_SPEED = num;
+    }
+    
+    function resetDevSpeed() {
+        DEV_SPEED = 1;
+    }
+    
+    function rewindTime() {
+        clearInterval(mainLoop);
+        player.lastUpdate = player.lastUpdate - (3600*1000);
         save();
+        window.location.reload();
     }
 
-    document.getElementById('calcPopupContainer').style.display = 'none';
-    document.getElementById('game').style.display = 'block';
+    function toggleTooltips() {
+        document.getElementById('brickTooltip').classList.toggle('tooltip');
+        document.getElementById('trueTooltip').classList.toggle('tooltip');
+        document.getElementById('antiTooltip').classList.toggle('tooltip');
+        document.getElementById('factoryTooltip').classList.toggle('tooltip');
+        document.getElementById('necropolisTooltip').classList.toggle('tooltip');
+        document.getElementById('sunTooltip').classList.toggle('tooltip');
+        player.tooltipsEnabled = !player.tooltipsEnabled;
+    }
 
-    startInterval();
-}
-
-function startInterval() {
-    mainLoop = setInterval(gameLoop, 50);
-}
-
-function changeDevSpeed(num) {
-    DEV_SPEED = num;
-}
-
-function resetDevSpeed() {
-    DEV_SPEED = 1;
-}
-
-function rewindTime() {
-    clearInterval(mainLoop);
-    player.lastUpdate = player.lastUpdate - (3600*1000);
-    save();
-    window.location.reload();
-}
-
-function toggleTooltips() {
-    document.getElementById('brickTooltip').classList.toggle('tooltip');
-    document.getElementById('trueTooltip').classList.toggle('tooltip');
-    document.getElementById('antiTooltip').classList.toggle('tooltip');
-    document.getElementById('factoryTooltip').classList.toggle('tooltip');
-    document.getElementById('necropolisTooltip').classList.toggle('tooltip');
-    document.getElementById('sunTooltip').classList.toggle('tooltip');
-    player.tooltipsEnabled = !player.tooltipsEnabled;
-}
-
-function showChangelog(divID) {
-    var allDivs = document.getElementsByClassName('changelogPageDiv');
-    var tab;
-    for (var i=0; i<allDivs.length; i++) {
-        tab = allDivs.item(i);
-        if (tab.id === divID) {
-            (tab.style.display == 'block') ? tab.style.display = 'none': tab.style.display = 'block'
-        } else {
-            tab.style.display = 'none';
+    function showChangelog(divID) {
+        var allDivs = document.getElementsByClassName('changelogPageDiv');
+        var tab;
+        for (var i=0; i<allDivs.length; i++) {
+            tab = allDivs.item(i);
+            if (tab.id === divID) {
+                (tab.style.display == 'block') ? tab.style.display = 'none': tab.style.display = 'block'
+            } else {
+                tab.style.display = 'none';
+            }
         }
     }
-}
