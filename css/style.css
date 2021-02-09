@@ -1056,3 +1056,16 @@ button:focus {
     width: 250px;
     height: 40px;
 }
+
+.confBut {
+    color: white;
+    background-color: #1f1f1f;
+    font-style: bold;
+    width: 50px;
+    height: 50px;
+    border: 1px solid #525252;
+    cursor: pointer;
+    border-radius: 4px;
+    font-family: 'Cinzel', serif;
+    font-size: 12pt;
+}

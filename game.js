@@ -310,8 +310,110 @@ const START_PLAYER = {
         },
     },
 
+    confirmations: {
+        'worldPrestige': {
+            'click': true,
+            'key': true,
+        },
+        'timePrestige': {
+            'click': true,
+            'key': true,
+        },
+        'timeRespec': {
+            'click': true,
+            'key': true,
+        },
+    },
+
     tooltipsEnabled: false,
 };
+
+const HOTKEYS = {
+    'm': {
+        desc: 'Max All Units',
+        onPress: function() {
+            buyMaxAll();
+        }
+    },
+    'a': {
+        desc: 'Toggle Astral Enslavement',
+        onPress: function() {
+            toggleAstral();
+        }
+    },
+    'w': {
+        desc: 'World Prestige',
+        onPress: function() {
+            spacePrestige();
+        }
+    },
+    's': {
+        desc: 'Sacrifice',
+        onPress: function() {
+            timePrestige();
+        }
+    },
+    'r': {
+        desc: 'Respec Time Production',
+        onPress: function() {
+            timePrestige();
+        }
+    },
+    '1': {
+        desc: 'Buy One Zombie',
+        onPress: function(ctrlPressed) {
+            ctrlPressed ? buyMaxUnits(1) : buySingleUnit(1)
+        }
+    },
+    '2': {
+        desc: 'Buy One Abomination',
+        onPress: function(ctrlPressed) {
+            ctrlPressed ? buyMaxUnits(2) : buySingleUnit(2)
+        }
+    },
+    '3': {
+        desc: 'Buy One Skeleton Mage',
+        onPress: function(ctrlPressed) {
+            ctrlPressed ? buyMaxUnits(3) : buySingleUnit(3)
+        }
+    },
+    '4': {
+        desc: 'Buy One Banshee',
+        onPress: function(ctrlPressed) {
+            ctrlPressed ? buyMaxUnits(4) : buySingleUnit(4)
+        }
+    },
+    '5': {
+        desc: 'Buy One Lich',
+        onPress: function(ctrlPressed) {
+            ctrlPressed ? buyMaxUnits(5) : buySingleUnit(5)
+        }
+    },
+    '6': {
+        desc: 'Buy One Behemoth',
+        onPress: function(ctrlPressed) {
+            ctrlPressed ? buyMaxUnits(6) : buySingleUnit(6)
+        }
+    },
+    '7': {
+        desc: 'Buy One Ancient One',
+        onPress: function(ctrlPressed) {
+            ctrlPressed ? buyMaxUnits(7) : buySingleUnit(7)
+        }
+    },
+    '8': {
+        desc: 'Buy One Sun Eater',
+        onPress: function(ctrlPressed) {
+            ctrlPressed ? buyMaxUnits(8) : buySingleUnit(8)
+        }
+    },
+};
+
+document.onkeydown = function(e) {
+    var key = e.key;
+    var ctrlDown = e.ctrlKey;
+    if (HOTKEYS[key] !== undefined) { HOTKEYS[key].onPress(ctrlDown); }
+}
 
 var player = {};
 
@@ -625,9 +727,9 @@ function updateHTML() {
         else { document.getElementById(CONSTR_DATA[c].buttonID).innerHTML = "<span style=\"font-weight: 900;\">" + getCUpgName(c) + "</span><br>" + getCUpgDesc(c) + "<br>Cost: " + formatWhole(getCUpgCost(c)) + " astral bricks" + "<br>Current level: " + formatWhole(player.construction[c]) + (isDisplayEffectC(c) ? ("<br>Currently: +" + formatDefault2(getCUpgEffect(c))) : ""); }
     }
     for (var t in TIME_DATA.upgrades) {
-        if (hasTUpgrade(t)) { document.getElementById(TIME_DATA.upgrades[t].buttonID).className = 'boughtTimeUpg' }
-        else if (canAffordTUpg(t)) { document.getElementById(TIME_DATA.upgrades[t].buttonID).className = 'timeUpg' }
-        else { document.getElementById(TIME_DATA.upgrades[t].buttonID).className = 'unclickableTimeUpg' }
+        if (hasTUpgrade(t)) { document.getElementById(TIME_DATA.upgrades[t].buttonID).className = 'boughtTimeUpg' + ((player.tooltipsEnabled && TIME_DATA.upgrades[t].displayTooltip) ? ' tooltip' : '') }
+        else if (canAffordTUpg(t)) { document.getElementById(TIME_DATA.upgrades[t].buttonID).className = 'timeUpg' + ((player.tooltipsEnabled && TIME_DATA.upgrades[t].displayTooltip) ? ' tooltip' : '') }
+        else { document.getElementById(TIME_DATA.upgrades[t].buttonID).className = 'unclickableTimeUpg' + ((player.tooltipsEnabled && TIME_DATA.upgrades[t].displayTooltip) ? ' tooltip' : '') }
         document.getElementById(TIME_DATA.upgrades[t].buttonID).innerHTML = "<span style=\"font-weight: 900;\">" + getTUpgName(t) + "</span><br>" + getTUpgDesc(t) + ((TIME_DATA.upgrades[t].preReq != null) ? "<br>Requires <span style=\"font-weight: 800;\">" + TIME_DATA.upgrades[TIME_DATA.upgrades[t].preReq].title + "</span>": "") + "<br>Cost: " + formatWhole(getTUpgCost(t)) + " time crystals" + (isDisplayEffectT(t) ? ("<br>Currently: " + formatDefault2(getTUpgEffect(t)) + "x") : "");
     }
     if (player.astralFlag) {
@@ -786,6 +888,31 @@ function loadGame() {
         player.tooltipsEnabled = false;
         toggleTooltips();
     }
+
+    var element = document.getElementById('hotkeysList');
+    var count = 0;
+    element.innerHTML = 'Number Keys 1-8: Buy Single Unit; ctrl+(1-8): Buy Max Units;<br>';
+    for (var k in HOTKEYS) {
+        if (count == 3) {
+            count = 0;
+            element.innerHTML += '<br>';
+        }
+        if (isNaN(k)) {
+            element.innerHTML += k + ': ' + HOTKEYS[k].desc + '; ';
+            count++;
+        }
+    }
+    element.innerHTML = element.innerHTML.slice(0, -2);
+
+    for (var b in BUILDS_DATA) {
+        for (var u in BUILDS_DATA[b].upgrades) {
+            if (BUILDS_DATA[b].upgrades[u].displayTooltip) { document.getElementById(BUILDS_DATA[b].upgrades[u].buttonID).setAttribute('data-title', BUILDS_DATA[b].upgrades[u].displayFormula) }
+        }
+    }
+    for (var t in TIME_DATA.upgrades) {
+        if (TIME_DATA.upgrades[t].displayTooltip) { document.getElementById(TIME_DATA.upgrades[t].buttonID).setAttribute('data-title', TIME_DATA.upgrades[t].displayFormula) }
+    }
+
     for (var i=1; i<10; i++) {
         
         if (i<9) { 
@@ -1170,6 +1297,21 @@ function fixResetBug() {
         },
     });
 
+    copyData(START_PLAYER.confirmations, {
+        'worldPrestige': {
+            'click': true,
+            'key': true,
+        },
+        'timePrestige': {
+            'click': true,
+            'key': true,
+        },
+        'timeRespec': {
+            'click': true,
+            'key': true,
+        },
+    });
+
     START_PLAYER.tooltipsEnabled = false;
 
     fixData(player, START_PLAYER);
@@ -1185,208 +1327,227 @@ function exportGameState() {
 }
 
 function gameLoop(diff=new Decimal(0), offline=false) {
-        var currentUpdate = new Date().getTime();
-        if (diff.eq(0)) { var diff = new Decimal(currentUpdate - player.lastUpdate); }
-        if (DEV_SPEED>0) { diff = diff.times(DEV_SPEED); }
-        var timeBuff = player.astralFlag ? getAntiTimeBuff().div(10) : getTrueTimeBuff();
-        diff = timeBuff.times(diff);
-        var realDiff = diff.div(timeBuff);
-        if (player.astralFlag) {
-            player.bricks = player.bricks.plus(getBricksPerSecond().times(diff.div(1000)));
-        } else {
-            player.corpses = player.corpses.plus(getCorpsesPerSecond().times(diff.div(1000)));
-        }
-        player.totalCorpses = player.totalCorpses.plus(getCorpsesPerSecond().times(diff.div(1000)));
-        for (var i=1; i<NUM_UNITS; i++) {
-            player.units[i].amount = player.units[i].amount.plus(getUnitProdPerSecond(i).times(diff.div(1000)));
-        }
-        if (player.timeLocked) {
-            for (var i=1; i<=NUM_TIMEDIMS; i++) {
-                if (i==1) {
-                    player.trueEssence = player.trueEssence.plus(getEssenceProdPerSecond().times(realDiff.div(1000)).times(player.truePercent/100));
-                    player.antiEssence = player.antiEssence.plus(getEssenceProdPerSecond().times(realDiff.div(1000)).times(player.antiPercent/100));
-                }
-                else { player.timeDims[i-1].amount = player.timeDims[i-1].amount.plus(getTimeDimProdPerSecond(i).times(realDiff.div(1000))); }
+    var currentUpdate = new Date().getTime();
+    if (diff.eq(0)) { var diff = new Decimal(currentUpdate - player.lastUpdate); }
+    if (DEV_SPEED>0) { diff = diff.times(DEV_SPEED); }
+    var timeBuff = player.astralFlag ? getAntiTimeBuff().div(10) : getTrueTimeBuff();
+    diff = timeBuff.times(diff);
+    var realDiff = diff.div(timeBuff);
+    if (player.astralFlag) {
+        player.bricks = player.bricks.plus(getBricksPerSecond().times(diff.div(1000)));
+    } else {
+        player.corpses = player.corpses.plus(getCorpsesPerSecond().times(diff.div(1000)));
+    }
+    player.totalCorpses = player.totalCorpses.plus(getCorpsesPerSecond().times(diff.div(1000)));
+    for (var i=1; i<NUM_UNITS; i++) {
+        player.units[i].amount = player.units[i].amount.plus(getUnitProdPerSecond(i).times(diff.div(1000)));
+    }
+    if (player.timeLocked) {
+        for (var i=1; i<=NUM_TIMEDIMS; i++) {
+            if (i==1) {
+                player.trueEssence = player.trueEssence.plus(getEssenceProdPerSecond().times(realDiff.div(1000)).times(player.truePercent/100));
+                player.antiEssence = player.antiEssence.plus(getEssenceProdPerSecond().times(realDiff.div(1000)).times(player.antiPercent/100));
             }
-        }
-        for (var b in BUILDS_DATA) {
-            if (isBuilt(b)) {
-                player.buildings[b].amount = player.buildings[b].amount.plus(getBuildingProdPerSec(b).times(diff.div(1000)));
-            }
-        }
-        if (!offline && player.unlocks['unitsTab']['autobuyers']) {
-            var slowAutoBuy = (currentUpdate - player.lastAutobuy)>=(15000/DEV_SPEED);
-            autobuyerTick(slowAutoBuy);
-            if (slowAutoBuy) { player.lastAutobuy = (new Date).getTime(); }
-        }
-        if (!offline) {
-            allDisplay();
-            if ((currentUpdate-player.lastAutoSave)>5000) { 
-                player.lastAutoSave = currentUpdate;
-                save();
-            }
-            player.lastUpdate = currentUpdate;
+            else { player.timeDims[i-1].amount = player.timeDims[i-1].amount.plus(getTimeDimProdPerSecond(i).times(realDiff.div(1000))); }
         }
     }
-
-    function autobuyerTick(slow) {
-        var tier;
-        for (var i=0; i<player.autobuyers.priority.length; i++) {
-            tier = player.autobuyers.priority[i];
-            if (player.autobuyers[tier].on && (player.autobuyers[tier].fast || slow)) {
-                if (player.autobuyers[tier].bulk) {
-                    buyMaxUnits(tier);
-                } else {
-                    buySingleUnit(tier);
-                }
-            }
-        }
-        if (player.autobuyers[9].on && (player.autobuyers[9].fast || slow)) {
-            if (isAutoSacTriggered()) { timePrestigeNoConfirm(true); }
+    for (var b in BUILDS_DATA) {
+        if (isBuilt(b)) {
+            player.buildings[b].amount = player.buildings[b].amount.plus(getBuildingProdPerSec(b).times(diff.div(1000)));
         }
     }
+    if (!offline && player.unlocks['unitsTab']['autobuyers']) {
+        var slowAutoBuy = (currentUpdate - player.lastAutobuy)>=(15000/DEV_SPEED);
+        autobuyerTick(slowAutoBuy);
+        if (slowAutoBuy) { player.lastAutobuy = (new Date).getTime(); }
+    }
+    if (!offline) {
+        allDisplay();
+        if ((currentUpdate-player.lastAutoSave)>5000) { 
+            player.lastAutoSave = currentUpdate;
+            save();
+        }
+        player.lastUpdate = currentUpdate;
+    }
+}
 
-    function calculateOfflineTime(seconds) {
-        document.getElementById('offlineCalcPopup').style.display = 'block';
-        var ticks = seconds * 20;
-        var extra = new Decimal(0);
-        var simMilliseconds = 0;
-        if (ticks>1000) {
-            extra = new Decimal((ticks-1000)/20);
-            ticks = 1000;
+function autobuyerTick(slow) {
+    var tier;
+    for (var i=0; i<player.autobuyers.priority.length; i++) {
+        tier = player.autobuyers.priority[i];
+        if (player.autobuyers[tier].on && (player.autobuyers[tier].fast || slow)) {
+            if (player.autobuyers[tier].bulk) {
+                buyMaxUnits(tier);
+            } else {
+                buySingleUnit(tier);
+            }
         }
-    
-        var startCorpses = new Decimal(player.corpses);
-        var startBricks = new Decimal(player.bricks);
-        var startArms = new Decimal(player.buildings[1].amount);
-        var startAcolytes = new Decimal(player.buildings[2].amount);
-        var startPhotons = new Decimal(player.buildings[3].amount);
-        var startTrue = new Decimal(player.trueEssence);
-        var startAnti = new Decimal(player.antiEssence);
-    
-        for (var done=0; done<ticks; done++) {
-            gameLoop(extra.plus(50), true);
-            simMilliseconds += extra.plus(50);
-            autobuyerTick(simMilliseconds>=15000);
-            if (simMilliseconds>=15000) { simMilliseconds = 0; }
-        }
-        save();
-    
-        var allZero = true;
-        if (player.corpses.gt(startCorpses)) {
-            document.getElementById('offlineCorpseGain').innerHTML = formatDefault(player.corpses.minus(startCorpses));
-            document.getElementById('offlineCorpse').style.display = 'block';
-            allZero = false;
-        } else {
-            document.getElementById('offlineCorpse').style.display = 'none';
-        }
-        if (player.bricks.gt(startBricks)) {
-            document.getElementById('offlineBrickGain').innerHTML = formatDefault(player.bricks.minus(startBricks));
-            document.getElementById('offlineBrick').style.display = 'block';
-            allZero = false;
-        } else {
-            document.getElementById('offlineBrick').style.display = 'none';
-        }
-        if (player.buildings[1].amount.gt(startArms)) {
-            document.getElementById('offlineArmamentGain').innerHTML = formatDefault(player.buildings[1].amount.minus(startArms));
-            document.getElementById('offlineArmament').style.display = 'block';
-            allZero = false;
-        } else {
-            document.getElementById('offlineArmament').style.display = 'none';
-        }
-        if (player.buildings[2].amount.gt(startAcolytes)) {
-            document.getElementById('offlineAcolyteGain').innerHTML = formatDefault(player.buildings[2].amount.minus(startAcolytes));
-            document.getElementById('offlineAcolyte').style.display = 'block';
-            allZero = false;
-        } else {
-            document.getElementById('offlineAcolyte').style.display = 'none';
-        }
-        if (player.buildings[3].amount.gt(startPhotons)) {
-            document.getElementById('offlinePhotonGain').innerHTML = formatDefault(player.buildings[3].amount.minus(startPhotons));
-            document.getElementById('offlinePhoton').style.display = 'block';
-            allZero = false;
-        } else {
-            document.getElementById('offlinePhoton').style.display = 'none';
-        }
-        if (player.trueEssence.gt(startTrue) || player.antiEssence.gt(startAnti)) {
-            document.getElementById('offlineTrueGain').innerHTML = formatDefault(player.trueEssence.minus(startTrue).gte(1) ? player.trueEssence.minus(startTrue) : '0');
-            document.getElementById('offlineAntiGain').innerHTML = formatDefault(player.antiEssence.minus(startAnti).gte(1) ? player.antiEssence.minus(startAnti) : '0');
-            document.getElementById('offlineEssence').style.display = 'block';
-            allZero = false;
-        } else {
-            document.getElementById('offlineEssence').style.display = 'none';
-        }
-    
-        if (allZero) {
-            document.getElementById('offlineZero');
-        }
-        document.getElementById('offlineCalcPopup').style.display = 'none';
-        document.getElementById('offlineGainPopup').style.display = 'block';
+    }
+    if (player.autobuyers[9].on && (player.autobuyers[9].fast || slow)) {
+        if (isAutoSacTriggered()) { timePrestigeNoConfirm(true); }
+    }
+}
+
+function calculateOfflineTime(seconds) {
+    document.getElementById('offlineCalcPopup').style.display = 'block';
+    var ticks = seconds * 20;
+    var extra = new Decimal(0);
+    var simMilliseconds = 0;
+    if (ticks>1000) {
+        extra = new Decimal((ticks-1000)/20);
+        ticks = 1000;
+    }
+
+    var startCorpses = new Decimal(player.corpses);
+    var startBricks = new Decimal(player.bricks);
+    var startArms = new Decimal(player.buildings[1].amount);
+    var startAcolytes = new Decimal(player.buildings[2].amount);
+    var startPhotons = new Decimal(player.buildings[3].amount);
+    var startTrue = new Decimal(player.trueEssence);
+    var startAnti = new Decimal(player.antiEssence);
+
+    for (var done=0; done<ticks; done++) {
+        gameLoop(extra.plus(50), true);
+        simMilliseconds += extra.plus(50);
+        autobuyerTick(simMilliseconds>=15000);
+        if (simMilliseconds>=15000) { simMilliseconds = 0; }
+    }
+    save();
+
+    var allZero = true;
+    if (player.corpses.gt(startCorpses)) {
+        document.getElementById('offlineCorpseGain').innerHTML = formatDefault(player.corpses.minus(startCorpses));
+        document.getElementById('offlineCorpse').style.display = 'block';
+        allZero = false;
+    } else {
+        document.getElementById('offlineCorpse').style.display = 'none';
+    }
+    if (player.bricks.gt(startBricks)) {
+        document.getElementById('offlineBrickGain').innerHTML = formatDefault(player.bricks.minus(startBricks));
+        document.getElementById('offlineBrick').style.display = 'block';
+        allZero = false;
+    } else {
+        document.getElementById('offlineBrick').style.display = 'none';
+    }
+    if (player.buildings[1].amount.gt(startArms)) {
+        document.getElementById('offlineArmamentGain').innerHTML = formatDefault(player.buildings[1].amount.minus(startArms));
+        document.getElementById('offlineArmament').style.display = 'block';
+        allZero = false;
+    } else {
+        document.getElementById('offlineArmament').style.display = 'none';
+    }
+    if (player.buildings[2].amount.gt(startAcolytes)) {
+        document.getElementById('offlineAcolyteGain').innerHTML = formatDefault(player.buildings[2].amount.minus(startAcolytes));
+        document.getElementById('offlineAcolyte').style.display = 'block';
+        allZero = false;
+    } else {
+        document.getElementById('offlineAcolyte').style.display = 'none';
+    }
+    if (player.buildings[3].amount.gt(startPhotons)) {
+        document.getElementById('offlinePhotonGain').innerHTML = formatDefault(player.buildings[3].amount.minus(startPhotons));
+        document.getElementById('offlinePhoton').style.display = 'block';
+        allZero = false;
+    } else {
+        document.getElementById('offlinePhoton').style.display = 'none';
+    }
+    if (player.trueEssence.gt(startTrue) || player.antiEssence.gt(startAnti)) {
+        document.getElementById('offlineTrueGain').innerHTML = formatDefault(player.trueEssence.minus(startTrue).gte(1) ? player.trueEssence.minus(startTrue) : '0');
+        document.getElementById('offlineAntiGain').innerHTML = formatDefault(player.antiEssence.minus(startAnti).gte(1) ? player.antiEssence.minus(startAnti) : '0');
+        document.getElementById('offlineEssence').style.display = 'block';
+        allZero = false;
+    } else {
+        document.getElementById('offlineEssence').style.display = 'none';
+    }
+
+    if (allZero) {
+        document.getElementById('offlineZero');
+    }
+    document.getElementById('offlineCalcPopup').style.display = 'none';
+    document.getElementById('offlineGainPopup').style.display = 'block';
+    player.lastUpdate = (new Date).getTime();
+    player.lastAutoSave = (new Date).getTime();
+    player.lastAutobuy = (new Date).getTime();
+}
+
+function closeOfflinePopup() {
+    document.getElementById('offlineGainPopup').style.display = 'none';
+}
+
+function startGame() {
+    var diff = (new Date).getTime() - player.lastUpdate;
+    if ((diff)>(1000*1000)) { calculateOfflineTime(new Decimal(diff/1000)); }
+    else {
         player.lastUpdate = (new Date).getTime();
         player.lastAutoSave = (new Date).getTime();
         player.lastAutobuy = (new Date).getTime();
-    }
-    
-    function closeOfflinePopup() {
-        document.getElementById('offlineGainPopup').style.display = 'none';
-    }
-    
-    function startGame() {
-        var diff = (new Date).getTime() - player.lastUpdate;
-        if ((diff)>(1000*1000)) { calculateOfflineTime(new Decimal(diff/1000)); }
-        else {
-            player.lastUpdate = (new Date).getTime();
-            player.lastAutoSave = (new Date).getTime();
-            player.lastAutobuy = (new Date).getTime();
-            save();
-        }
-
-        if (player.pastRuns.lastRun.timeSacrificed == 0) { player.pastRuns.lastRun.timeSacrificed = (new Date).getTime(); }
-    
-        document.getElementById('calcPopupContainer').style.display = 'none';
-        document.getElementById('game').style.display = 'block';
-    
-        startInterval();
-    }
-    
-    function startInterval() {
-        mainLoop = setInterval(gameLoop, 50);
-    }
-    
-    function changeDevSpeed(num) {
-        DEV_SPEED = num;
-    }
-    
-    function resetDevSpeed() {
-        DEV_SPEED = 1;
-    }
-    
-    function rewindTime() {
-        clearInterval(mainLoop);
-        player.lastUpdate = player.lastUpdate - (3600*1000);
         save();
-        window.location.reload();
     }
 
-    function toggleTooltips() {
-        document.getElementById('brickTooltip').classList.toggle('tooltip');
-        document.getElementById('trueTooltip').classList.toggle('tooltip');
-        document.getElementById('antiTooltip').classList.toggle('tooltip');
-        document.getElementById('factoryTooltip').classList.toggle('tooltip');
-        document.getElementById('necropolisTooltip').classList.toggle('tooltip');
-        document.getElementById('sunTooltip').classList.toggle('tooltip');
-        player.tooltipsEnabled = !player.tooltipsEnabled;
-    }
+    if (player.pastRuns.lastRun.timeSacrificed == 0) { player.pastRuns.lastRun.timeSacrificed = (new Date).getTime(); }
 
-    function showChangelog(divID) {
-        var allDivs = document.getElementsByClassName('changelogPageDiv');
-        var tab;
-        for (var i=0; i<allDivs.length; i++) {
-            tab = allDivs.item(i);
-            if (tab.id === divID) {
-                (tab.style.display == 'block') ? tab.style.display = 'none': tab.style.display = 'block'
-            } else {
-                tab.style.display = 'none';
-            }
+    document.getElementById('calcPopupContainer').style.display = 'none';
+    document.getElementById('game').style.display = 'block';
+
+    startInterval();
+}
+
+function startInterval() {
+    mainLoop = setInterval(gameLoop, 50);
+}
+
+function changeDevSpeed(num) {
+    DEV_SPEED = num;
+}
+
+function resetDevSpeed() {
+    DEV_SPEED = 1;
+}
+
+function rewindTime() {
+    clearInterval(mainLoop);
+    player.lastUpdate = player.lastUpdate - (3600*1000);
+    save();
+    window.location.reload();
+}
+
+function toggleTooltips() {
+    document.getElementById('brickTooltip').classList.toggle('tooltip');
+    document.getElementById('trueTooltip').classList.toggle('tooltip');
+    document.getElementById('antiTooltip').classList.toggle('tooltip');
+    document.getElementById('factoryTooltip').classList.toggle('tooltip');
+    document.getElementById('necropolisTooltip').classList.toggle('tooltip');
+    document.getElementById('sunTooltip').classList.toggle('tooltip');
+    player.tooltipsEnabled = !player.tooltipsEnabled;
+    if (player.tooltipsEnabled) { document.getElementById('toggleTooltips').innerHTML = 'TOGGLE FORMULA TOOLTIPS: ON'; }
+    else { document.getElementById('toggleTooltips').innerHTML = 'TOGGLE FORMULA TOOLTIPS: OFF'; }
+}
+
+function showChangelog(divID) {
+    var allDivs = document.getElementsByClassName('changelogPageDiv');
+    var tab;
+    for (var i=0; i<allDivs.length; i++) {
+        tab = allDivs.item(i);
+        if (tab.id === divID) {
+            (tab.style.display == 'block') ? tab.style.display = 'none': tab.style.display = 'block'
+        } else {
+            tab.style.display = 'none';
         }
     }
+}
+
+function toggleConfirmations(action, method, id) {
+    player.confirmations[action][method] = !player.confirmations[action][method];
+    if (player.confirmations[action][method]) {
+        document.getElementById(id).innerHTML = "ON";
+    } else {
+        document.getElementById(id).innerHTML = "OFF";
+    }
+}
+
+function openConfirmationsPopup() {
+    document.getElementById('confirmationsPopup').style.display = 'block';
+}
+
+function closeConfirmationsPopup() {
+    document.getElementById('confirmationsPopup').style.display = 'none';
+}

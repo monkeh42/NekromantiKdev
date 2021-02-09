@@ -299,7 +299,8 @@ function canSpacePrestige() {
 
 function spacePrestige() {
     if (canSpacePrestige()) {
-        if (!confirm("Are you sure? This will reset ALL of your corpses, units, and astral bricks.")) return
+        if (player.confirmations['worldPrestige'])
+            if (!confirm("Are you sure? This will reset ALL of your corpses, units, and astral bricks.")) return
         if (player.astralFlag) { toggleAstral(); }
         clearInterval(mainLoop);
         player.spaceResets = player.spaceResets.plus(1);

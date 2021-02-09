@@ -798,7 +798,7 @@
                     </tr>
                     <tr id="factoryUpgradesRow1" style="display: none;">
                         <td>
-                            <button id="factoryUpg11" class="factoryUpg" data-title="1 + 2*sqrt(log(x))" onclick="buyBUpg(1, 11)"></button>
+                            <button id="factoryUpg11" class="factoryUpg" onclick="buyBUpg(1, 11)"></button>
                         </td>
                         <td>
                             <button id="factoryUpg12" class="factoryUpg" onclick="buyBUpg(1, 12)"></button>
@@ -809,13 +809,13 @@
                     </tr>
                     <tr id="factoryUpgradesRow2" style="display: none;">
                         <td>
-                            <button id="factoryUpg21" class="factoryUpg" data-title="1 + 2*sqrt(log(x))" onclick="buyBUpg(1, 21)"></button>
+                            <button id="factoryUpg21" class="factoryUpg" onclick="buyBUpg(1, 21)"></button>
                         </td>
                         <td>
                             <button id="factoryUpg22" class="factoryUpg" onclick="buyBUpg(1, 22)"></button>
                         </td>
                         <td>
-                            <button id="factoryUpg23" class="factoryUpg" data-title="1 + log(x)^2" onclick="buyBUpg(1, 23)"></button>
+                            <button id="factoryUpg23" class="factoryUpg" onclick="buyBUpg(1, 23)"></button>
                         </td>
                     </tr>
                 </table>
@@ -836,24 +836,24 @@
                     </tr>
                     <tr id="necropolisUpgradesRow1" style="display: none;">
                         <td>
-                            <button id="necropolisUpg11" class="necropolisUpg" data-title="1.2^OoM" onclick="buyBUpg(2, 11)"><strong>Upgrade 1</strong><br>description of upgrade</button>
+                            <button id="necropolisUpg11" class="necropolisUpg" onclick="buyBUpg(2, 11)"><strong>Upgrade 1</strong><br>description of upgrade</button>
                         </td>
                         <td>
-                            <button id="necropolisUpg12" class="necropolisUpg" data-title="1 + sqrt(log(x))" onclick="buyBUpg(2, 12)"><strong>Upgrade 2</strong><br>description of upgrade</button>
+                            <button id="necropolisUpg12" class="necropolisUpg" onclick="buyBUpg(2, 12)"><strong>Upgrade 2</strong><br>description of upgrade</button>
                         </td>
                         <td>
-                            <button id="necropolisUpg13" class="necropolisUpg" data-title="1 + sqrt(log(x))" onclick="buyBUpg(2, 13)"><strong>Upgrade 3</strong><br>description of upgrade</button>
+                            <button id="necropolisUpg13" class="necropolisUpg" onclick="buyBUpg(2, 13)"><strong>Upgrade 3</strong><br>description of upgrade</button>
                         </td>
                     </tr>
                     <tr id="necropolisUpgradesRow2" style="display: none;">
                         <td>
-                            <button id="necropolisUpg21" class="necropolisUpg" data-title="1 + log(x)^2" onclick="buyBUpg(2, 21)"><strong>Upgrade 4</strong><br>description of upgrade</button>
+                            <button id="necropolisUpg21" class="necropolisUpg" onclick="buyBUpg(2, 21)"><strong>Upgrade 4</strong><br>description of upgrade</button>
                         </td>
                         <td>
-                            <button id="necropolisUpg22" class="necropolisUpg" data-title="1 + log(x)^2" onclick="buyBUpg(2, 22)"><strong>Upgrade 5</strong><br>description of upgrade</button>
+                            <button id="necropolisUpg22" class="necropolisUpg" onclick="buyBUpg(2, 22)"><strong>Upgrade 5</strong><br>description of upgrade</button>
                         </td>
                         <td>
-                            <button id="necropolisUpg23" class="necropolisUpg" data-title="1 + log(x)/4" onclick="buyBUpg(2, 23)"><strong>Upgrade 6</strong><br>description of upgrade</button>
+                            <button id="necropolisUpg23" class="necropolisUpg" onclick="buyBUpg(2, 23)"><strong>Upgrade 6</strong><br>description of upgrade</button>
                         </td>
                     </tr>
                 </table>
@@ -1171,16 +1171,16 @@
                 </tr>
                 <tr>
                     <td>
+                        <button id="toggleConfBut" class="optBut" style="font-size: 10pt;" onclick="openConfirmationsPopup()">TOGGLE CONFIRMATIONS</button>
+                    </td>
+                    <td>
+                        <button id="toggleTooltips" class="optBut" style="font-size: 10pt;" onclick="toggleTooltips()">TOGGLE FORMULA TOOLTIPS: OFF</button>
+                    </td>
+                    <td>
                         <a href="changelog.html" target="_blank"><button id="helpBut" class="optBut">CHANGELOG</button></a>
                     </td>
                     <td>
-                        <button id="toggleTooltips" class="optBut" style="font-size: 10pt;" onclick="toggleTooltips()">TOGGLE FORMULA TOOLTIPS</button>
-                    </td>
-                    <td>
                         <div style="height: 50px; width: 100%; text-align: center;"><a href="https://discord.gg/H2V7FfT4Rt" target="_blank"><img src="discord.png" width="50px" style="margin-top:10px;"></a></div>
-                    </td>
-                    <td>
-                        
                     </td>
                 </tr>
                 <tr style="height: 25px;">
@@ -1201,6 +1201,13 @@
                         <button class="optBut" onclick="closeText()">CLOSE</button>
                     </td>
                     <td></td>
+                </tr>
+                <tr>
+                    <td colspan="4">
+                        <div style="text-align: center; width: 80%; margin: auto;">
+                            <span style="font-weight: bold;">HOTKEYS: </span><span id="hotkeysList" style="font-size: 11pt;"></span>
+                        </div>
+                    </td>
                 </tr>
                 <tr style="height: 25px;">
                     <div style="height: 100%;"></div>
@@ -1229,6 +1236,58 @@
                 <span id="offlineEssence" style="display: none;"><span id="offlineTrueGain" style="font-size: 15pt; font-weight: bold; white-space: pre; color: #006ba0;"> 0 </span> true time essence and <span id="offlineAntiGain" style="font-size: 15pt; font-weight: bold; white-space: pre; color: #006ba0;"> 0 </span> anti time essence.<br></span>
             </div>
             <button class="optBut" id="closeOfflinePopup" style="margin: 10px;" onclick="closeOfflinePopup()">CLOSE</button>
+        </div>
+        <div class="popup" id="confirmationsPopup">
+            <div>
+                <h2>Confirmations</h2>
+                <table>
+                    <tr>
+                        <td width="50%">
+                            <strong>Action</strong>
+                        </td>
+                        <td width="25%">
+                            <strong>On Click</strong>
+                        </td>
+                        <td width="25%">
+                            <strong>On Hotkey</strong>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            World Prestige
+                        </td>
+                        <td>
+                            <button id="worldPrestigeClickBut" class="confBut" onclick="toggleConfirmations('worldPrestige', 'click', 'worldPrestigeClickBut')">ON</button>
+                        </td>
+                        <td>
+                            <button id="worldPrestigeKeyBut" class="confBut" onclick="toggleConfirmations('worldPrestige', 'key', 'worldPrestigeKeyBut')">ON</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Sacrifice
+                        </td>
+                        <td>
+                            <button id="timePrestigeClickBut" class="confBut" onclick="toggleConfirmations('timePrestige', 'click', 'timePrestigeClickBut')">ON</button>
+                        </td>
+                        <td>
+                            <button id="timePrestigeKeyBut" class="confBut" onclick="toggleConfirmations('timePrestige', 'key', 'timePrestigeKeyBut')">ON</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Respec Time
+                        </td>
+                        <td>
+                            <button id="timeRespecClickBut" class="confBut" onclick="toggleConfirmations('timeRespec', 'click', 'timeRespecClickBut')">ON</button>
+                        </td>
+                        <td>
+                            <button id="timeRespecKeyBut" class="confBut" onclick="toggleConfirmations('timeRespec', 'key', 'timeRespecKeyBut')">ON</button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <button class="optBut" id="closeConfPopup" style="margin: 10px;" onclick="closeConfirmationsPopup()">CLOSE</button>
         </div>
     </div>
 </body>

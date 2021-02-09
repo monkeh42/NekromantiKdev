@@ -45,6 +45,7 @@ const BUILDS_DATA = {
                 buttonID: 'factoryUpg11',
                 displayEffect: true,
                 displayTooltip: true,
+                displayFormula: '1 + 2*sqrt(log(x))',
                 effect: function() {
                     var b = Decimal.max(player.buildings[1].amount, 1).log10();
                     var e = new Decimal(0.5);
@@ -58,6 +59,7 @@ const BUILDS_DATA = {
                 buttonID: 'factoryUpg12',
                 displayEffect: false,
                 displayTooltip: false,
+                displayFormula: '',
                 effect: function() {
                     var e = new Decimal(1.25);
                     return e;
@@ -70,6 +72,7 @@ const BUILDS_DATA = {
                 buttonID: 'factoryUpg13',
                 displayEffect: false,
                 displayTooltip: false,
+                displayFormula: '',
                 effect: function() {
                     return new Decimal(1);
                 }
@@ -81,6 +84,7 @@ const BUILDS_DATA = {
                 buttonID: 'factoryUpg21',
                 displayEffect: true,
                 displayTooltip: true,
+                displayFormula: '1 + sqrt(log(x))',
                 effect: function() {
                     var b = Decimal.max(player.units[2].amount, 1).log10();
                     var e = new Decimal(0.5);
@@ -94,6 +98,7 @@ const BUILDS_DATA = {
                 buttonID: 'factoryUpg22',
                 displayEffect: false,
                 displayTooltip: false,
+                displayFormula: '',
                 effect: function() {
                     return UNITS_DATA[8].corpseMult().gt(1);
                 }
@@ -105,6 +110,7 @@ const BUILDS_DATA = {
                 buttonID: 'factoryUpg23',
                 displayEffect: true,
                 displayTooltip: true,
+                displayFormula: '1 + log(x)^2',
                 effect: function() {
                     var b = Decimal.max(player.corpses, 1);
                     b = Decimal.pow(b.log10(), 2);
@@ -157,6 +163,7 @@ const BUILDS_DATA = {
                 buttonID: 'necropolisUpg11',
                 displayEffect: true,
                 displayTooltip: true,
+                displayFormula: '1.2^x',
                 effect: function() {
                     var e = Decimal.floor(player.bricks.e);
                     return Decimal.pow(1.2, e);
@@ -169,6 +176,7 @@ const BUILDS_DATA = {
                 buttonID: 'necropolisUpg12',
                 displayEffect: true,
                 displayTooltip: true,
+                displayFormula: '1 + sqrt(log(x))',
                 effect: function() {
                     var e = Decimal.sqrt(Decimal.max(player.bricks, 1).log10()).plus(1);
                     return e;
@@ -181,6 +189,7 @@ const BUILDS_DATA = {
                 buttonID: 'necropolisUpg13',
                 displayEffect: true,
                 displayTooltip: true,
+                displayFormula: '1 + sqrt(log(x))',
                 effect: function() {
                     var e = Decimal.sqrt(Decimal.max(player.bricks, 1).log10()).plus(1);
                     return e;
@@ -193,6 +202,7 @@ const BUILDS_DATA = {
                 buttonID: 'necropolisUpg21',
                 displayEffect: true,
                 displayTooltip: true,
+                displayFormula: '1 + log(x)^2',
                 effect: function() {
                     var b = Decimal.max(player.bricks, 1);
                     b = Decimal.pow(b.log10(), 2);
@@ -206,6 +216,7 @@ const BUILDS_DATA = {
                 buttonID: 'necropolisUpg22',
                 displayEffect: true,
                 displayTooltip: true,
+                displayFormula: '1 + log(x)^2',
                 effect: function() {
                     var b = Decimal.max(player.bricks, 1);
                     b = Decimal.pow(b.log10(), 2);
@@ -219,8 +230,9 @@ const BUILDS_DATA = {
                 buttonID: 'necropolisUpg23',
                 displayEffect: true,
                 displayTooltip: true,
+                displayFormula: '1 + log(x)/4',
                 effect: function() {
-                    var e = Decimal.sqrt(Decimal.max(player.bricks, 1).log10()).plus(1);
+                    var e = Decimal.div(Decimal.max(player.bricks, 1).log10(), 4).plus(1);
                     return e;
                 }
             }
@@ -271,6 +283,7 @@ const BUILDS_DATA = {
                 buttonID: 'sunUpg11',
                 displayEffect: false,
                 displayTooltip: false,
+                displayFormula: '',
                 effect: function() {
                     return new Decimal(1);
                 }
@@ -282,6 +295,7 @@ const BUILDS_DATA = {
                 buttonID: 'sunUpg12',
                 displayEffect: false,
                 displayTooltip: false,
+                displayFormula: '',
                 effect: function() {
                     return new Decimal(1);
                 }
@@ -293,6 +307,7 @@ const BUILDS_DATA = {
                 buttonID: 'sunUpg13',
                 displayEffect: false,
                 displayTooltip: false,
+                displayFormula: '',
                 effect: function() {
                     return new Decimal(1);
                 }
@@ -304,6 +319,7 @@ const BUILDS_DATA = {
                 buttonID: 'sunUpg21',
                 displayEffect: false,
                 displayTooltip: false,
+                displayFormula: '',
                 effect: function() {
                     return new Decimal(1);
                 }
@@ -315,6 +331,7 @@ const BUILDS_DATA = {
                 buttonID: 'sunUpg22',
                 displayEffect: false,
                 displayTooltip: false,
+                displayFormula: '',
                 effect: function() {
                     return new Decimal(1);
                 }
@@ -326,6 +343,7 @@ const BUILDS_DATA = {
                 buttonID: 'sunUpg23',
                 displayEffect: false,
                 displayTooltip: false,
+                displayFormula: '',
                 effect: function() {
                     return new Decimal(1);
                 }

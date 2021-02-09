@@ -109,6 +109,8 @@ const TIME_DATA = {
             preReq: null,
             buttonID: 'timeUpg11',
             displayEffect: false,
+            displayTooltip: false,
+            displayFormula: '',
             effect: function() {
                 return new Decimal(1);
             }
@@ -120,6 +122,8 @@ const TIME_DATA = {
             preReq: 11,
             buttonID: 'timeUpg12',
             displayEffect: false,
+            displayTooltip: false,
+            displayFormula: '',
             effect: function() {
                 return new Decimal(1);
             }
@@ -131,6 +135,8 @@ const TIME_DATA = {
             preReq: 12,
             buttonID: 'timeUpg13',
             displayEffect: false,
+            displayTooltip: false,
+            displayFormula: '',
             effect: function() {
                 return new Decimal(1);
             }
@@ -142,6 +148,8 @@ const TIME_DATA = {
             preReq: 13,
             buttonID: 'timeUpg14',
             displayEffect: false,
+            displayTooltip: false,
+            displayFormula: '',
             effect: function() {
                 return new Decimal(1);
             }
@@ -149,10 +157,12 @@ const TIME_DATA = {
         21: {
             title: 'Recrystallization',
             desc: 'Double your time crystal gain.',
-            cost: new Decimal(500),
+            cost: new Decimal(1000),
             preReq: null,
             buttonID: 'timeUpg21',
             displayEffect: false,
+            displayTooltip: false,
+            displayFormula: '',
             effect: function() {
                 return new Decimal(1);
             }
@@ -164,6 +174,8 @@ const TIME_DATA = {
             preReq: 21,
             buttonID: 'timeUpg22',
             displayEffect: true,
+            displayTooltip: true,
+            displayFormula: '1 + 10*log(x)',
             effect: function() {
                 var e = player.crystals;
                 e = e.log10()*10;
@@ -173,10 +185,12 @@ const TIME_DATA = {
         23: {
             title: 'Building Boost',
             desc: 'All building resources get a production boost based on unspent time crystals.',
-            cost: new Decimal(5000),
+            cost: new Decimal(10000),
             preReq: 22,
             buttonID: 'timeUpg23',
             displayEffect: true,
+            displayTooltip: true,
+            displayFormula: '1 + log(x)',
             effect: function() {
                 var e = player.crystals;
                 e = e.log10();
@@ -186,10 +200,12 @@ const TIME_DATA = {
         24: {
             title: 'Rapid Fire',
             desc: 'Unlock fast autobuyers, and the buildings/construction tabs are never reset on sacrifice (except bricks and resources).',
-            cost: new Decimal(10000),
+            cost: new Decimal(15000),
             preReq: 23,
             buttonID: 'timeUpg24',
             displayEffect: false,
+            displayTooltip: false,
+            displayFormula: '',
             effect: function() {
                 return new Decimal(1);
             }
@@ -197,10 +213,12 @@ const TIME_DATA = {
         31: {
             title: 'Time Boost',
             desc: 'Time dimension multipliers get a boost based on unspent time crystals.',
-            cost: new Decimal(5000),
+            cost: new Decimal(15000),
             preReq: null,
             buttonID: 'timeUpg31',
             displayEffect: true,
+            displayTooltip: true,
+            displayFormula: '1 + 10*log(x)',
             effect: function() {
                 var e = player.crystals;
                 e = e.log10()*10
@@ -210,10 +228,12 @@ const TIME_DATA = {
         32: {
             title: 'Forgotten Worlds',
             desc: 'The corpse production multiplier from conquered worlds is 1.5x stronger.',
-            cost: new Decimal(10000),
+            cost: new Decimal(25000),
             preReq: 31,
             buttonID: 'timeUpg32',
             displayEffect: false,
+            displayTooltip: false,
+            displayFormula: '',
             effect: function() {
                 return new Decimal(1.5);
             }
@@ -221,10 +241,12 @@ const TIME_DATA = {
         33: {
             title: 'Automation',
             desc: 'Unlock bulk autobuyers, and post-25 construction cost scaling is halved.',
-            cost: new Decimal(20000),
+            cost: new Decimal(50000),
             preReq: 32,
             buttonID: 'timeUpg33',
             displayEffect: false,
+            displayTooltip: false,
+            displayFormula: '',
             effect: function() {
                 return new Decimal(0.5);
             }
@@ -236,6 +258,8 @@ const TIME_DATA = {
             preReq: 33,
             buttonID: 'timeUpg34',
             displayEffect: false,
+            displayTooltip: false,
+            displayFormula: '',
             effect: function() {
                 return new Decimal(1);
             }
@@ -386,7 +410,9 @@ function canTimePrestige() {
 function respecTime() {
     if (player.timeResets.gte(1)) {
         if (player.timeLocked) {
-            if (!confirm("Are you sure? This will reset ALL of your progress before unlocking Time Warp, and all of your time essense.")) return
+            if (player.confirmations['timeRespec']) {
+                if (!confirm("Are you sure? This will reset ALL of your progress before unlocking Time Warp, and all of your time essense.")) return
+            }
             timePrestigeReset();
         }
     }
@@ -397,6 +423,7 @@ function lockInTime() {
 }
 
 function timePrestigeReset(auto=false) {
+    var timeUpgUnlocked = hasUpgrade(3, 13) ? true : false
     if (player.astralFlag) { toggleAstral(); }
     clearInterval(mainLoop);
     player.pastRuns.lastRun.crystalGain = calculateCrystalGain();
@@ -415,6 +442,7 @@ function timePrestigeReset(auto=false) {
     player.timeLocked = false;
     copyData(player.unlocks['unitsTab'], START_PLAYER.unlocks['unitsTab']);
     copyData(player.unlocks['buildingsTab'], START_PLAYER.unlocks['buildingsTab']);
+    if (timeUpgUnlocked) { player.buildings[3].upgrades[13] = true; }
     document.getElementById('timeSlider').removeAttribute('disabled');
     allDisplay();
     save();
@@ -448,7 +476,9 @@ function resetSpaceCounts() {
 
 function timePrestige() {
     if (canTimePrestige()) {
-        if (!confirm("Are you sure? This will reset ALL of your progress before unlocking Time Warp, and all of your time essense.")) return
+        if (player.confirmations['timePrestige']) {
+            if (!confirm("Are you sure? This will reset ALL of your progress before unlocking Time Warp, and all of your time essense.")) return
+        }
         player.crystals = player.crystals.plus(calculateCrystalGain());
         player.totalCrystals = player.totalCrystals.plus(calculateCrystalGain());
         player.timeResets = player.timeResets.plus(1);
