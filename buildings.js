@@ -579,7 +579,7 @@ function resetBuildings() {
 }
 
 function toggleAstral() {
-    if (!player.astralFlag) {
+    if (!player.astralFlag && player.unlocks['buildingsTab']['mainTab']) {
         player.astralFlag = true;
         document.getElementById('brickGainDiv').style.display = 'block';
         document.getElementById('astralToggle').className = 'astralOn';
