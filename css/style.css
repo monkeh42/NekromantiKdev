@@ -991,61 +991,60 @@ button:focus {
 }
 
 .buyerRadio {
-    height: 12px;
-    width: 12px;
+    height: 13px;
+    width: 13px;
     -webkit-appearance: none;
     -moz-appearance: none;
     -o-appearance: none;
     appearance: none;
-    border: 1px solid white;
     outline: none;
-    background-color: transparent;
+    background-color: white;
     cursor: pointer;
 }
 
 .buyerRadio:checked {
-    background-color: black;
-    border: 1px solid white;
+    background-color: #170424;
+    border: 3px solid white;
 }
 
 .buyerRadio:checked:hover {
-    background-color: black;
-    border: 1px solid white;
+    background-color: #170424;
+    border: 3px solid white;
     opacity: 1;
     cursor: default;
 }
 
 .buyerRadio:hover {
-    background-color: #460573;
+    background-color: #170424;
+    border: 3px solid white;
     opacity: 0.5;
 }
 
 .buyerCheckbox {
-    height: 12px;
-    width: 12px;
+    height: 13px;
+    width: 13px;
     -webkit-appearance: none;
     -moz-appearance: none;
     -o-appearance: none;
     appearance: none;
-    border: 1px solid white;
     outline: none;
-    background-color: transparent;
+    background-color: white;
     cursor: pointer;
 }
 
 .buyerCheckbox:checked {
-    background-color: black;
-    border: 1px solid white;
+    background-color: #170424;
+    border: 3px solid white;
 }
 
 .buyerCheckbox:checked:hover {
-    background-color: black;
-    border: 1px solid white;
+    background-color: #170424;
+    border: 3px solid white;
     opacity: 0.5;
 }
 
 .buyerCheckbox:hover {
-    background-color: #460573;
+    background-color: white;
     opacity: 0.5;
 }
 
