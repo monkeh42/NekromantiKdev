@@ -455,7 +455,7 @@ function resetSpaceCounts() {
     player.spaceResets = new Decimal(START_PLAYER.spaceResets);
     player.worlds = new Decimal(START_PLAYER.worlds);
     player.nextSpaceReset = START_PLAYER.nextSpaceReset.slice();
-    if (hasTUpgrade(13)) {
+    if (hasTUpgrade(14)) {
         player.worlds = new Decimal(4);
         player.spaceResets = new Decimal(4);
         player.nextSpaceReset = [3, 8];
