@@ -175,10 +175,10 @@ const TIME_DATA = {
             buttonID: 'timeUpg22',
             displayEffect: true,
             displayTooltip: true,
-            displayFormula: '1 + 10*log(x)',
+            displayFormula: '1 + 7.5*log(x)',
             effect: function() {
                 var e = player.crystals;
-                e = e.log10()*10;
+                e = e.log10()*7.5;
                 return 1 + e;
             }
         },
