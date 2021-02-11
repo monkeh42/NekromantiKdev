@@ -175,7 +175,7 @@ function buyTUpg(t) {
     if (canAffordTUpg(t) && !hasTUpgrade(t)) {
         player.timeUpgs[t] = true;
         player.crystals = player.crystals.minus(getTUpgCost(t));
-        addTUpgClass(t, 'timeUpg');
+        remTUpgClass(t, 'timeUpg');
         addTUpgClass(t, 'boughtTimeUpg');
     }
 }
