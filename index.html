@@ -86,7 +86,7 @@
                 </table>
             </div>
             <div id="unitsSubTab" class="unitSubTab">
-                <table style="width: 90%; margin: auto; margin-top: 20px;">
+                <table style="width: 100%; margin: auto; margin-top: 20px;">
                     <tr>
                         <td width="5%">
                             <h1>Tier</h1>
@@ -431,6 +431,8 @@
                                 </div>
                             </div>
                         </td>
+                    </tr>
+                    <tr>
                         <td>
                             <div id="bansheeBuyerOptions" class="autobuyerOptions">
                                 <h2>Banshees</h2>
@@ -479,8 +481,6 @@
                                 </div>
                             </div>
                         </td>
-                    </tr>
-                    <tr>
                         <td>
                             <div id="lichBuyerOptions" class="autobuyerOptions">
                                 <h2>Liches</h2>
@@ -577,6 +577,8 @@
                                 </div>
                             </div>
                         </td>
+                    </tr>
+                    <tr>
                         <td>
                             <div id="ancientoneBuyerOptions" class="autobuyerOptions">
                                 <h2>Ancient Ones</h2>
@@ -675,7 +677,6 @@
                         </td>
                     </tr>
                     <tr>
-                        <td></td>
                         <td>
                             <div id="sacrificeBuyerOptions" class="autobuyerOptions">
                                 <h2>Sacrifice</h2>
@@ -716,6 +717,9 @@
                                 </div>
                             </div>
                         </td>
+                    </tr>
+                    <tr>
+                        <td></td>
                         <td>
                             <div id="prestigeBuyerOptions" class="autobuyerOptions">
                                 <h2>World Prestige</h2>
@@ -763,7 +767,7 @@
             </div>
         </div>
         <div id="buildingsTab" class="pageTab">
-            <table style="width: 60%; margin: auto; text-align: center;">
+            <table style="width: 75%; margin: auto; text-align: center;">
                 <tr rowspan="3">
                     <td colspan="3">
                         <button id="astralToggle" class="astralBut" style="margin: 15px;" onclick="toggleAstral()"><span id="astralText">enable</span><h2>ASTRAL ENSLAVEMENT</h2></button>
@@ -798,7 +802,7 @@
             <div id="buildingsSubTab" class="buildingSubTab" style="position: relative;">
                 <!--<div id="testBox" style="position: absolute; right: -400px; top: 0; width: 400px; height: 600px; border: 1px solid white; font-variant-numeric: tabular-nums;"></div>
                 <div id="testBoxL" style="position: absolute; left: -400px; top: 0; width: 400px; height: 600px; border: 1px solid white; font-variant-numeric: tabular-nums;"></div>-->
-                <table style="width: 60%; margin: auto; margin-top: 20px; text-align: center; border-collapse: collapse;" class="buildingsTable">
+                <table style="width: 75%; margin: auto; margin-top: 20px; text-align: center; border-collapse: collapse;" class="buildingsTable">
                     <tr id="factoryBuildRow">
                         <td colspan="3">
                             <button id="factoryBuild" class="buildBut" onclick="buyBuilding(1)">Build the<h2><span id="factoryBuildLabel" style="font-size: 18pt;">Death Factory.</span></h2>Cost: <span id="factoryCostLabel">1,000</span> astral bricks</button>
@@ -835,7 +839,7 @@
                     </tr>
                 </table>
                 <div style="min-height: 25px;"></div>
-                <table style="width: 60%; margin: auto; margin-top: 20px; text-align: center; border-collapse: collapse;" class="buildingsTable">
+                <table style="width: 75%; margin: auto; margin-top: 20px; text-align: center; border-collapse: collapse;" class="buildingsTable">
                     <tr id="necropolisBuildRow">
                         <td colspan="3">
                             <button id="necropolisBuild" class="buildBut" onclick="buyBuilding(2)">Build the<h2><span id="necropolisBuildLabel" style="font-size: 18pt;">Necropolis.</span></h2>Cost: <span id="necropolisCostLabel">100,000</span> astral bricks</button>
@@ -873,7 +877,7 @@
                     </tr>
                 </table>
                 <div style="min-height: 25px;"></div>
-                <table style="width: 60%; margin: auto; margin-top: 20px; text-align: center; border-collapse: collapse;" class="buildingsTable">
+                <table style="width: 75%; margin: auto; margin-top: 20px; text-align: center; border-collapse: collapse;" class="buildingsTable">
                     <tr id="sunBuildRow">
                         <td colspan="3">
                             <button id="sunBuild" class="buildBut" onclick="buyBuilding(3)">Build the<h2><span id="sunBuildLabel" style="font-size: 18pt;">Dead Sun.</span></h2>Cost: <span id="sunCostLabel">100,000,000</span> astral bricks</button>
@@ -913,7 +917,7 @@
                 <div style="min-height: 25px;"></div>
             </div>
             <div id="constructionSubTab" class="buildingSubTab" style="display: none;">
-                <table style="width: 60%; margin: auto; margin-top: 20px; text-align: center; border-collapse: collapse;">
+                <table style="width: 75%; margin: auto; margin-top: 20px; text-align: center; border-collapse: collapse;">
                     <tr id="cUpgHeaderRow">
                         <td colspan="4">
                             <h2 style="font-size: 18pt;">CONSTRUCTION UPGRADES</h2>
@@ -942,7 +946,7 @@
             </div>
         </div>
         <div id="timeTab" class="pageTab">
-            <table style="width: 60%; margin: auto auto; text-align: center;">
+            <table style="width: 75%; margin: auto auto; text-align: center;">
                 <tr>
                     <div id="timePresContainer" style="text-align: center; margin: 25px;">
                         <button id="timePrestige" class="timePrestigeBut" data-title="floor(10^(corpses_exponent/20 - 0.65))" onclick="timePrestigeClick()">
@@ -988,7 +992,7 @@
                 </table>
             </div>
             <div id="timeDimSubTab" class="timeSubTab">
-                <table style="width: 60%; margin: auto; margin-top: 20px; text-align: center;">
+                <table style="width: 75%; margin: auto; margin-top: 20px; text-align: center;">
                     <tr>
                         <td width="10%">
                             <div style="float: left;"><span id="sliderValueLeft" style="font-size: 16pt;">50</span>%</div>
@@ -1101,7 +1105,7 @@
                 </table>
             </div>
             <div id="timeUpgSubTab" class="timeSubTab" style="display: none;">
-                <table id="timeUpgTable" style="width: 60%; margin: auto; margin-top: 20px; text-align: center;">
+                <table id="timeUpgTable" style="width: 75%; margin: auto; margin-top: 20px; text-align: center;">
                     <tr>
                         <td class="timeUpgTDs">
                             <button id="timeUpg11" class="timeUpg" onclick="buyTUpg(11)"><strong>Upgrade 1.1</strong><br>description of upgrade</button>
@@ -1150,7 +1154,7 @@
             </div>
         </div>
         <div id="galaxyTab" class="pageTab" style="display: none;">
-            <table style="width: 60%; margin: auto auto; text-align: center;">
+            <table style="width: 75%; margin: auto auto; text-align: center;">
                 <tr>
                     <div id="galaxyPresContainer" style="text-align: center; margin: 25px;">
                         <button id="galaxyPrestige" class="galaxyPrestigeBut" data-title="floor(10^(corpses_exponent/20 - 0.65))" onclick="galaxyPrestige()">
@@ -1434,7 +1438,7 @@
             </table>
         </div>
         <div id="optionsTab" class="pageTab">
-            <table id="optionsTable" style="width: 60%; margin: auto; text-align: center;">
+            <table id="optionsTable" style="width: 75%; margin: auto; text-align: center;">
                 <tr style="height: 25px;">
                     <div style="height: 100%;"></div>
                 </tr>
