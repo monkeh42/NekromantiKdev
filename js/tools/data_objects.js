@@ -180,6 +180,11 @@ const START_PLAYER = {
             type: 'atx',
             autolock: true,
         },
+        10: {
+            on: false,
+            fast: false,
+            priority: false,
+        },
         
         priority: [1, 2, 3, 4, 5, 6, 7, 8],
     },
