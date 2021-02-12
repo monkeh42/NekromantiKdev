@@ -180,11 +180,7 @@ const START_PLAYER = {
             type: 'atx',
             autolock: true,
         },
-        10: {
-            on: false,
-            fast: false,
-            priority: false,
-        },
+        
         priority: [1, 2, 3, 4, 5, 6, 7, 8],
     },
 
@@ -795,6 +791,11 @@ function fixResetBug() {
             type: 'atx',
             autolock: true,
         },
+        10: {
+            on: false,
+            fast: false,
+            priority: false,
+        },
         priority: [1, 2, 3, 4, 5, 6, 7, 8],
     });
 
@@ -926,6 +927,7 @@ function fixResetBug() {
 
     START_PLAYER.tooltipsEnabled = false;
     START_PLAYER.activeTabs = new Array('unitsTab', 'unitsSubTab', 'buildingsSubTab', 'timeDimSubTab');
+    START_PLAYER.hotKeysOn = true,
     START_PLAYER.displayData = new Array(0);
 
     fixData(player, START_PLAYER);

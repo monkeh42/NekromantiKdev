@@ -443,6 +443,7 @@ function exportGameState() {
     document.getElementById('importConfirm').style.display = 'none';
     document.getElementById('closeText').style.display = 'table-cell';
     document.getElementById('closeText').setAttribute('colspan', '2');
+    document.getElementById('exportText').select();
 }
 
 //fixes and data manipulation
