@@ -393,7 +393,7 @@ function updateAutobuyers() {
             player.autobuyers[tier].amount = new Decimal(document.getElementById(unitName + 'BuyerAmount').value);
             player.autobuyers[tier].type = document.getElementById(unitName + 'BuyerOptionsList').value;
         } else {
-            player.autobuyers[tier].bulk = document.getElementById(unitName + 'BuyerBulkOn').checked;
+            player.autobuyers[tier].bulk = document.getElementById(unitName + 'BuysBulk').checked;
             if (newPriority[pri-1] === undefined) { newPriority[pri-1] = parseInt(tier); }
             else { newPriority.splice(pri-1, 0, tier); }
         }

@@ -2,7 +2,7 @@
 
 const GAME_DATA = {
     author: 'monkeh42',
-    version: 'v0.2.9_d.1',
+    version: 'v0.2.9_d.2',
 }
 
 const NUM_UNITS = 8;
@@ -172,7 +172,7 @@ function loadStyles() {
             var unitName = UNITS_DATA[i].single.replace(' ', '');
             document.getElementById(unitName + 'BuyerOn').checked = player.autobuyers[i].on;
             document.getElementById(unitName + 'BuyerFast').checked = player.autobuyers[i].fast;
-            document.getElementById(unitName + 'BuyerBulkOn').checked = player.autobuyers[i].bulk;
+            document.getElementById(unitName + 'BuysBulk').checked = player.autobuyers[i].bulk;
         } else if (i==9) {
             document.getElementById('sacrificeBuyerOn').checked = player.autobuyers[i].on ;
             document.getElementById('sacrificeBuyerFast').checked = player.autobuyers[i].fast;
@@ -438,7 +438,7 @@ function closeText() {
 }
 
 function exportGameState() {
-    document.getElementById('exportText').value = window.btoa(JSON.stringify(player) + '\n') + window.btoa(JSON.stringify(START_PLAYER) + '\n') + window.btoa(JSON.stringify(UNITS_DATA) + '\n') + window.btoa(JSON.stringify(BUILDS_DATA) + '\n') + window.btoa(JSON.stringify(CONSTR_DATA) + '\n') + window.btoa(JSON.stringify(TIME_DATA) + '\n');
+    document.getElementById('exportText').value = window.btoa(JSON.stringify(player) + '\n\n') + window.btoa(JSON.stringify(START_PLAYER) + '\n\n') + window.btoa(JSON.stringify(UNITS_DATA) + '\n\n') + window.btoa(JSON.stringify(BUILDS_DATA) + '\n\n') + window.btoa(JSON.stringify(CONSTR_DATA) + '\n\n') + window.btoa(JSON.stringify(TIME_DATA) + '\n\n') + window.btoa(JSON.stringify(UNLOCKS_DATA) + '\n\n');
     document.getElementById('exportText').style.display = 'block';
     document.getElementById('importConfirm').style.display = 'none';
     document.getElementById('closeText').style.display = 'table-cell';
