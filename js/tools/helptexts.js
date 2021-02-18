@@ -17,7 +17,7 @@ const HELP_TEXTS = {
                     Each autobuyer attempts to purchase its corresponding unit or reset at regular intervals. When you first unlock them, you only have access to "slow autobuyers" - these trigger every 15 REAL WORLD seconds, \
                     meaning the time speed effects from astral enslavement and time essence have no effect on that interval. Eventually, you\'ll unlock "fast autobuyers", which trigger every game tick (20x/sec).<br>\
                     Each time autobuyers trigger, they attempt to buy each unit in order of the priority drop-down menus, starting with 1 and ending with 8.\
-                    You will also eventually unlock "bulk autobuyers" for units, which attempt to max buy each unit every time instead of just buy one, and a world prestige autobuyer, which works the same as the unit autobuyers.<br>\
+                    You will also eventually unlock "bulk autobuyers" for units, which attempt to max buy each unit every time instead of just buy one, and a world prestige autobuyer, which works the same as the unit autobuyers. You can toggle whether the game will prioritize prestige or sacrifice when they\'re both on and ready in the same tick.<br>\
                     The sacrifice autobuyer works a bit differently. You specify at what amount of crystals gained it should sacrifice, and then every autobuyer tick it will check your crystal gain and sacrifice if it\'s greater than \
                     or equal to what you entered. There is an additional checkbox on the sacrifice autobuyer for "auto lock in"; this means if the sacrifice was initiated by the autobuyer, it will automatically lock in your time \
                     dimensions to start producing essence.<br>\
@@ -45,7 +45,7 @@ const HELP_TEXTS = {
         'necropolisRow2':  '',
         'sun': '<h2>DEAD SUN</h2>\
                     Here you will produce nekro-photons. They are produced at a constant rate, but only during astral enslavement (and yes, they are affected by the astral time speed nerf, but also by anti time essence).<br>\
-                    Dead Sun upgrades are purchased with nekro-photons and unlock new upgrades and features.',
+                    Dead Sun upgrades are purchased with nekro-photons and mostly unlock new upgrades and features.',
         'sunRow2':  '',
         'construction': '<h2>CONSTRUCTION</h2>\
                     Here you can use Astral Bricks to improve the infrastructure of your hellish empire machine. These upgrades can be bought repeatedly and indefinitely, although the cost \
