@@ -155,6 +155,13 @@ function resetBuildings() {
     copyData(player.buildings, START_PLAYER.buildings);
     copyData(player.construction, START_PLAYER.construction);
     copyData(player.unlocks['buildingsTab'], START_PLAYER.unlocks['buildingsTab']);
+    
+    for (var b in BUILDS_DATA) {
+        player.displayData.push(['setProp', BUILDS_DATA[b].buildingRowID, 'display', 'table-row']);
+        player.displayData.push(['setProp', BUILDS_DATA[b].buildingHeaderID, 'display', 'none']);
+        player.displayData.push(['setProp', BUILDS_DATA[b].upgradesRow1ID, 'display', 'none']);
+        player.displayData.push(['setProp', BUILDS_DATA[b].upgradesRow2ID, 'display', 'none']);
+    }
     if (hasTUpgrade(14)) {
         copyData(player.buildings[3], tempSun);
         player.unlocks['buildingsTab']['sun'] = tempSunUnlock[0];
@@ -162,12 +169,6 @@ function resetBuildings() {
     }
     else { player.buildings[3].upgrades[33] = tempSun.upgrades[33]; }
     player.buildings[3].amount = new Decimal(0);
-    for (var b in BUILDS_DATA) {
-        player.displayData.push(['setProp', BUILDS_DATA[b].buildingRowID, 'display', 'table-row']);
-        player.displayData.push(['setProp', BUILDS_DATA[b].buildingHeaderID, 'display', 'none']);
-        player.displayData.push(['setProp', BUILDS_DATA[b].upgradesRow1ID, 'display', 'none']);
-        player.displayData.push(['setProp', BUILDS_DATA[b].upgradesRow2ID, 'display', 'none']);
-    }
     justReset = true;
 }
 

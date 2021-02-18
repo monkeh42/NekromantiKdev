@@ -282,6 +282,7 @@ function timePrestigeReset() {
     //allDisplay();
     justReset = true;
     save();
+    loadStyles();
     showBuildingSubTab('buildingsSubTab');
     startInterval();
 }
