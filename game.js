@@ -94,6 +94,10 @@ function loadGame() {
 }
 
 function loadStyles() {
+    if (player.displayData.length>0) {
+        updateDisplay();
+    }
+
     document.getElementById('versionNumber').innerHTML = GAME_DATA.version;
 
     for (let tab in UNLOCKS_DATA) {
