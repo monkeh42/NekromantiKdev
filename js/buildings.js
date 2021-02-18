@@ -137,11 +137,13 @@ function toggleAstral() {
         player.astralFlag = !player.astralFlag;
         toggleAstralDisplay();
     }
+    if (player.astralFlag) { player.thisSacStats.hasGoneAstral = true; }
 }
 
-function resetBuildingResources() {
+function resetBuildingResources(sacrifice=false) {
     if (player.astralFlag) { toggleAstral(); }
-    player.bricks = new Decimal(START_PLAYER.bricks);
+    if (!hasAchievement(25)) { player.bricks = new Decimal(START_PLAYER.bricks); }
+    else { if (sacrifice) { player.bricks = new Decimal(getAchievementEffect(25)); } }
     for (var b in BUILDS_DATA) {
         player.buildings[b].amount = new Decimal(START_PLAYER.buildings[b].amount);
     }

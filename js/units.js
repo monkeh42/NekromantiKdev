@@ -121,8 +121,12 @@ function spacePrestige() {
         }
         player.spaceResets = player.spaceResets.plus(1);
         player.worlds = player.worlds.plus(1);
-        player.totalSpaceResets = player.totalSpaceResets.plus(1);
-        player.totalWorlds = player.totalWorlds.plus(1);
+        if (player.worlds.gt(player.thisSacStats.bestWorlds)) { player.thisSacStats.bestWorlds = new Decimal(player.worlds); }
+        if (player.worlds.gt(player.allTimeStats.bestWorlds)) { player.allTimeStats.bestWorlds = new Decimal(player.worlds); }
+        player.thisSacStats.totalSpaceResets = player.thisSacStats.totalSpaceResets.plus(1);
+        player.thisSacStats.totalWorlds = player.thisSacStats.totalWorlds.plus(1);
+        player.allTimeStats.totalSpaceResets = player.allTimeStats.totalSpaceResets.plus(1);
+        player.allTimeStats.totalWorlds = player.allTimeStats.totalWorlds.plus(1);
         spacePrestigeReset();
     }
 }
@@ -131,8 +135,12 @@ function spacePrestigeNoConfirm() {
     if (canSpacePrestige()) {
         player.spaceResets = player.spaceResets.plus(1);
         player.worlds = player.worlds.plus(1);
-        player.totalSpaceResets = player.totalSpaceResets.plus(1);
-        player.totalWorlds = player.totalWorlds.plus(1);
+        if (player.worlds.gt(player.thisSacStats.bestWorlds)) { player.thisSacStats.bestWorlds = new Decimal(player.worlds); }
+        if (player.worlds.gt(player.allTimeStats.bestWorlds)) { player.allTimeStats.bestWorlds = new Decimal(player.worlds); }
+        player.thisSacStats.totalSpaceResets = player.thisSacStats.totalSpaceResets.plus(1);
+        player.thisSacStats.totalWorlds = player.thisSacStats.totalWorlds.plus(1);
+        player.allTimeStats.totalSpaceResets = player.allTimeStats.totalSpaceResets.plus(1);
+        player.allTimeStats.totalWorlds = player.allTimeStats.totalWorlds.plus(1);
         spacePrestigeReset();
     }
 }
@@ -187,7 +195,8 @@ const UNITS_DATA = {
             m = m.pow(player.units[this.tier].bought-1);
             if (hasUpgrade(1, 11)) m = m.times(getUpgEffect(1, 11));
             if (hasTUpgrade(22)) { m = m.times(getTUpgEffect(22)); }
-            return m;
+            if (hasAchievement(31)) { m = m.times(getAchievementEffect(31)); }
+            return m.times(getAchievementBoost());
         },
         prodMult: function() {
             var m = this.corpseMult();
@@ -222,7 +231,8 @@ const UNITS_DATA = {
             if (player.units[this.tier].bought.eq(0)) { return new Decimal(0); }
             m = m.pow(player.units[this.tier].bought-1);
             if (hasTUpgrade(22)) { m = m.times(getTUpgEffect(22)); }
-            return m;
+            if (hasAchievement(31)) { m = m.times(getAchievementEffect(31)); }
+            return m.times(getAchievementBoost());
         },
         prodMult: function() {
             var m = this.corpseMult();
@@ -258,7 +268,8 @@ const UNITS_DATA = {
             if (player.units[this.tier].bought.eq(0)) { return new Decimal(0); }
             m = m.pow(player.units[this.tier].bought-1);
             if (hasTUpgrade(22)) { m = m.times(getTUpgEffect(22)); }
-            return m;
+            if (hasAchievement(31)) { m = m.times(getAchievementEffect(31)); }
+            return m.times(getAchievementBoost());
         },
         prodMult: function() {
             var m = this.corpseMult();
@@ -293,7 +304,8 @@ const UNITS_DATA = {
             if (player.units[this.tier].bought.eq(0)) { return new Decimal(0); }
             m = m.pow(player.units[this.tier].bought-1);
             if (hasTUpgrade(22)) { m = m.times(getTUpgEffect(22)); }
-            return m;
+            if (hasAchievement(31)) { m = m.times(getAchievementEffect(31)); }
+            return m.times(getAchievementBoost());
         },
         prodMult: function() {
             var m = this.corpseMult();
@@ -328,7 +340,8 @@ const UNITS_DATA = {
             if (player.units[this.tier].bought.eq(0)) { return new Decimal(0); }
             m = m.pow(player.units[this.tier].bought-1);
             if (hasTUpgrade(22)) { m = m.times(getTUpgEffect(22)); }
-            return m;
+            if (hasAchievement(31)) { m = m.times(getAchievementEffect(31)); }
+            return m.times(getAchievementBoost());
         },
         prodMult: function() {
             var m = this.corpseMult();
@@ -363,7 +376,8 @@ const UNITS_DATA = {
             if (player.units[this.tier].bought.eq(0)) { return new Decimal(0); }
             m = m.pow(player.units[this.tier].bought-1);
             if (hasTUpgrade(22)) { m = m.times(getTUpgEffect(22)); }
-            return m;
+            if (hasAchievement(31)) { m = m.times(getAchievementEffect(31)); }
+            return m.times(getAchievementBoost());
         },
         prodMult: function() {
             var m = this.corpseMult();
@@ -398,7 +412,8 @@ const UNITS_DATA = {
             if (player.units[this.tier].bought.eq(0)) { return new Decimal(0); }
             m = m.pow(player.units[this.tier].bought-1);
             if (hasTUpgrade(22)) { m = m.times(getTUpgEffect(22)); }
-            return m;
+            if (hasAchievement(31)) { m = m.times(getAchievementEffect(31)); }
+            return m.times(getAchievementBoost());
         },
         prodMult: function() {
             var m = this.corpseMult();
@@ -435,7 +450,8 @@ const UNITS_DATA = {
             if (player.units[this.tier].bought.eq(0)) { return new Decimal(0); }
             m = m.pow(player.units[this.tier].bought-1);
             if (hasTUpgrade(22)) { m = m.times(getTUpgEffect(22)); }
-            return m;
+            if (hasAchievement(31)) { m = m.times(getAchievementEffect(31)); }
+            return m.times(getAchievementBoost());
         },
         prodMult: function() {
             var m = this.corpseMult();

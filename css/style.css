@@ -1113,6 +1113,34 @@ option:active, option.active {
     opacity: 0.5;
 }
 
+.timeCheckbox {
+    height: 17px;
+    width: 17px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    -o-appearance: none;
+    appearance: none;
+    outline: none;
+    background-color: white;
+    cursor: pointer;
+}
+
+.timeCheckbox:checked {
+    background-color: #006ba0;
+    border: 3px solid white;
+}
+
+.timeCheckbox:checked:hover {
+    background-color: #006ba0;
+    border: 3px solid white;
+    opacity: 0.5;
+}
+
+.timeCheckbox:hover {
+    background-color: white;
+    opacity: 0.5;
+}
+
 .priorityContainer {
     text-align: center;
     top: 245px;
@@ -1183,6 +1211,7 @@ option:active, option.active {
 }
 
 #achUnlockPopup {
+    position: fixed !important;
     display: block !important;
     top: 15px !important;
     transform: translateX(-50%) translateY(0%) !important;

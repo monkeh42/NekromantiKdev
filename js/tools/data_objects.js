@@ -200,15 +200,35 @@ const START_PLAYER = {
     antiEssence: new Decimal(0),
     timeResets: new Decimal(0),
     timeLocked: false,
-    
-    totalCorpses: new Decimal(0),
-    totalWorlds: new Decimal(0),
-    totalSpaceResets: new Decimal(0),
-    totalTimeResets: new Decimal(0),
-    totalCrystals: new Decimal(0),
 
-    bestCrystalGain: new Decimal(0),
-    bestCrystalRate: new Decimal(0),
+    allTimeStats: {
+        totalCorpses: new Decimal(0),
+        totalWorlds: new Decimal(0),
+        totalBricks: new Decimal(0),
+        totalSpaceResets: new Decimal(0),
+        totalTimeResets: new Decimal(0),
+        totalCrystals: new Decimal(0),
+
+        bestCrystalGain: new Decimal(0),
+        bestCrystalRate: new Decimal(0),
+        bestCorpses: new Decimal(0),
+        bestWorlds: new Decimal(0),
+        bestBricks: new Decimal(0),
+        bestCrystals: new Decimal(0),
+    },
+
+    thisSacStats: {
+        totalCorpses: new Decimal(0),
+        totalWorlds: new Decimal(0),
+        totalBricks: new Decimal(0),
+        totalSpaceResets: new Decimal(0),
+
+        bestCorpses: new Decimal(0),
+        bestWorlds: new Decimal(0),
+        bestBricks: new Decimal(0),
+
+        hasGoneAstral: false,
+    },
 
     pastRuns: {
         lastRun: {
@@ -304,6 +324,8 @@ const START_PLAYER = {
         },
     },
 
+    numAchievements: 0,
+
     achievements: {
         11: {
             unlocked: false,
@@ -322,6 +344,46 @@ const START_PLAYER = {
             new: false,
         },
         15: {
+            unlocked: false,
+            new: false,
+        },
+        21: {
+            unlocked: false,
+            new: false,
+        },
+        22: {
+            unlocked: false,
+            new: false,
+        },
+        23: {
+            unlocked: false,
+            new: false,
+        },
+        24: {
+            unlocked: false,
+            new: false,
+        },
+        25: {
+            unlocked: false,
+            new: false,
+        },
+        31: {
+            unlocked: false,
+            new: false,
+        },
+        32: {
+            unlocked: false,
+            new: false,
+        },
+        33: {
+            unlocked: false,
+            new: false,
+        },
+        34: {
+            unlocked: false,
+            new: false,
+        },
+        35: {
             unlocked: false,
             new: false,
         },
@@ -384,7 +446,7 @@ const ACH_DATA = {
         }
     },
     13: {
-        title: 'Killing Time',
+        title: 'Wait, This Sounds Familiar...',
         desc: 'Unlock Time Warp.',
         reward: '',
         showEffect: false,
@@ -435,6 +497,183 @@ const ACH_DATA = {
         },
         onUnlock: function() {
             return;
+        }
+    },
+    21: {
+        title: 'Killing Time',
+        desc: 'Unlock Time Upgrades.',
+        reward: '',
+        hasReward: false,
+        showEffect: false,
+        divID: 'ach21',
+        canUnlock: function() {
+            return player.unlocks['timeTab']['timeUpgrades'];
+        },
+        effect: function() {
+            return new Decimal(1);
+        },
+        onUnlock: function() {
+            return;
+        }
+    },
+    22: {
+        title: 'Inter-dimensional Nekro-Cable',
+        desc: 'Buy one 4th Time Dimension.',
+        reward: '',
+        hasReward: false,
+        showEffect: false,
+        divID: 'ach22',
+        canUnlock: function() {
+            return player.timeDims[4].bought.gt(0);
+        },
+        effect: function() {
+            return new Decimal(1);
+        },
+        onUnlock: function() {
+            return;
+        }
+    },
+    23: {
+        title: 'Full Stasis',
+        desc: 'Buy the entire first column of Time Upgrades.',
+        reward: '',
+        hasReward: false,
+        showEffect: false,
+        divID: 'ach23',
+        canUnlock: function() {
+            return hasTUpgrade(14);
+        },
+        effect: function() {
+            return new Decimal(1);
+        },
+        onUnlock: function() {
+            return;
+        }
+    },
+    24: {
+        title: 'It\'s About Time',
+        desc: 'Buy the entire second column of Time Upgrades.',
+        reward: '',
+        showEffect: false,
+        hasReward: false,
+        divID: 'ach24',
+        canUnlock: function() {
+            return hasTUpgrade(24);
+        },
+        effect: function() {
+            return new Decimal(1);
+        },
+        onUnlock: function() {
+            return;
+        }
+    },
+    25: {
+        title: 'Thyme Lord',
+        desc: 'Buy the entire third column of Time Upgrades.',
+        reward: 'Keep all your bricks on prestige, and keep your best bricks this sacrifice raised ^0.2 on sacrifice.',
+        showEffect: false,
+        hasReward: true,
+        divID: 'ach25',
+        canUnlock: function() {
+            return hasTUpgrade(34);
+        },
+        effect: function() {
+            let e = new Decimal(player.thisSacStats.bestBricks);
+            return e.pow(0.2);
+        },
+        onUnlock: function() {
+            document.getElementById('keptBricks').style.display = 'block';
+        }
+    },
+    31: {
+        title: 'The Grind',
+        desc: 'Sacrifice ten times.',
+        reward: 'Your unit corpse multipliers get a boost based on number of sacrifices.',
+        hasReward: true,
+        showEffect: true,
+        divID: 'ach31',
+        canUnlock: function() {
+            return player.timeResets.gte(10);
+        },
+        effect: function() {
+            let e = new Decimal(player.timeResets);
+            e = e.div(5);
+            return e.plus(1);
+        },
+        onUnlock: function() {
+            return;
+        }
+    },
+    32: {
+        title: 'Master Nekro-Carpenter',
+        desc: 'Get the first four construction upgrades all to at least level 25.',
+        reward: '',
+        hasReward: false,
+        showEffect: false,
+        divID: 'ach32',
+        canUnlock: function() {
+            for (let id in CONSTR_DATA) {
+                if (player.construction[id].lt(25)) { return false; }
+            }
+            return true;
+        },
+        effect: function() {
+            return new Decimal(1);
+        },
+        onUnlock: function() {
+            return;
+        }
+    },
+    33: {
+        title: 'Frugality',
+        desc: 'Reach 1e100 corpses without enabling Astral Enslavement this sacrifice.',
+        reward: '',
+        hasReward: false,
+        showEffect: false,
+        divID: 'ach33',
+        canUnlock: function() {
+            return (player.corpses.gte(1e100) && !player.thisSacStats.hasGoneAstral);
+        },
+        effect: function() {
+            return new Decimal(1);
+        },
+        onUnlock: function() {
+            return;
+        }
+    },
+    34: {
+        title: 'In A Flash',
+        desc: 'Get your normal time multiplier to at least 30x.',
+        reward: '',
+        showEffect: false,
+        hasReward: false,
+        divID: 'ach34',
+        canUnlock: function() {
+            return getTrueTimeBuff().gte(30);
+        },
+        effect: function() {
+            return new Decimal(1);
+        },
+        onUnlock: function() {
+            return;
+        }
+    },
+    35: {
+        title: 'Galactic Angst',
+        desc: 'Unlock Depleted Galaxies.',
+        reward: 'Menagerie Of Worlds\'s effect is stronger (^0.67 -> 0.5).',
+        showEffect: false,
+        hasReward: true,
+        divID: 'ach35',
+        canUnlock: function() {
+            return false; //hasUpgrade(3, 23);
+        },
+        effect: function() {
+            let e = new Decimal(player.bestBricks);
+            return e.pow(0.2);
+        },
+        onUnlock: function() {
+            document.getElementById('keptBricks').style.display = 'block';
         }
     },
 }
@@ -1056,11 +1295,34 @@ function fixResetBug() {
     START_PLAYER.timeResets = new Decimal(0);
     START_PLAYER.timeLocked = false;
     
-    START_PLAYER.totalCorpses = new Decimal(0),
-    START_PLAYER.totalWorlds = new Decimal(0),
-    START_PLAYER.totalSpaceResets = new Decimal(0),
-    START_PLAYER.totalTimeResets = new Decimal(0),
-    START_PLAYER.totalCrystals = new Decimal(0),
+    copyData(START_PLAYER.allTimeStats, {
+        totalCorpses: new Decimal(0),
+        totalWorlds: new Decimal(0),
+        totalBricks: new Decimal(0),
+        totalSpaceResets: new Decimal(0),
+        totalTimeResets: new Decimal(0),
+        totalCrystals: new Decimal(0),
+
+        bestCrystalGain: new Decimal(0),
+        bestCrystalRate: new Decimal(0),
+        bestCorpses: new Decimal(0),
+        bestWorlds: new Decimal(0),
+        bestBricks: new Decimal(0),
+        bestCrystals: new Decimal(0),
+    });
+
+    copyData(START_PLAYER.thisSacStats, {
+        totalCorpses: new Decimal(0),
+        totalWorlds: new Decimal(0),
+        totalBricks: new Decimal(0),
+        totalSpaceResets: new Decimal(0),
+        
+        bestCorpses: new Decimal(0),
+        bestWorlds: new Decimal(0),
+        bestBricks: new Decimal(0),
+
+        hasGoneAstral: false,
+    });
     
     START_PLAYER.lastUpdate = new Date();
     START_PLAYER.lastAutoSave = new Date();
@@ -1096,6 +1358,8 @@ function fixResetBug() {
         },
     });
 
+    START_PLAYER.numAchievements = 0;
+
     copyData(START_PLAYER.achievements, {
         11: {
             unlocked: false,
@@ -1114,6 +1378,46 @@ function fixResetBug() {
             new: false,
         },
         15: {
+            unlocked: false,
+            new: false,
+        },
+        21: {
+            unlocked: false,
+            new: false,
+        },
+        22: {
+            unlocked: false,
+            new: false,
+        },
+        23: {
+            unlocked: false,
+            new: false,
+        },
+        24: {
+            unlocked: false,
+            new: false,
+        },
+        25: {
+            unlocked: false,
+            new: false,
+        },
+        31: {
+            unlocked: false,
+            new: false,
+        },
+        32: {
+            unlocked: false,
+            new: false,
+        },
+        33: {
+            unlocked: false,
+            new: false,
+        },
+        34: {
+            unlocked: false,
+            new: false,
+        },
+        35: {
             unlocked: false,
             new: false,
         },

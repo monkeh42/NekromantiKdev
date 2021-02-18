@@ -2,7 +2,7 @@
 
 const GAME_DATA = {
     author: 'monkeh42',
-    version: 'v0.2.9_d.3',
+    version: 'v0.2.9_d.4',
 }
 
 const NUM_UNITS = 8;
@@ -41,7 +41,8 @@ function init() {
     showUnitSubTab(player.activeTabs[1]);
     showBuildingSubTab(player.activeTabs[2]);
     showTimeSubTab(player.activeTabs[3]);
-    showStatsSubTab(player.activeTabs[4]);
+    if (player.activeTabs[0] == 'statsTab' && player.activeTabs[4] == 'statSubTab') { statsSubTabClick(); }
+    else { showStatsSubTab(player.activeTabs[4]); }
 
     startGame();
 }
@@ -57,6 +58,25 @@ function loadGame() {
         copyData(player, JSON.parse(window.atob(savePlayer)));
     }
     fixData(player, START_PLAYER);
+
+    if (player.allTimeStats === undefined) { fixStats(); }
+
+    if (player.allTimeStats.bestCorpses.eq(0)) { player.allTimeStats.bestCorpses = new Decimal(player.corpses); }
+    if (player.allTimeStats.bestBricks.eq(0)) { player.allTimeStats.bestBricks = new Decimal(player.bricks); }
+    if (player.allTimeStats.bestWorlds.eq(0)) { player.allTimeStats.bestWorlds = new Decimal(player.worlds); }
+    if (player.thisSacStats.bestCorpses.eq(0)) { player.thisSacStats.bestCorpses = new Decimal(player.corpses); }
+    if (player.thisSacStats.bestBricks.eq(0)) { player.thisSacStats.bestBricks = new Decimal(player.bricks); }
+    if (player.thisSacStats.bestWorlds.eq(0)) { player.thisSacStats.bestWorlds = new Decimal(player.worlds); }
+    if (player.allTimeStats.bestCrystals.eq(0)) { player.allTimeStats.bestCrystals = new Decimal(player.crystals); }
+
+    if (player.allTimeStats.totalCorpses.eq(0)) { player.allTimeStats.totalCorpses = new Decimal(player.corpses); }
+    if (player.allTimeStats.totalBricks.eq(0)) { player.allTimeStats.totalBricks = new Decimal(player.bricks); }
+    if (player.allTimeStats.totalWorlds.eq(0)) { player.allTimeStats.totalWorlds = new Decimal(player.worlds); }
+    if (player.thisSacStats.totalCorpses.eq(0)) { player.thisSacStats.totalCorpses = new Decimal(player.corpses); }
+    if (player.thisSacStats.totalBricks.eq(0)) { player.thisSacStats.totalBricks = new Decimal(player.bricks); }
+    if (player.thisSacStats.totalWorlds.eq(0)) { player.thisSacStats.totalWorlds = new Decimal(player.worlds); }
+    if (player.allTimeStats.totalCrystals.eq(0)) { player.allTimeStats.totalCrystals = new Decimal(player.crystals); }
+
     //updateFixes();
     player.displayData.splice(0, player.displayData.length);
     if (player.tooltipsEnabled) {
@@ -146,6 +166,9 @@ function loadStyles() {
             }
         }
     }
+
+    if (hasAchievement(25)) { document.getElementById('keptBricks').style.display = 'block'; }
+    
     for (var t in TIME_DATA.upgrades) {
         if (TIME_DATA.upgrades[t].displayTooltip) { document.getElementById(TIME_DATA.upgrades[t].buttonID).setAttribute('data-title', TIME_DATA.upgrades[t].displayFormula) }
         if (player.timeUpgs[t]) {
@@ -182,7 +205,7 @@ function loadStyles() {
     updateAutobuyersDisplay();
 
     for (let id in ACH_DATA) {
-        document.getElementById(ACH_DATA[id].divID).setAttribute('data-title', ACH_DATA[id].desc + (ACH_DATA[id].hasReward ? ' Reward: ' + ACH_DATA[id].reward : '' ));
+        document.getElementById(ACH_DATA[id].divID).setAttribute('data-title', ACH_DATA[id].desc + (ACH_DATA[id].hasReward ? ' Reward: ' + ACH_DATA[id].reward : '' ) + (ACH_DATA[id].showEffect ? ' Currently: ' + formatDefault2(ACH_DATA[id].effect()) + 'x' : '' ));
         if (player.achievements[id].unlocked) {
             document.getElementById(ACH_DATA[id].divID).classList.add('achievementUnlocked');
             document.getElementById(ACH_DATA[id].divID).classList.remove('achievement');
@@ -242,10 +265,17 @@ function gameLoop(diff=new Decimal(0), offline=false) {
     var realDiff = diff.div(timeBuff);
     if (player.astralFlag) {
         player.bricks = player.bricks.plus(getBricksPerSecond().times(diff.div(1000)));
+        player.thisSacStats.totalBricks = player.thisSacStats.totalBricks.plus(getBricksPerSecond().times(diff.div(1000)));
+        player.allTimeStats.totalBricks = player.allTimeStats.totalBricks.plus(getBricksPerSecond().times(diff.div(1000)));
     } else {
         player.corpses = player.corpses.plus(getCorpsesPerSecond().times(diff.div(1000)));
+        player.thisSacStats.totalCorpses = player.thisSacStats.totalCorpses.plus(getCorpsesPerSecond().times(diff.div(1000)));
+        player.allTimeStats.totalCorpses = player.allTimeStats.totalCorpses.plus(getCorpsesPerSecond().times(diff.div(1000)));
     }
-    player.totalCorpses = player.totalCorpses.plus(getCorpsesPerSecond().times(diff.div(1000)));
+    if (player.corpses.gt(player.thisSacStats.bestCorpses)) { player.thisSacStats.bestCorpses = new Decimal(player.corpses); }
+    if (player.bricks.gt(player.thisSacStats.bestBricks)) { player.thisSacStats.bestBricks = new Decimal(player.bricks); }
+    if (player.corpses.gt(player.allTimeStats.bestCorpses)) { player.allTimeStats.bestCorpses = new Decimal(player.corpses); }
+    if (player.bricks.gt(player.allTimeStats.bestBricks)) { player.allTimeStats.bestBricks = new Decimal(player.bricks); }
     for (var i=1; i<NUM_UNITS; i++) {
         player.units[i].amount = player.units[i].amount.plus(getUnitProdPerSecond(i).times(diff.div(1000)));
     }
@@ -462,6 +492,38 @@ function exportGameState() {
 
 //fixes and data manipulation
 
+function fixStats() {
+    player.allTimeStats = {};
+    player.thisSacStats = {};
+    copyData(player.allTimeStats, START_PLAYER.allTimeStats);
+    copyData(player.thisSacStats, START_PLAYER.thisSacStats);
+
+    player.allTimeStats.totalCorpses = player.totalCorpses !== undefined ? new Decimal(player.totalCorpses) : new Decimal(0);
+    player.allTimeStats.totalWorlds = player.totalWorlds !== undefined ? new Decimal(player.totalWorlds) : new Decimal(0);
+    player.allTimeStats.totalBricks = player.totalBricks !== undefined ? new Decimal(player.totalBricks) : new Decimal(0);
+    player.allTimeStats.totalSpaceResets = player.totalSpaceResets !== undefined ? new Decimal(player.totalSpaceResets) : new Decimal(0);
+    player.allTimeStats.totalTimeResets = player.totalTimeResets !== undefined ? new Decimal(player.totalTimeResets) : new Decimal(0);
+    player.allTimeStats.totalCrystals = player.totalCrystals !== undefined ? new Decimal(player.totalCrystals) : new Decimal(0);
+
+    player.allTimeStats.bestCrystalGain = player.bestCrystalGain !== undefined ? new Decimal(player.bestCrystalGain) : new Decimal(0);
+    player.allTimeStats.bestCrystalRate = player.bestCrystalRate !== undefined ? new Decimal(player.bestCrystalRate) : new Decimal(0);
+    player.allTimeStats.bestCorpses = player.bestCorpses !== undefined ? new Decimal(player.bestCorpses) : new Decimal(0);
+    player.allTimeStats.bestWorlds = player.bestWorlds !== undefined ? new Decimal(player.bestWorlds) : new Decimal(0);
+    player.allTimeStats.bestBricks = player.bestBricks !== undefined ? new Decimal(player.bestBricks) : new Decimal(0);
+    player.allTimeStats.bestCrystals = player.bestCrystals !== undefined ? new Decimal(player.bestCrystals) : new Decimal(0);
+
+    player.thisSacStats.totalCorpses = player.corpses;
+    player.thisSacStats.totalWorlds = player.worlds;
+    player.thisSacStats.totalBricks = player.bricks;
+    player.thisSacStats.totalSpaceResets = player.spaceResets;
+
+    player.thisSacStats.bestCorpses = player.corpses;
+    player.thisSacStats.bestWorlds = player.worlds;
+    player.thisSacStats.bestBricks = player.bricks;
+
+    player.thisSacStats.hasGoneAstral = true;
+}
+
 function copyData(data, start) {
     for (item in start) {
         if (start[item] == null) {
@@ -525,6 +587,12 @@ function fixData(data, start) {
 }
 
 //achievement stuff
+
+function getAchievementBoost() {
+    let b = Decimal.pow(1.1, player.numAchievements);
+    b = b.times(Decimal.pow(1.2, Math.floor(player.numAchievements/5)));
+    return b;
+}
 
 function hasAchievement(id) {
     return player.achievements[id].unlocked;

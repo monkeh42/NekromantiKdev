@@ -10,7 +10,7 @@ const HELP_TEXTS = {
                     (more sections will appear here as you progress)',
         'spacePrestige': '<h2>NEW WORLDS</h2>\
                     Eventually, this world will run out of souls to torture and corpses to harvest. When this happens, you must \'world prestige\' to move on to a new world.<br>\
-                    When you world prestige, you lose all of your corpses and units, and you gain one Conquered World. Your conquered worlds provide a new multiplier to total corpse gain. Your first three world prestiges \
+                    When you world prestige, you lose all of your corpses and units, and you gain one Exterminated World. Your exterminated worlds provide a new multiplier to total corpse gain. Your first three world prestiges \
                     each also unlock a new feature and a new unit tier.<br>\
                     The first four world prestiges require at least one of your highest unlocked unit tier. After that, the requirement in 8th tier units increases by 2 with every prestige.',
         'autobuyers': '<h2>AUTOBUYERS</h2>\
@@ -54,7 +54,7 @@ const HELP_TEXTS = {
     'timeTab': {
         'mainTab': '<h2>TIME WARP</h2>\
                     Here you will use Time Crystals to purchase Time Dimensions, which produce Time Essence in two varieties - True Time and Anti Time.<br>\
-                    To gain Time Crystals, you need to Sacrifice. You need at least 1e20 corpses to sacrifice, and it will reset ALL of your progress up to unlocking Time Warp (your corpses, units, conquered worlds, \
+                    To gain Time Crystals, you need to Sacrifice. You need at least 1e20 corpses to sacrifice, and it will reset ALL of your progress up to unlocking Time Warp (your corpses, units, exterminated worlds, \
                     astral bricks, buildings, building upgrades, and construction upgrades) plus any time essence or time dimensions you\'ve produced (not bought). You will gain time crystals based on the amount of corpses you have when you sacrifice. (base formula is floor(10^(corpses_exponent/20 - 0.45)))<br>\
                     Time Dimensions work similarly to units, except there are only 4 tiers. Each 1st dimension produces 1 time essence per second times the 1st dimension multiplier, which doubles with each 1st dimension purchased. Each higher tier dimension produces 1 per second of the tier below it, \
                     multiplied by that tier\'s multiplier. Unlike units, each dimension\'s multiplier increases at the same rate (x2 with each purchase) and the full multiplier is applied to production; however, the higher tier multipliers don\'t apply directly to essence production.<br>\

@@ -39,7 +39,7 @@
             <span>You are harvesting <span id="corpseGain" style="font-size: 17pt; font-weight: bold; white-space: pre; color: #6c00b4; font-variant-numeric: tabular-nums;"> 0 </span> <span id='pluralCorpseG'> corpses </span>/sec.<span id="devSpeedContainer" style="white-space: pre; display: none;"> (@ <span id="devSpeedDisplay">3</span>x time speed)</span></span><br>
             <div id="astralNotice" style="color:  #1c8a2e; display: none;"><h2>Corpse production disabled due to Astral Enslavement.</h2></div>
             <div style="font-size: 10pt; white-space: pre;">Total corpse gain multiplier from units:  <span id="totalMult" style="font-size: 12pt; font-variant-numeric: tabular-nums;">0.0x</span></div>
-            <div id="worldsBonusDisplay" style="font-size: 10pt; white-space: pre; display: none;">You have conquered <span id="worldsNum" style="font-size: 12pt; font-variant-numeric: tabular-nums;"> 1 </span> <span id="pluralWorld">world</span>, giving a <span id="worldsMult" style="font-size: 12pt"> 0.0x </span> bonus to corpse gain.</div>
+            <div id="worldsBonusDisplay" style="font-size: 10pt; white-space: pre; display: none;">You have exterminated <span id="worldsNum" style="font-size: 12pt; font-variant-numeric: tabular-nums;"> 1 </span> <span id="pluralWorld">world</span>, giving a <span id="worldsMult" style="font-size: 12pt"> 0.0x </span> bonus to corpse gain.</div>
             <div id="totalBonusDisplay" style="font-size: 10pt; white-space: pre; display: none;">Total corpse gain multiplier from all sources:  <span id="totalMultAll" style="font-size: 12pt; font-variant-numeric: tabular-nums;">0.0x</span></div>
             <div id="timeBoostDisplay" style="font-size: 10pt; white-space: pre; display: none;">Your <span id="normalAstral" style="font-size: 12pt; color: white;"> NORMAL </span> time is going <span id="timeMult" style="font-size: 12pt; font-variant-numeric: tabular-nums;"> 1.0x </span> as fast.</div>
         </div>
@@ -271,7 +271,7 @@
                 <div id="spacePresContainer" style="text-align: center; margin: 50px; display: none;">
                     <button id="spacePrestige" class="prestigeBut" onclick="spacePrestigeClick()">
                         <span style="font-size: 15pt;">This world is dead and empty...</span><br>
-                        <span id="spacePresDesc">Give up all your units and corpses to conquer a new world. You gain a boost to corpse gain based on total conquered worlds.<br>
+                        <span id="spacePresDesc">Give up all your units and corpses to exterminate a new world. You gain a boost to corpse gain based on total exterminated worlds.<br>
                         This World Prestige will unlock <span id="spacePresUnlock">Buildings</span> and a new unit tier.</span><br>
                         <span id="prestigeReq" style="font-size: 13pt;">Requires <span style="font-size: 17pt; white-space: pre;"> 1 </span> Liches</span>
                     </button>
@@ -788,6 +788,7 @@
                     <td colspan="3" id="brickTooltip" data-title="corpse production rate ^2.0">
                         <div style="font-size: 18pt; white-space: pre;">Your unholy hordes have forged <span id="brickDisplay" style="font-size: 21pt; font-weight: bold; color: #1c8a2e; font-variant-numeric: tabular-nums;"> 0 </span> <span id="astralTextAmt" class="buildingResourceTexts">astral bricks</span>.</div>
                         <div id="brickGainDiv" style="font-size: 15pt; white-space: pre; display: none;">You are gaining <span id="brickGainDisplay" style="font-size: 18pt; font-weight: bold; color: #1c8a2e; font-variant-numeric: tabular-nums;"> 0 </span> <span id="bricksTextGain" class="buildingResourceTexts">bricks</span>/sec. (@ 10x slower time speed)</div>
+                        <div id="keptBricks" style="font-size: 15pt; white-space: pre; display: none;">You will keep <span id="brickKeepDisplay" style="font-size: 18pt; font-weight: bold; color: #1c8a2e; font-variant-numeric: tabular-nums;"> 0 </span> <span id="bricksKeepGain" class="buildingResourceTexts">bricks</span> on sacrifice.</div>
                         <span style="font-size: 11pt">You can now force the dead you harvest to work for your rapidly growing empire. While Astral Enslavement is active, time goes 10x slower,
                         and you won't gain any corpses; instead, those tortured, miasmic souls will suffer tirelessly making bricks for your most unholy of foundations.<br></span>
                     </td>
@@ -966,7 +967,8 @@
                             <span id="timePrestigeReq" style="font-size: 13pt;">Requires at least <span style="font-size: 17pt; white-space: pre;"> 1e20 </span> corpses</span>
                             <span id="timePrestigeGainDesc" style="font-size: 13pt; display: none;">Gain <span id="timePrestigeGain" style="font-size: 17pt; white-space: pre; font-variant-numeric: tabular-nums;"> 1 </span> <span id="crystalsTextGain" class="timeResourceTexts">time crystals</span></span>
                             <span id="crystalRateDesc" style="display: none; font-variant-numeric: tabular-nums;"></span>
-                        </button>
+                        </button><br>
+                        <input type="checkbox" id="respecOnSac" class="timeCheckbox" style="margin-top: 10px;"> Respec slider on next sacrifice
                     </div>
                 </tr>
                 <tr>
@@ -1363,36 +1365,156 @@
                             <button id="statSubTabBut" class="subTabBut" onclick="statsSubTabClick('statSubTab', 'statSubTabBut')">STATS</button>
                         </td>
                         <td>
+                            <button id="last10SubTabBut" class="subTabBut" onclick="statsSubTabClick('last10SubTab', 'last10SubTabBut')">LAST 10 RUNS</button>
+                        </td>
+                        <td>
                             <button id="achSubTabBut" class="subTabBut" onclick="showStatsSubTab('achSubTab', 'achSubTabBut')">ACHIEVEMENTS</button>
                         </td>
                     </tr>
                 </table>
             </div>
             <div id="statSubTab" class="statSubTab">
-                <table style="width: 75%; margin: auto; text-align: center;">
+                <table style="width: 600px; margin: auto; text-align: center; border-collapse: collapse;">
                     <tr style="height: 25px;">
                         <div style="height: 100%;"></div>
                     </tr>
                     <tr>
-                        <td>
-                            <h3>Stat Totals</h3>
+                        <td colspan="3">
+                            <h3>All Time</h3>
+                        </td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid white; font-weight: bold;">
+                        <td width="40%" style="border-right: 1px solid white; font-weight: bold;">
+                            resource
+                        </td>
+                        <td width="30%">
+                            total
+                        </td>
+                        <td width="30%">
+                            best
                         </td>
                     </tr>
                     <tr>
+                        <td style="border-right: 1px solid white; font-weight: bold;">
+                            corpses
+                        </td>
                         <td>
-                            you have produced a total of <span id="totCorpses"></span> corpses, <span id="totWorlds"></span> exterminated planets, and <span id="totCrystals"></span> time crystals.
+                            <span id="totCorpses"></span>
+                        </td>
+                        <td>
+                            <span id="bestCorpses"></span>
                         </td>
                     </tr>
                     <tr>
+                        <td style="border-right: 1px solid white; font-weight: bold;">
+                            astral bricks
+                        </td>
                         <td>
+                            <span id="totBricks"></span>
+                        </td>
+                        <td>
+                            <span id="bestBricks"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="border-right: 1px solid white; font-weight: bold;">
+                            time crystals
+                        </td>
+                        <td>
+                            <span id="totCrystals"></span>
+                        </td>
+                        <td>
+                            <span id="bestCrystals"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="border-right: 1px solid white; font-weight: bold;">
+                            exterminated worlds
+                        </td>
+                        <td>
+                            <span id="totWorlds"></span>
+                        </td>
+                        <td>
+                            <span id="bestWorlds"></span>
+                        </td>
+                    </tr>
+                    <tr style="height: 25px;">
+                        <div style="height: 100%;"></div>
+                    </tr>
+                    <tr>
+                        <td colspan="3">
                             you have world prestiged <span id="totPrestige"></span> times and sacrificed <span id="totSacrifice"></span> times.
                         </td>
                     </tr>
                     <tr>
-                        <td>
-                            your highest crystal gain was <span id="bestGain"></span> and your best crystal gain rate was <span id="bestRate"></span>/min.
+                        <td colspan="3">
+                            your best crystal gain was <span id="bestGain"></span> and your best crystal gain rate was <span id="bestRate"></span>/min.
                         </td>
                     </tr>
+                    <tr style="height: 25px;">
+                        <div style="height: 100%;"></div>
+                    </tr>
+                    <tr>
+                        <td colspan="3">
+                            <h3>This Sacrifice</h3>
+                        </td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid white; font-weight: bold;">
+                        <td width="40%" style="border-right: 1px solid white; font-weight: bold;">
+                            resource
+                        </td>
+                        <td width="30%">
+                            total
+                        </td>
+                        <td width="30%">
+                            best
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="border-right: 1px solid white; font-weight: bold;">
+                            corpses
+                        </td>
+                        <td>
+                            <span id="totCorpsesRun"></span>
+                        </td>
+                        <td>
+                            <span id="bestCorpsesRun"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="border-right: 1px solid white; font-weight: bold;">
+                            astral bricks
+                        </td>
+                        <td>
+                            <span id="totBricksRun"></span>
+                        </td>
+                        <td>
+                            <span id="bestBricksRun"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="border-right: 1px solid white; font-weight: bold;">
+                            exterminated worlds
+                        </td>
+                        <td>
+                            <span id="totWorldsRun"></span>
+                        </td>
+                        <td>
+                            <span id="bestWorldsRun"></span>
+                        </td>
+                    </tr>
+                    <tr style="height: 25px;">
+                        <div style="height: 100%;"></div>
+                    </tr>
+                    <tr>
+                        <td colspan="3">
+                            you have world prestiged <span id="totPrestigeRun"></span> times.
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div id="last10SubTab" class="statSubTab">
+                <table style="width: 75%; margin: auto; text-align: center;">
                     <tr style="height: 25px;">
                         <div style="height: 100%;"></div>
                     </tr>
@@ -1463,7 +1585,9 @@
             </div>
             <div id="achSubTab" class="statSubTab" style="display: none;">
                 <div id="achievementsInfo" style="text-align: center; margin-top: 20px;">
-                    Your achievements and achievement rewards are permanent. They persist through <span style="font-size: 14pt;">ALL</span> resets.
+                    Your achievements and achievement rewards are permanent. They persist through <span style="font-size: 14pt;">ALL</span> resets.<br>
+                    You have <span id="numAch" style="font-size: 17pt; white-space: pre; font-variant-numeric: tabular-nums;"> 0 </span> achievements, boosting all units' corpse multipliers by <span id="achBoost" style="font-size: 17pt; white-space: pre; font-variant-numeric: tabular-nums;"> 0</span>x.<br>
+                    Achievements with a '+' have an additional reward.
                 </div>
                 <table style="width: 75%; margin: auto; text-align: center;">
                     <tr style="height: 25px;">
@@ -1477,13 +1601,53 @@
                             <div id="ach12" class="achievement achTooltip" onmouseover="mouseoverAchievement(12)"><p>Nekro-Carpentry</p></div>
                         </td>
                         <td>
-                            <div id="ach13" class="achievement achTooltip" onmouseover="mouseoverAchievement(13)"><p>Killing Time</p></div>
+                            <div id="ach13" class="achievement achTooltip" onmouseover="mouseoverAchievement(13)"><p>Wait, This Sounds Familiar...</p></div>
                         </td>
                         <td>
                             <div id="ach14" class="achievement achTooltip" onmouseover="mouseoverAchievement(14)"><p>Master Of The Dead</p></div>
                         </td>
                         <td>
-                            <div id="ach15" class="achievement achTooltip" onmouseover="mouseoverAchievement(15)"><p>One Sun, Two Sun, Dead Sun, Blue Sun</p></div>
+                            <div id="ach15" class="achievement achTooltip" onmouseover="mouseoverAchievement(15)"><p>One Sun, Two Sun, Dead Sun, Blue Sun<br>+</p></div>
+                        </td>
+                    </tr>
+                    <tr style="height: 10px;">
+                        <div style="height: 100%;"></div>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div id="ach21" class="achievement achTooltip" onmouseover="mouseoverAchievement(21)"><p>Killing Time</p></div>
+                        </td>
+                        <td>
+                            <div id="ach22" class="achievement achTooltip" onmouseover="mouseoverAchievement(22)"><p>Inter-dimensional Nekro-Cable</p></div>
+                        </td>
+                        <td>
+                            <div id="ach23" class="achievement achTooltip" onmouseover="mouseoverAchievement(23)"><p>Full Stasis</p></div>
+                        </td>
+                        <td>
+                            <div id="ach24" class="achievement achTooltip" onmouseover="mouseoverAchievement(24)"><p>It's About Time</p></div>
+                        </td>
+                        <td>
+                            <div id="ach25" class="achievement achTooltip" onmouseover="mouseoverAchievement(25)"><p>Thyme Lord<br>+</p></div>
+                        </td>
+                    </tr>
+                    <tr style="height: 10px;">
+                        <div style="height: 100%;"></div>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div id="ach31" class="achievement achTooltip" onmouseover="mouseoverAchievement(31)"><p>The Grind<br>+</p></div>
+                        </td>
+                        <td>
+                            <div id="ach32" class="achievement achTooltip" onmouseover="mouseoverAchievement(32)"><p>Master Nekro-Carpenter</p></div>
+                        </td>
+                        <td>
+                            <div id="ach33" class="achievement achTooltip" onmouseover="mouseoverAchievement(33)"><p>Frugality</p></div>
+                        </td>
+                        <td>
+                            <div id="ach34" class="achievement achTooltip" onmouseover="mouseoverAchievement(34)"><p>In A Flash</p></div>
+                        </td>
+                        <td>
+                            <div id="ach35" class="achievement achTooltip" onmouseover="mouseoverAchievement(35)"><p>Galactic Angst<br>+</p></div>
                         </td>
                     </tr>
                 </table>

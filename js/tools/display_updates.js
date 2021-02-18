@@ -128,6 +128,8 @@ function updateTimeUpgs() {
 }
 
 function updateResourceDisplays() {
+    player.displayData.push(['html', 'achBoost', formatDefault2(getAchievementBoost())]);
+    player.displayData.push(['html', 'numAch', formatWhole(player.numAchievements)]);
     updateCorpseDisplays();
     updateBuildingDisplays();
     updateTimeDisplays()
@@ -168,6 +170,7 @@ function updateBuildingDisplays() {
     //document.getElementById('sunGainSpan').style.display = player.astralFlag ? 'block' : 'none'
     //document.getElementById('sunGainNotice').style.display = player.astralFlag ? 'none' : 'block'
     player.displayData.push(['html', 'acolyteEff', formatDefault2(BUILDS_DATA[2].resourceEff())]);
+    player.displayData.push(['html', 'brickKeepDisplay', ` ${formatUnitRow(getAchievementEffect(25))} `]);
     var buildingTextElements = document.getElementsByClassName('buildingResourceTexts');
     for (var el=0; el<buildingTextElements.length; el++) {
         player.displayData.push(['html', buildingTextElements[el].id, buildingSingulizer(buildingTextElements[el].id)]);
@@ -177,14 +180,14 @@ function updateBuildingDisplays() {
 function updateTimeDisplays() {
     player.displayData.push(['html', 'trueTimeAmt', formatUnitRow(player.trueEssence)]);
     player.displayData.push(['html', 'antiTimeAmt', formatUnitRow(player.antiEssence)]);
-    player.displayData.push(['html', 'trueTimeGain', formatUnitRow(getTimeDimProdPerSecond(1).times((100-player.truePercent)/100))]);
+    player.displayData.push(['html', 'trueTimeGain', formatUnitRow(getTimeDimProdPerSecond(1).times(player.truePercent/100))]);
     player.displayData.push(['html', 'antiTimeGain', formatUnitRow(getTimeDimProdPerSecond(1).times(player.antiPercent/100))]);
     player.displayData.push(['html', 'trueTimeBuff', formatDefault2(getTrueTimeBuff())]);
     player.displayData.push(['html', 'antiTimeBuff', formatDefault2(getAntiTimeBuff())]);
     player.displayData.push(['html', 'trueTimeNerf', formatDefault2(getTrueTimeNerf())]);
     player.displayData.push(['html', 'antiTimeNerf', formatDefault2(getAntiTimeNerf())]);
     player.displayData.push(['html', 'crystalAmt', ' ' + formatWhole(player.crystals) + ' ']);
-    if (player.totalCrystals.gte(2000)) {
+    if (player.allTimeStats.totalCrystals.gte(2000)) {
         player.displayData.push(['setProp', 'timePresDesc', 'display', 'none']);
         player.displayData.push(['setProp', 'crystalRateDesc', 'display', 'block']);
         player.displayData.push(['html', 'crystalRateDesc', '(' + formatDefault(calculateCrystalsPerMin()) + '/min)'])
@@ -669,8 +672,10 @@ function updateUnlocks(notify=true) {
 function updateAchievements() {
     for (let id in ACH_DATA) {
         if (!player.achievements[id].unlocked && ACH_DATA[id].canUnlock()) {
+            ACH_DATA[id].onUnlock();
             player.achievements[id].unlocked = true;
             player.achievements[id].new = true;
+            player.numAchievements += 1;
             player.displayData.push(['addClass', ACH_DATA[id].divID, 'achievementUnlocked']);
             player.displayData.push(['addClass', ACH_DATA[id].divID, 'achievementNew']);
             player.displayData.push(['remClass', ACH_DATA[id].divID, 'achievement']);
@@ -846,11 +851,11 @@ function statsTabClick() {
     showStatsSubTab(player.activeTabs[4], player.activeTabs[4] + 'But');
 }
 
-function statsSubTabClick() {
+function statsSubTabClick(tabName='statSubTab', butName='statSubTabBut') {
     generateLastRuns();
     updateStatsTab();
     showTab('statsTab', 'statsTabBut');
-    showStatsSubTab('statSubTab', 'statSubTabBut');
+    showStatsSubTab(tabName, butName);
 }
 
 function generateLastRuns() {
@@ -877,13 +882,26 @@ function generateLastRuns() {
 }
 
 function updateStatsTab() {
-    document.getElementById('totCorpses').innerHTML = formatWhole(player.totalCorpses);
-    document.getElementById('totWorlds').innerHTML = formatWhole(player.totalWorlds);
-    document.getElementById('totCrystals').innerHTML = formatWhole(player.totalCrystals);
-    document.getElementById('totPrestige').innerHTML = formatWhole(player.totalSpaceResets);
-    document.getElementById('totSacrifice').innerHTML = formatWhole(player.totalTimeResets);
-    document.getElementById('bestGain').innerHTML = formatWhole(player.bestCrystalGain);
-    document.getElementById('bestRate').innerHTML = formatWhole(player.bestCrystalRate);
+    document.getElementById('totCorpses').innerHTML = formatWhole(player.allTimeStats.totalCorpses);
+    document.getElementById('totBricks').innerHTML = formatWhole(player.allTimeStats.totalBricks);
+    document.getElementById('totWorlds').innerHTML = formatWhole(player.allTimeStats.totalWorlds);
+    document.getElementById('totCrystals').innerHTML = formatWhole(player.allTimeStats.totalCrystals);
+    document.getElementById('bestCorpses').innerHTML = formatWhole(player.allTimeStats.bestCorpses);
+    document.getElementById('bestBricks').innerHTML = formatWhole(player.allTimeStats.bestBricks);
+    document.getElementById('bestWorlds').innerHTML = formatWhole(player.allTimeStats.bestWorlds);
+    document.getElementById('bestCrystals').innerHTML = formatWhole(player.allTimeStats.bestCrystals);
+    document.getElementById('totPrestige').innerHTML = formatWhole(player.allTimeStats.totalSpaceResets);
+    document.getElementById('totSacrifice').innerHTML = formatWhole(player.allTimeStats.totalTimeResets);
+    document.getElementById('bestGain').innerHTML = formatWhole(player.allTimeStats.bestCrystalGain);
+    document.getElementById('bestRate').innerHTML = formatWhole(player.allTimeStats.bestCrystalRate);
+
+    document.getElementById('totCorpsesRun').innerHTML = formatWhole(player.thisSacStats.totalCorpses);
+    document.getElementById('totBricksRun').innerHTML = formatWhole(player.thisSacStats.totalBricks);
+    document.getElementById('totWorldsRun').innerHTML = formatWhole(player.thisSacStats.totalWorlds);
+    document.getElementById('bestCorpsesRun').innerHTML = formatWhole(player.thisSacStats.bestCorpses);
+    document.getElementById('bestBricksRun').innerHTML = formatWhole(player.thisSacStats.bestBricks);
+    document.getElementById('bestWorldsRun').innerHTML = formatWhole(player.thisSacStats.bestWorlds);
+    document.getElementById('totPrestigeRun').innerHTML = formatWhole(player.thisSacStats.totalSpaceResets);
 }
 
 //add/remove/set/toggle etc for QoL
