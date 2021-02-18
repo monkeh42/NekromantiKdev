@@ -280,6 +280,7 @@ function timePrestigeReset() {
     copyData(player.unlocks['buildingsTab'], START_PLAYER.unlocks['buildingsTab']);
     if (timeUpgUnlocked) { player.buildings[3].upgrades[13] = true; }
     //allDisplay();
+    justReset = true;
     save();
     showBuildingSubTab('buildingsSubTab');
     startInterval();

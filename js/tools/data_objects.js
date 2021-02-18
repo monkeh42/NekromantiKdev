@@ -281,6 +281,7 @@ const START_PLAYER = {
             'autobuyers': false,
             'fastBuyers': false,
             'BulkBuyers': false,
+            'prestigeBuyer': false,
             'advancedBuyer': false,
         },
         'buildingsTab': {
@@ -303,6 +304,29 @@ const START_PLAYER = {
         },
     },
 
+    achievements: {
+        11: {
+            unlocked: false,
+            new: false,
+        },
+        12: {
+            unlocked: false,
+            new: false,
+        },
+        13: {
+            unlocked: false,
+            new: false,
+        },
+        14: {
+            unlocked: false,
+            new: false,
+        },
+        15: {
+            unlocked: false,
+            new: false,
+        },
+    },
+
     confirmations: {
         'worldPrestige': {
             'click': true,
@@ -319,9 +343,100 @@ const START_PLAYER = {
     },
 
     tooltipsEnabled: false,
-    activeTabs: ['unitsTab', 'unitsSubTab', 'buildingsSubTab', 'timeDimSubTab'],
+    activeTabs: ['unitsTab', 'unitsSubTab', 'buildingsSubTab', 'timeDimSubTab', 'statSubTab'],
     hotKeysOn: true,
     displayData: [],
+}
+
+const ACH_DATA = {
+    11: {
+        title: 'The Astral Brick Road',
+        desc: 'Unlock Buildings.',
+        reward: '',
+        hasReward: false,
+        showEffect: false,
+        divID: 'ach11',
+        canUnlock: function() {
+            return player.unlocks['buildingsTab']['mainTab'];
+        },
+        effect: function() {
+            return new Decimal(1);
+        },
+        onUnlock: function() {
+            return;
+        }
+    },
+    12: {
+        title: 'Nekro-Carpentry',
+        desc: 'Unlock Construction.',
+        reward: '',
+        hasReward: false,
+        showEffect: false,
+        divID: 'ach12',
+        canUnlock: function() {
+            return player.unlocks['buildingsTab']['construction'];
+        },
+        effect: function() {
+            return new Decimal(1);
+        },
+        onUnlock: function() {
+            return;
+        }
+    },
+    13: {
+        title: 'Killing Time',
+        desc: 'Unlock Time Warp.',
+        reward: '',
+        showEffect: false,
+        hasReward: false,
+        divID: 'ach13',
+        canUnlock: function() {
+            return player.unlocks['timeTab']['mainTab'];
+        },
+        effect: function() {
+            return new Decimal(1);
+        },
+        onUnlock: function() {
+            return;
+        }
+    },
+    14: {
+        title: 'Master Of The Dead',
+        desc: 'Own at least one of each unit.',
+        reward: '',
+        showEffect: false,
+        hasReward: false,
+        divID: 'ach14',
+        canUnlock: function() {
+            for (let i=1; i<=NUM_UNITS; i++) {
+                if (player.units[i].amount.eq(0)) { return false; }
+            }
+            return true;
+        },
+        effect: function() {
+            return new Decimal(1);
+        },
+        onUnlock: function() {
+            return;
+        }
+    },
+    15: {
+        title: 'One Sun, Two Sun, Dead Sun, Blue Sun',
+        desc: 'Build the Dead Sun.',
+        reward: 'Double base nekro-photon production (2/sec -> 4/sec).',
+        showEffect: false,
+        hasReward: true,
+        divID: 'ach15',
+        canUnlock: function() {
+            return isBuilt(3);
+        },
+        effect: function() {
+            return new Decimal(2);
+        },
+        onUnlock: function() {
+            return;
+        }
+    },
 }
 
 const UNLOCKS_DATA = {
@@ -347,6 +462,8 @@ const UNLOCKS_DATA = {
         'autobuyers': {
             unlocked: false,
             classNotID: false,
+            notifyID: 'autobuyersSubTabBut',
+            parentNotify: 'unitsTabBut',
             idsToShow: ['unitsSubMenu', 'autobuyersSubTabBut'],
             idsToHide: [],
             condition: function() {
@@ -401,6 +518,7 @@ const UNLOCKS_DATA = {
         'mainTab': {
             unlocked: false,
             classNotID: false,
+            notifyID: 'buildingsTabBut',
             idsToShow: ['buildingsTabCell', 'worldsBonusDisplay', 'totalBonusDisplay'],
             idsToHide: [],
             condition: function() {
@@ -464,6 +582,8 @@ const UNLOCKS_DATA = {
         'construction': {
             unlocked: false,
             classNotID: false,
+            notifyID: 'constructionSubTabBut',
+            parentNotify: 'buildingsTabBut',
             idsToShow: ['buildingsSubMenu', 'constructionSubTabBut'],
             idsToHide: [],
             condition: function() {
@@ -475,6 +595,7 @@ const UNLOCKS_DATA = {
         'mainTab': {
             unlocked: false,
             classNotID: false,
+            notifyID: 'timeTabBut',
             idsToShow: ['timeTabCell', 'timeBoostDisplay'],
             idsToHide: [],
             condition: function() {
@@ -484,6 +605,8 @@ const UNLOCKS_DATA = {
         'timeUpgrades': {
             unlocked: false,
             classNotID: false,
+            notifyID: 'timeUpgSubTabBut',
+            parentNotify: 'timeTabBut',
             idsToShow: ['timeSubMenu', 'timeUpgSubTabBut'],
             idsToHide: [],
             condition: function() {
@@ -893,6 +1016,7 @@ function fixResetBug() {
             'autobuyers': false,
             'fastBuyers': false,
             'BulkBuyers': false,
+            'prestigeBuyer': false,
             'advancedBuyer': false,
         },
         'buildingsTab': {
@@ -915,6 +1039,29 @@ function fixResetBug() {
         },
     });
 
+    copyData(START_PLAYER.achievements, {
+        11: {
+            unlocked: false,
+            new: false,
+        },
+        12: {
+            unlocked: false,
+            new: false,
+        },
+        13: {
+            unlocked: false,
+            new: false,
+        },
+        14: {
+            unlocked: false,
+            new: false,
+        },
+        15: {
+            unlocked: false,
+            new: false,
+        },
+    });
+
     copyData(START_PLAYER.confirmations, {
         'worldPrestige': {
             'click': true,
@@ -931,7 +1078,7 @@ function fixResetBug() {
     });
 
     START_PLAYER.tooltipsEnabled = false;
-    START_PLAYER.activeTabs = new Array('unitsTab', 'unitsSubTab', 'buildingsSubTab', 'timeDimSubTab');
+    START_PLAYER.activeTabs = new Array('unitsTab', 'unitsSubTab', 'buildingsSubTab', 'timeDimSubTab', 'statSubTab');
     START_PLAYER.hotKeysOn = true,
     START_PLAYER.displayData = new Array(0);
 

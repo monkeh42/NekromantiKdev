@@ -286,7 +286,7 @@ function updateTDimTiers() {
 
 //style/display updaters for unlocks
 
-function unlockElements(mainTab, subTab) {
+function unlockElements(mainTab, subTab, notify=true) {
     let data = UNLOCKS_DATA[mainTab][subTab];
     player.unlocks[mainTab][subTab] = true;
     if (data.idsToShow.length > 0) {
@@ -312,6 +312,10 @@ function unlockElements(mainTab, subTab) {
             }
         }
     }
+    if (notify) {
+        if (data.notifyID !== undefined) { player.displayData.push(['addClass', data.notifyID, 'tabButNotify']); }
+        if (data.parentNotify !== undefined) { player.displayData.push(['addClass', data.parentNotify, 'tabButIndirectNotify']); }
+    } 
 }
 
 function lockElements(mainTab, subTab) {
@@ -406,6 +410,37 @@ function updateAutobuyers() {
     copyData(player.autobuyers.priority, newPriority);
 }
 
+function updateAutobuyersDisplay() {
+    for (var i=1; i<=10; i++) {
+        if (i<9) { 
+            document.getElementById(player.autobuyers.priority[i-1].toString() + (i).toString()).selected = true;
+            var unitName = UNITS_DATA[i].single.replace(' ', '');
+            document.getElementById(unitName + 'BuyerOn').checked = player.autobuyers[i].on;
+            document.getElementById(unitName + 'BuyerFast').checked = player.autobuyers[i].fast;
+            document.getElementById(unitName + 'BuysBulk').checked = player.autobuyers[i].bulk;
+            document.getElementById(unitName + 'BuyerOff').checked = !player.autobuyers[i].on;
+            document.getElementById(unitName + 'BuyerSlow').checked = !player.autobuyers[i].fast;
+            document.getElementById(unitName + 'BuysOne').checked = !player.autobuyers[i].bulk;
+        } else if (i==9) {
+            document.getElementById('sacrificeBuyerOn').checked = player.autobuyers[i].on ;
+            document.getElementById('sacrificeBuyerFast').checked = player.autobuyers[i].fast;
+            document.getElementById('sacrificeBuyerOff').checked = !player.autobuyers[i].on;
+            document.getElementById('sacrificeBuyerSlow').checked = !player.autobuyers[i].fast;
+            document.getElementById('sacrificeBuyerAmount').value = formatWholeNoComma(player.autobuyers[i].amount);
+            document.getElementById('sacrificeBuyerOptionsList').options.namedItem(player.autobuyers[i].type).selected = true;
+            let sacMethod = document.getElementById('sacrificeBuyerOptionsList');
+            document.getElementById('sacrificeBuyerAmountLabel').innerHTML = sacMethod.options[sacMethod.selectedIndex].text;
+            //if (player.autobuyers[i].autolock) { document.getElementById('sacrificeBuyerAutolock').checked = true; }
+        } else {
+            document.getElementById('prestigeBuyerOn').checked = player.autobuyers[i].on;
+            document.getElementById('prestigeBuyerFast').checked = player.autobuyers[i].fast;
+            document.getElementById('prestigeBuyerOff').checked = !player.autobuyers[i].on;
+            document.getElementById('prestigeBuyerSlow').checked = !player.autobuyers[i].fast;
+            document.getElementById('prestigeBuyerPriority').checked = player.autobuyers[i].priority;
+        }
+    }
+}
+
 function updateSliderDisplay() {
     player.truePercent = 100 - Number(document.getElementById('timeSlider').value);
     player.antiPercent = Number(document.getElementById('timeSlider').value);
@@ -466,60 +501,111 @@ function closeConfirmationsPopup() {
     document.getElementById('confirmationsPopup').style.display = 'none';
 }
 
-function showTab(tabName) {
+function showTab(tabName, buttonName) {
+    let bName = tabName + 'But'
     var allTabs = document.getElementsByClassName('pageTab');
     var tab;
     for (var i=0; i<allTabs.length; i++) {
         tab = allTabs.item(i);
         if (tab.id === tabName) {
             tab.style.display = 'block';
+            tab.classList.remove('tabButSelected');
         } else {
             tab.style.display = 'none';
+            document.getElementById(tab.id + 'But').classList.remove('tabButSelected');
         }
     }
+    if (document.getElementById('helpDiv').style.display != 'none') {
+        player.displayData.push(['togDisplay', 'helpDiv']);
+        player.displayData.push(['togClass', 'helpTabBut', 'tabButSelected'])
+    }
+    player.displayData.push(['addClass', bName, 'tabButSelected'])
     player.activeTabs[0] = tabName;
+    if (buttonName !== undefined) { document.getElementById(buttonName).classList.remove('tabButNotify'); }
 }
 
-function showUnitSubTab(subTabName) {
+function showStatsSubTab(subTabName) {
+    let bName = subTabName + 'But'
+    var allSubTabs = document.getElementsByClassName('statSubTab');
+    var tab;
+    for (var i=0; i<allSubTabs.length; i++) {
+        tab = allSubTabs.item(i);
+        if (tab.id === subTabName) {
+            tab.style.display = 'block';
+            tab.classList.remove('tabButSelected');
+        } else {
+            tab.style.display = 'none';
+            document.getElementById(tab.id + 'But').classList.remove('tabButSelected');
+        }
+    }
+    player.displayData.push(['addClass', bName, 'tabButSelected'])
+    player.activeTabs[4] = subTabName;
+}
+
+function showUnitSubTab(subTabName, buttonName, parentButton) {
+    let bName = subTabName + 'But'
     var allSubTabs = document.getElementsByClassName('unitSubTab');
     var tab;
     for (var i=0; i<allSubTabs.length; i++) {
         tab = allSubTabs.item(i);
         if (tab.id === subTabName) {
             tab.style.display = 'block';
+            tab.classList.remove('tabButSelected');
         } else {
             tab.style.display = 'none';
+            document.getElementById(tab.id + 'But').classList.remove('tabButSelected');
         }
     }
     player.activeTabs[1] = subTabName;
+    if (buttonName !== undefined) {
+        document.getElementById(buttonName).classList.remove('tabButNotify');
+        document.getElementById(parentButton).classList.remove('tabButIndirectNotify');
+    }
+    player.displayData.push(['addClass', bName, 'tabButSelected'])
 }
 
-function showBuildingSubTab(subTabName) {
+function showBuildingSubTab(subTabName, buttonName, parentButton) {
+    let bName = subTabName + 'But'
     var allSubTabs = document.getElementsByClassName('buildingSubTab');
     var tab;
     for (var i=0; i<allSubTabs.length; i++) {
         tab = allSubTabs.item(i);
         if (tab.id === subTabName) {
             tab.style.display = 'block';
+            tab.classList.remove('tabButSelected');
         } else {
             tab.style.display = 'none';
+            document.getElementById(tab.id + 'But').classList.remove('tabButSelected');
         }
     }
     player.activeTabs[2] = subTabName;
+    if (buttonName !== undefined) {
+        document.getElementById(buttonName).classList.remove('tabButNotify');
+        document.getElementById(parentButton).classList.remove('tabButIndirectNotify');
+    }
+    player.displayData.push(['addClass', bName, 'tabButSelected'])
 }
 
-function showTimeSubTab(subTabName) {
+function showTimeSubTab(subTabName, buttonName, parentButton) {
+    let bName = subTabName + 'But'
     var allSubTabs = document.getElementsByClassName('timeSubTab');
     var tab;
     for (var i=0; i<allSubTabs.length; i++) {
         tab = allSubTabs.item(i);
         if (tab.id === subTabName) {
             tab.style.display = 'block';
+            tab.classList.remove('tabButSelected');
         } else {
             tab.style.display = 'none';
+            document.getElementById(tab.id + 'But').classList.remove('tabButSelected');
         }
     }
     player.activeTabs[3] = subTabName;
+    if (buttonName !== undefined) {
+        document.getElementById(buttonName).classList.remove('tabButNotify');
+        document.getElementById(parentButton).classList.remove('tabButIndirectNotify');
+    }
+    player.displayData.push(['addClass', bName, 'tabButSelected'])
 }
 
 function isActiveTab(tabName) {
@@ -559,10 +645,10 @@ function getActiveTabs() {
     return aTabs;
 }
 
-function updateUnlocks() {
+function updateUnlocks(notify=true) {
     for (var tab in UNLOCKS_DATA) {
         for (var key in UNLOCKS_DATA[tab]) {
-            if (!player.unlocks[tab][key] && UNLOCKS_DATA[tab][key].condition()) { unlockElements(tab, key) }
+            if (!player.unlocks[tab][key] && UNLOCKS_DATA[tab][key].condition()) { unlockElements(tab, key, notify) }
             else if (!player.unlocks[tab][key] && key == 'mainTab') { break; }
         }
     }
@@ -577,6 +663,34 @@ function updateUnlocks() {
             player.timeDims[i+1].unlocked = true;
             player.displayData.push(['setProp', TIME_DATA[i+1].rowID, 'display', 'table-row']);
         } 
+    }
+}
+
+function updateAchievements() {
+    for (let id in ACH_DATA) {
+        if (!player.achievements[id].unlocked && ACH_DATA[id].canUnlock()) {
+            player.achievements[id].unlocked = true;
+            player.achievements[id].new = true;
+            player.displayData.push(['addClass', ACH_DATA[id].divID, 'achievementUnlocked']);
+            player.displayData.push(['addClass', ACH_DATA[id].divID, 'achievementNew']);
+            player.displayData.push(['remClass', ACH_DATA[id].divID, 'achievement']);
+            player.displayData.push(['addClass', 'achSubTabBut', 'tabButNotify']);
+            player.displayData.push(['addClass', 'statsTabBut', 'tabButIndirectNotify']);
+            player.displayData.push(['setProp', 'achUnlockPopup', 'opacity', '1']);
+            popupShownTime = (new Date).getTime();
+        }
+    }
+}
+
+function mouseoverAchievement(ach) {
+    if (player.achievements[ach].new) {
+        player.achievements[ach].new = false;
+        player.displayData.push(['remClass', ACH_DATA[ach].divID, 'achievementNew']);
+        for (let id in player.achievements) {
+            if (player.achievements[id].new) { return; }
+        }
+        player.displayData.push(['remClass', 'achSubTabBut', 'tabButNotify']);
+        player.displayData.push(['remClass', 'statsTabBut', 'tabButIndirectNotify']);
     }
 }
 
@@ -681,6 +795,7 @@ function checkUnlocked(tab, unlock) {
 
 function showHelp() {
     player.displayData.push(['togDisplay', 'helpDiv']); 
+    player.displayData.push(['togClass', 'helpTabBut', 'tabButSelected'])
     var active = getActiveTab();
         
     if (HELP_TEXTS[active] === undefined) {return;}
@@ -727,7 +842,8 @@ function generateHelpForFullPage(tabName, button, section) {
 function statsTabClick() {
     generateLastRuns();
     updateStatsTab();
-    showTab('statsTab');
+    showTab('statsTab', 'statsTabBut');
+    showStatsSubTab('statSubTab', 'statSubTabBut');
 }
 
 function generateLastRuns() {
@@ -785,8 +901,8 @@ function setPropBButton(b, prop, val) {
     player.displayData.push(['setProp', BUILDS_DATA[b].buildingButtonID, prop, val]);
 }
 
-function togDisplayBButton(b, prop) {
-    player.displayData.push(['togDisplay', BUILDS_DATA[b].buildingButtonID, prop]);
+function togDisplayBButton(b) {
+    player.displayData.push(['togDisplay', BUILDS_DATA[b].buildingButtonID]);
 }
 
 function writeHTMLBButton(b, text) {
@@ -813,8 +929,8 @@ function setPropBUpg(b, u, prop, val) {
     player.displayData.push(['setProp', BUILDS_DATA[b].upgrades[u].buttonID, prop, val]);
 }
 
-function togDisplayBUpg(b, u, prop) {
-    player.displayData.push(['togDisplay', BUILDS_DATA[b].upgrades[u].buttonID, prop]);
+function togDisplayBUpg(b, u) {
+    player.displayData.push(['togDisplay', BUILDS_DATA[b].upgrades[u].buttonID]);
 }
 
 function writeHTMLBUpg(b, u, text) {
@@ -841,8 +957,8 @@ function setPropCUpg(c, prop, val) {
     player.displayData.push(['setProp', CONSTR_DATA[c].buttonID, prop, val]);
 }
 
-function togDisplayCUpg(c, prop) {
-    player.displayData.push(['togDisplay', CONSTR_DATA[c].buttonID, prop]);
+function togDisplayCUpg(c) {
+    player.displayData.push(['togDisplay', CONSTR_DATA[c].buttonID]);
 }
 
 function writeHTMLCUpg(c, text) {
@@ -869,8 +985,8 @@ function setPropTUpg(t, prop, val) {
     player.displayData.push(['setProp', TIME_DATA.upgrades[t].buttonID, prop, val]);
 }
 
-function togDisplayTUpg(t, prop) {
-    player.displayData.push(['togDisplay', TIME_DATA.upgrades[t].buttonID, prop]);
+function togDisplayTUpg(t) {
+    player.displayData.push(['togDisplay', TIME_DATA.upgrades[t].buttonID]);
 }
 
 function writeHTMLTUpg(t, text) {
@@ -897,8 +1013,8 @@ function setPropUnit(tier, prop, val) {
     player.displayData.push(['setProp', UNITS_DATA[tier].buttonID, prop, val]);
 }
 
-function togDisplayUnit(tier, prop) {
-    player.displayData.push(['togDisplay', UNITS_DATA[tier].buttonID, prop]);
+function togDisplayUnit(tier) {
+    player.displayData.push(['togDisplay', UNITS_DATA[tier].rowID]);
 }
 
 function writeHTMLUnit(tier, text) {
@@ -925,8 +1041,8 @@ function setPropTDim(tier, prop, val) {
     player.displayData.push(['setProp', TIME_DATA[tier].buttonID, prop, val]);
 }
 
-function togDisplayTDim(tier, prop) {
-    player.displayData.push(['togDisplay', TIME_DATA[tier].buttonID, prop]);
+function togDisplayTDim(tier) {
+    player.displayData.push(['togDisplay', TIME_DATA[tier].rowID]);
 }
 
 function writeHTMLTDim(tier, text) {
@@ -953,8 +1069,8 @@ function setPropPres(presType, prop, val) {
     player.displayData.push(['setProp', presType + 'Prestige', prop, val]);
 }
 
-function togDisplayPres(presType, prop) {
-    player.displayData.push(['togDisplay', presType + 'Prestige', prop]);
+function togDisplayPres(presType) {
+    player.displayData.push(['togDisplay', presType + 'Prestige']);
 }
 
 function writeHTMLPres(presType, text) {

@@ -46,6 +46,39 @@
     display: none;
  }
 
+ .achTooltip {
+    position: relative;
+ }
+
+ .achTooltip::before {
+    white-space: pre;
+    background-color: black;
+    border: 3px solid white;
+    color: white;
+    box-shadow: 3px 3px #424242;
+    border-radius: 4px;
+    content: attr(data-title);
+    display: none;
+    font: 400 13.3333px Arial;
+    padding: 2px 5px;
+    max-width: 119px;
+    min-width: 119px;
+    text-align: center;
+    white-space: pre-wrap;
+    position: absolute;
+    top: -20px;
+    left: 0px;
+    z-index: 1;
+ }
+
+ .achTooltip:hover::before {
+    display: inline-block;
+ }
+
+ .achTooltip::before:empty {
+    display: none;
+ }
+
 body {
     color: white;
     background-color: black;
@@ -235,12 +268,25 @@ option:active, option.active {
     background-color: #1f1f1f;
     font-style: bold;
     width: 180px;
-    height: 50px;
+    height: 60px;
     border: 1px solid #525252;
     cursor: pointer;
     border-radius: 4px;
     font-family: 'Cinzel', serif;
     font-size: 15pt;
+}
+
+.tabButSelected {
+    background-color: black !important;
+    cursor: default !important;
+}
+
+.tabButNotify {
+    box-shadow: 0px 0px 20px 10px goldenrod;
+}
+
+.tabButIndirectNotify {
+    box-shadow: 0px 0px 20px 10px silver;
 }
 
 .tabBut:hover {
@@ -783,10 +829,6 @@ option:active, option.active {
     margin: 10px;
 }
 
-.buyerOptionsContainer {
-
-}
-
 .buyerEnabledOffContainer {
     float: left;
     margin-bottom: 10px;
@@ -1097,4 +1139,55 @@ option:active, option.active {
     margin: auto;
     margin-top: 25px;
     display: block;
+}
+
+.allAutoBut {
+    color: white;
+    background-color: #170424;
+    font-style: bold;
+    width: 180px;
+    height: 35px;
+    border: 1px solid #460573;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.achievement {
+    width: 125px;
+    height: 125px;
+    border: 1px solid grey;
+    color: grey;
+    /*font-weight: bold;*/
+    text-align: center;
+    padding: 5px;
+    margin: auto;
+}
+
+.achievementUnlocked {
+    width: 125px;
+    height: 125px;
+    border: 1px solid gold;
+    color: gold;
+    /*font-weight: bold;*/
+    text-align: center;
+    padding: 5px;
+    margin: auto;
+}
+
+.achievementNew {
+    box-shadow: 0px 0px 10px 5px goldenrod;
+}
+
+.achievement p, .achievementUnlocked p {
+    vertical-align: middle;
+}
+
+#achUnlockPopup {
+    display: block !important;
+    top: 15px !important;
+    transform: translateX(-50%) translateY(0%) !important;
+    box-shadow: 0px 0px 10px 5px goldenrod;
+    opacity: 0;
+    -webkit-transition: 2s;
+    transition: opacity 2s;
 }

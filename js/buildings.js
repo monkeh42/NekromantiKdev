@@ -150,24 +150,25 @@ function resetBuildingResources() {
 function resetBuildings() {
     if (player.astralFlag) { toggleAstral(); }
     var tempSun = {};
-    var tempSunUnlock = player.unlocks['buildingsTab']['sun'];
+    var tempSunUnlock = [player.unlocks['buildingsTab']['sun'], player.unlocks['buildingsTab']['sunRow2']];
     copyData(tempSun, player.buildings[3]);
     copyData(player.buildings, START_PLAYER.buildings);
     copyData(player.construction, START_PLAYER.construction);
     copyData(player.unlocks['buildingsTab'], START_PLAYER.unlocks['buildingsTab']);
     if (hasTUpgrade(14)) {
         copyData(player.buildings[3], tempSun);
-        player.unlocks['buildingsTab']['sun'] = tempSunUnlock;
+        player.unlocks['buildingsTab']['sun'] = tempSunUnlock[0];
+        player.unlocks['buildingsTab']['sunRow2'] = tempSunUnlock[1];
     }
     else { player.buildings[3].upgrades[33] = tempSun.upgrades[33]; }
     player.buildings[3].amount = new Decimal(0);
     for (var b in BUILDS_DATA) {
-        if (b!=3 || !isBuilt(3) || !hasTUpgrade(14)) {
-            document.getElementById(BUILDS_DATA[b].buildingRowID).style.display = 'table-row';
-            document.getElementById(BUILDS_DATA[b].upgradesRow1ID).style.display = 'none';
-            document.getElementById(BUILDS_DATA[b].upgradesRow2ID).style.display = 'none';
-        }
+        player.displayData.push(['setProp', BUILDS_DATA[b].buildingRowID, 'display', 'table-row']);
+        player.displayData.push(['setProp', BUILDS_DATA[b].buildingHeaderID, 'display', 'none']);
+        player.displayData.push(['setProp', BUILDS_DATA[b].upgradesRow1ID, 'display', 'none']);
+        player.displayData.push(['setProp', BUILDS_DATA[b].upgradesRow2ID, 'display', 'none']);
     }
+    justReset = true;
 }
 
 //data
@@ -206,6 +207,7 @@ const BUILDS_DATA = {
         buildingButtonClass: 'buildBut',
         buildingButtonUnclick: 'unclickableBuildBut',
         buildingRowID: 'factoryBuildRow',
+        buildingHeaderID: 'factoryHeaderRow',
         upgradesRow1ID: 'factoryUpgradesRow1',
         upgradesRow2ID: 'factoryUpgradesRow2',
         upgradeBtnClass: 'factoryUpg',
@@ -340,6 +342,7 @@ const BUILDS_DATA = {
         buildingButtonClass: 'buildBut',
         buildingButtonUnclick: 'unclickableBuildBut',
         buildingRowID: 'necropolisBuildRow',
+        buildingHeaderID: 'necropolisHeaderRow',
         upgradesRow1ID: 'necropolisUpgradesRow1',
         upgradesRow2ID: 'necropolisUpgradesRow2',
         upgradeBtnClass: 'necropolisUpg',
@@ -471,6 +474,7 @@ const BUILDS_DATA = {
         },
         prod: function() {
             var p = Decimal.pow(this.pBase(), this.pExp());
+            if (hasAchievement(15)) { p = p.times(getAchievementEffect(15)) }
             if (hasUpgrade(2, 23)) { p = p.times(getUpgEffect(2, 23)); }
             if (hasTUpgrade(23)) { p = p.times(getTUpgEffect(23)) }
             if (player.astralFlag) { return p; }
@@ -487,6 +491,7 @@ const BUILDS_DATA = {
         buildingButtonClass: 'buildBut',
         buildingButtonUnclick: 'unclickableBuildBut',
         buildingRowID: 'sunBuildRow',
+        buildingHeaderID: 'sunHeaderRow',
         upgradesRow1ID: 'sunUpgradesRow',
         upgradesRow2ID: 'sunUpgradesRow2',
         upgradeBtnClass: 'sunUpg',

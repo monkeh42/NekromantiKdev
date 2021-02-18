@@ -2,7 +2,7 @@
 
 const GAME_DATA = {
     author: 'monkeh42',
-    version: 'v0.2.9_d.2',
+    version: 'v0.2.9_d.3',
 }
 
 const NUM_UNITS = 8;
@@ -24,6 +24,10 @@ var DEV_SPEED = 1;
 
 var mainLoop;
 
+var justReset = false;
+
+var popupShownTime;
+
 var hidden, visibilityChange, isHidden;
 
 var player = {};
@@ -37,6 +41,7 @@ function init() {
     showUnitSubTab(player.activeTabs[1]);
     showBuildingSubTab(player.activeTabs[2]);
     showTimeSubTab(player.activeTabs[3]);
+    showStatsSubTab(player.activeTabs[4]);
 
     startGame();
 }
@@ -52,6 +57,7 @@ function loadGame() {
         copyData(player, JSON.parse(window.atob(savePlayer)));
     }
     fixData(player, START_PLAYER);
+    //updateFixes();
     player.displayData.splice(0, player.displayData.length);
     if (player.tooltipsEnabled) {
         player.tooltipsEnabled = false;
@@ -92,7 +98,7 @@ function loadStyles() {
 
     for (let tab in UNLOCKS_DATA) {
         for (let key in UNLOCKS_DATA[tab]) {
-            if (player.unlocks[tab][key]) { unlockElements(tab, key) }
+            if (player.unlocks[tab][key]) { unlockElements(tab, key, false) }
             else if (!player.unlocks[tab][key] && key == 'mainTab') { break; }
         }
     }
@@ -164,27 +170,20 @@ function loadStyles() {
         document.getElementById('timeSlider').classList.add('slider');
         document.getElementById('timeSlider').removeAttribute('disabled');
     }
-    updateSliderDisplay()
+    updateSliderDisplay();
 
-    for (var i=1; i<=10; i++) {
-        if (i<9) { 
-            document.getElementById(player.autobuyers.priority[i-1].toString() + (i).toString()).selected = true;
-            var unitName = UNITS_DATA[i].single.replace(' ', '');
-            document.getElementById(unitName + 'BuyerOn').checked = player.autobuyers[i].on;
-            document.getElementById(unitName + 'BuyerFast').checked = player.autobuyers[i].fast;
-            document.getElementById(unitName + 'BuysBulk').checked = player.autobuyers[i].bulk;
-        } else if (i==9) {
-            document.getElementById('sacrificeBuyerOn').checked = player.autobuyers[i].on ;
-            document.getElementById('sacrificeBuyerFast').checked = player.autobuyers[i].fast;
-            document.getElementById('sacrificeBuyerAmount').value = formatWholeNoComma(player.autobuyers[i].amount);
-            document.getElementById('sacrificeBuyerOptionsList').options.namedItem(player.autobuyers[i].type).selected = true;
-            let sacMethod = document.getElementById('sacrificeBuyerOptionsList');
-            document.getElementById('sacrificeBuyerAmountLabel').innerHTML = sacMethod.options[sacMethod.selectedIndex].text;
-            //if (player.autobuyers[i].autolock) { document.getElementById('sacrificeBuyerAutolock').checked = true; }
-        } else {
-            document.getElementById('prestigeBuyerOn').checked = player.autobuyers[i].on;
-            document.getElementById('prestigeBuyerFast').checked = player.autobuyers[i].fast;
-            document.getElementById('prestigeBuyerPriority').checked = player.autobuyers[i].priority;
+    updateAutobuyersDisplay();
+
+    for (let id in ACH_DATA) {
+        document.getElementById(ACH_DATA[id].divID).setAttribute('data-title', ACH_DATA[id].desc + (ACH_DATA[id].hasReward ? ' Reward: ' + ACH_DATA[id].reward : '' ));
+        if (player.achievements[id].unlocked) {
+            document.getElementById(ACH_DATA[id].divID).classList.add('achievementUnlocked');
+            document.getElementById(ACH_DATA[id].divID).classList.remove('achievement');
+            if (player.achievements[id].new) {
+                document.getElementById(ACH_DATA[id].divID).classList.add('achievementNew');
+                player.displayData.push(['addClass', 'achSubTabBut', 'tabButNotify']);
+                player.displayData.push(['addClass', 'statsTabBut', 'tabButIndirectNotify']);
+            }
         }
     }
 
@@ -219,6 +218,7 @@ function startGame() {
 
     updateDisplay();
     loadStyles();
+
     startInterval();
 }
 
@@ -256,7 +256,8 @@ function gameLoop(diff=new Decimal(0), offline=false) {
             player.buildings[b].amount = player.buildings[b].amount.plus(getBuildingProdPerSec(b).times(diff.div(1000)));
         }
     }
-    updateUnlocks();
+    updateUnlocks(!justReset);
+    updateAchievements();
 
     if (!offline && player.unlocks['unitsTab']['autobuyers']) {
         var slowAutoBuy = (currentUpdate - player.lastAutobuy)>=(15000/DEV_SPEED);
@@ -271,7 +272,13 @@ function gameLoop(diff=new Decimal(0), offline=false) {
         }
         player.lastUpdate = currentUpdate;
     }
-    
+    justReset = false;
+    if (popupShownTime !== undefined && popupShownTime !== null) {
+        if (currentUpdate-popupShownTime >= 2000) {
+            player.displayData.push(['setProp', 'achUnlockPopup', 'opacity', '0']);
+            popupShownTime = null;
+        }
+    }
     if (!isHidden) { window.requestAnimationFrame(updateDisplay); }
 }
 
@@ -469,6 +476,10 @@ function copyData(data, start) {
 
 }
 
+/*function updateFixes() {
+    if player.activeTabs[4] == 
+}*/
+
 function fixData(data, start) {
     for (item in start) {
         if (start[item] == null) {
@@ -506,7 +517,17 @@ function fixData(data, start) {
     }
 }
 
-//hotkeys
+//achievement stuff
+
+function hasAchievement(id) {
+    return player.achievements[id].unlocked;
+}
+
+function getAchievementEffect(id) {
+    return ACH_DATA[id].effect();
+}
+
+//hotkeys/autobuyers
 
 document.onkeydown = function(e) {
     if (!player.hotkeysOn) {return}
@@ -522,14 +543,36 @@ function toggleHotkeys() {
     else { document.getElementById('toggleHotkeysBut').innerHTML = 'ENABLE HOTKEYS: OFF'; }
 }
 
+function allAuto(n) {
+    if (n<0) {
+        for (let i=1; i<10; i++) {
+            player.autobuyers[i].on = false;
+        }
+        if (player.unlocks['unitsTab']['prestigeBuyer']) { player.autobuyers[10].on = false; }
+    } else if (n>0) {
+        for (let i=1; i<10; i++) {
+            player.autobuyers[i].on = true;
+        }
+        if (player.unlocks['unitsTab']['prestigeBuyer']) { player.autobuyers[10].on = true; }
+    } else {
+        for (let i=1; i<10; i++) {
+            player.autobuyers[i].on = !player.autobuyers[i].on;
+        }
+        if (player.unlocks['unitsTab']['prestigeBuyer']) { player.autobuyers[10].on = !player.autobuyers[10].on; }
+    }
+    updateAutobuyersDisplay();
+}
+
 //dev stuff
 
 function changeDevSpeed(num) {
     DEV_SPEED = num;
+    if (DEV_SPEED!=1) { document.getElementById('devSpeedContainer').style.display = 'block'}
 }
 
 function resetDevSpeed() {
     DEV_SPEED = 1;
+    document.getElementById('devSpeedContainer').style.display = 'none';
 }
 
 function rewindTime() {
