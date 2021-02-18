@@ -473,7 +473,7 @@ const UNLOCKS_DATA = {
             idsToShow: ['unitsSubMenu', 'autobuyersSubTabBut'],
             idsToHide: [],
             shouldNotify: function() {
-                return true;
+                return !hasTUpgrade(13);
             },
             condition: function() {
                 return hasTUpgrade(13);
@@ -543,7 +543,7 @@ const UNLOCKS_DATA = {
             idsToShow: ['buildingsTabCell', 'worldsBonusDisplay', 'totalBonusDisplay'],
             idsToHide: [],
             shouldNotify: function() {
-                return hasTUpgrade(11);
+                return !hasTUpgrade(11);
             },
             condition: function() {
                 return player.spaceResets.gte(1);
@@ -629,7 +629,7 @@ const UNLOCKS_DATA = {
             idsToShow: ['buildingsSubMenu', 'constructionSubTabBut'],
             idsToHide: [],
             shouldNotify: function() {
-                return hasTUpgrade(12);
+                return !hasTUpgrade(12);
             },
             condition: function() {
                 return player.spaceResets.gte(2);
@@ -644,7 +644,7 @@ const UNLOCKS_DATA = {
             idsToShow: ['timeTabCell', 'timeBoostDisplay'],
             idsToHide: [],
             shouldNotify: function() {
-                return true;
+                return !hasAchievement(13);
             },
             condition: function() {
                 return player.spaceResets.gte(3);
@@ -658,7 +658,7 @@ const UNLOCKS_DATA = {
             idsToShow: ['timeSubMenu', 'timeUpgSubTabBut'],
             idsToHide: [],
             shouldNotify: function() {
-                return true;
+                return !hasUpgrade(3, 13);
             },
             condition: function() {
                 return hasUpgrade(3, 13);
