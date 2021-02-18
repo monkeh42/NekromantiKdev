@@ -446,6 +446,9 @@ const UNLOCKS_DATA = {
             classNotID: false,
             idsToShow: [],
             idsToHide: [],
+            shouldNotify: function() {
+                return false;
+            },
             condition: function() {
                 return true;
             }
@@ -455,6 +458,9 @@ const UNLOCKS_DATA = {
             classNotID: false,
             idsToShow: ['spacePresContainer'],
             idsToHide: [],
+            shouldNotify: function() {
+                return false;
+            },
             condition: function() {
                 return player.units[4].bought.gte(1);
             }
@@ -466,6 +472,9 @@ const UNLOCKS_DATA = {
             parentNotify: 'unitsTabBut',
             idsToShow: ['unitsSubMenu', 'autobuyersSubTabBut'],
             idsToHide: [],
+            shouldNotify: function() {
+                return true;
+            },
             condition: function() {
                 return hasTUpgrade(13);
             }
@@ -477,6 +486,9 @@ const UNLOCKS_DATA = {
             idsToHide: ['buyerSpeedOnContainer'],
             cssVar: '--speedDisplay',
             classToEnable: 'speedBuyerRadio',
+            shouldNotify: function() {
+                return false;
+            },
             condition: function() {
                 return hasTUpgrade(24);
             }
@@ -488,6 +500,9 @@ const UNLOCKS_DATA = {
             idsToHide: ['buyerBulkOnContainer'],
             cssVar: '--bulkDisplay',
             classToEnable: 'bulkBuyerRadio',
+            shouldNotify: function() {
+                return false;
+            },
             condition: function() {
                 return hasTUpgrade(33);
             }
@@ -498,6 +513,9 @@ const UNLOCKS_DATA = {
             idsToShow: [],
             idsToHide: [],
             cssVar: '--prestigeDisplay',
+            shouldNotify: function() {
+                return false;
+            },
             condition: function() {
                 return hasTUpgrade(34);
             }
@@ -509,6 +527,9 @@ const UNLOCKS_DATA = {
             idsToHide: ['buyerAmountOptionsContainer'],
             cssVar: '--optionsDisplay',
             classToEnable: 'buyerList',
+            shouldNotify: function() {
+                return false;
+            },
             condition: function() {
                 return hasUpgrade(3, 22);
             }
@@ -521,6 +542,9 @@ const UNLOCKS_DATA = {
             notifyID: 'buildingsTabBut',
             idsToShow: ['buildingsTabCell', 'worldsBonusDisplay', 'totalBonusDisplay'],
             idsToHide: [],
+            shouldNotify: function() {
+                return hasTUpgrade(11);
+            },
             condition: function() {
                 return player.spaceResets.gte(1);
             }
@@ -530,6 +554,9 @@ const UNLOCKS_DATA = {
             classNotID: false,
             idsToShow: ['factoryUpgradesRow1', 'factoryHeaderRow'],
             idsToHide: ['factoryBuildRow'],
+            shouldNotify: function() {
+                return false;
+            },
             condition: function() {
                 return isBuilt(1);
             }
@@ -539,6 +566,9 @@ const UNLOCKS_DATA = {
             classNotID: false,
             idsToShow: ['factoryUpgradesRow2'],
             idsToHide: [],
+            shouldNotify: function() {
+                return false;
+            },
             condition: function() {
                 return hasUpgrade(3, 11) && isBuilt(1);
             }
@@ -548,6 +578,9 @@ const UNLOCKS_DATA = {
             classNotID: false,
             idsToShow: ['necropolisUpgradesRow1', 'necropolisHeaderRow'],
             idsToHide: ['necropolisBuildRow'],
+            shouldNotify: function() {
+                return false;
+            },
             condition: function() {
                 return isBuilt(2);
             }
@@ -557,6 +590,9 @@ const UNLOCKS_DATA = {
             classNotID: false,
             idsToShow: ['necropolisUpgradesRow2'],
             idsToHide: [],
+            shouldNotify: function() {
+                return false;
+            },
             condition: function() {
                 return hasUpgrade(3, 12) && isBuilt(2);
             }
@@ -566,6 +602,9 @@ const UNLOCKS_DATA = {
             classNotID: false,
             idsToShow: ['sunUpgradesRow', 'sunHeaderRow'],
             idsToHide: ['sunBuildRow'],
+            shouldNotify: function() {
+                return false;
+            },
             condition: function() {
                 return isBuilt(3);
             }
@@ -575,6 +614,9 @@ const UNLOCKS_DATA = {
             classNotID: false,
             idsToShow: ['sunUpgradesRow2'],
             idsToHide: [],
+            shouldNotify: function() {
+                return false;
+            },
             condition: function() {
                 return hasTUpgrade(34) && isBuilt(3);
             }
@@ -586,6 +628,9 @@ const UNLOCKS_DATA = {
             parentNotify: 'buildingsTabBut',
             idsToShow: ['buildingsSubMenu', 'constructionSubTabBut'],
             idsToHide: [],
+            shouldNotify: function() {
+                return hasTUpgrade(12);
+            },
             condition: function() {
                 return player.spaceResets.gte(2);
             }
@@ -598,6 +643,9 @@ const UNLOCKS_DATA = {
             notifyID: 'timeTabBut',
             idsToShow: ['timeTabCell', 'timeBoostDisplay'],
             idsToHide: [],
+            shouldNotify: function() {
+                return true;
+            },
             condition: function() {
                 return player.spaceResets.gte(3);
             }
@@ -609,6 +657,9 @@ const UNLOCKS_DATA = {
             parentNotify: 'timeTabBut',
             idsToShow: ['timeSubMenu', 'timeUpgSubTabBut'],
             idsToHide: [],
+            shouldNotify: function() {
+                return true;
+            },
             condition: function() {
                 return hasUpgrade(3, 13);
             }
@@ -620,6 +671,9 @@ const UNLOCKS_DATA = {
             classNotID: false,
             idsToShow: ['galaxyTabCell', 'timeBoostDisplay'],
             idsToHide: [],
+            shouldNotify: function() {
+                return false;
+            },
             condition: function() {
                 return false;
             }
@@ -629,6 +683,9 @@ const UNLOCKS_DATA = {
             classNotID: false,
             idsToShow: ['galaxiesSubMenu', 'shipSubTabBut'],
             idsToHide: [],
+            shouldNotify: function() {
+                return false;
+            },
             condition: function() {
                 return false;
             }

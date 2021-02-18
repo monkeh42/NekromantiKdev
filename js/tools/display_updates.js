@@ -230,11 +230,11 @@ function updateTimePrestigeDisplay() {
         addPresClass('time', 'unclickablePrestige');
     }
     if (canTimePrestige() && !document.getElementById('timePrestige').classList.contains('timePrestigeBut')) {
-        player.displayData.push(['togDisplay', 'timePrestigeReq']);
-        player.displayData.push(['togDisplay', 'timePrestigeGainDesc']);
+        player.displayData.push(['setProp', 'timePrestigeReq', 'display', 'none']);
+        player.displayData.push(['setProp', 'timePrestigeGainDesc', 'display', '']);
     } else if (!canTimePrestige() && document.getElementById('timePrestige').classList.contains('timePrestigeBut')) {
-        player.displayData.push(['togDisplay', 'timePrestigeReq']);
-        player.displayData.push(['togDisplay', 'timePrestigeGainDesc']);
+        player.displayData.push(['setProp', 'timePrestigeReq', 'display', '']);
+        player.displayData.push(['setProp', 'timePrestigeGainDesc', 'display', 'none']);
     }
     player.displayData.push(['html', 'timePrestigeGain', ` ${formatWhole(calculateCrystalGain())} `]);
 }
@@ -312,7 +312,7 @@ function unlockElements(mainTab, subTab, notify=true) {
             }
         }
     }
-    if (notify) {
+    if (UNLOCKS_DATA[mainTab][subTab].shouldNotify()) {
         if (data.notifyID !== undefined) { player.displayData.push(['addClass', data.notifyID, 'tabButNotify']); }
         if (data.parentNotify !== undefined) { player.displayData.push(['addClass', data.parentNotify, 'tabButIndirectNotify']); }
     } 
@@ -840,6 +840,13 @@ function generateHelpForFullPage(tabName, button, section) {
 }
 
 function statsTabClick() {
+    generateLastRuns();
+    updateStatsTab();
+    showTab('statsTab', 'statsTabBut');
+    showStatsSubTab(player.activeTabs[4], player.activeTabs[4] + 'But');
+}
+
+function statsSubTabClick() {
     generateLastRuns();
     updateStatsTab();
     showTab('statsTab', 'statsTabBut');

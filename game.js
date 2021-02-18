@@ -137,9 +137,12 @@ function loadStyles() {
             if (hasUpgrade(b, u)) {
                 document.getElementById(BUILDS_DATA[b].upgrades[u].buttonID).classList.add(BUILDS_DATA[b].upgradeBtnBought);
                 document.getElementById(BUILDS_DATA[b].upgrades[u].buttonID).classList.remove(BUILDS_DATA[b].upgradeBtnClass);
-            } else if (!canAffordBUpg(b, u)) {
-                document.getElementById(BUILDS_DATA[b].upgrades[u].buttonID).classList.add(BUILDS_DATA[b].upgradeBtnUnclick);
-                document.getElementById(BUILDS_DATA[b].upgrades[u].buttonID).classList.remove(BUILDS_DATA[b].upgradeBtnClass);
+            } else {
+                document.getElementById(BUILDS_DATA[b].upgrades[u].buttonID).classList.remove(BUILDS_DATA[b].upgradeBtnBought);
+                if (!canAffordBUpg(b, u)) {
+                    document.getElementById(BUILDS_DATA[b].upgrades[u].buttonID).classList.add(BUILDS_DATA[b].upgradeBtnUnclick);
+                    document.getElementById(BUILDS_DATA[b].upgrades[u].buttonID).classList.remove(BUILDS_DATA[b].upgradeBtnClass);
+                }
             }
         }
     }
