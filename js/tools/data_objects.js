@@ -642,7 +642,7 @@ const ACH_DATA = {
         }
     },
     34: {
-        title: 'In A Flash',
+        title: 'I Need To Go Faster',
         desc: 'Get your normal time multiplier to at least 30x.',
         reward: '',
         showEffect: false,
