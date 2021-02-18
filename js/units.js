@@ -439,7 +439,7 @@ const UNITS_DATA = {
         cost: function() {
             var c = this.baseCost;
             var m = this.baseCostMult;
-            if (hasUpgrade(3, 22)) { m = Decimal.pow(m, 0.67); }
+            if (hasUpgrade(3, 22)) { m = Decimal.pow(m, getUpgEffect(3, 22)); }
             c = c.times(m.pow(player.units[this.tier].bought));
             if (c.gte(this.expCostStartCost)) { c = c.times(Decimal.pow(this.expCostMult, addFactorial(player.units[this.tier].bought.minus(this.expCostStart)))); }
             return c;

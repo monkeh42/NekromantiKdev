@@ -661,7 +661,7 @@ const ACH_DATA = {
     35: {
         title: 'Galactic Angst',
         desc: 'Unlock Depleted Galaxies.',
-        reward: 'Menagerie Of Worlds\'s effect is stronger (^0.67 -> 0.5).',
+        reward: 'Menagerie Of Worlds\'s effect is stronger (^0.67 -> ^0.37).',
         showEffect: false,
         hasReward: true,
         divID: 'ach35',
@@ -908,7 +908,7 @@ const UNLOCKS_DATA = {
         'mainTab': {
             unlocked: false,
             classNotID: false,
-            idsToShow: ['galaxyTabCell', 'timeBoostDisplay'],
+            idsToShow: ['galaxyTabCell'],
             idsToHide: [],
             shouldNotify: function() {
                 return false;
@@ -920,7 +920,7 @@ const UNLOCKS_DATA = {
         'arkTab': {
             unlocked: false,
             classNotID: false,
-            idsToShow: ['galaxiesSubMenu', 'shipSubTabBut'],
+            idsToShow: ['galaxiesSubMenu', 'arkSubTabBut'],
             idsToHide: [],
             shouldNotify: function() {
                 return false;

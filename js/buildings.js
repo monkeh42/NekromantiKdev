@@ -561,7 +561,8 @@ const BUILDS_DATA = {
                 displayTooltip: true,
                 displayFormula: function() { return '(1e15x -> 1e10x)'; },
                 effect: function() {
-                    return new Decimal(1);
+                    if (hasAchievement(35)) { return 0.37; }
+                    else { return 0.67; }
                 }
             },
             23: {

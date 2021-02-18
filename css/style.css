@@ -1180,6 +1180,10 @@ option:active, option.active {
     border-radius: 4px;
 }
 
+.allAutoBut:hover {
+    background-color: #460573;
+}
+
 .achievement {
     width: 125px;
     height: 125px;
