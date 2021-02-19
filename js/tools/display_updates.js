@@ -461,7 +461,7 @@ function toggleTooltips() {
     document.getElementById('necropolisTooltip').classList.toggle('tooltip');
     document.getElementById('sunTooltip').classList.toggle('tooltip');
     document.getElementById('timePrestige').classList.toggle('tooltip');
-    document.getElementById('achievementsInfo').classList.toggle('tooltip');
+    document.getElementById('achBoostTooltip').classList.toggle('tooltip');
     for (let b in BUILDS_DATA) {
         for (let u in BUILDS_DATA[b].upgrades) {
             if (BUILDS_DATA[b].upgrades[u].displayTooltip) { document.getElementById(BUILDS_DATA[b].upgrades[u].buttonID).classList.toggle('tooltip'); }
