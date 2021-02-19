@@ -324,8 +324,6 @@ const START_PLAYER = {
         },
     },
 
-    numAchievements: 0,
-
     achievements: {
         11: {
             unlocked: false,
@@ -1357,8 +1355,6 @@ function fixResetBug() {
             'arkTab': false,
         },
     });
-
-    START_PLAYER.numAchievements = 0;
 
     copyData(START_PLAYER.achievements, {
         11: {

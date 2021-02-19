@@ -323,6 +323,8 @@ function resetSpaceCounts() {
         player.spaceResets = new Decimal(1);
         player.nextSpaceReset = [1, 6];
     }
+    player.thisSacStats.totalWorlds = player.worlds;
+    player.thisSacStats.bestWorlds = player.worlds;
 }
 
 //data

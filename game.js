@@ -9,6 +9,8 @@ const NUM_UNITS = 8;
 
 const NUM_TIMEDIMS = 4;
 
+const NUM_ACHS = 15;
+
 const TIERS = {
     1: 'zombie',
     2: 'abomination',
@@ -589,9 +591,9 @@ function fixData(data, start) {
 //achievement stuff
 
 function getAchievementBoost() {
-    let b = Decimal.pow(1.1, player.numAchievements);
-    b = b.times(Decimal.pow(1.2, Math.floor(player.numAchievements/5)));
-    return b;
+    let b = Decimal.pow(1.1, getNumAchievements());
+    b = b.times(Decimal.pow(1.2, getNumAchRows()));
+    return Decimal.max(b, 1);
 }
 
 function hasAchievement(id) {
@@ -600,6 +602,27 @@ function hasAchievement(id) {
 
 function getAchievementEffect(id) {
     return ACH_DATA[id].effect();
+}
+
+function getNumAchievements() {
+    let count = 0;
+    for (let id in ACH_DATA) {
+        if (player.achievements[id].unlocked) { count++ }
+    }
+    return count;
+}
+
+function getNumAchRows() {
+    let count = 0;
+    let yes = true;
+    for (let i=1; i<=Math.floor(NUM_ACHS/5); i++) {
+        for (let j=1; j<=5; j++) {
+            if (!player.achievements[i.toString() + j.toString()].unlocked) { yes = false; }
+        }
+        if (yes) { count++ }
+        yes = true;
+    }
+    return count;
 }
 
 //hotkeys/autobuyers
