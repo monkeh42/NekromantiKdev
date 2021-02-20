@@ -626,7 +626,7 @@ const GALAXIES_DATA = {
         upgrades: {
             11: {
                 title: 'title 1.11',
-                desc: 'The effect of each first row Necropolis upgrade directly applies to the effect of the upgrade below it.',
+                desc: 'The effect of each second row Necropolis upgrade directly applies to the effect of the upgrade above it.',
                 requires: [],
                 bought: false,
                 row: 1,
