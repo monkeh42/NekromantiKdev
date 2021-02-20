@@ -263,6 +263,7 @@ function galaxyPrestigeReset(respec=false) {
     }
     document.getElementById('respecOnAsc').checked = false;
 
+    showUnitSubTab('unitsSubTab');
     showBuildingSubTab('buildingsSubTab');
     showTimeSubTab('timeDimSubTab');
     save();
