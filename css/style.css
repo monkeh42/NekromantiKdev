@@ -1366,7 +1366,7 @@ option:active, option.active {
     width: 250px;
     height: 35px;
     border: 1px solid #e32d05;
-    margin: 10px;
+    margin: 5px;
     cursor: pointer;
     border-radius: 4px;
 }
