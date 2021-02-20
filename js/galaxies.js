@@ -268,6 +268,7 @@ function galaxyPrestigeReset(respec=false) {
     showTimeSubTab('timeDimSubTab');
     save();
     loadStyles();
+    startInterval();
 }
 
 function resetTimeCounts() {
