@@ -584,13 +584,13 @@ const ACH_DATA = {
     },
     31: {
         title: 'The Grind',
-        desc: 'Sacrifice twenty-five times.',
+        desc: 'Sacrifice fifteen times.',
         reward: 'Your unit corpse multipliers get a boost based on number of sacrifices.',
         hasReward: true,
         showEffect: true,
         divID: 'ach31',
         canUnlock: function() {
-            return player.timeResets.gte(25);
+            return player.timeResets.gte(15);
         },
         effect: function() {
             let e = new Decimal(player.timeResets);
