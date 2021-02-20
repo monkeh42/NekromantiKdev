@@ -638,6 +638,26 @@ const START_PLAYER = {
             unlocked: false,
             new: false,
         },
+        41: {
+            unlocked: false,
+            new: false,
+        },
+        42: {
+            unlocked: false,
+            new: false,
+        },
+        43: {
+            unlocked: false,
+            new: false,
+        },
+        44: {
+            unlocked: false,
+            new: false,
+        },
+        45: {
+            unlocked: false,
+            new: false,
+        },
     },
 
     confirmations: {
