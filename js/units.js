@@ -462,7 +462,7 @@ const UNITS_DATA = {
             var m = this.baseCostMult;
             var e = hasGUpgrade(2, 32) ? this.expCostStart : this.expCostStart*2
             if (hasUpgrade(3, 22)) { m = Decimal.pow(m, getUpgEffect(3, 22)); }
-            c = c.times(this.baseCostMult.pow(player.units[this.tier].bought));
+            c = c.times(m.pow(player.units[this.tier].bought));
             if (player.units[this.tier].bought.gte(e)) { c = c.times(Decimal.pow(this.expCostMult, addFactorial(player.units[this.tier].bought.minus(e)))); }
             return c;
         },
