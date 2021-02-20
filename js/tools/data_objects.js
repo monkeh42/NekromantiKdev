@@ -1,5 +1,6 @@
 const START_PLAYER = {
     corpses: new Decimal(10),
+    corpsesAch41: new Decimal(25000),
     units: {
         1: {
             unlocked: true,
@@ -932,6 +933,94 @@ const ACH_DATA = {
             return;
         }
     },
+    41: {
+        title: 'Interstellar',
+        desc: 'Buy a galaxy upgrade.',
+        reward: 'You start all resets with 25,000 corpses.',
+        hasReward: true,
+        showEffect: true,
+        divID: 'ach41',
+        canUnlock: function() {
+            return player.spentGalaxies.gt(0);
+        },
+        effect: function() {
+            return new Decimal(1);
+        },
+        onUnlock: function() {
+            return;
+        }
+    },
+    42: {
+        title: 'Master Nekro-Carpenter',
+        desc: 'Get the first four construction upgrades all to at least level 25.',
+        reward: '',
+        hasReward: false,
+        showEffect: false,
+        divID: 'ach42',
+        canUnlock: function() {
+            for (let id in CONSTR_DATA) {
+                if (player.construction[id].lt(25)) { return false; }
+            }
+            return true;
+        },
+        effect: function() {
+            return new Decimal(1);
+        },
+        onUnlock: function() {
+            return;
+        }
+    },
+    43: {
+        title: 'Frugality',
+        desc: 'Reach 1e100 corpses without enabling Astral Enslavement this sacrifice.',
+        reward: '',
+        hasReward: false,
+        showEffect: false,
+        divID: 'ach43',
+        canUnlock: function() {
+            return (player.corpses.gte(1e100) && !player.thisSacStats.hasGoneAstral);
+        },
+        effect: function() {
+            return new Decimal(1);
+        },
+        onUnlock: function() {
+            return;
+        }
+    },
+    44: {
+        title: 'I Need To Go Faster',
+        desc: 'Get your normal time multiplier to at least 30x.',
+        reward: '',
+        showEffect: false,
+        hasReward: false,
+        divID: 'ach44',
+        canUnlock: function() {
+            return getTrueTimeBuff().gte(30);
+        },
+        effect: function() {
+            return new Decimal(1);
+        },
+        onUnlock: function() {
+            return;
+        }
+    },
+    45: {
+        title: 'Galactic Angst',
+        desc: 'Unlock Depleted Galaxies.',
+        reward: 'Menagerie Of Worlds\'s effect is stronger (^0.67 -> ^0.333).',
+        showEffect: false,
+        hasReward: true,
+        divID: 'ach45',
+        canUnlock: function() {
+            return hasUpgrade(3, 23);
+        },
+        effect: function() {
+            return new Decimal(1);
+        },
+        onUnlock: function() {
+            return;
+        }
+    },
 }
 
 const UNLOCKS_DATA = {
@@ -1304,6 +1393,7 @@ function fixResetBug() {
 
     }
     START_PLAYER.corpses = new Decimal(10);
+    START_PLAYER.corpsesAch41 = new Decimal(25000);
     copyData(START_PLAYER.units, {
         1: {
             unlocked: true,

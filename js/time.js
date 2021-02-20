@@ -297,7 +297,7 @@ function timePrestigeReset() {
     copyData(player.pastRuns.lastTen[0], player.pastRuns.lastRun);
     player.trueEssence = new Decimal(START_PLAYER.trueEssence);
     player.antiEssence = new Decimal(START_PLAYER.antiEssence);
-    player.corpses = new Decimal(START_PLAYER.corpses)
+    player.corpses = hasAchievement(41) ? new Decimal(START_PLAYER.corpsesAch41) : new Decimal(START_PLAYER.corpses)
     resetUnits();
     resetSpaceCounts();
     if (!hasTUpgrade(24)) { resetBuildings(); }

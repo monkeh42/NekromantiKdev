@@ -249,10 +249,10 @@ function galaxyPrestigeReset(respec=false) {
     resetTime();
     resetTimeCounts();
     resetUnits();
-    player.corpses = new Decimal(START_PLAYER.corpses);
+    player.corpses = hasAchievement(41) ? new Decimal(START_PLAYER.corpsesAch41) : new Decimal(START_PLAYER.corpses)
     resetSpaceCounts();
     resetBuildingResources(false, true);
-    resetBuildings();
+    resetBuildings(true);
     lockTab('unitsTab');
     lockTab('buildingsTab');
     lockTab('timeTab');

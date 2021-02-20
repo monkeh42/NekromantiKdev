@@ -157,7 +157,7 @@ function spacePrestigeReset() {
     resetUnits();
     resetBuildingResources();
     //unitSetup(START_PLAYER);
-    player.corpses = new Decimal(START_PLAYER.corpses)
+    player.corpses = hasAchievement(41) ? new Decimal(START_PLAYER.corpsesAch41) : new Decimal(START_PLAYER.corpses)
     //allDisplay();
     
     save();
