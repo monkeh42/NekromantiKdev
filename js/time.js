@@ -49,6 +49,7 @@ function calculateCrystalGain() {
         var ret = Decimal.floor(Decimal.pow(10, (player.thisSacStats.bestCorpses.e/div) - 0.65));
         if (hasTUpgrade(21)) { ret = ret.times(2); }
         if (hasTUpgrade(33)) { ret = ret.times(getTUpgEffect(33)); }
+        if (hasGUpgrade(4, 21)) { ret = ret.times(getGUpgEffect(4, 21)) }
         return ret;
     } else {
         return new Decimal(0);
@@ -87,12 +88,14 @@ function getTimeDimProdPerSecond(tier) {
 function getEssenceProdPerSecond() {
     var p = player.timeDims[1].amount.times(TIME_DATA[1].mult());
     if (hasUpgrade(2, 22)) { p = p.times(getUpgEffect(2, 22)); }
+    if (hasGUpgrade(4, 11)) { p = p.times(getGUpgEffect(4, 11)); }
     return p;
 }
 
 function getTrueTimeBuff() {
     if (!player.timeLocked) { return new Decimal(1); }
     var b = new Decimal(Decimal.max(player.trueEssence, 1).log10());
+    if (hasGUpgrade(4, 31)) { b = b.pow(getGUpgEffect(4, 31)); }
     b = b.div(getAntiTimeNerf());
     b = Decimal.add(b, 1);
     return b;
@@ -101,20 +104,21 @@ function getTrueTimeBuff() {
 function getAntiTimeBuff() {
     if (!player.timeLocked) { return new Decimal(1); }
     var b = new Decimal(Decimal.max(player.antiEssence, 1).log10());
+    if (hasGUpgrade(4, 31)) { b = b.pow(getGUpgEffect(4, 31)); }
     b = b.div(getTrueTimeNerf()).times(2);
     b = Decimal.add(b, 1);
     return b;
 }
 
 function getTrueTimeNerf() {
-    if (!player.timeLocked) { return new Decimal(1); }
+    if (!player.timeLocked || hasGUpgrade(4, 41)) { return new Decimal(1); }
     var b = new Decimal(Decimal.max(player.trueEssence, 1).log10());
     b = Decimal.pow(b, 0.2);
     return b.max(1);
 }
 
 function getAntiTimeNerf() {
-    if (!player.timeLocked) { return new Decimal(1); }
+    if (!player.timeLocked || hasGUpgrade(4, 41)) { return new Decimal(1); }
     var b = new Decimal(Decimal.max(player.antiEssence, 1).log10());
     b = Decimal.pow(b, 0.2);
     return b.max(1);
@@ -233,9 +237,12 @@ function timePrestige() {
     if (canTimePrestige()) {
         if (!confirm("Are you sure? This will reset ALL of your progress before unlocking Time Warp, and all of your time essense.")) return
         player.crystals = player.crystals.plus(calculateCrystalGain());
+        player.thisAscStats.totalCrystals = player.thisAscStats.totalCrystals.plus(calculateCrystalGain());
         player.allTimeStats.totalCrystals = player.allTimeStats.totalCrystals.plus(calculateCrystalGain());
-        if (player.crystals.gt(player.allTimeStats.bestCrystals)) { player.allTimeStats.bestCrystals = new Decimal(player.crystals); }
+        if (player.crystals.gt(player.thisAscStats.bestCrystals)) { player.thisAscStats.bestCrystals = new Decimal(player.crystals); }
+        if (player.thisAscStats.bestCrystals.gt(player.allTimeStats.bestCrystals)) { player.allTimeStats.bestCrystals = new Decimal(player.thisAscStats.bestCrystals); }
         player.timeResets = player.timeResets.plus(1);
+        player.thisAscStats.totalTimeResets = player.thisAscStats.totalTimeResets.plus(1);
         player.allTimeStats.totalTimeResets = player.allTimeStats.totalTimeResets.plus(1);
         if (document.getElementById('respecOnSac').checked) {
             player.timeLocked = false;
@@ -250,9 +257,12 @@ function timePrestige() {
 function timePrestigeNoConfirm() {
     if (canTimePrestige()) {
         player.crystals = player.crystals.plus(calculateCrystalGain());
+        player.thisAscStats.totalCrystals = player.thisAscStats.totalCrystals.plus(calculateCrystalGain());
         player.allTimeStats.totalCrystals = player.allTimeStats.totalCrystals.plus(calculateCrystalGain());
-        if (player.crystals.gt(player.allTimeStats.bestCrystals)) { player.allTimeStats.bestCrystals = new Decimal(player.crystals); }
+        if (player.crystals.gt(player.thisAscStats.bestCrystals)) { player.thisAscStats.bestCrystals = new Decimal(player.crystals); }
+        if (player.thisAscStats.bestCrystals.gt(player.allTimeStats.bestCrystals)) { player.allTimeStats.bestCrystals = new Decimal(player.thisAscStats.bestCrystals); }
         player.timeResets = player.timeResets.plus(1);
+        player.thisAscStats.totalTimeResets = player.thisAscStats.totalTimeResets.plus(1);
         player.allTimeStats.totalTimeResets = player.allTimeStats.totalTimeResets.plus(1);
         if (document.getElementById('respecOnSac').checked) {
             player.timeLocked = false;
@@ -279,8 +289,10 @@ function timePrestigeReset() {
     player.pastRuns.lastRun.crystalGain = calculateCrystalGain();
     player.pastRuns.lastRun.timeSpent = (new Date).getTime()-player.pastRuns.lastRun.timeSacrificed;
     player.pastRuns.lastRun.timeSacrificed = (new Date).getTime();
-    if (player.pastRuns.lastRun.crystalGain.gt(player.allTimeStats.bestCrystalGain)) { player.allTimeStats.bestCrystalGain = new Decimal(player.pastRuns.lastRun.crystalGain) }
-    if (player.pastRuns.lastRun.crystalGain.div(player.pastRuns.lastRun.timeSpent/60000).gt(player.allTimeStats.bestCrystalRate)) { player.allTimeStats.bestCrystalRate = new Decimal(player.pastRuns.lastRun.crystalGain.div(player.pastRuns.lastRun.timeSpent/60000)) }
+    if (player.pastRuns.lastRun.crystalGain.gt(player.thisAscStats.bestCrystalGain)) { player.thisAscStats.bestCrystalGain = new Decimal(player.pastRuns.lastRun.crystalGain) }
+    if (player.thisAscStats.bestCrystalGain.gt(player.allTimeStats.bestCrystalGain)) { player.allTimeStats.bestCrystalGain = new Decimal(player.thisAscStats.bestCrystalGain) }
+    if (player.pastRuns.lastRun.crystalGain.div(player.pastRuns.lastRun.timeSpent/60000).gt(player.thisAscStats.bestCrystalRate)) { player.thisAscStats.bestCrystalRate = new Decimal(player.pastRuns.lastRun.crystalGain.div(player.pastRuns.lastRun.timeSpent/60000)) }
+    if (player.thisAscStats.bestCrystalRate.gt(player.allTimeStats.bestCrystalRate)) { player.allTimeStats.bestCrystalRate = new Decimal(player.thisAscStats.bestCrystalRate) }
     for (var i=9; i>0; i--) { copyData(player.pastRuns.lastTen[i], player.pastRuns.lastTen[i-1]); }
     copyData(player.pastRuns.lastTen[0], player.pastRuns.lastRun);
     player.trueEssence = new Decimal(START_PLAYER.trueEssence);
@@ -298,9 +310,23 @@ function timePrestigeReset() {
     window.location.reload(true);
 }
 
+function resetTime() {
+    for (let id in TIME_DATA.upgrades) {
+        player.timeUpgs[id] = false;
+    }
+    copyData(player.timeUpgs, START_PLAYER.timeUpgs);
+
+    for (var i=NUM_TIMEDIMS; i>=1; i--) {
+        player.timeDims[i].amount = new Decimal(0);
+        player.timeDims[i].bought = new Decimal(0);
+    }
+    copyData(player.timeDims, START_PLAYER.timeDims);
+}
+
 function resetSpaceCounts() {
     if (hasTUpgrade(14)) {
-        player.worlds = new Decimal(4);
+        if (hasGUpgrade(2, 22)) { player.worlds = new Decimal(5); }
+        else { player.worlds = new Decimal(4); }
         player.spaceResets = new Decimal(4);
         player.nextSpaceReset = [3, 8];
         lockElements('buildingsTab', 'factory');

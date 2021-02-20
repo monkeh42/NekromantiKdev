@@ -2,7 +2,7 @@
 
 const GAME_DATA = {
     author: 'monkeh42',
-    version: 'v0.2.9',
+    version: 'v0.3.1_d.1',
 }
 
 const NUM_UNITS = 8;
@@ -10,6 +10,8 @@ const NUM_UNITS = 8;
 const NUM_TIMEDIMS = 4;
 
 const NUM_ACHS = 15;
+
+const NUM_GALAXY_ROWS = 4;
 
 const TIERS = {
     1: 'zombie',
@@ -43,8 +45,8 @@ function init() {
     showUnitSubTab(player.activeTabs[1]);
     showBuildingSubTab(player.activeTabs[2]);
     showTimeSubTab(player.activeTabs[3]);
-    if (player.activeTabs[0] == 'statsTab' && player.activeTabs[4] == 'statSubTab') { statsSubTabClick(); }
-    else { showStatsSubTab(player.activeTabs[4]); }
+    if (player.activeTabs[0] == 'statsTab' && player.activeTabs[5] != 'achSubTab') { statsSubTabClick(player.activeTabs[5], player.activeTabs[5] + 'But'); }
+    else { showStatsSubTab(player.activeTabs[5]); }
 
     startGame();
 }
@@ -148,6 +150,11 @@ function loadStyles() {
         document.getElementById('timePrestigeReq').style.display = 'none';
         document.getElementById('timePrestigeGainDesc').style.display = 'block';
     } 
+    if (canGalaxyPrestige()) {
+        document.getElementById('galaxyPrestigeReq').style.display = 'none';
+        document.getElementById('galaxyPrestigeGainDesc').style.display = 'block';
+        document.getElementById('galaxyPrestigeNextDesc').style.display = 'block';
+    } 
 
     for (var b in BUILDS_DATA) {
         for (var u in BUILDS_DATA[b].upgrades) {
@@ -186,6 +193,50 @@ function loadStyles() {
             document.getElementById(CONSTR_DATA[c].buttonID).classList.remove('constrUpg');
         }
     }    
+
+    for (var g in GALAXIES_DATA) {
+        for (var u in GALAXIES_DATA[g].upgrades) {
+            if (GALAXIES_DATA[g].upgrades[u].displayTooltip) { document.getElementById(GALAXIES_DATA[g].upgrades[u].buttonID).setAttribute('data-title', GALAXIES_DATA[g].upgrades[u].displayFormula) }
+            if (player.galaxyUpgs[g][u].locked) {
+                document.getElementById(GALAXIES_DATA[b].upgrades[u].buttonID).classList.add('lockedGalaxyUpg'); 
+                document.getElementById(GALAXIES_DATA[b].upgrades[u].buttonID).classList.remove('galaxyUpg');
+                document.getElementById(GALAXIES_DATA[g].upgrades[u].textID).style.display = 'none';
+            } else {
+                document.getElementById(GALAXIES_DATA[b].upgrades[u].buttonID).classList.remove('lockedGalaxyUpg');
+                document.getElementById(GALAXIES_DATA[g].upgrades[u].textID).innerHTML = `${getGUpgDesc(g, u)}<br><br>Cost: ${formatWhole(getGUpgCost(g, u))} ${galaxyTextSingulizer(getGUpgCost(g, u))}${isDisplayEffectG(g, u) ? ("<br>Currently: " + formatDefault2(getGUpgEffect(g, u)) + "x") : ""}`;
+                document.getElementById(GALAXIES_DATA[g].upgrades[u].textID).style.display = 'block';
+                if (hasGUpgrade(g, u)) { 
+                    document.getElementById(GALAXIES_DATA[b].upgrades[u].buttonID).classList.add('boughtGalaxyUpg'); 
+                    document.getElementById(GALAXIES_DATA[b].upgrades[u].buttonID).classList.remove('galaxyUpg');//+ ((player.tooltipsEnabled && isDisplayTooltipG(g, u)) ? ' tooltip' : '') }
+                } 
+                else {
+                    document.getElementById(GALAXIES_DATA[b].upgrades[u].buttonID).classList.remove('boughtGalaxyUpg');
+                    if (!canAffordGUpg(g, u)) {
+                        document.getElementById(GALAXIES_DATA[b].upgrades[u].buttonID).classList.add('unclickGalaxyUpg'); 
+                        document.getElementById(GALAXIES_DATA[b].upgrades[u].buttonID).classList.remove('galaxyUpg');
+                    }
+                }
+            }
+        }
+    }
+
+    for (var a in ARK_DATA) {
+        if (!arkIsUnlocked(a)) {
+            document.getElementById(a + 'But').className = 'lockedArkUpg'
+            document.getElementById(a + 'Text').style.display = 'none';
+        } else {
+            document.getElementById(a + 'Text').style.display = 'block';
+            if (hasAUpgrade(a)) {
+                document.getElementById(a + 'But').className = 'boughtArkUpg' + ((player.tooltipsEnabled && isDisplayTooltipA(a)) ? ' tooltip' : '');
+                document.getElementById(a).style.display = 'block';
+            } else {
+                if (canAffordAUpg(a)) { document.getElementById(a + 'But').className = 'arkUpg' + ((player.tooltipsEnabled && isDisplayTooltipA(a)) ? ' tooltip' : '') }
+                else { document.getElementById(a + 'But').className = 'unclickableArkUpg' + ((player.tooltipsEnabled && isDisplayTooltipA(a)) ? ' tooltip' : '') }
+                document.getElementById(a + 'Text').innerHTML = "<span style=\"font-weight: 900;\">" + getAUpgName(a) + "</span><br>" + getAUpgDesc(a) + "<br>Cost: " + formatWhole(getAUpgCost(a)) + " astral bricks" + (isDisplayEffectA(a) ? ("<br>Currently: " + formatDefault2(getAUpgEffect(a)) + "x") : "");
+                document.getElementById(a).style.display = 'none';
+            }
+        }
+    }
 
     document.getElementById('timeSlider').value = player.antiPercent;
     if (player.timeLocked) {
@@ -261,17 +312,33 @@ function gameLoop(diff=new Decimal(0), offline=false) {
     var currentUpdate = new Date().getTime();
     if (diff.eq(0)) { var diff = new Decimal(currentUpdate - player.lastUpdate); }
     if (DEV_SPEED>0) { diff = diff.times(DEV_SPEED); }
-    var timeBuff = player.astralFlag ? getAntiTimeBuff().div(10) : getTrueTimeBuff();
-    diff = timeBuff.times(diff);
-    var realDiff = diff.div(timeBuff);
+    var timeBuff;
+    if (player.astralFlag) {
+        if (hasGUpgrade(1, 41)) { timeBuff = getAntiTimeBuff().div(5); }
+        else if (hasGUpgrade(1, 11)) { timeBuff = getAntiTimeBuff().div(8); }
+        else { timeBuff = getAntiTimeBuff().div(10); } 
+    } else { timeBuff = getTrueTimeBuff(); }
+    var realDiff = diff;
+    diff = diff.times(timeBuff);
+    if (hasGUpgrade(1, 32) || hasGUpgrade(4, 22)) { realDiff = diff.times(sqrt(timeBuff)); } 
     if (player.astralFlag) {
         player.bricks = player.bricks.plus(getBricksPerSecond().times(diff.div(1000)));
         player.thisSacStats.totalBricks = player.thisSacStats.totalBricks.plus(getBricksPerSecond().times(diff.div(1000)));
         player.allTimeStats.totalBricks = player.allTimeStats.totalBricks.plus(getBricksPerSecond().times(diff.div(1000)));
+        if (hasGUpgrade(1, 22)) {
+            player.corpses = player.corpses.plus(getCorpsesPerSecond().times(diff.div(1000)).times(.01));
+            player.thisSacStats.totalCorpses = player.thisSacStats.totalCorpses.plus(getCorpsesPerSecond().times(diff.div(1000)).times(.01));
+            player.allTimeStats.totalCorpses = player.allTimeStats.totalCorpses.plus(getCorpsesPerSecond().times(diff.div(1000)).times(.01));
+        }
     } else {
         player.corpses = player.corpses.plus(getCorpsesPerSecond().times(diff.div(1000)));
         player.thisSacStats.totalCorpses = player.thisSacStats.totalCorpses.plus(getCorpsesPerSecond().times(diff.div(1000)));
         player.allTimeStats.totalCorpses = player.allTimeStats.totalCorpses.plus(getCorpsesPerSecond().times(diff.div(1000)));
+        if (hasGUpgrade(4, 32)) {
+            player.bricks = player.bricks.plus(getBricksPerSecond().times(diff.div(1000)).pow(0.9));
+            player.thisSacStats.totalBricks = player.thisSacStats.totalBricks.plus(getBricksPerSecond().times(diff.div(1000)).pow(0.9));
+            player.allTimeStats.totalBricks = player.allTimeStats.totalBricks.plus(getBricksPerSecond().times(diff.div(1000)).pow(0.9));
+        }
     }
     if (player.corpses.gt(player.thisSacStats.bestCorpses)) { player.thisSacStats.bestCorpses = new Decimal(player.corpses); }
     if (player.bricks.gt(player.thisSacStats.bestBricks)) { player.thisSacStats.bestBricks = new Decimal(player.bricks); }
@@ -280,6 +347,7 @@ function gameLoop(diff=new Decimal(0), offline=false) {
     for (var i=1; i<NUM_UNITS; i++) {
         player.units[i].amount = player.units[i].amount.plus(getUnitProdPerSecond(i).times(diff.div(1000)));
     }
+    if (hasGUpgrade(2, 41)) { player.units[8].amount = player.units[8].amount.plus(getUnitProdPerSecond(i).times(realDiff.div(1000))); }
     if (player.timeLocked) {
         for (var i=1; i<=NUM_TIMEDIMS; i++) {
             if (i==1) {

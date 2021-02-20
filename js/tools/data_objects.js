@@ -189,6 +189,171 @@ const START_PLAYER = {
         priority: [1, 2, 3, 4, 5, 6, 7, 8],
     },
 
+    galaxyUpgs: {
+        1: {
+            11: {
+                bought: false,
+                locked: false,
+                boughtFor: new Decimal(0),
+            },
+            21: {
+                bought: false,
+                locked: false,
+                boughtFor: new Decimal(0),
+            },
+            22: {
+                bought: false,
+                locked: false,
+                boughtFor: new Decimal(0),
+            },
+            31: {
+                bought: false,
+                locked: false,
+                boughtFor: new Decimal(0),
+            },
+            32: {
+                bought: false,
+                locked: false,
+                boughtFor: new Decimal(0),
+            },
+            41: {
+                bought: false,
+                locked: false,
+                boughtFor: new Decimal(0),
+            },
+        },
+        2: {
+            11: {
+                bought: false,
+                locked: false,
+                boughtFor: new Decimal(0),
+            },
+            21: {
+                bought: false,
+                locked: false,
+                boughtFor: new Decimal(0),
+            },
+            22: {
+                bought: false,
+                locked: false,
+                boughtFor: new Decimal(0),
+            },
+            31: {
+                bought: false,
+                locked: false,
+                boughtFor: new Decimal(0),
+            },
+            32: {
+                bought: false,
+                locked: false,
+                boughtFor: new Decimal(0),
+            },
+            41: {
+                bought: false,
+                locked: false,
+                boughtFor: new Decimal(0),
+            },
+        },
+        3: {
+            11: {
+                bought: false,
+                locked: false,
+                boughtFor: new Decimal(0),
+            },
+            21: {
+                bought: false,
+                locked: false,
+                boughtFor: new Decimal(0),
+            },
+            22: {
+                bought: false,
+                locked: false,
+                boughtFor: new Decimal(0),
+            },
+            31: {
+                bought: false,
+                locked: false,
+                boughtFor: new Decimal(0),
+            },
+            32: {
+                bought: false,
+                locked: false,
+                boughtFor: new Decimal(0),
+            },
+            41: {
+                bought: false,
+                locked: false,
+                boughtFor: new Decimal(0),
+            },
+        },
+        4: {
+            11: {
+                bought: false,
+                locked: false,
+                boughtFor: new Decimal(0),
+            },
+            21: {
+                bought: false,
+                locked: false,
+                boughtFor: new Decimal(0),
+            },
+            22: {
+                bought: false,
+                locked: false,
+                boughtFor: new Decimal(0),
+            },
+            31: {
+                bought: false,
+                locked: false,
+                boughtFor: new Decimal(0),
+            },
+            32: {
+                bought: false,
+                locked: false,
+                boughtFor: new Decimal(0),
+            },
+            41: {
+                bought: false,
+                locked: false,
+                boughtFor: new Decimal(0),
+            },
+        },
+    },
+
+    ark: {
+        'engines': {
+            unlocked: false,
+            bought: false,
+        },
+        'thrusters': {
+            unlocked: false,
+            bought: false,
+        },
+        'support': {
+            unlocked: false,
+            bought: false,
+        },
+        'railguns': {
+            unlocked: false,
+            bought: false,
+        },
+        'torpedos': {
+            unlocked: false,
+            bought: false,
+        },
+        'navigation': {
+            unlocked: false,
+            bought: false,
+        },
+    },
+
+    rowCosts: {
+        1: new Decimal(1),
+        2: new Decimal(1),
+        3: new Decimal(1),
+        4: new Decimal(1),
+    },
+
     bricks: new Decimal(0),
     brickGainExp: 0.2,
     astralFlag: false,
@@ -201,6 +366,11 @@ const START_PLAYER = {
     timeResets: new Decimal(0),
     timeLocked: false,
 
+    galaxies: new Decimal(0),
+    spentGalaxies: new Decimal(0),
+    ascensions: new Decimal(0),
+    
+
     allTimeStats: {
         totalCorpses: new Decimal(0),
         totalWorlds: new Decimal(0),
@@ -208,13 +378,19 @@ const START_PLAYER = {
         totalSpaceResets: new Decimal(0),
         totalTimeResets: new Decimal(0),
         totalCrystals: new Decimal(0),
+        totalGalaxies: new Decimal(0),
+        totalSpentGalaxies: new Decimal(0),
+        totalAscensions: new Decimal(0),
 
         bestCrystalGain: new Decimal(0),
         bestCrystalRate: new Decimal(0),
+        bestGalaxyGain: new Decimal(0),
+        bestGalaxyRate: new Decimal(0),
         bestCorpses: new Decimal(0),
         bestWorlds: new Decimal(0),
         bestBricks: new Decimal(0),
         bestCrystals: new Decimal(0),
+        bestGalaxies: new Decimal(0),
     },
 
     thisSacStats: {
@@ -228,6 +404,22 @@ const START_PLAYER = {
         bestBricks: new Decimal(0),
 
         hasGoneAstral: false,
+    },
+
+    thisAscStats: {
+        totalCorpses: new Decimal(0),
+        totalWorlds: new Decimal(0),
+        totalBricks: new Decimal(0),
+        totalSpaceResets: new Decimal(0),
+        totalTimeResets: new Decimal(0),
+        totalCrystals: new Decimal(0),
+
+        bestCrystalGain: new Decimal(0),
+        bestCrystalRate: new Decimal(0),
+        bestCorpses: new Decimal(0),
+        bestWorlds: new Decimal(0),
+        bestBricks: new Decimal(0),
+        bestCrystals: new Decimal(0),
     },
 
     pastRuns: {
@@ -286,6 +478,66 @@ const START_PLAYER = {
                 crystalGain: new Decimal(0),
                 timeSpent: 0,
                 timeSacrificed: new Date(0),
+            },
+        ],
+    },
+
+    pastAscRuns: {
+        lastRun: {
+            galaxyGain: new Decimal(0),
+            timeSpent: 0,
+            timeAscended: new Date(0),
+        },
+        lastTen: [
+            {
+                galaxyGain: new Decimal(0),
+                timeSpent: 0,
+                timeAscended: new Date(0),
+            },
+            {
+                galaxyGain: new Decimal(0),
+                timeSpent: 0,
+                timeAscended: new Date(0),
+            },
+            {
+                galaxyGain: new Decimal(0),
+                timeSpent: 0,
+                timeAscended: new Date(0),
+            },
+            {
+                galaxyGain: new Decimal(0),
+                timeSpent: 0,
+                timeAscended: new Date(0),
+            },
+            {
+                galaxyGain: new Decimal(0),
+                timeSpent: 0,
+                timeAscended: new Date(0),
+            },
+            {
+                galaxyGain: new Decimal(0),
+                timeSpent: 0,
+                timeAscended: new Date(0),
+            },
+            {
+                galaxyGain: new Decimal(0),
+                timeSpent: 0,
+                timeAscended: new Date(0),
+            },
+            {
+                galaxyGain: new Decimal(0),
+                timeSpent: 0,
+                timeAscended: new Date(0),
+            },
+            {
+                galaxyGain: new Decimal(0),
+                timeSpent: 0,
+                timeAscended: new Date(0),
+            },
+            {
+                galaxyGain: new Decimal(0),
+                timeSpent: 0,
+                timeAscended: new Date(0),
             },
         ],
     },
@@ -400,10 +652,18 @@ const START_PLAYER = {
             'click': true,
             'key': true,
         },
+        'galaxyPrestige': {
+            'click': true,
+            'key': true,
+        },
+        'galaxyRespec': {
+            'click': true,
+            'key': true,
+        },
     },
 
     tooltipsEnabled: false,
-    activeTabs: ['unitsTab', 'unitsSubTab', 'buildingsSubTab', 'timeDimSubTab', 'statSubTab'],
+    activeTabs: ['unitsTab', 'unitsSubTab', 'buildingsSubTab', 'timeDimSubTab', 'galaxiesSubTab', 'statSubTab'],
     hotkeysOn: true,
 }
 
@@ -658,16 +918,15 @@ const ACH_DATA = {
     35: {
         title: 'Galactic Angst',
         desc: 'Unlock Depleted Galaxies.',
-        reward: 'Menagerie Of Worlds\'s effect is stronger (^0.67 -> ^0.37).',
+        reward: 'Menagerie Of Worlds\'s effect is stronger (^0.67 -> ^0.333).',
         showEffect: false,
         hasReward: true,
         divID: 'ach35',
         canUnlock: function() {
-            return false; //hasUpgrade(3, 23);
+            return hasUpgrade(3, 23);
         },
         effect: function() {
-            let e = new Decimal(player.bestBricks);
-            return e.pow(0.2);
+            return new Decimal(1);
         },
         onUnlock: function() {
             return;
@@ -905,13 +1164,14 @@ const UNLOCKS_DATA = {
         'mainTab': {
             unlocked: false,
             classNotID: false,
+            notifyID: 'galaxyTabBut',
             idsToShow: ['galaxyTabCell'],
             idsToHide: [],
             shouldNotify: function() {
-                return false;
+                return true;
             },
             condition: function() {
-                return false;
+                return hasUpgrade(3, 23);
             }
         },
         'arkTab': {
@@ -958,6 +1218,18 @@ const HOTKEYS = {
         desc: 'Respec Time Production',
         onPress: function() {
             respecTimeKey();
+        }
+    },
+    'n': {
+        desc: 'Ascension',
+        onPress: function() {
+            galaxyPrestigeKey();
+        }
+    },
+    'g': {
+        desc: 'Respec Galaxies',
+        onPress: function() {
+            respecGalaxiesKey();
         }
     },
     '1': {
@@ -1280,6 +1552,231 @@ function fixResetBug() {
         ],
     });
 
+    copyData(START_PLAYER.pastAscRuns, {
+        lastRun: {
+            galaxyGain: new Decimal(0),
+            timeSpent: 0,
+            timeAscended: new Date(0),
+        },
+        lastTen: [
+            {
+                galaxyGain: new Decimal(0),
+                timeSpent: 0,
+                timeAscended: new Date(0),
+            },
+            {
+                galaxyGain: new Decimal(0),
+                timeSpent: 0,
+                timeAscended: new Date(0),
+            },
+            {
+                galaxyGain: new Decimal(0),
+                timeSpent: 0,
+                timeAscended: new Date(0),
+            },
+            {
+                galaxyGain: new Decimal(0),
+                timeSpent: 0,
+                timeAscended: new Date(0),
+            },
+            {
+                galaxyGain: new Decimal(0),
+                timeSpent: 0,
+                timeAscended: new Date(0),
+            },
+            {
+                galaxyGain: new Decimal(0),
+                timeSpent: 0,
+                timeAscended: new Date(0),
+            },
+            {
+                galaxyGain: new Decimal(0),
+                timeSpent: 0,
+                timeAscended: new Date(0),
+            },
+            {
+                galaxyGain: new Decimal(0),
+                timeSpent: 0,
+                timeAscended: new Date(0),
+            },
+            {
+                galaxyGain: new Decimal(0),
+                timeSpent: 0,
+                timeAscended: new Date(0),
+            },
+            {
+                galaxyGain: new Decimal(0),
+                timeSpent: 0,
+                timeAscended: new Date(0),
+            },
+        ],
+    });
+
+    copyData(START_PLAYER.galaxyUpgs, {
+        1: {
+            11: {
+                bought: false,
+                locked: false,
+                boughtFor: new Decimal(0),
+            },
+            21: {
+                bought: false,
+                locked: false,
+                boughtFor: new Decimal(0),
+            },
+            22: {
+                bought: false,
+                locked: false,
+                boughtFor: new Decimal(0),
+            },
+            31: {
+                bought: false,
+                locked: false,
+                boughtFor: new Decimal(0),
+            },
+            32: {
+                bought: false,
+                locked: false,
+                boughtFor: new Decimal(0),
+            },
+            41: {
+                bought: false,
+                locked: false,
+                boughtFor: new Decimal(0),
+            },
+        },
+        2: {
+            11: {
+                bought: false,
+                locked: false,
+                boughtFor: new Decimal(0),
+            },
+            21: {
+                bought: false,
+                locked: false,
+                boughtFor: new Decimal(0),
+            },
+            22: {
+                bought: false,
+                locked: false,
+                boughtFor: new Decimal(0),
+            },
+            31: {
+                bought: false,
+                locked: false,
+                boughtFor: new Decimal(0),
+            },
+            32: {
+                bought: false,
+                locked: false,
+                boughtFor: new Decimal(0),
+            },
+            41: {
+                bought: false,
+                locked: false,
+                boughtFor: new Decimal(0),
+            },
+        },
+        3: {
+            11: {
+                bought: false,
+                locked: false,
+                boughtFor: new Decimal(0),
+            },
+            21: {
+                bought: false,
+                locked: false,
+                boughtFor: new Decimal(0),
+            },
+            22: {
+                bought: false,
+                locked: false,
+                boughtFor: new Decimal(0),
+            },
+            31: {
+                bought: false,
+                locked: false,
+                boughtFor: new Decimal(0),
+            },
+            32: {
+                bought: false,
+                locked: false,
+                boughtFor: new Decimal(0),
+            },
+            41: {
+                bought: false,
+                locked: false,
+                boughtFor: new Decimal(0),
+            },
+        },
+        4: {
+            11: {
+                bought: false,
+                locked: false,
+                boughtFor: new Decimal(0),
+            },
+            21: {
+                bought: false,
+                locked: false,
+                boughtFor: new Decimal(0),
+            },
+            22: {
+                bought: false,
+                locked: false,
+                boughtFor: new Decimal(0),
+            },
+            31: {
+                bought: false,
+                locked: false,
+                boughtFor: new Decimal(0),
+            },
+            32: {
+                bought: false,
+                locked: false,
+                boughtFor: new Decimal(0),
+            },
+            41: {
+                bought: false,
+                locked: false,
+                boughtFor: new Decimal(0),
+            },
+        },
+    });
+
+    copyData(START_PLAYER.arkUpgs, {
+        'engines': {
+            unlocked: false,
+            bought: false,
+        },
+        'thrusters': {
+            unlocked: false,
+            bought: false,
+        },
+        'support': {
+            unlocked: false,
+            bought: false,
+        },
+        'railguns': {
+            unlocked: false,
+            bought: false,
+        },
+        'torpedos': {
+            unlocked: false,
+            bought: false,
+        },
+        'navigation': {
+            unlocked: false,
+            bought: false,
+        },
+    });
+
+    copyData(START_PLAYER.rowCosts, {
+        1: new Decimal(1),
+        2: new Decimal(1),
+        3: new Decimal(1),
+        4: new Decimal(1),
+    });
+
     START_PLAYER.bricks = new Decimal(0);
     START_PLAYER.brickGainExp = 0.2;
     START_PLAYER.astralFlag = false;
@@ -1299,6 +1796,9 @@ function fixResetBug() {
         totalSpaceResets: new Decimal(0),
         totalTimeResets: new Decimal(0),
         totalCrystals: new Decimal(0),
+        totalGalaxies: new Decimal(0),
+        totalSpentGalaxies: new Decimal(0),
+        totalAscensions: new Decimal(0),
 
         bestCrystalGain: new Decimal(0),
         bestCrystalRate: new Decimal(0),
@@ -1306,6 +1806,7 @@ function fixResetBug() {
         bestWorlds: new Decimal(0),
         bestBricks: new Decimal(0),
         bestCrystals: new Decimal(0),
+        bestGalaxies: new Decimal(0),
     });
 
     copyData(START_PLAYER.thisSacStats, {
@@ -1313,12 +1814,28 @@ function fixResetBug() {
         totalWorlds: new Decimal(0),
         totalBricks: new Decimal(0),
         totalSpaceResets: new Decimal(0),
-        
+
         bestCorpses: new Decimal(0),
         bestWorlds: new Decimal(0),
         bestBricks: new Decimal(0),
 
         hasGoneAstral: false,
+    });
+
+    copyData(START_PLAYER.thisAscStats, {
+        totalCorpses: new Decimal(0),
+        totalWorlds: new Decimal(0),
+        totalBricks: new Decimal(0),
+        totalSpaceResets: new Decimal(0),
+        totalTimeResets: new Decimal(0),
+        totalCrystals: new Decimal(0),
+
+        bestCrystalGain: new Decimal(0),
+        bestCrystalRate: new Decimal(0),
+        bestCorpses: new Decimal(0),
+        bestWorlds: new Decimal(0),
+        bestBricks: new Decimal(0),
+        bestCrystals: new Decimal(0),
     });
     
     START_PLAYER.lastUpdate = new Date();
@@ -1431,10 +1948,18 @@ function fixResetBug() {
             'click': true,
             'key': true,
         },
+        'galaxyPrestige': {
+            'click': true,
+            'key': true,
+        },
+        'galaxyRespec': {
+            'click': true,
+            'key': true,
+        },
     });
 
     START_PLAYER.tooltipsEnabled = false;
-    START_PLAYER.activeTabs = new Array('unitsTab', 'unitsSubTab', 'buildingsSubTab', 'timeDimSubTab', 'statSubTab');
+    START_PLAYER.activeTabs = new Array('unitsTab', 'unitsSubTab', 'buildingsSubTab', 'galaxiesSubTab', 'timeDimSubTab', 'statSubTab');
     START_PLAYER.hotkeysOn = true,
 
     fixData(player, START_PLAYER);

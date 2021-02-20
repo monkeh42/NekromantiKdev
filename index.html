@@ -9,6 +9,7 @@
     <script type="text/javascript" src="js/units.js"></script>
     <script type="text/javascript" src="js/buildings.js"></script>
     <script type="text/javascript" src="js/time.js"></script>
+    <script type="text/javascript" src="js/galaxies.js"></script>
     <script type="text/javascript" src="js/tools/data_objects.js"></script>
     <script type="text/javascript" src="js/tools/display_updates.js"></script>
     <script type="text/javascript" src="js/tools/helptexts.js"></script>
@@ -44,7 +45,7 @@
             <div id="timeBoostDisplay" style="font-size: 10pt; white-space: pre; display: none;">Your <span id="normalAstral" style="font-size: 12pt; color: white;"> NORMAL </span> time is going <span id="timeMult" style="font-size: 12pt; font-variant-numeric: tabular-nums;"> 1.0x </span> as fast.</div>
         </div>
     </div>
-    <div id="tabButtons">
+    <div id="tabButtons" id="tabButtons" style="width: 100%; margin: 15px auto 25px; display: block;">
         <table style="width: auto; margin: auto;">
             <tr>
                 <td id="unitsTabCell">
@@ -85,8 +86,8 @@
                     </tr>
                 </table>
             </div>
-            <div id="unitsSubTab" class="unitSubTab">
-                <table style="width: 100%; margin: auto; margin-top: 20px;">
+            <div id="unitsSubTab" class="unitSubTab" style="position: relative; height: 650px;">
+                <table style="position: absolute; left: -80px; width: 1184px;">
                     <tr>
                         <td width="5%">
                             <h1>Tier</h1>
@@ -268,7 +269,7 @@
                         </td>
                     </tr>
                 </table>
-                <div id="spacePresContainer" style="text-align: center; margin: 50px; display: none;">
+                <div id="spacePresContainer" style="text-align: center; display: none; position: absolute; top: 470px; left: 262px;">
                     <button id="spacePrestige" class="spacePrestigeBut" onclick="spacePrestigeClick()">
                         <span style="font-size: 15pt;">This world is dead and empty...</span><br>
                         <span id="spacePresDesc">Give up all your units and corpses to exterminate a new world. You gain a boost to corpse gain based on total exterminated worlds.<br>
@@ -1036,7 +1037,7 @@
                             <div><h1>Multiplier</h1></div>
                         </td>
                         <td width="35%">
-                            <div style="min-width: 30%; float: left;"><h1>Owned</h1></div><div style="width: 30%; float: left;"><h1>(Bought)</h1></div><div style="min-width: 40%; float: right; text-align: center;"><h1>Gain</h1></div>
+                            <div style="min-width: 30%; float: left;"><h1>Owned</h1></div><div style="min-width: 30%; float: left;"><h1>(Bought)</h1></div><div style="min-width: 40%; float: left;"><h1>Gain</h1></div>
                         </td>
                         <td colspan="2" width="30%">
                             <div style="width: 100%; text-align: center;">
@@ -1053,7 +1054,7 @@
                             <div id="timeMult1">x1</div>
                         </td>
                         <td>
-                            <div id="timeAmount1"><div style="min-width: 30%; float: left;">0</div><div style="width: 30%; float: left;">(0)</div><div style="width: 40%; float: left;"></div></div>
+                            <div id="timeAmount1"><div style="min-width: 30%; float: left;">0</div><div style="min-width: 50%; float: left;">(0)</div><div style="min-width: 20%; float: right; text-align: center;"></div></div>
                         </td>
                         <td class="buttonTD">
                             <button id="timeBut1" class="unitButT" onclick="buySingleTime(1)">Cost: 10 crystals</button>
@@ -1070,7 +1071,7 @@
                             <div id="timeMult2">x1</div>
                         </td>
                         <td>
-                            <div id="timeAmount2"><div style="min-width: 30%; float: left;">0</div><div style="width: 30%; float: left;">(0)</div><div style="width: 40%; float: left;"></div></div>
+                            <div id="timeAmount2"><div style="min-width: 30%; float: left;">0</div><div style="min-width: 50%; float: left;">(0)</div><div style="min-width: 20%; float: right; text-align: center;"></div></div>
                         </td>
                         <td class="buttonTD">
                             <button id="timeBut2" class="unitButT" onclick="buySingleTime(2)">Cost: 100 crystals</button>
@@ -1087,7 +1088,7 @@
                             <div id="timeMult3">x1</div>
                         </td>
                         <td>
-                            <div id="timeAmount3"><div style="min-width: 30%; float: left;">0</div><div style="width: 30%; float: left;">(0)</div><div style="width: 40%; float: left;"></div></div>
+                            <div id="timeAmount3"><div style="min-width: 30%; float: left;">0</div><div style="min-width: 50%; float: left;">(0)</div><div style="min-width: 20%; float: right; text-align: center;"></div></div>
                         </td>
                         <td class="buttonTD">
                             <button id="timeBut3" class="unitButT" onclick="buySingleTime(3)">Cost: 1e6 crystals</button>
@@ -1104,7 +1105,7 @@
                             <div id="timeMult4">x1</div>
                         </td>
                         <td>
-                            <div id="timeAmount4"><div style="min-width: 30%; float: left;">0</div><div style="width: 30%; float: left;">(0)</div><div style="width: 40%; float: left;"></div></div>
+                            <div id="timeAmount4"><div style="min-width: 30%; float: left;">0</div><div style="min-width: 50%; float: left;">(0)</div><div style="min-width: 20%; float: right; text-align: center;"></div></div>
                         </td>
                         <td class="buttonTD">
                             <button id="timeBut4" class="unitButT" onclick="buySingleTime(4)">Cost: 1e9 crystals</button>
@@ -1168,13 +1169,15 @@
             <table style="width: 75%; margin: auto auto; text-align: center;">
                 <tr>
                     <div id="galaxyPresContainer" style="text-align: center; margin: 25px;">
-                        <button id="galaxyPrestige" class="galaxyPrestigeBut" data-title="floor(10^(corpses_exponent/20 - 0.65))" onclick="galaxyPrestige()">
+                        <button id="galaxyPrestige" class="galaxyPrestigeBut" data-title="floor(10^(corpses_exponent/20 - 0.65))" onclick="galaxyPrestigeClick()">
                             <span style="font-size: 21pt; font-weight: bold;">ASCENSION</span><br>
                             <span id="galaxyPresDesc">Ascend your mortal form and gain true infernal might - gather your exterminated worlds and form a Depleted Galaxy to rule.<br>
                             This resets everything that sacrifice does.</span><br>
-                            <span id="galaxyPrestigeReq" style="font-size: 13pt;">Requires at least <span style="font-size: 17pt; white-space: pre;"> ? </span> exterminated worlds</span>
-                            <span id="galaxyPrestigeGainDesc" style="font-size: 13pt; display: none;">Gain <span id="galaxyPrestigeGain" style="font-size: 17pt; white-space: pre; font-variant-numeric: tabular-nums;"> 1 </span> depleted<span id="galaxyTextGain" class="galaxyResourceTexts">galaxy</span></span>
-                        </button>
+                            <span id="galaxyPrestigeReq" style="font-size: 13pt;">Requires at least <span style="font-size: 17pt; white-space: pre;"> 10 </span> exterminated worlds</span>
+                            <span id="galaxyPrestigeGainDesc" style="font-size: 15pt; display: none;">Gain <span id="galaxyPrestigeGain" style="font-size: 17pt; white-space: pre; font-variant-numeric: tabular-nums;"> 1 </span> <span id="galaxyTextGain" class="galaxyResourceTexts">depleted galaxy</span></span>
+                            <span id="galaxyPrestigeNextDesc" style="font-size: 11pt; display: none;">Next at <span id="galaxyPrestigeNext" style="font-size: 13pt; white-space: pre; font-variant-numeric: tabular-nums;"> 1 </span> exterminated worlds</span>
+                        </button><br>
+                        <input type="checkbox" id="respecOnAsc" class="GalaxyCheckbox" style="margin-top: 10px;"> Respec galaxies on next ascension
                     </div>
                 </tr>
                 <tr>
@@ -1197,7 +1200,13 @@
                 </table>
             </div>
             <div id="galaxiesSubTab" class="galaxySubTab">
-                <table style="width: 100%; text-align: center;">
+                <div style="text-align: center; width: auto; margin: auto; position: relative; top: 25px;">
+                    <span style="font-size: 17pt; font-weight: bold; color: #e32d05;">There must be loss in exchange for true power.</span><br>
+                    All galaxy upgrades have a base cost of <span style="font-size: 17pt; white-space: pre;"> 1 </span> depleted galaxy, but whenever you buy one, all others on that row and below increase in cost by 1.<br>
+                    You can only take one branch at a time in each tree; once you buy an upgrade in the 2nd row, the two in the other branch will lock.
+                </div>
+                <div style="text-align: center; position: relative; top: 50px;"><button id="galaxyRespecBut" class="galaxyBut" onclick="respecGalaxiesClick()">Respec galaxies - forces ascension</button></div>
+                <table style="text-align: center; position: relative; top: 50px;">
                     <tr>
                         <td>
 
@@ -1354,6 +1363,20 @@
                     </tr>
                 </table>
             </div>
+            <div id="arkSubTab" class="galaxySubTab">
+                <img id="thrusters" class="arkImg" src="../images/thrusters.png">
+                <img id="engines" class="arkImg" src="../images/engines.png">
+                <img id="navigation" class="arkImg" src="../images/navigation.png">
+                <img id="torpedos" class="arkImg" src="../images/torpedos.png">
+                <img id="railguns" class="arkImg" src="../images/railguns.png">
+                <img id="support" class="arkImg" src="../images/support.png">
+                <button id="thrustersBut" class="arkUpg" onclick="buyArkUpgrade('thrusters')" chal-num="1"><span id="thrustersText" style="display: none;">thrusters</span></button>
+                <button id="enginesBut" class="arkUpg" onclick="buyArkUpgrade('engines')" chal-num="2"><span id="enginesText" style="display: none;">engines</span></button>
+                <button id="navigationBut" class="arkUpg" onclick="buyArkUpgrade('navigation')" chal-num="3"><span id="navigationText" style="display: none;">navigation</span></button>
+                <button id="torpedosBut" class="arkUpg" onclick="buyArkUpgrade('torpedos')" chal-num="4"><span id="torpedosText" style="display: none;">torpedos</span></button>
+                <button id="railgunsBut" class="arkUpg" onclick="buyArkUpgrade('railguns')" chal-num="5"><span id="railgunsText" style="display: none;">railguns</span></button>
+                <button id="supportBut" class="arkUpg" onclick="buyArkUpgrade('support')" chal-num="6"><span id="supportText" style="display: none;">death support</span></button>
+            </div>
         </div>
         <div id="statsTab" class="pageTab">
             <div id="statsSubMenu" style="width: 100%; margin-top: 20px;">
@@ -1363,7 +1386,10 @@
                             <button id="statSubTabBut" class="subTabBut" onclick="statsSubTabClick('statSubTab', 'statSubTabBut')">STATS</button>
                         </td>
                         <td>
-                            <button id="last10SubTabBut" class="subTabBut" onclick="statsSubTabClick('last10SubTab', 'last10SubTabBut')">LAST 10 RUNS</button>
+                            <button id="last10SubTabBut" class="subTabBut" onclick="statsSubTabClick('last10SubTab', 'last10SubTabBut')">LAST 10 SAC.</button>
+                        </td>
+                        <td>
+                            <button id="last10AscSubTabBut" class="subTabBut" onclick="statsSubTabClick('last10AscSubTab', 'last10AscSubTabBut')">LAST 10 ASC.</button>
                         </td>
                         <td>
                             <button id="achSubTabBut" class="subTabBut" onclick="showStatsSubTab('achSubTab', 'achSubTabBut')">ACHIEVEMENTS</button>
@@ -1438,6 +1464,82 @@
                     </tr>
                     <tr>
                         <td colspan="3">
+                            <h3>This Ascension</h3>
+                        </td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid white; font-weight: bold;">
+                        <td width="40%" style="border-right: 1px solid white; font-weight: bold;">
+                            resource
+                        </td>
+                        <td width="30%">
+                            total
+                        </td>
+                        <td width="30%">
+                            best
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="border-right: 1px solid white; font-weight: bold;">
+                            corpses
+                        </td>
+                        <td>
+                            <span id="totCorpsesRunAsc"></span>
+                        </td>
+                        <td>
+                            <span id="bestCorpsesRunAsc"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="border-right: 1px solid white; font-weight: bold;">
+                            astral bricks
+                        </td>
+                        <td>
+                            <span id="totBricksRunAsc"></span>
+                        </td>
+                        <td>
+                            <span id="bestBricksRunAsc"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="border-right: 1px solid white; font-weight: bold;">
+                            time crystals
+                        </td>
+                        <td>
+                            <span id="totCrystalsAsc"></span>
+                        </td>
+                        <td>
+                            <span id="bestCrystalsAsc"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="border-right: 1px solid white; font-weight: bold;">
+                            exterminated worlds
+                        </td>
+                        <td>
+                            <span id="totWorldsRunAsc"></span>
+                        </td>
+                        <td>
+                            <span id="bestWorldsRunAsc"></span>
+                        </td>
+                    </tr>
+                    <tr style="height: 25px;">
+                        <div style="height: 100%;"></div>
+                    </tr>
+                    <tr>
+                        <td colspan="3">
+                            you have world prestiged <span id="totPrestigeAsc"></span> times and sacrificed <span id="totSacrificeAsc"></span> times.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">
+                            your best crystal gain was <span id="bestGainAsc"></span> and your best crystal gain rate was <span id="bestRateAsc"></span>/min.
+                        </td>
+                    </tr>
+                    <tr style="height: 25px;">
+                        <div style="height: 100%;"></div>
+                    </tr>
+                    <tr>
+                        <td colspan="3">
                             <h3>All Time</h3>
                         </td>
                     </tr>
@@ -1496,17 +1598,33 @@
                             <span id="bestWorlds"></span>
                         </td>
                     </tr>
+                    <tr>
+                        <td style="border-right: 1px solid white; font-weight: bold;">
+                            depleted galaxies
+                        </td>
+                        <td>
+                            <span id="totGalaxies"></span>
+                        </td>
+                        <td>
+                            <span id="bestGalaxies"></span>
+                        </td>
+                    </tr>
                     <tr style="height: 25px;">
                         <div style="height: 100%;"></div>
                     </tr>
                     <tr>
                         <td colspan="3">
-                            you have world prestiged <span id="totPrestige"></span> times and sacrificed <span id="totSacrifice"></span> times.
+                            you have world prestiged <span id="totPrestige"></span> times, sacrificed <span id="totSacrifice"></span> times, and ascended <span id="totAscensions"></span> times.
                         </td>
                     </tr>
                     <tr>
                         <td colspan="3">
                             your best crystal gain was <span id="bestGain"></span> and your best crystal gain rate was <span id="bestRate"></span>/min.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">
+                            you have spent a total of <span id="totalSpent"></span> galaxies.
                         </td>
                     </tr>
                 </table>
@@ -1581,6 +1699,79 @@
                     </tr>
                 </table>
             </div>
+            <div id="last10AscSubTab" class="statSubTab">
+                <div style="margin-top: 50px; text-align: center;">
+                    <span style="font-size: 48px; font-weight: bold;">coming soon</span>
+                </div>
+                <!--<table style="width: 75%; margin: auto; text-align: center;">
+                    <tr style="height: 25px;">
+                        <div style="height: 100%;"></div>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h3>Last 10 Ascension Runs</h3>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Avg. of past 10 runs: <span id="statAvgsAsc"></span>
+                        </td>
+                    </tr>
+                    <tr style="height: 10px;">
+                        <div style="height: 100%;"></div>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span id="last1" class="last10AscRuns"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span id="last2" class="last10AscRuns"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span id="last3" class="last10AscRuns"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span id="last4" class="last10AscRuns"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span id="last5" class="last10AscRuns"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span id="last6" class="last10AscRuns"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span id="last7" class="last10AscRuns"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span id="last8" class="last10AscRuns"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span id="last9" class="last10AscRuns"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span id="last10" class="last10AscRuns"></span>
+                        </td>
+                    </tr>
+                </table>
+            </div>-->
             <div id="achSubTab" class="statSubTab" style="display: none;">
                 <div id="achievementsInfo" style="text-align: center; margin-top: 20px;">
                     Your achievements and achievement rewards are permanent. They persist through <span style="font-size: 14pt;">ALL</span> resets.<br>
@@ -1812,6 +2003,28 @@
                         </td>
                         <td>
                             <button id="timeRespecKeyBut" class="confBut" onclick="toggleConfirmations('timeRespec', 'key', 'timeRespecKeyBut')">ON</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Ascension
+                        </td>
+                        <td>
+                            <button id="galaxyPrestigeClickBut" class="confBut" onclick="toggleConfirmations('galaxyPrestige', 'click', 'galaxyPrestigeClickBut')">ON</button>
+                        </td>
+                        <td>
+                            <button id="galaxyPrestigeKeyBut" class="confBut" onclick="toggleConfirmations('galaxyPrestige', 'key', 'galaxyPrestigeKeyBut')">ON</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Respec Galaxies
+                        </td>
+                        <td>
+                            <button id="galaxyRespecClickBut" class="confBut" onclick="toggleConfirmations('galaxyRespec', 'click', 'galaxyRespecClickBut')">ON</button>
+                        </td>
+                        <td>
+                            <button id="galaxyRespecKeyBut" class="confBut" onclick="toggleConfirmations('galaxyRespec', 'key', 'galaxyRespecKeyBut')">ON</button>
                         </td>
                     </tr>
                 </table>

@@ -495,6 +495,103 @@ option:active, option.active {
     background-color: #085e16;
 } 
 
+.galaxyUpg {
+    color: white;
+    background-color: #661503;
+    width: 175px;
+    height: 175px;
+    border: 1px solid #e32d05;
+    cursor: pointer;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+.boughtGalaxyUpg {
+    color: white;
+    background-color:black;
+    width: 175px;
+    height: 175px;
+    border: 1px solid #661503;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+.unclickGalaxyUpg {
+    color: white;
+    background-color: #4b4b4b;
+    width: 175px;
+    height: 175px;
+    border: 1px solid #4b4b4b;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+.lockedGalaxyUpg {
+    color: white;
+    background: #4b4b4b url("../images/skull.png") no-repeat center;
+    width: 175px;
+    height: 175px;
+    border: 3px solid #40ff00;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+.galaxyUpg:hover {
+    background-color: #e32d05;
+} 
+
+.lockedArkUpg {
+    color: #661503;
+    background: #4b4b4b url("../images/questionmark.png") no-repeat center;
+    font-family: 'Cinzel', serif;
+    font-weight: bold;
+    font-size: 18pt;
+    width: 200px;
+    height: 120px;
+    border: 3px solid #661503;
+    border-radius: 4px;
+}
+
+.lockedArkUpg:after {
+    content: "Complete Challenge " attr(chal-num) " to unlock."
+}
+
+.arkUpg {
+    color: white;
+    background-color: #661503;
+    width: 200px;
+    height: 120px;
+    border: 1px solid #e32d05;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.unclickableArkUpg {
+    color: white;
+    background-color: #4b4b4b;
+    width: 200px;
+    height: 120px;
+    border: 1px solid #4b4b4b;
+    border-radius: 4px;
+}
+
+.boughtArkUpg {
+    color: white;
+    background-color:black;
+    width: 200px;
+    height: 120px;
+    border: 1px solid #661503;
+    border-radius: 4px;
+}
+
+.arkUpg:hover {
+    background-color: #e32d05;
+} 
+
 .buttonTD {
     text-align: right;
 }
@@ -568,6 +665,21 @@ option:active, option.active {
 .timePrestigeBut:hover {
     background-color: white;
     color: #006ba0;
+}
+
+.galaxyPrestigeBut {
+    color: white;
+    background-color: #661503;
+    width: 500px;
+    height: 175px;
+    border: 1px solid #e32d05;
+    cursor: pointer;
+    border-radius: 4px;
+    font-family: 'Cinzel', serif;
+}
+
+.galaxyPrestigeBut:hover {
+    background-color: #e32d05;
 }
 
 .unclickablePrestige {
@@ -1223,4 +1335,163 @@ option:active, option.active {
     opacity: 0;
     -webkit-transition: 2s;
     transition: opacity 2s;
+}
+
+.galaxyBut {
+    color: white;
+    background-color: #661503;
+    font-style: bold;
+    width: 250px;
+    height: 35px;
+    border: 1px solid #e32d05;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.galaxyBut:hover {
+    background-color: #e32d05;
+}
+
+.unclickGalaxyBut {
+    color: white;
+    background-color: #4b4b4b;
+    font-style: bold;
+    width: 250px;
+    height: 35px;
+    border: 1px solid #4b4b4b;
+    border-radius: 4px;
+}
+
+.galaxyTable {
+    text-align: center;
+    margin: 20px 7px 0;
+    width: 385px;
+    border: 1px solid #661503;
+    background-color: transparent;
+    border-collapse: collapse;
+}
+
+.leftGalaxyTD {
+    width: 175px;
+    height: 195px;
+    margin: auto;
+    border-right: 3px solid #661503;
+}
+
+.rightGalaxyTD {
+    width: 175px;
+    height: 195px;
+    margin: auto;
+    border-left: 3px solid #661503;
+}
+
+#bottomBorderDiv {
+    width: 175px;
+    height: 195px;
+    margin: auto;
+    border-top: 3px solid #661503;
+}
+
+#topBorderDiv {
+    width: 175px;
+    height: 195px;
+    margin: auto;
+    border-bottom: 3px solid #661503;
+}
+
+.arkImg {
+    position: absolute;
+    top: 150px;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+    display: none;
+}
+
+#arkSubTab {
+    display: none;
+    position: relative;
+    width: 50%;
+    width: 1600px;
+    height: 1024px;
+    top: 0;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+}
+
+#thrustersBut {
+    position: absolute;
+    bottom: 45px;
+    left: 50%;
+    -webkit-transform: translateX(25%);
+    transform: translateX(25%);
+}
+
+#enginesBut {
+    position: absolute;
+    bottom: 45px;
+    left: 50%;
+    -webkit-transform: translateX(-125%);
+    transform: translateX(-125%);
+}
+
+#navigationBut {
+    position: absolute;
+    top: 50px;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+}
+
+#torpedosBut {
+    position: absolute;
+    top: 300px;
+    left: 50%;
+    -webkit-transform: translateX(-150%);
+    transform: translateX(-150%);
+}
+
+#railgunsBut {
+    position: absolute;
+    top: 300px;
+    left: 50%;
+    -webkit-transform: translateX(50%);
+    transform: translateX(50%);
+}
+
+#supportBut {
+    position: absolute;
+    bottom: 175px;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+}
+
+.leftRowCost {
+    position: relative;
+    width: 50px;
+    left: -50px;
+    top: 210px;
+    margin: 0 0 0 0;
+    font-size: 48pt;
+    z-index: 2;
+}
+
+.rightRowCost {
+    position: relative;
+    width: 50px;
+    left: 1620px;
+    top: 125px;
+    margin: 0 0 0 0;
+    font-size: 48pt;
+    z-index: 2;
+}
+
+#galaxiesSubTab {
+    position: relative; 
+    transform: translateX(-18.2%);
+    text-align: center;
+    width: 1614px;
+    height: 1280px;
 }

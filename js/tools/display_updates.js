@@ -70,6 +70,7 @@ function updateBuyables() {
     updateBuildingUpgs();
     updateConstrUpgs();
     updateTimeUpgs();
+    updateGalaxyUpgs();
 }
 
 function updateBuildingUpgs() {
@@ -127,12 +128,41 @@ function updateTimeUpgs() {
     }
 }
 
+function updateGalaxyUpgs() {
+    for (let g in GALAXIES_DATA) {
+        for (let u in GALAXIES_DATA[g].upgrades) {
+            if (player.galaxyUpgs[g][u].locked) {
+                addGUpgClass(g, u, 'lockedGalaxyUpg');
+                remGUpgClass(g, u, 'galaxyUpg');
+                document.getElementById(GALAXIES_DATA[g].upgrades[u].textID).style.display = 'none';
+            } else {
+                if (hasGUpgrade(g, u)) {
+                        addGUpgClass(g, u, 'boughtGalaxyUpg');
+                        remGUpgClass(g, u, 'galaxyUpg');
+                        remGUpgClass(g, u, 'unclickGalaxyUpg');
+                } else {
+                    if (canAffordGUpg(g, u) && !document.getElementById(GALAXIES_DATA[g].upgrades[u].buttonID).classList.contains('galaxyUpg')) {
+                        addGUpgClass(g, u, 'galaxyUpg');
+                        remGUpgClass(g, u, 'unclickGalaxyUpg');
+                    } else if (!canAffordGUpg(g, u) && document.getElementById(GALAXIES_DATA[g].upgrades[u].buttonID).classList.contains('galaxyUpg')) {
+                        addGUpgClass(g, u, 'unclickGalaxyUpg');
+                        remGUpgClass(g, u, 'galaxyUpg');
+                    }
+                } 
+                document.getElementById(GALAXIES_DATA[g].upgrades[u].textID).innerHTML = `<span style="font-weight: 900;">${getGUpgName(g, u)}</span><br>${getGUpgDesc(g, u)}${GALAXIES_DATA[g].upgrades[u].requires.length>0 ? ("<br>Requires <span style=\"font-weight: 800;\">" + GALAXIES_DATA[g].upgrades[GALAXIES_DATA[g].upgrades[u].requires[0]].title + "</span>") + (GALAXIES_DATA[g].upgrades[u].requires.length>1 ? " or <span style=\"font-weight: 800;\">" + GALAXIES_DATA[g].upgrades[GALAXIES_DATA[g].upgrades[u].requires[1]].title + "</span>" : "") : ""}<br>Cost: ${formatWhole(getGUpgCost(g, u))} ${galaxyTextSingulizer(getGUpgCost(g, u))}${isDisplayEffectG(g, u) ? ("<br>Currently: " + formatDefault2(getGUpgEffect(g, u)) + GALAXIES_DATA[g].upgrades[u].displaySuffix) : ""}`;
+                document.getElementById(GALAXIES_DATA[g].upgrades[u].textID).style.display = 'block';
+            }
+        }
+    }
+}
+
 function updateResourceDisplays() {
     displayData.push(['html', 'achBoost', formatDefault2(getAchievementBoost())]);
     displayData.push(['html', 'numAch', formatWhole(getNumAchievements())]);
     updateCorpseDisplays();
     updateBuildingDisplays();
     updateTimeDisplays()
+    updateGalaxyDisplays();
 }
 
 function updateCorpseDisplays() {
@@ -198,9 +228,16 @@ function updateTimeDisplays() {
     }
 }
 
+function updateGalaxyDisplays() {
+    displayData.push(['html', 'galaxyAmount', formatWhole(player.galaxies)]);
+    displayData.push(['html', 'totalGalaxyAmount', formatWhole(player.allTimeStats.totalGalaxies)]);
+    displayData.push(['html', 'ascensionAmount', formatWhole(player.ascensions)]);
+}
+
 function updatePrestigeDisplays() {
     updateSpacePrestigeDisplay();
     updateTimePrestigeDisplay();
+    updateGalaxyPrestigeDisplay();
 }
 
 function updateSpacePrestigeDisplay() {
@@ -237,6 +274,24 @@ function updateTimePrestigeDisplay() {
         displayData.push(['setProp', 'timePrestigeGainDesc', 'display', 'none']);
     }
     displayData.push(['html', 'timePrestigeGain', ` ${formatWhole(calculateCrystalGain())} `]);
+}
+
+function updateGalaxyPrestigeDisplay() {
+    if (canGalaxyPrestige() && !document.getElementById('galaxyPrestige').classList.contains('galaxyPrestigeBut')) {
+        addPresClass('galaxy', 'galaxyPrestigeBut');
+        remPresClass('galaxy', 'unclickablePrestige');
+        displayData.push(['setProp', 'galaxyPrestigeReq', 'display', 'none']);
+        displayData.push(['setProp', 'galaxyPrestigeGainDesc', 'display', '']);
+        displayData.push(['setProp', 'galaxyPrestigeNextDesc', 'display', '']);
+    } else if (!canGalaxyPrestige() && document.getElementById('galaxyPrestige').classList.contains('galaxyPrestigeBut')) {
+        remPresClass('galaxy', 'galaxyPrestigeBut');
+        addPresClass('galaxy', 'unclickablePrestige');
+        displayData.push(['setProp', 'galaxyPrestigeReq', 'display', '']);
+        displayData.push(['setProp', 'galaxyPrestigeGainDesc', 'display', 'none']);
+        displayData.push(['setProp', 'galaxyPrestigeNextDesc', 'display', 'none']);
+    }
+    displayData.push(['html', 'galaxyPrestigeGain', ` ${formatWhole(calculateGalaxyGain())} `]);
+    displayData.push(['html', 'galaxyPrestigeNext', ` ${formatWhole(calculateNextGalaxy())} `]);
 }
 
 function updateTierDisplays() {
@@ -508,6 +563,11 @@ function toggleTooltips() {
     for (let t in TIME_DATA.upgrades) {
         if (TIME_DATA.upgrades[t].displayTooltip) { document.getElementById(TIME_DATA.upgrades[t].buttonID).classList.toggle('tooltip'); }
     }
+    for (let g in GALAXIES_DATA) {
+        for (let u in GALAXIES_DATA[g].upgrades) {
+            if (GALAXIES_DATA[g].upgrades[u].displayTooltip) { document.getElementById(GALAXIES_DATA[g].upgrades[u].buttonID).classList.toggle('tooltip'); }
+        }
+    }
 }
 
 function showChangelog(divID) {
@@ -578,7 +638,7 @@ function showStatsSubTab(subTabName) {
         }
     }
     displayData.push(['addClass', bName, 'tabButSelected'])
-    player.activeTabs[4] = subTabName;
+    player.activeTabs[5] = subTabName;
 }
 
 function showUnitSubTab(subTabName, buttonName, parentButton) {
@@ -640,6 +700,28 @@ function showTimeSubTab(subTabName, buttonName, parentButton) {
         }
     }
     player.activeTabs[3] = subTabName;
+    if (buttonName !== undefined) {
+        document.getElementById(buttonName).classList.remove('tabButNotify');
+        document.getElementById(parentButton).classList.remove('tabButIndirectNotify');
+    }
+    displayData.push(['addClass', bName, 'tabButSelected'])
+}
+
+function showGalaxySubTab(subTabName, buttonName, parentButton) {
+    let bName = subTabName + 'But'
+    var allSubTabs = document.getElementsByClassName('galaxySubTab');
+    var tab;
+    for (var i=0; i<allSubTabs.length; i++) {
+        tab = allSubTabs.item(i);
+        if (tab.id === subTabName) {
+            tab.style.display = 'block';
+            tab.classList.remove('tabButSelected');
+        } else {
+            tab.style.display = 'none';
+            document.getElementById(tab.id + 'But').classList.remove('tabButSelected');
+        }
+    }
+    player.activeTabs[4] = subTabName;
     if (buttonName !== undefined) {
         document.getElementById(buttonName).classList.remove('tabButNotify');
         document.getElementById(parentButton).classList.remove('tabButIndirectNotify');
@@ -827,6 +909,34 @@ function unitSingulizer(tier, number) {
     }
 }
 
+function galaxySingulizer(id) {
+    var firstThree = id.slice(0,3);
+    var gain = (id.slice(-1) == 'n');
+    if (gain) {
+        if (calculateGalaxyGain().eq(1)) { return "depleted galaxy"; }
+        else { return "depleted galaxies"; }
+    } else {
+        switch (firstThree) {
+            case 'gal':
+                if (player.galaxies.eq(1)) { return "depleted galaxy"; }
+                else { return "depleted galaxies"; }
+            case 'asc':
+                if (player.ascensions.eq(1)) { return "ascension"; }
+                else { return "ascensions"; }
+        }
+    }
+}
+
+function ascensionTextSingulizer(amt) {
+    if ((new Decimal(1)).eq(amt)) { return 'ascension'; }
+    else { return 'ascensions'; }
+}
+
+function galaxyTextSingulizer(amt) {
+    if ((new Decimal(1)).eq(amt)) { return 'galaxy'; }
+    else { return 'galaxies'; }
+}
+
 //help text generators + related
 
 function checkUnlocked(tab, unlock) {
@@ -883,7 +993,7 @@ function statsTabClick() {
     generateLastRuns();
     updateStatsTab();
     showTab('statsTab', 'statsTabBut');
-    showStatsSubTab(player.activeTabs[4], player.activeTabs[4] + 'But');
+    showStatsSubTab(player.activeTabs[5], player.activeTabs[5] + 'But');
 }
 
 function statsSubTabClick(tabName='statSubTab', butName='statSubTabBut') {
@@ -916,10 +1026,34 @@ function generateLastRuns() {
     document.getElementById('statAvgs').innerHTML = `${formatTime(totalTime/count, 'num')}; ${formatDefault2(totalGain/count)} crystals; ${ formatDefault2(totalGain.div(totalTime/(60*1000))) + " crystals/min" }`;
 }
 
+/*function generateAscRuns() {
+    let totalGain = new Decimal(0);
+    let totalTime = 0;
+    let runGain = new Decimal(0);
+    let data = player.pastRuns.lastTen;
+    let count = 0;
+
+    for (let i=0; i<10; i++) {
+        if (data[i].timeSpent == 0) {break}
+        runGain = data[i].crystalGain.div(data[i].timeSpent/(1000*60));
+        document.getElementById('last' + (i+1).toString()).innerHTML = `${formatTime(data[i].timeSpent, 'num')}; ${formatDefault2(data[i].crystalGain)} crystals; ${ formatDefault2(runGain) + " crystals/min" }`;
+        totalGain = totalGain.plus(data[i].crystalGain);
+        totalTime += data[i].timeSpent;
+        count++;
+    }
+    if (count==0) {
+        document.getElementById('last1').innerHTML = "you don't have any past runs!";
+        return;
+    }
+
+    document.getElementById('statAvgs').innerHTML = `${formatTime(totalTime/count, 'num')}; ${formatDefault2(totalGain/count)} crystals; ${ formatDefault2(totalGain.div(totalTime/(60*1000))) + " crystals/min" }`;
+}*/
+
 function updateStatsTab() {
     document.getElementById('totCorpses').innerHTML = formatWhole(player.allTimeStats.totalCorpses);
     document.getElementById('totBricks').innerHTML = formatWhole(player.allTimeStats.totalBricks);
     document.getElementById('totWorlds').innerHTML = formatWhole(player.allTimeStats.totalWorlds);
+    document.getElementById('totGalaxies').innerHTML = formatWhole(player.allTimeStats.totalgalaxies);
     document.getElementById('totCrystals').innerHTML = formatWhole(player.allTimeStats.totalCrystals);
     document.getElementById('bestCorpses').innerHTML = formatWhole(player.allTimeStats.bestCorpses);
     document.getElementById('bestBricks').innerHTML = formatWhole(player.allTimeStats.bestBricks);
@@ -927,8 +1061,23 @@ function updateStatsTab() {
     document.getElementById('bestCrystals').innerHTML = formatWhole(player.allTimeStats.bestCrystals);
     document.getElementById('totPrestige').innerHTML = formatWhole(player.allTimeStats.totalSpaceResets);
     document.getElementById('totSacrifice').innerHTML = formatWhole(player.allTimeStats.totalTimeResets);
-    document.getElementById('bestGain').innerHTML = formatWhole(player.bestCrystalGain);
-    document.getElementById('bestRate').innerHTML = formatWhole(player.bestCrystalRate);
+    document.getElementById('bestGain').innerHTML = formatWhole(player.allTimeStats.bestCrystalGain);
+    document.getElementById('bestRate').innerHTML = formatWhole(player.allTimeStats.bestCrystalRate);
+    document.getElementById('totAscensions').innerHTML = formatWhole(player.allTimeStats.totalAscensions);
+    document.getElementById('totalSpent').innerHTML = formatWhole(player.allTimeStats.totalSpentGalaxies);
+
+    document.getElementById('totCorpsesRunAsc').innerHTML = formatWhole(player.thisAscStats.totalCorpses);
+    document.getElementById('totBricksRunAsc').innerHTML = formatWhole(player.thisAscStats.totalBricks);
+    document.getElementById('totWorldsRunAsc').innerHTML = formatWhole(player.thisAscStats.totalWorlds);
+    document.getElementById('totCrystalsAsc').innerHTML = formatWhole(player.thisAscStats.totalCrystals);
+    document.getElementById('bestCorpsesRunAsc').innerHTML = formatWhole(player.thisAscStats.bestCorpses);
+    document.getElementById('bestBricksRunAsc').innerHTML = formatWhole(player.thisAscStats.bestBricks);
+    document.getElementById('bestWorldsRunAsc').innerHTML = formatWhole(player.thisAscStats.bestWorlds);
+    document.getElementById('bestCrystalsAsc').innerHTML = formatWhole(player.thisAscStats.bestCrystals);
+    document.getElementById('totPrestigeAsc').innerHTML = formatWhole(player.thisAscStats.totalSpaceResets);
+    document.getElementById('totSacrificeAsc').innerHTML = formatWhole(player.thisAscStats.totalTimeResets);
+    document.getElementById('bestGainAsc').innerHTML = formatWhole(player.thisAscStats.bestCrystalGain);
+    document.getElementById('bestRateAsc').innerHTML = formatWhole(player.thisAscStats.bestCrystalRate);
 
     document.getElementById('totCorpsesRun').innerHTML = formatWhole(player.thisSacStats.totalCorpses);
     document.getElementById('totBricksRun').innerHTML = formatWhole(player.thisSacStats.totalBricks);
@@ -1051,6 +1200,62 @@ function togDisplayTUpg(t) {
 
 function writeHTMLTUpg(t, text) {
     displayData.push(['html', TIME_DATA.upgrades[t].buttonID, text]);
+}
+
+function addGUpgClass(g, u, className) {
+    displayData.push(['addClass', GALAXIES_DATA[g].upgrades[u].buttonID, className]);
+}
+
+function remGUpgClass(g, u, className) {
+    displayData.push(['remClass', GALAXIES_DATA[g].upgrades[u].buttonID, className]);
+}
+
+function togGUpgClass(g, u, className) {
+    displayData.push(['remClass', GALAXIES_DATA[g].upgrades[u].buttonID, className]);
+}
+
+function setAttrGUpg(g, u, attr, val) {
+    displayData.push(['setAttr', GALAXIES_DATA[g].upgrades[u].buttonID, attr, val]);
+}
+
+function setPropGUpg(g, u, prop, val) {
+    displayData.push(['setProp', GALAXIES_DATA[g].upgrades[u].buttonID, prop, val]);
+}
+
+function togDisplayGUpg(t) {
+    displayData.push(['togDisplay', GALAXIES_DATA[g].upgrades[u].buttonID]);
+}
+
+function writeHTMLGUpg(g, u, text) {
+    displayData.push(['html', GALAXIES_DATA[g].upgrades[u].buttonID, text]);
+}
+
+function addAUpgClass(a, className) {
+    displayData.push(['addClass', ARK_DATA[a].buttonID, className]);
+}
+
+function remAUpgClass(a, className) {
+    displayData.push(['remClass', ARK_DATA[a].buttonID, className]);
+}
+
+function togAUpgClass(a, className) {
+    displayData.push(['remClass', ARK_DATA[a].buttonID, className]);
+}
+
+function setAttrAUpg(a, attr, val) {
+    displayData.push(['setAttr', ARK_DATA[a].buttonID, attr, val]);
+}
+
+function setPropAUpg(a, prop, val) {
+    displayData.push(['setProp', ARK_DATA[a].buttonID, prop, val]);
+}
+
+function togDisplayAUpg(t) {
+    displayData.push(['togDisplay', ARK_DATA[a].buttonID]);
+}
+
+function writeHTMLAUpg(a, text) {
+    displayData.push(['html', ARK_DATA[a].buttonID, text]);
 }
 
 function addUnitClass(tier, className) {

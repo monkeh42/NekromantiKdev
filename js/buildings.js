@@ -83,10 +83,12 @@ function getBuildingProdPerSec(b) {
 //production/calculation
 
 function getBricksPerSecond() {
-    var b = getCorpsesPerSecond().pow(player.brickGainExp);
+    var e = hasGUpgrade(1, 21) ? 0.25 : 0.2
+    var b = getCorpsesPerSecond().pow(e);
     if (isBuilt(2)) { b = b.times(getResourceEff(2)) }
     if (hasUpgrade(2, 11)) { b = b.times(getUpgEffect(2, 11)); }
     if (hasUpgrade(2, 21)) { b = b.times(getUpgEffect(2, 21)); }
+    if (hasGUpgrade(3, 41)) { b = b.times(getGUpgEffect(3, 41)); }
     return b;
 }
 
@@ -140,9 +142,9 @@ function toggleAstral() {
     if (player.astralFlag) { player.thisSacStats.hasGoneAstral = true; }
 }
 
-function resetBuildingResources(sacrifice=false) {
+function resetBuildingResources(sacrifice=false, ascension=false) {
     if (player.astralFlag) { toggleAstral(); }
-    if (!hasAchievement(15)) { player.bricks = new Decimal(START_PLAYER.bricks); }
+    if (!hasAchievement(15) || ascension) { player.bricks = new Decimal(START_PLAYER.bricks); }
     else if (sacrifice) { player.bricks = new Decimal(getAchievementEffect(15)); } 
     for (var b in BUILDS_DATA) {
         player.buildings[b].amount = new Decimal(START_PLAYER.buildings[b].amount);
@@ -229,12 +231,14 @@ const BUILDS_DATA = {
                 effect: function() {
                     if (hasUpgrade(3, 21)) {
                         var b = new Decimal(Decimal.max(player.buildings[1].amount, 1).log10());
-                        return b.times(2).plus(1);
+                        b = b.times(2);
                     } else {
                         var b = Decimal.max(player.buildings[1].amount, 1).log10();
                         var e = new Decimal(0.5);
-                        return Decimal.pow(b, e).times(2).plus(1);
+                        b = Decimal.pow(b, e).times(2);
                     }
+                    if (hasGUpgrade(3, 21)) { b = b.pow(getGUpgEffect(3, 21)); }
+                    return b.plus(1);
                 }
             },
             12: {
@@ -332,6 +336,7 @@ const BUILDS_DATA = {
         prod: function() {
             var p = Decimal.pow(this.pBase(), this.pExp());
             if (hasTUpgrade(23)) { p = p.times(getTUpgEffect(23)) }
+            if (hasGUpgrade(3, 31)) { p = p.pow(2); }
             return p;
         },
         resourceEff: function() {
@@ -378,12 +383,13 @@ const BUILDS_DATA = {
                 displayFormula: function() { return hasUpgrade(3, 21) ? '1 + log(x)' : '1 + sqrt(log(x))'; },
                 effect: function() {
                     if (hasUpgrade(3, 21)) {
-                        var e = new Decimal(Decimal.max(player.bricks, 1).log10()).plus(1);
-                        return e;
+                        var e = new Decimal(Decimal.max(player.bricks, 1).log10());
                     } else {
-                        var e = Decimal.sqrt(Decimal.max(player.bricks, 1).log10()).plus(1);
-                        return e;
+                        var e = Decimal.sqrt(Decimal.max(player.bricks, 1).log10());
                     }
+                    if (hasGUpgrade(3, 11) && hasUpgrade(2, 22)) { e = e.times(getUpgEffect(2, 22)); }
+
+                    return e.plus(1);
                 }
             },
             13: {
@@ -396,12 +402,13 @@ const BUILDS_DATA = {
                 displayFormula: function() { return hasUpgrade(3, 21) ? '1 + log(x)' : '1 + sqrt(log(x))'; },
                 effect: function() {
                     if (hasUpgrade(3, 21)) {
-                        var e = new Decimal(Decimal.max(player.bricks, 1).log10()).plus(1);
-                        return e;
+                        var e = new Decimal(Decimal.max(player.bricks, 1).log10());
                     } else {
-                        var e = Decimal.sqrt(Decimal.max(player.bricks, 1).log10()).plus(1);
-                        return e;
+                        var e = Decimal.sqrt(Decimal.max(player.bricks, 1).log10());
                     }
+                    if (hasGUpgrade(3, 11) && hasUpgrade(2, 23)) { e = e.times(getUpgEffect(2, 23)); }
+
+                    return e.plus(1);
                 }
             },
             21: {
@@ -416,12 +423,12 @@ const BUILDS_DATA = {
                     if (hasUpgrade(3, 21)) {
                         var b = Decimal.max(player.bricks, 1);
                         b = Decimal.pow(b.log10(), 4);
-                        return b.plus(1);
                     } else {
                         var b = Decimal.max(player.bricks, 1);
                         b = Decimal.pow(b.log10(), 2);
-                        return b.plus(1);
                     }
+
+                    return b.plus(1);
                 }
             },
             22: {
@@ -436,12 +443,12 @@ const BUILDS_DATA = {
                     if (hasUpgrade(3, 21)) {
                         var b = Decimal.max(player.bricks, 1);
                         b = Decimal.pow(b.log10(), 4);
-                        return b.plus(1);
                     } else {
                         var b = Decimal.max(player.bricks, 1);
                         b = Decimal.pow(b.log10(), 2);
-                        return b.plus(1);
                     }
+
+                    return b.plus(1);
                 }
             },
             23: {
@@ -454,12 +461,12 @@ const BUILDS_DATA = {
                 displayFormula: function() { return hasUpgrade(3, 21) ? '1 + (log(x)^2)/4' : '1 + log(x)/4'; },
                 effect: function() {
                     if (hasUpgrade(3, 21)) {
-                        var e = Decimal.div(Decimal.pow(Decimal.max(player.bricks, 1).log10(), 2), 4).plus(1);
-                        return e;
+                        var e = Decimal.div(Decimal.pow(Decimal.max(player.bricks, 1).log10(), 2), 4)
                     } else {
-                        var e = Decimal.div(Decimal.max(player.bricks, 1).log10(), 4).plus(1);
-                        return e;
+                        var e = Decimal.div(Decimal.max(player.bricks, 1).log10(), 4)
                     }
+
+                    return e.plus(1);
                 }
             }
         }
@@ -570,8 +577,8 @@ const BUILDS_DATA = {
             },
             23: {
                 title: 'Cosmogenesis',
-                desc: 'Unlock <strong>Depleted Galaxies</strong>.<br>(COMING SOON)',
-                cost: new Decimal("Infinity"),
+                desc: function() { return 'Unlock <strong>Depleted Galaxies</strong>.'; },
+                cost: new Decimal(25000000),
                 buttonID: 'sunUpg23',
                 displayEffect: false,
                 displayTooltip: false,
@@ -594,7 +601,11 @@ const CONSTR_DATA = {
         cost: function() {
             var c = this.baseCost;
             c = c.times(Decimal.pow(this.baseCostMult, player.construction[this.tier]));
-            if (player.construction[this.tier].gte(25)) { c = c.times(Decimal.pow(this.expCostMult, addFactorial(player.construction[this.tier].minus(24)))); }
+            if (hasGUpgrade(3, 22)) {
+                if (player.construction[this.tier].gte(50)) { c = c.times(Decimal.pow(this.expCostMult, addFactorial(player.construction[this.tier].minus(49)))); }
+            } else {
+                if (player.construction[this.tier].gte(25)) { c = c.times(Decimal.pow(this.expCostMult, addFactorial(player.construction[this.tier].minus(24)))); }
+            }
             return c;
         },
         baseCostMult: 5,
@@ -602,7 +613,9 @@ const CONSTR_DATA = {
         buttonID: 'constrUpg1',
         displayEffect: true,
         effect: function() {
-            return Decimal.max(1+(0.05*player.construction[this.tier]), 1);
+            let e = Decimal.max(1+(0.05*player.construction[this.tier]), 1);
+            if (hasGUpgrade(3, 32)) { e = e.times(getGUpgEffect(3, 32)); }
+            return e;
         }
     },
     2: {
@@ -614,7 +627,11 @@ const CONSTR_DATA = {
         cost: function() {
             var c = this.baseCost;
             c = c.times(Decimal.pow(this.baseCostMult, player.construction[this.tier]));
-            if (player.construction[this.tier].gte(25)) { c = c.times(Decimal.pow(this.expCostMult, addFactorial(player.construction[this.tier].minus(24)))); }
+            if (hasGUpgrade(3, 22)) {
+                if (player.construction[this.tier].gte(50)) { c = c.times(Decimal.pow(this.expCostMult, addFactorial(player.construction[this.tier].minus(49)))); }
+            } else {
+                if (player.construction[this.tier].gte(25)) { c = c.times(Decimal.pow(this.expCostMult, addFactorial(player.construction[this.tier].minus(24)))); }
+            }
             return c;
         },
         baseCostMult: 5,
@@ -622,7 +639,9 @@ const CONSTR_DATA = {
         buttonID: 'constrUpg2',
         displayEffect: true,
         effect: function() {
-            return .02*player.construction[this.tier];
+            let e = .02*player.construction[this.tier];
+            if (hasGUpgrade(3, 32)) { e = e.times(getGUpgEffect(3, 32)); }
+            return e;
         }
     },
     3: {
@@ -634,7 +653,11 @@ const CONSTR_DATA = {
         cost: function() {
             var c = this.baseCost;
             c = c.times(Decimal.pow(this.baseCostMult, player.construction[this.tier]));
-            if (player.construction[this.tier].gte(25)) { c = c.times(Decimal.pow(this.expCostMult, addFactorial(player.construction[this.tier].minus(24)))); }
+            if (hasGUpgrade(3, 22)) {
+                if (player.construction[this.tier].gte(50)) { c = c.times(Decimal.pow(this.expCostMult, addFactorial(player.construction[this.tier].minus(49)))); }
+            } else {
+                if (player.construction[this.tier].gte(25)) { c = c.times(Decimal.pow(this.expCostMult, addFactorial(player.construction[this.tier].minus(24)))); }
+            }
             return c;
         },
         baseCostMult: 5,
@@ -642,7 +665,9 @@ const CONSTR_DATA = {
         buttonID: 'constrUpg3',
         displayEffect: true,
         effect: function() {
-            return Decimal.max(1+(0.1*player.construction[this.tier]), 1);
+            let e = Decimal.max(1+(0.1*player.construction[this.tier]), 1);
+            if (hasGUpgrade(3, 32)) { e = e.times(getGUpgEffect(3, 32)); }
+            return e;
         }
     },
     4: {
@@ -654,7 +679,11 @@ const CONSTR_DATA = {
         cost: function() {
             var c = this.baseCost;
             c = c.times(Decimal.pow(this.baseCostMult, player.construction[this.tier]));
-            if (player.construction[this.tier].gte(25)) { c = c.times(Decimal.pow(this.expCostMult, addFactorial(player.construction[this.tier].minus(24)))); }
+            if (hasGUpgrade(3, 22)) {
+                if (player.construction[this.tier].gte(50)) { c = c.times(Decimal.pow(this.expCostMult, addFactorial(player.construction[this.tier].minus(49)))); }
+            } else {
+                if (player.construction[this.tier].gte(25)) { c = c.times(Decimal.pow(this.expCostMult, addFactorial(player.construction[this.tier].minus(24)))); }
+            }
             return c;
         },
         baseCostMult: 10,
@@ -662,7 +691,9 @@ const CONSTR_DATA = {
         buttonID: 'constrUpg4',
         displayEffect: true,
         effect: function() {
-            return .02*player.construction[this.tier];
+            let e = .02*player.construction[this.tier];
+            if (hasGUpgrade(3, 32)) { e = e.times(getGUpgEffect(3, 32)); }
+            return e;
         }
     },
 }
