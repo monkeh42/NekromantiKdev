@@ -161,6 +161,22 @@ body {
     z-index: 2;
 }
 
+.milestonePopup {
+    position: fixed;
+    right: 50px;
+	top: 150px;
+    text-align: center;
+    background-color: black;
+    border: 3px solid #661503;
+    box-shadow: 3px 3px #424242;
+    cursor: move;
+    height: 695px;
+    width: 400px;
+    border-radius: 4px;
+    z-index: 9;
+    display: none;
+}
+
 h1 {
     font-family: 'Cinzel', serif;
     font-weight: bold;
@@ -185,6 +201,12 @@ h4 {
     font-family: 'Roboto', sans-serif;
     font-weight: 700;
     font-size: 13pt;
+}
+
+h5 {
+    font-family: 'Cinzel', serif;
+    font-weight: bold;
+    font-size: 24pt;
 }
 
 button:focus, select:focus {
@@ -1344,6 +1366,7 @@ option:active, option.active {
     width: 250px;
     height: 35px;
     border: 1px solid #e32d05;
+    margin: 10px;
     cursor: pointer;
     border-radius: 4px;
 }
@@ -1494,4 +1517,18 @@ option:active, option.active {
     text-align: center;
     width: 1614px;
     height: 1280px;
+}
+
+.milestoneTD {
+    padding-bottom: 10px;
+    padding-top: 10px;
+    height: 75px;
+    border: 1px double #e32d05;
+}
+
+.milestoneTDUnlocked {
+    padding-bottom: 10px;
+    padding-top: 10px;
+    border: 1px double #e32d05;
+    background-color: #661503;
 }

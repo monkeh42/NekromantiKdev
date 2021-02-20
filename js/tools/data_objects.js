@@ -660,6 +660,29 @@ const START_PLAYER = {
         },
     },
 
+    milestones: {
+        1: {
+            unlocked: false,
+            new: false,
+        },
+        2: {
+            unlocked: false,
+            new: false,
+        },
+        3: {
+            unlocked: false,
+            new: false,
+        },
+        4: {
+            unlocked: false,
+            new: false,
+        },
+        5: {
+            unlocked: false,
+            new: false,
+        },
+    },
+
     confirmations: {
         'worldPrestige': {
             'click': true,
@@ -686,6 +709,49 @@ const START_PLAYER = {
     tooltipsEnabled: false,
     activeTabs: ['unitsTab', 'unitsSubTab', 'buildingsSubTab', 'timeDimSubTab', 'galaxiesSubTab', 'statSubTab'],
     hotkeysOn: true,
+}
+
+MILES_DATA = {
+    1: {
+        canUnlock: function() {
+            return false;
+        },
+        effect: function() {
+            return new Decima(1);
+        },
+    },
+    2: {
+        canUnlock: function() {
+            return false;
+        },
+        effect: function() {
+            return new Decima(1);
+        },
+    },
+    3: {
+        canUnlock: function() {
+            return false;
+        },
+        effect: function() {
+            return new Decima(1);
+        },
+    },
+    4: {
+        canUnlock: function() {
+            return false;
+        },
+        effect: function() {
+            return new Decima(1);
+        },
+    },
+    5: {
+        canUnlock: function() {
+            return false;
+        },
+        effect: function() {
+            return new Decima(1);
+        },
+    },
 }
 
 const ACH_DATA = {
@@ -2037,6 +2103,29 @@ function fixResetBug() {
             new: false,
         },
         35: {
+            unlocked: false,
+            new: false,
+        },
+    });
+
+    copyData(START_PLAYER.milestones, {
+        1: {
+            unlocked: false,
+            new: false,
+        },
+        2: {
+            unlocked: false,
+            new: false,
+        },
+        3: {
+            unlocked: false,
+            new: false,
+        },
+        4: {
+            unlocked: false,
+            new: false,
+        },
+        5: {
             unlocked: false,
             new: false,
         },

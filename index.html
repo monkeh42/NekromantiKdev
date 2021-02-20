@@ -1205,7 +1205,7 @@
                     All galaxy upgrades have a base cost of <span style="font-size: 17pt; white-space: pre;"> 1 </span> depleted galaxy, but whenever you buy one, all others on that row and below increase in cost by 1.<br>
                     You can only take one branch at a time in each tree; once you buy an upgrade in the 2nd row, the two in the other branch will lock.
                 </div>
-                <div style="text-align: center; position: relative; top: 50px;"><button id="galaxyRespecBut" class="galaxyBut" onclick="respecGalaxiesClick()">Respec galaxies - forces ascension</button></div>
+                <div style="text-align: center; position: relative; top: 50px;"><button id="galaxyRespecBut" class="galaxyBut" onclick="respecGalaxiesClick()">Respec galaxies - forces ascension</button><button id="milestonesBut" class="galaxyBut" onclick="showMilestones()">Galaxy Milestones - not yet working</button></div>
                 <table style="text-align: center; position: relative; top: 50px;">
                     <tr>
                         <td>
@@ -2050,6 +2050,46 @@
         </div>
         <div class="popup" id="achUnlockPopup">
             Achievement Unlocked!
+        </div>
+        <div class="milestonePopup" id="milestonesPopup">
+            <table style="width: 100%;">
+                <tr>
+                    <td class="milestoneTD">
+                        <span style="font-size: 24pt; font-weight: 800;">MILESTONES</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="milestoneTD">
+                        <span style="font-size: 16pt;">Complete one galaxy.</span><br>
+                        <span style="font-size: 11pt;">Unlock the ascension autobuyer, and all autobuyers are permanently unlocked.</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="milestoneTD">
+                        <span style="font-size: 16pt;">Complete two galaxies at once.</span><br>
+                        <span style="font-size: 11pt;">Unlock two more construction upgrades, and you keep <span style="font-size: 800;">Rapid Fire</span> permanently.</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="milestoneTD">
+                        <span style="font-size: 16pt;">Complete three galaxies at once.</span><br>
+                        <span style="font-size: 11pt;">Unlock a fourth building.<br></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="milestoneTD">
+                        <span style="font-size: 16pt;">Complete four galaxies at once.</span><br>
+                        <span style="font-size: 11pt;">Unlock two more columns of time upgrades.</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="milestoneTD">
+                        <span style="font-size: 16pt;">???</span><br>
+                        <span style="font-size: 11pt;">...</span>
+                    </td>
+                </tr>
+            </table>
+            <button class="optBut" id="closeMilestonesPopup" style="margin: 25px;" onclick="hideMilestones()">CLOSE</button>
         </div>
     </div>
 </body>
