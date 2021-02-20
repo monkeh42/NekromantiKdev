@@ -950,7 +950,7 @@ const ACH_DATA = {
             return;
         }
     },
-    42: {
+    /*42: {
         title: 'Master Nekro-Carpenter',
         desc: 'Get the first four construction upgrades all to at least level 25.',
         reward: '',
@@ -1020,7 +1020,7 @@ const ACH_DATA = {
         onUnlock: function() {
             return;
         }
-    },
+    },*/
 }
 
 const UNLOCKS_DATA = {
