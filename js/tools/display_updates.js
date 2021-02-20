@@ -791,17 +791,21 @@ function updateAchievements() {
     for (let id in ACH_DATA) {
         if (!player.achievements[id].unlocked && ACH_DATA[id].canUnlock()) {
             ACH_DATA[id].onUnlock();
-            player.achievements[id].unlocked = true;
-            player.achievements[id].new = true;
-            displayData.push(['addClass', ACH_DATA[id].divID, 'achievementUnlocked']);
-            displayData.push(['addClass', ACH_DATA[id].divID, 'achievementNew']);
-            displayData.push(['remClass', ACH_DATA[id].divID, 'achievement']);
-            displayData.push(['addClass', 'achSubTabBut', 'tabButNotify']);
-            displayData.push(['addClass', 'statsTabBut', 'tabButIndirectNotify']);
-            displayData.push(['setProp', 'achUnlockPopup', 'opacity', '1']);
-            popupShownTime = (new Date).getTime();
+            unlockAchievement(id)
         }
     }
+}
+
+function unlockAchievement(a) {
+    player.achievements[a].unlocked = true;
+    player.achievements[a].new = true;
+    displayData.push(['addClass', ACH_DATA[a].divID, 'achievementUnlocked']);
+    displayData.push(['addClass', ACH_DATA[a].divID, 'achievementNew']);
+    displayData.push(['remClass', ACH_DATA[a].divID, 'achievement']);
+    displayData.push(['addClass', 'achSubTabBut', 'tabButNotify']);
+    displayData.push(['addClass', 'statsTabBut', 'tabButIndirectNotify']);
+    displayData.push(['setProp', 'achUnlockPopup', 'opacity', '1']);
+    popupShownTime = (new Date).getTime();
 }
 
 function mouseoverAchievement(ach) {
