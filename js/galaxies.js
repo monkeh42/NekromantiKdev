@@ -267,7 +267,7 @@ function galaxyPrestigeReset(respec=false) {
     showBuildingSubTab('buildingsSubTab');
     showTimeSubTab('timeDimSubTab');
     save();
-    window.location.reload(true);
+    loadStyles();
 }
 
 function resetTimeCounts() {
