@@ -198,22 +198,21 @@ function loadStyles() {
         for (var u in GALAXIES_DATA[g].upgrades) {
             if (GALAXIES_DATA[g].upgrades[u].displayTooltip) { document.getElementById(GALAXIES_DATA[g].upgrades[u].buttonID).setAttribute('data-title', GALAXIES_DATA[g].upgrades[u].displayFormula) }
             if (player.galaxyUpgs[g][u].locked) {
-                document.getElementById(GALAXIES_DATA[b].upgrades[u].buttonID).classList.add('lockedGalaxyUpg'); 
-                document.getElementById(GALAXIES_DATA[b].upgrades[u].buttonID).classList.remove('galaxyUpg');
+                document.getElementById(GALAXIES_DATA[g].upgrades[u].buttonID).classList.add('lockedGalaxyUpg'); 
+                document.getElementById(GALAXIES_DATA[g].upgrades[u].buttonID).classList.remove('galaxyUpg');
                 document.getElementById(GALAXIES_DATA[g].upgrades[u].textID).style.display = 'none';
             } else {
-                document.getElementById(GALAXIES_DATA[b].upgrades[u].buttonID).classList.remove('lockedGalaxyUpg');
+                document.getElementById(GALAXIES_DATA[g].upgrades[u].buttonID).classList.remove('lockedGalaxyUpg');
                 document.getElementById(GALAXIES_DATA[g].upgrades[u].textID).innerHTML = `${getGUpgDesc(g, u)}<br><br>Cost: ${formatWhole(getGUpgCost(g, u))} ${galaxyTextSingulizer(getGUpgCost(g, u))}${isDisplayEffectG(g, u) ? ("<br>Currently: " + formatDefault2(getGUpgEffect(g, u)) + "x") : ""}`;
                 document.getElementById(GALAXIES_DATA[g].upgrades[u].textID).style.display = 'block';
                 if (hasGUpgrade(g, u)) { 
-                    document.getElementById(GALAXIES_DATA[b].upgrades[u].buttonID).classList.add('boughtGalaxyUpg'); 
-                    document.getElementById(GALAXIES_DATA[b].upgrades[u].buttonID).classList.remove('galaxyUpg');//+ ((player.tooltipsEnabled && isDisplayTooltipG(g, u)) ? ' tooltip' : '') }
-                } 
-                else {
-                    document.getElementById(GALAXIES_DATA[b].upgrades[u].buttonID).classList.remove('boughtGalaxyUpg');
+                    document.getElementById(GALAXIES_DATA[g].upgrades[u].buttonID).classList.add('boughtGalaxyUpg'); 
+                    document.getElementById(GALAXIES_DATA[g].upgrades[u].buttonID).classList.remove('galaxyUpg');//+ ((player.tooltipsEnabled && isDisplayTooltipG(g, u)) ? ' tooltip' : '') }
+                } else {
+                    document.getElementById(GALAXIES_DATA[g].upgrades[u].buttonID).classList.remove('boughtGalaxyUpg');
                     if (!canAffordGUpg(g, u)) {
-                        document.getElementById(GALAXIES_DATA[b].upgrades[u].buttonID).classList.add('unclickGalaxyUpg'); 
-                        document.getElementById(GALAXIES_DATA[b].upgrades[u].buttonID).classList.remove('galaxyUpg');
+                        document.getElementById(GALAXIES_DATA[g].upgrades[u].buttonID).classList.add('unclickGalaxyUpg'); 
+                        document.getElementById(GALAXIES_DATA[g].upgrades[u].buttonID).classList.remove('galaxyUpg');
                     }
                 }
             }
