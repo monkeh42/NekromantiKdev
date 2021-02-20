@@ -308,6 +308,7 @@ function timePrestigeReset() {
     showBuildingSubTab('buildingsSubTab');
     save();
     loadStyles();
+    startInterval()
 }
 
 function resetTime() {
