@@ -498,32 +498,32 @@ const TIME_DATA = {
             }
         },
         22: {
-            title: 'Building Boost',
-            desc: 'All building resources get a production boost based on unspent time crystals.',
+            title: 'Unit Boost',
+            desc: 'Unit tier corpse multipliers get a boost based on unspent time crystals.',
             cost: new Decimal(2500),
             preReq: 21,
             buttonID: 'timeUpg22',
-            displayEffect: true,
-            displayTooltip: true,
-            displayFormula: '1 + log(x)',
-            effect: function() {
-                var e = player.crystals;
-                e = e.log10();
-                return 1 + e;
-            }
-        },
-        23: {
-            title: 'Unit Boost',
-            desc: 'Unit tier corpse multipliers get a boost based on unspent time crystals.',
-            cost: new Decimal(10000),
-            preReq: 22,
-            buttonID: 'timeUpg23',
             displayEffect: true,
             displayTooltip: true,
             displayFormula: '1 + 7.5*log(x)',
             effect: function() {
                 var e = player.crystals;
                 e = e.log10()*7.5;
+                return 1 + e;
+            }
+        },
+        23: {
+            title: 'Building Boost',
+            desc: 'All building resources get a production boost based on unspent time crystals.',
+            cost: new Decimal(10000),
+            preReq: 22,
+            buttonID: 'timeUpg23',
+            displayEffect: true,
+            displayTooltip: true,
+            displayFormula: '1 + log(x)',
+            effect: function() {
+                var e = player.crystals;
+                e = e.log10();
                 return 1 + e;
             }
         },
