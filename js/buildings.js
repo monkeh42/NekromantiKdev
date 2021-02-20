@@ -57,7 +57,7 @@ function getUpgName(b, u) {
 }
 
 function getUpgDesc(b, u) {
-    return BUILDS_DATA[b].upgrades[u].desc;
+    return BUILDS_DATA[b].upgrades[u].desc();
 }
 
 function getUpgCost(b, u) {
@@ -152,11 +152,13 @@ function resetBuildingResources(sacrifice=false) {
 function resetBuildings() {
     if (player.astralFlag) { toggleAstral(); }
     var tempSun = {};
-    var tempSunUnlock = [player.unlocks['buildingsTab']['sun'], player.unlocks['buildingsTab']['sunRow2']];
+    var tempSunUnlock = { 'sun': false, 'sunRow2': false };
+    tempSunUnlock['sun'] = player.unlocks['buildingsTab']['sun'];
+    tempSunUnlock['sunRow2'] = player.unlocks['buildingsTab']['sunRow2'];
     copyData(tempSun, player.buildings[3]);
     copyData(player.buildings, START_PLAYER.buildings);
     copyData(player.construction, START_PLAYER.construction);
-    copyData(player.unlocks['buildingsTab'], START_PLAYER.unlocks['buildingsTab']);
+    lockTab('buildingsTab');
     
     for (var b in BUILDS_DATA) {
         displayData.push(['setProp', BUILDS_DATA[b].buildingRowID, 'display', 'table-row']);
@@ -164,15 +166,13 @@ function resetBuildings() {
         displayData.push(['setProp', BUILDS_DATA[b].upgradesRow1ID, 'display', 'none']);
         displayData.push(['setProp', BUILDS_DATA[b].upgradesRow2ID, 'display', 'none']);
     }
-    displayData.push(['setProp', 'buildingsTabCell', 'display', 'none']);
     if (hasTUpgrade(14)) {
         copyData(player.buildings[3], tempSun);
-        player.unlocks['buildingsTab']['sun'] = tempSunUnlock[0];
-        player.unlocks['buildingsTab']['sunRow2'] = tempSunUnlock[1];
+        if (tempSunUnlock['sun']) { unlockElements('buildingsTab', 'sun') }
+        if (tempSunUnlock['sunRow2']) { unlockElements('buildingsTab', 'sunRow2') }
     }
     else { player.buildings[3].upgrades[33] = tempSun.upgrades[33]; }
     player.buildings[3].amount = new Decimal(0);
-    justReset = true;
 }
 
 //data
@@ -197,7 +197,7 @@ const BUILDS_DATA = {
             var p = Decimal.pow(this.pBase(), this.pExp());
             if (hasUpgrade(2, 12)) { p = p.times(getUpgEffect(2, 12)); }
             if (hasUpgrade(1, 21)) { p = p.times(getUpgEffect(1, 21)); }
-            if (hasTUpgrade(22)) { p = p.times(getTUpgEffect(22)) }
+            if (hasTUpgrade(23)) { p = p.times(getTUpgEffect(23)) }
             return p;
         },
         resourceEff: function() {
@@ -220,7 +220,7 @@ const BUILDS_DATA = {
         upgrades: {
             11: {
                 title: 'Industrialize',
-                desc: 'Arm your zombies, giving a boost to their corpse multiplier based on armaments.',
+                desc: function() { return 'Arm your zombies, giving a boost to their corpse multiplier based on armaments.'; },
                 cost: new Decimal(1000),
                 buttonID: 'factoryUpg11',
                 displayEffect: true,
@@ -239,7 +239,7 @@ const BUILDS_DATA = {
             },
             12: {
                 title: 'Militarize',
-                desc: 'Increase the base corpse multiplier of unit tiers 2 through 8 by 25%.',
+                desc: function() { return 'Increase the base corpse multiplier of unit tiers 2 through 8 by 25%.'; },
                 cost: new Decimal(5000),
                 buttonID: 'factoryUpg12',
                 displayEffect: false,
@@ -252,7 +252,7 @@ const BUILDS_DATA = {
             },
             13: {
                 title: 'Digitize',
-                desc: 'Each unit tier\'s base unit multiplier is equal to its corpse multiplier, instead of the square root.',
+                desc: function() { return 'Each unit tier\'s base unit multiplier is equal to its corpse multiplier, instead of the square root.'; },
                 cost: new Decimal(10000),
                 buttonID: 'factoryUpg13',
                 displayEffect: false,
@@ -264,7 +264,7 @@ const BUILDS_DATA = {
             },
             21: {
                 title: 'Part Time Jobs',
-                desc: 'Armament production is boosted based on abominations.',
+                desc: function() { return 'Armament production is boosted based on abominations.'; },
                 cost: new Decimal(100000),
                 buttonID: 'factoryUpg21',
                 displayEffect: true,
@@ -283,7 +283,7 @@ const BUILDS_DATA = {
             },
             22: {
                 title: 'Galactic Armaments',
-                desc: 'The sun eater corpse multiplier is multiplicative instead of additive when it\'s greater than 1x.',
+                desc: function() { return 'The sun eater corpse multiplier is multiplicative instead of additive when it\'s greater than 1x.'; },
                 cost: new Decimal(250000),
                 buttonID: 'factoryUpg22',
                 displayEffect: false,
@@ -295,7 +295,7 @@ const BUILDS_DATA = {
             },
             23: {
                 title: 'Arm The Dead',
-                desc: 'Corpse production is boosted based on corpses.',
+                desc: function() { return 'Corpse production is boosted based on corpses.'; },
                 cost: new Decimal(500000),
                 buttonID: 'factoryUpg23',
                 displayEffect: true,
@@ -331,7 +331,7 @@ const BUILDS_DATA = {
         },
         prod: function() {
             var p = Decimal.pow(this.pBase(), this.pExp());
-            if (hasTUpgrade(22)) { p = p.times(getTUpgEffect(22)) }
+            if (hasTUpgrade(23)) { p = p.times(getTUpgEffect(23)) }
             return p;
         },
         resourceEff: function() {
@@ -355,7 +355,7 @@ const BUILDS_DATA = {
         upgrades: {
             11: {
                 title: 'Astral Kilns',
-                desc: 'Gain 20% more astral bricks for each OoM (order of magnitude) of astral bricks owned.',
+                desc: function() { return 'Gain 20% more astral bricks for each OoM (order of magnitude) of astral bricks owned.'; },
                 cost: new Decimal(100000),
                 buttonID: 'necropolisUpg11',
                 displayEffect: true,
@@ -363,12 +363,14 @@ const BUILDS_DATA = {
                 displayFormula: function() { return '1.2^x'; },
                 effect: function() {
                     var e = Decimal.floor(player.bricks.e);
-                    return Decimal.pow(1.2, e);
+                    var b = Decimal.pow(1.2, e);
+                    if (hasGUpgrade(3, 11) && hasUpgrade(2, 21)) { b = b.times(getUpgEffect(2, 21)); }
+                    return b;
                 }
             },
             12: {
                 title: 'Astral Forges',
-                desc: 'Boost armament production based on astral bricks.',
+                desc: function() { return 'Boost armament production based on astral bricks.'; },
                 cost: new Decimal(500000),
                 buttonID: 'necropolisUpg12',
                 displayEffect: true,
@@ -386,7 +388,7 @@ const BUILDS_DATA = {
             },
             13: {
                 title: 'Astral Siege Engines',
-                desc: 'Boost corpse production based on astral bricks.',
+                desc: function() { return 'Boost corpse production based on astral bricks.'; },
                 cost: new Decimal(1000000),
                 buttonID: 'necropolisUpg13',
                 displayEffect: true,
@@ -404,7 +406,7 @@ const BUILDS_DATA = {
             },
             21: {
                 title: 'Astral Kiln Kilns',
-                desc: 'Boost astral brick production based on astral bricks.',
+                desc: function() { return 'Boost astral brick production based on astral bricks.'; },
                 cost: new Decimal(1e9),
                 buttonID: 'necropolisUpg21',
                 displayEffect: true,
@@ -424,7 +426,7 @@ const BUILDS_DATA = {
             },
             22: {
                 title: 'Astral Time Machine',
-                desc: 'Boost time essence production based on astral bricks.',
+                desc: function() { return 'Boost time essence production based on astral bricks.'; },
                 cost: new Decimal(1e12),
                 buttonID: 'necropolisUpg22',
                 displayEffect: true,
@@ -444,7 +446,7 @@ const BUILDS_DATA = {
             },
             23: {
                 title: 'Astral Magnifying Glass',
-                desc: 'Boost nekro-photon production based on astral bricks.',
+                desc: function() { return 'Boost nekro-photon production based on astral bricks.'; },
                 cost: new Decimal(1e15),
                 buttonID: 'necropolisUpg23',
                 displayEffect: true,
@@ -480,7 +482,7 @@ const BUILDS_DATA = {
             var p = Decimal.pow(this.pBase(), this.pExp());
             if (hasAchievement(25)) { p = p.times(getAchievementEffect(25)) }
             if (hasUpgrade(2, 23)) { p = p.times(getUpgEffect(2, 23)); }
-            if (hasTUpgrade(22)) { p = p.times(getTUpgEffect(22)) }
+            if (hasTUpgrade(23)) { p = p.times(getTUpgEffect(23)) }
             if (player.astralFlag) { return p; }
             else { return new Decimal(0); }
         },
@@ -504,7 +506,7 @@ const BUILDS_DATA = {
         upgrades: {
             11: {
                 title: 'Death Factory Expansion',
-                desc: 'Unlock a new row of Death Factory upgrades.',
+                desc: function() { return 'Unlock a new row of Death Factory upgrades.'; },
                 cost: new Decimal(1000),
                 buttonID: 'sunUpg11',
                 displayEffect: false,
@@ -516,7 +518,7 @@ const BUILDS_DATA = {
             },
             12: {
                 title: 'Necropolis Expansion',
-                desc: 'Unlock a new row of Necropolis upgrades.',
+                desc: function() { return 'Unlock a new row of Necropolis upgrades.'; },
                 cost: new Decimal(1000),
                 buttonID: 'sunUpg12',
                 displayEffect: false,
@@ -528,7 +530,7 @@ const BUILDS_DATA = {
             },
             13: {
                 title: 'Nekro-Time',
-                desc: 'Unlock time upgrades.<br>(This upgrade is never reset on sacrifice.)',
+                desc: function() { return 'Unlock time upgrades.<br>(This upgrade is never reset on sacrifice.)'; },
                 cost: new Decimal(10000),
                 buttonID: 'sunUpg13',
                 displayEffect: false,
@@ -540,7 +542,7 @@ const BUILDS_DATA = {
             },
             21: {
                 title: 'Solar Flares',
-                desc: 'All building upgrade formulas based on log(x) are now based on log(x)^2.',
+                desc: function() { return 'All building upgrade formulas based on log(x) are now based on log(x)^2.'; },
                 cost: new Decimal(100000),
                 buttonID: 'sunUpg21',
                 displayEffect: false,
@@ -555,14 +557,14 @@ const BUILDS_DATA = {
             },
             22: {
                 title: 'Menagerie of Worlds',
-                desc: 'Unlock advanced sacrifice autobuyer options, and raise the sun eater base cost multiplier to ^0.67.',
+                desc: function() { return `Unlock advanced sacrifice autobuyer options, and raise the sun eater base cost multiplier to ^0.67${hasAchievement(35) ? ' (0.333 after Galactic Angst).' : '.'}`; },
                 cost: new Decimal(2500000),
                 buttonID: 'sunUpg22',
                 displayEffect: false,
                 displayTooltip: true,
-                displayFormula: function() { return '(1e15x -> 1e10x)'; },
+                displayFormula: function() { return hasAchievement(35) ? '(1e15x -> 1e5x)' : '(1e15x -> 1e10x)' },
                 effect: function() {
-                    if (hasAchievement(35)) { return 0.37; }
+                    if (hasAchievement(35)) { return 0.333; }
                     else { return 0.67; }
                 }
             },

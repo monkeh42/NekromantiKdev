@@ -204,11 +204,11 @@ function updatePrestigeDisplays() {
 }
 
 function updateSpacePrestigeDisplay() {
-    if (canSpacePrestige() && !document.getElementById('spacePrestige').classList.contains('prestigeBut')) {
-        addPresClass('space', 'prestigeBut');
+    if (canSpacePrestige() && !document.getElementById('spacePrestige').classList.contains('spacePrestigeBut')) {
+        addPresClass('space', 'spacePrestigeBut');
         remPresClass('space', 'unclickablePrestige');
-    } else if (!canSpacePrestige() && document.getElementById('spacePrestige').classList.contains('prestigeBut')) {
-        remPresClass('space', 'prestigeBut');
+    } else if (!canSpacePrestige() && document.getElementById('spacePrestige').classList.contains('spacePrestigeBut')) {
+        remPresClass('space', 'spacePrestigeBut');
         addPresClass('space', 'unclickablePrestige');
     }
     if (player.spaceResets.lt(3)) {
@@ -228,14 +228,11 @@ function updateTimePrestigeDisplay() {
     if (canTimePrestige() && !document.getElementById('timePrestige').classList.contains('timePrestigeBut')) {
         addPresClass('time', 'timePrestigeBut');
         remPresClass('time', 'unclickablePrestige');
-    } else if (!canTimePrestige() && document.getElementById('timePrestige').classList.contains('timePrestigeBut')) {
-        remPresClass('time', 'timePrestigeBut');
-        addPresClass('time', 'unclickablePrestige');
-    }
-    if (canTimePrestige() && !document.getElementById('timePrestige').classList.contains('timePrestigeBut')) {
         displayData.push(['setProp', 'timePrestigeReq', 'display', 'none']);
         displayData.push(['setProp', 'timePrestigeGainDesc', 'display', '']);
     } else if (!canTimePrestige() && document.getElementById('timePrestige').classList.contains('timePrestigeBut')) {
+        remPresClass('time', 'timePrestigeBut');
+        addPresClass('time', 'unclickablePrestige');
         displayData.push(['setProp', 'timePrestigeReq', 'display', '']);
         displayData.push(['setProp', 'timePrestigeGainDesc', 'display', 'none']);
     }
@@ -354,21 +351,30 @@ function lockElements(mainTab, subTab) {
     player.unlocks[mainTab][subTab] = false;
     if (data.idsToShow.length > 0) {
         for (let i=0; i<data.idsToShow.length; i++) {
-            displayData.push(['togDisplay', data.idsToShow[i]]);
+            displayData.push(['setProp', data.idsToShow[i], 'display', 'none']);
         }
     }
-    if (data.idsToHide.length > 0) {
+    if (data.idsToHide.length > 0 || data.classNotID) {
         if (data.classNotID) {
             displayData.push(['setProp', 'docElement', data.cssVar, 'block']);
-            let els = document.getElementsByClassName(data.classToEnable);
-            for (let el in els) {
-                displayData.push(['setProp', el.id, 'disabled', 'true']);
+            if (data.classToEnable !== undefined) {
+                let els = document.getElementsByClassName(data.classToEnable);
+                for (let el in els) {
+                    els[el].disabled = true;
+                }
             }
         } else {
             for (let i=0; i<data.idsToHide.length; i++) {
-                displayData.push(['togDisplay', data.idsToHide[i]]);
+                displayData.push(['setProp', data.idsToHide[i], 'display', '']);
             }
         }
+    }
+}
+
+function lockTab(mainTab) {
+    copyData(player.unlocks[mainTab], START_PLAYER.unlocks[mainTab]);
+    for (let subTab in UNLOCKS_DATA[mainTab]) {
+        if (player.unlocks[mainTab][subTab]) { lockElements(mainTab, subTab); }
     }
 }
 
@@ -482,6 +488,10 @@ function updateSliderDisplay() {
 //generic UI stuff (tabs, toggles, popups etc)
 
 function toggleTooltips() {
+    player.tooltipsEnabled = !player.tooltipsEnabled;
+    if (player.tooltipsEnabled) { document.getElementById('toggleTooltips').innerHTML = 'TOGGLE FORMULA TOOLTIPS: ON'; }
+    else { document.getElementById('toggleTooltips').innerHTML = 'TOGGLE FORMULA TOOLTIPS: OFF'; }
+
     document.getElementById('brickTooltip').classList.toggle('tooltip');
     document.getElementById('trueTooltip').classList.toggle('tooltip');
     document.getElementById('antiTooltip').classList.toggle('tooltip');
@@ -498,9 +508,6 @@ function toggleTooltips() {
     for (let t in TIME_DATA.upgrades) {
         if (TIME_DATA.upgrades[t].displayTooltip) { document.getElementById(TIME_DATA.upgrades[t].buttonID).classList.toggle('tooltip'); }
     }
-    player.tooltipsEnabled = !player.tooltipsEnabled;
-    if (player.tooltipsEnabled) { document.getElementById('toggleTooltips').innerHTML = 'TOGGLE FORMULA TOOLTIPS: ON'; }
-    else { document.getElementById('toggleTooltips').innerHTML = 'TOGGLE FORMULA TOOLTIPS: OFF'; }
 }
 
 function showChangelog(divID) {
