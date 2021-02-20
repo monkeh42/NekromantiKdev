@@ -970,18 +970,15 @@ const ACH_DATA = {
             return;
         }
     },
-    /*42: {
-        title: 'Master Nekro-Carpenter',
-        desc: 'Get the first four construction upgrades all to at least level 25.',
+    42: {
+        title: 'title',
+        desc: '',
         reward: '',
         hasReward: false,
         showEffect: false,
         divID: 'ach42',
         canUnlock: function() {
-            for (let id in CONSTR_DATA) {
-                if (player.construction[id].lt(25)) { return false; }
-            }
-            return true;
+            return false;
         },
         effect: function() {
             return new Decimal(1);
@@ -991,14 +988,14 @@ const ACH_DATA = {
         }
     },
     43: {
-        title: 'Frugality',
-        desc: 'Reach 1e100 corpses without enabling Astral Enslavement this sacrifice.',
+        title: 'title',
+        desc: '',
         reward: '',
         hasReward: false,
         showEffect: false,
         divID: 'ach43',
         canUnlock: function() {
-            return (player.corpses.gte(1e100) && !player.thisSacStats.hasGoneAstral);
+            return false;
         },
         effect: function() {
             return new Decimal(1);
@@ -1008,14 +1005,14 @@ const ACH_DATA = {
         }
     },
     44: {
-        title: 'I Need To Go Faster',
-        desc: 'Get your normal time multiplier to at least 30x.',
+        title: 'title',
+        desc: '',
         reward: '',
         showEffect: false,
         hasReward: false,
         divID: 'ach44',
         canUnlock: function() {
-            return getTrueTimeBuff().gte(30);
+            return false;
         },
         effect: function() {
             return new Decimal(1);
@@ -1025,14 +1022,14 @@ const ACH_DATA = {
         }
     },
     45: {
-        title: 'Galactic Angst',
-        desc: 'Unlock Depleted Galaxies.',
-        reward: 'Menagerie Of Worlds\'s effect is stronger (^0.67 -> ^0.333).',
+        title: 'title',
+        desc: '',
+        reward: '',
         showEffect: false,
-        hasReward: true,
+        hasReward: false,
         divID: 'ach45',
         canUnlock: function() {
-            return hasUpgrade(3, 23);
+            return false;
         },
         effect: function() {
             return new Decimal(1);
@@ -1040,7 +1037,7 @@ const ACH_DATA = {
         onUnlock: function() {
             return;
         }
-    },*/
+    },
 }
 
 const UNLOCKS_DATA = {
