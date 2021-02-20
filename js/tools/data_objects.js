@@ -404,8 +404,7 @@ const START_PLAYER = {
 
     tooltipsEnabled: false,
     activeTabs: ['unitsTab', 'unitsSubTab', 'buildingsSubTab', 'timeDimSubTab', 'statSubTab'],
-    hotKeysOn: true,
-    displayData: [],
+    hotkeysOn: true,
 }
 
 const ACH_DATA = {
@@ -483,7 +482,7 @@ const ACH_DATA = {
     15: {
         title: 'One Sun, Two Sun, Dead Sun, Blue Sun',
         desc: 'Build the Dead Sun.',
-        reward: 'Double base nekro-photon production (2/sec -> 4/sec).',
+        reward: 'Keep all your bricks on prestige, and keep your best bricks this sacrifice raised ^0.2 on sacrifice.',
         showEffect: false,
         hasReward: true,
         divID: 'ach15',
@@ -491,7 +490,8 @@ const ACH_DATA = {
             return isBuilt(3);
         },
         effect: function() {
-            return new Decimal(2);
+            let e = new Decimal(player.thisSacStats.bestBricks);
+            return e.pow(0.2);
         },
         onUnlock: function() {
             return;
@@ -568,7 +568,7 @@ const ACH_DATA = {
     25: {
         title: 'Thyme Lord',
         desc: 'Buy the entire third column of Time Upgrades.',
-        reward: 'Keep all your bricks on prestige, and keep your best bricks this sacrifice raised ^0.2 on sacrifice.',
+        reward: 'Double base nekro-photon production (2/sec -> 4/sec).',
         showEffect: false,
         hasReward: true,
         divID: 'ach25',
@@ -576,8 +576,7 @@ const ACH_DATA = {
             return hasTUpgrade(34);
         },
         effect: function() {
-            let e = new Decimal(player.thisSacStats.bestBricks);
-            return e.pow(0.2);
+            return new Decimal(2);
         },
         onUnlock: function() {
             document.getElementById('keptBricks').style.display = 'block';
@@ -585,13 +584,13 @@ const ACH_DATA = {
     },
     31: {
         title: 'The Grind',
-        desc: 'Sacrifice ten times.',
+        desc: 'Sacrifice twenty-five times.',
         reward: 'Your unit corpse multipliers get a boost based on number of sacrifices.',
         hasReward: true,
         showEffect: true,
         divID: 'ach31',
         canUnlock: function() {
-            return player.timeResets.gte(10);
+            return player.timeResets.gte(25);
         },
         effect: function() {
             let e = new Decimal(player.timeResets);
@@ -1436,8 +1435,7 @@ function fixResetBug() {
 
     START_PLAYER.tooltipsEnabled = false;
     START_PLAYER.activeTabs = new Array('unitsTab', 'unitsSubTab', 'buildingsSubTab', 'timeDimSubTab', 'statSubTab');
-    START_PLAYER.hotKeysOn = true,
-    START_PLAYER.displayData = new Array(0);
+    START_PLAYER.hotkeysOn = true,
 
     fixData(player, START_PLAYER);
     save();

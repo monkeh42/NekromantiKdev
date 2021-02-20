@@ -142,8 +142,8 @@ function toggleAstral() {
 
 function resetBuildingResources(sacrifice=false) {
     if (player.astralFlag) { toggleAstral(); }
-    if (!hasAchievement(25)) { player.bricks = new Decimal(START_PLAYER.bricks); }
-    else { if (sacrifice) { player.bricks = new Decimal(getAchievementEffect(25)); } }
+    if (!hasAchievement(15)) { player.bricks = new Decimal(START_PLAYER.bricks); }
+    else if (sacrifice) { player.bricks = new Decimal(getAchievementEffect(15)); } 
     for (var b in BUILDS_DATA) {
         player.buildings[b].amount = new Decimal(START_PLAYER.buildings[b].amount);
     }
@@ -159,11 +159,12 @@ function resetBuildings() {
     copyData(player.unlocks['buildingsTab'], START_PLAYER.unlocks['buildingsTab']);
     
     for (var b in BUILDS_DATA) {
-        player.displayData.push(['setProp', BUILDS_DATA[b].buildingRowID, 'display', 'table-row']);
-        player.displayData.push(['setProp', BUILDS_DATA[b].buildingHeaderID, 'display', 'none']);
-        player.displayData.push(['setProp', BUILDS_DATA[b].upgradesRow1ID, 'display', 'none']);
-        player.displayData.push(['setProp', BUILDS_DATA[b].upgradesRow2ID, 'display', 'none']);
+        displayData.push(['setProp', BUILDS_DATA[b].buildingRowID, 'display', 'table-row']);
+        displayData.push(['setProp', BUILDS_DATA[b].buildingHeaderID, 'display', 'none']);
+        displayData.push(['setProp', BUILDS_DATA[b].upgradesRow1ID, 'display', 'none']);
+        displayData.push(['setProp', BUILDS_DATA[b].upgradesRow2ID, 'display', 'none']);
     }
+    displayData.push(['setProp', 'buildingsTabCell', 'display', 'none']);
     if (hasTUpgrade(14)) {
         copyData(player.buildings[3], tempSun);
         player.unlocks['buildingsTab']['sun'] = tempSunUnlock[0];
@@ -196,7 +197,7 @@ const BUILDS_DATA = {
             var p = Decimal.pow(this.pBase(), this.pExp());
             if (hasUpgrade(2, 12)) { p = p.times(getUpgEffect(2, 12)); }
             if (hasUpgrade(1, 21)) { p = p.times(getUpgEffect(1, 21)); }
-            if (hasTUpgrade(23)) { p = p.times(getTUpgEffect(23)) }
+            if (hasTUpgrade(22)) { p = p.times(getTUpgEffect(22)) }
             return p;
         },
         resourceEff: function() {
@@ -330,7 +331,7 @@ const BUILDS_DATA = {
         },
         prod: function() {
             var p = Decimal.pow(this.pBase(), this.pExp());
-            if (hasTUpgrade(23)) { p = p.times(getTUpgEffect(23)) }
+            if (hasTUpgrade(22)) { p = p.times(getTUpgEffect(22)) }
             return p;
         },
         resourceEff: function() {
@@ -477,9 +478,9 @@ const BUILDS_DATA = {
         },
         prod: function() {
             var p = Decimal.pow(this.pBase(), this.pExp());
-            if (hasAchievement(15)) { p = p.times(getAchievementEffect(15)) }
+            if (hasAchievement(25)) { p = p.times(getAchievementEffect(25)) }
             if (hasUpgrade(2, 23)) { p = p.times(getUpgEffect(2, 23)); }
-            if (hasTUpgrade(23)) { p = p.times(getTUpgEffect(23)) }
+            if (hasTUpgrade(22)) { p = p.times(getTUpgEffect(22)) }
             if (player.astralFlag) { return p; }
             else { return new Decimal(0); }
         },
@@ -623,7 +624,7 @@ const CONSTR_DATA = {
         }
     },
     3: {
-        title: 'Abomination Steroids',
+        title: 'Abominable Steroids',
         desc: 'Boosts the abomination unit multiplier by 10% per level.',
         tier: 3,
         baseCost: new Decimal(500),

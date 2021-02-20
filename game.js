@@ -2,7 +2,7 @@
 
 const GAME_DATA = {
     author: 'monkeh42',
-    version: 'v0.2.9_d.4',
+    version: 'v0.2.9',
 }
 
 const NUM_UNITS = 8;
@@ -31,6 +31,8 @@ var justReset = false;
 var popupShownTime;
 
 var hidden, visibilityChange, isHidden;
+
+var displayData = new Array(0);
 
 var player = {};
 
@@ -79,12 +81,8 @@ function loadGame() {
     if (player.thisSacStats.totalWorlds.eq(0)) { player.thisSacStats.totalWorlds = new Decimal(player.worlds); }
     if (player.allTimeStats.totalCrystals.eq(0)) { player.allTimeStats.totalCrystals = new Decimal(player.crystals); }
 
-    //updateFixes();
-    player.displayData.splice(0, player.displayData.length);
-    if (player.tooltipsEnabled) {
-        player.tooltipsEnabled = false;
-        toggleTooltips();
-    }
+    if (player.allTimeStats.totalTimeResets.gt(player.timeResets)) { player.allTimeStats.totalTimeResets = new Decimal(player.timeResets); }
+    if (player.displayData !== undefined) { delete player.displayData; }
 
     if (typeof document.hidden !== "undefined") { // Opera 12.10 and Firefox 18 and later support
         hidden = "hidden";
@@ -116,7 +114,7 @@ function loadGame() {
 }
 
 function loadStyles() {
-    if (player.displayData.length>0) {
+    if (displayData.length>0) {
         updateDisplay();
     }
 
@@ -124,7 +122,7 @@ function loadStyles() {
 
     for (let tab in UNLOCKS_DATA) {
         for (let key in UNLOCKS_DATA[tab]) {
-            if (player.unlocks[tab][key]) { unlockElements(tab, key, false) }
+            if (player.unlocks[tab][key]) { unlockElementsOnLoad(tab, key) }
             else if (!player.unlocks[tab][key] && key == 'mainTab') { break; }
         }
     }
@@ -184,7 +182,7 @@ function loadStyles() {
     for (var c in CONSTR_DATA) {
         if (!canAffordCUpg(c)) {
             document.getElementById(CONSTR_DATA[c].buttonID).classList.add('unclickableConstrUpg');
-            document.getElementById(CONSTR_DATA[c].buttonID).classList.remove('timeUpg');
+            document.getElementById(CONSTR_DATA[c].buttonID).classList.remove('constrUpg');
         }
     }    
 
@@ -213,8 +211,8 @@ function loadStyles() {
             document.getElementById(ACH_DATA[id].divID).classList.remove('achievement');
             if (player.achievements[id].new) {
                 document.getElementById(ACH_DATA[id].divID).classList.add('achievementNew');
-                player.displayData.push(['addClass', 'achSubTabBut', 'tabButNotify']);
-                player.displayData.push(['addClass', 'statsTabBut', 'tabButIndirectNotify']);
+                displayData.push(['addClass', 'achSubTabBut', 'tabButNotify']);
+                displayData.push(['addClass', 'statsTabBut', 'tabButIndirectNotify']);
             }
         }
     }
@@ -295,7 +293,7 @@ function gameLoop(diff=new Decimal(0), offline=false) {
             player.buildings[b].amount = player.buildings[b].amount.plus(getBuildingProdPerSec(b).times(diff.div(1000)));
         }
     }
-    updateUnlocks(!justReset);
+    updateUnlocks();
     updateAchievements();
 
     if (!offline && player.unlocks['unitsTab']['autobuyers']) {
@@ -314,7 +312,7 @@ function gameLoop(diff=new Decimal(0), offline=false) {
     justReset = false;
     if (popupShownTime !== undefined && popupShownTime !== null) {
         if (currentUpdate-popupShownTime >= 2000) {
-            player.displayData.push(['setProp', 'achUnlockPopup', 'opacity', '0']);
+            displayData.push(['setProp', 'achUnlockPopup', 'opacity', '0']);
             popupShownTime = null;
         }
     }
@@ -323,7 +321,7 @@ function gameLoop(diff=new Decimal(0), offline=false) {
 
 function handleVisibilityChange() {
     if (!document[hidden]) {
-        player.displayData = new Array(0);
+        displayData = new Array(0);
         isHidden = false;
     } else { isHidden = true; }
 }

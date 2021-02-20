@@ -166,7 +166,7 @@ function resetUnits() {
     }
     copyData(player.units, START_PLAYER.units);
     for (var zz=2; zz<=NUM_UNITS; zz++) {
-        player.displayData.push(['setProp', UNITS_DATA[zz].rowID, 'display', 'none']);
+        displayData.push(['setProp', UNITS_DATA[zz].rowID, 'display', 'none']);
     }
 }
 
@@ -194,7 +194,7 @@ const UNITS_DATA = {
             if (player.units[this.tier].bought.eq(0)) { return new Decimal(0); }
             m = m.pow(player.units[this.tier].bought-1);
             if (hasUpgrade(1, 11)) m = m.times(getUpgEffect(1, 11));
-            if (hasTUpgrade(22)) { m = m.times(getTUpgEffect(22)); }
+            if (hasTUpgrade(23)) { m = m.times(getTUpgEffect(23)); }
             if (hasAchievement(31)) { m = m.times(getAchievementEffect(31)); }
             return m.times(getAchievementBoost());
         },
@@ -230,7 +230,7 @@ const UNITS_DATA = {
             if (hasUpgrade(1, 12)) { m = m.times(getUpgEffect(1, 12)); }
             if (player.units[this.tier].bought.eq(0)) { return new Decimal(0); }
             m = m.pow(player.units[this.tier].bought-1);
-            if (hasTUpgrade(22)) { m = m.times(getTUpgEffect(22)); }
+            if (hasTUpgrade(23)) { m = m.times(getTUpgEffect(23)); }
             if (hasAchievement(31)) { m = m.times(getAchievementEffect(31)); }
             return m.times(getAchievementBoost());
         },
@@ -267,7 +267,7 @@ const UNITS_DATA = {
             if (hasUpgrade(1, 12)) { m = m.times(getUpgEffect(1, 12)); }
             if (player.units[this.tier].bought.eq(0)) { return new Decimal(0); }
             m = m.pow(player.units[this.tier].bought-1);
-            if (hasTUpgrade(22)) { m = m.times(getTUpgEffect(22)); }
+            if (hasTUpgrade(23)) { m = m.times(getTUpgEffect(23)); }
             if (hasAchievement(31)) { m = m.times(getAchievementEffect(31)); }
             return m.times(getAchievementBoost());
         },
@@ -303,7 +303,7 @@ const UNITS_DATA = {
             if (hasUpgrade(1, 12)) { m = m.times(getUpgEffect(1, 12)); }
             if (player.units[this.tier].bought.eq(0)) { return new Decimal(0); }
             m = m.pow(player.units[this.tier].bought-1);
-            if (hasTUpgrade(22)) { m = m.times(getTUpgEffect(22)); }
+            if (hasTUpgrade(23)) { m = m.times(getTUpgEffect(23)); }
             if (hasAchievement(31)) { m = m.times(getAchievementEffect(31)); }
             return m.times(getAchievementBoost());
         },
@@ -339,7 +339,7 @@ const UNITS_DATA = {
             if (hasUpgrade(1, 12)) { m = m.times(getUpgEffect(1, 12)); }
             if (player.units[this.tier].bought.eq(0)) { return new Decimal(0); }
             m = m.pow(player.units[this.tier].bought-1);
-            if (hasTUpgrade(22)) { m = m.times(getTUpgEffect(22)); }
+            if (hasTUpgrade(23)) { m = m.times(getTUpgEffect(23)); }
             if (hasAchievement(31)) { m = m.times(getAchievementEffect(31)); }
             return m.times(getAchievementBoost());
         },
@@ -375,7 +375,7 @@ const UNITS_DATA = {
             if (hasUpgrade(1, 12)) { m = m.times(getUpgEffect(1, 12)); }
             if (player.units[this.tier].bought.eq(0)) { return new Decimal(0); }
             m = m.pow(player.units[this.tier].bought-1);
-            if (hasTUpgrade(22)) { m = m.times(getTUpgEffect(22)); }
+            if (hasTUpgrade(23)) { m = m.times(getTUpgEffect(23)); }
             if (hasAchievement(31)) { m = m.times(getAchievementEffect(31)); }
             return m.times(getAchievementBoost());
         },
@@ -411,7 +411,7 @@ const UNITS_DATA = {
             if (hasUpgrade(1, 12)) { m = m.times(getUpgEffect(1, 12)); }
             if (player.units[this.tier].bought.eq(0)) { return new Decimal(0); }
             m = m.pow(player.units[this.tier].bought-1);
-            if (hasTUpgrade(22)) { m = m.times(getTUpgEffect(22)); }
+            if (hasTUpgrade(23)) { m = m.times(getTUpgEffect(23)); }
             if (hasAchievement(31)) { m = m.times(getAchievementEffect(31)); }
             return m.times(getAchievementBoost());
         },
@@ -449,7 +449,7 @@ const UNITS_DATA = {
             if (hasUpgrade(1, 12)) { m = m.times(getUpgEffect(1, 12)); }
             if (player.units[this.tier].bought.eq(0)) { return new Decimal(0); }
             m = m.pow(player.units[this.tier].bought-1);
-            if (hasTUpgrade(22)) { m = m.times(getTUpgEffect(22)); }
+            if (hasTUpgrade(23)) { m = m.times(getTUpgEffect(23)); }
             if (hasAchievement(31)) { m = m.times(getAchievementEffect(31)); }
             return m.times(getAchievementBoost());
         },

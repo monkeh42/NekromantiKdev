@@ -63,6 +63,7 @@ function calculateCrystalsPerMin() {
 }
 
 function isAutoSacTriggered() {
+    if (!canTimePrestige()) { return false; }
     switch (player.autobuyers[9].type) {
         case 'atx':
             return (calculateCrystalGain().gte(player.autobuyers[9].amount));
@@ -71,7 +72,7 @@ function isAutoSacTriggered() {
             return (calculateCrystalGain().times(player.pastRuns.lastRun.crystalGain).gte(player.autobuyers[9].amount));
 
         case 'afterx':
-            return player.autobuyers[9].amount.lt(((new Date).getTime()-player.pastRuns.lastRun.timeSacrificed)*1000);
+            return player.autobuyers[9].amount.lt(((new Date).getTime()-player.pastRuns.lastRun.timeSacrificed)/1000);
 
         default: return false;
     }
@@ -252,7 +253,7 @@ function timePrestigeNoConfirm() {
         player.allTimeStats.totalCrystals = player.allTimeStats.totalCrystals.plus(calculateCrystalGain());
         if (player.crystals.gt(player.allTimeStats.bestCrystals)) { player.allTimeStats.bestCrystals = new Decimal(player.crystals); }
         player.timeResets = player.timeResets.plus(1);
-        player.allTimeStats.totalTimeResets = player.allTimeStats.totalSpaceResets.plus(1);
+        player.allTimeStats.totalTimeResets = player.allTimeStats.totalTimeResets.plus(1);
         if (document.getElementById('respecOnSac').checked) {
             player.timeLocked = false;
             toggleTimeLockDisplay();
@@ -497,26 +498,11 @@ const TIME_DATA = {
             }
         },
         22: {
-            title: 'Unit Boost',
-            desc: 'Unit tier corpse multipliers get a boost based on unspent time crystals.',
+            title: 'Building Boost',
+            desc: 'All building resources get a production boost based on unspent time crystals.',
             cost: new Decimal(2500),
             preReq: 21,
             buttonID: 'timeUpg22',
-            displayEffect: true,
-            displayTooltip: true,
-            displayFormula: '1 + 7.5*log(x)',
-            effect: function() {
-                var e = player.crystals;
-                e = e.log10()*7.5;
-                return 1 + e;
-            }
-        },
-        23: {
-            title: 'Building Boost',
-            desc: 'All building resources get a production boost based on unspent time crystals.',
-            cost: new Decimal(10000),
-            preReq: 22,
-            buttonID: 'timeUpg23',
             displayEffect: true,
             displayTooltip: true,
             displayFormula: '1 + log(x)',
@@ -526,10 +512,25 @@ const TIME_DATA = {
                 return 1 + e;
             }
         },
+        23: {
+            title: 'Unit Boost',
+            desc: 'Unit tier corpse multipliers get a boost based on unspent time crystals.',
+            cost: new Decimal(10000),
+            preReq: 22,
+            buttonID: 'timeUpg23',
+            displayEffect: true,
+            displayTooltip: true,
+            displayFormula: '1 + 7.5*log(x)',
+            effect: function() {
+                var e = player.crystals;
+                e = e.log10()*7.5;
+                return 1 + e;
+            }
+        },
         24: {
             title: 'Rapid Fire',
             desc: 'Unlock fast autobuyers, and the buildings/construction tabs are never reset on sacrifice (except bricks and resources).',
-            cost: new Decimal(15000),
+            cost: new Decimal(20000),
             preReq: 23,
             buttonID: 'timeUpg24',
             displayEffect: false,
@@ -542,7 +543,7 @@ const TIME_DATA = {
         31: {
             title: 'Time Boost',
             desc: 'Time dimension multipliers get a boost based on unspent time crystals.',
-            cost: new Decimal(15000),
+            cost: new Decimal(20000),
             preReq: null,
             buttonID: 'timeUpg31',
             displayEffect: true,
@@ -557,7 +558,7 @@ const TIME_DATA = {
         32: {
             title: 'Forgotten Worlds',
             desc: 'The corpse production multiplier from exterminated worlds is 1.5x stronger.',
-            cost: new Decimal(25000),
+            cost: new Decimal(50000),
             preReq: 31,
             buttonID: 'timeUpg32',
             displayEffect: false,
@@ -570,7 +571,7 @@ const TIME_DATA = {
         33: {
             title: 'Lightspeed',
             desc: 'Unlock bulk autobuyers, and crystal gain is boosted based on your nekro-photons.',
-            cost: new Decimal(50000),
+            cost: new Decimal(150000),
             preReq: 32,
             buttonID: 'timeUpg33',
             displayEffect: true,
@@ -585,7 +586,7 @@ const TIME_DATA = {
         34: {
             title: 'Supernova',
             desc: 'Unlock the world prestige autobuyer and the second row of Dead Sun upgrades.',
-            cost: new Decimal(100000),
+            cost: new Decimal(1000000),
             preReq: 33,
             buttonID: 'timeUpg34',
             displayEffect: false,
