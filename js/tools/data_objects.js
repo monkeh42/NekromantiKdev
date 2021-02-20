@@ -494,7 +494,7 @@ const ACH_DATA = {
             return e.pow(0.2);
         },
         onUnlock: function() {
-            return;
+            document.getElementById('keptBricks').style.display = 'block';
         }
     },
     21: {
@@ -579,7 +579,7 @@ const ACH_DATA = {
             return new Decimal(2);
         },
         onUnlock: function() {
-            document.getElementById('keptBricks').style.display = 'block';
+            return;
         }
     },
     31: {
@@ -670,7 +670,7 @@ const ACH_DATA = {
             return e.pow(0.2);
         },
         onUnlock: function() {
-            document.getElementById('keptBricks').style.display = 'block';
+            return;
         }
     },
 }
