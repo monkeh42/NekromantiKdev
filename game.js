@@ -128,7 +128,7 @@ function loadStyles() {
     }
 
     for (let i=1; i<=NUM_UNITS; i++) {
-        if (player.units[i].unlocked) { document.getElementById(UNITS_DATA[i].rowID).style.display = 'table-row'; }
+        if (player.units[i].unlocked || player.ascensions.gt(0)) { document.getElementById(UNITS_DATA[i].rowID).style.display = 'table-row'; }
         if (!canAffordUnit(i)) {
             document.getElementById(UNITS_DATA[i].buttonID).classList.add('unclickableUnit');
             document.getElementById(UNITS_DATA[i].buttonID).classList.remove('unitBut');

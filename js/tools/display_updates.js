@@ -774,7 +774,7 @@ function updateUnlocks() {
         }
     }
     for (var i=1; i<NUM_UNITS; i++) {
-        if (player.units[i].bought.gte(1) && canUnlock(i+1)) {
+        if ((player.units[i].bought.gte(1) && canUnlock(i+1)) || player.ascensions.gt(0)) {
             player.units[i+1].unlocked = true;
             displayData.push(['setProp', UNITS_DATA[i+1].rowID, 'display', 'table-row']);
         } 
