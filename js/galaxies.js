@@ -92,7 +92,7 @@ function buyGUpg(g, u) {
         addGUpgClass(g, u, 'boughtGalaxyUpg');
         remGUpgClass(g, u, 'galaxyUpg');
 
-        for (let i=thisRow; i<=NUM_GALAXY_ROWS; i++) {
+        for (let i=thisRow+1; i<=NUM_GALAXY_ROWS; i++) {
             player.rowCosts[i] = player.rowCosts[i].plus(1);
         }
         
