@@ -154,11 +154,11 @@ function resetBuildingResources(sacrifice=false, ascension=false) {
 function resetBuildings(ascension=false) {
     if (player.astralFlag) { toggleAstral(); }
     var tempSun = {};
-    var tempSunRow1 = {};
-    var tempSunRow2 = {};
+    var tempSunRow1;
+    var tempSunRow2;
     copyData(tempSun, player.buildings[3]);
-    copyData(tempSunRow1, player.unlocks['buildingsTab']['sun']);
-    copyData(tempSunRow2, player.unlocks['buildingsTab']['sunRow2']);
+    tempSunRow1 = player.unlocks['buildingsTab']['sun'];
+    tempSunRow2 = player.unlocks['buildingsTab']['sunRow2'];
     copyData(player.buildings, START_PLAYER.buildings);
     copyData(player.construction, START_PLAYER.construction);
     lockTab('buildingsTab');
@@ -171,8 +171,8 @@ function resetBuildings(ascension=false) {
     }
     if (hasTUpgrade(14)) {
         copyData(player.buildings[3], tempSun);
-        copyData(player.unlocks['buildingsTab']['sun'], tempSunRow1);
-        copyData(player.unlocks['buildingsTab']['sunRow2'], tempSunRow2);
+        player.unlocks['buildingsTab']['sun'] = tempSunRow1;
+        player.unlocks['buildingsTab']['sunRow2'] = tempSunRow2;
     }
     else if (!ascension) {
         player.buildings[3].upgrades[13] = tempSun.upgrades[13];

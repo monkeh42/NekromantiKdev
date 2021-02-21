@@ -44,7 +44,8 @@ function init() {
     showTab(player.activeTabs[0]);
     showUnitSubTab(player.activeTabs[1]);
     showBuildingSubTab(player.activeTabs[2]);
-    showTimeSubTab(player.activeTabs[3]);
+    if (player.unlocks['timeTab']['timeUpgrades']) { showTimeSubTab(player.activeTabs[3]); }
+    else { showTimeSubTab('timeDimSubTab'); }
     if (player.activeTabs[0] == 'statsTab' && player.activeTabs[5] != 'achSubTab') { statsSubTabClick(player.activeTabs[5], player.activeTabs[5] + 'But'); }
     else { showStatsSubTab(player.activeTabs[5]); }
 
@@ -563,6 +564,8 @@ function exportGameState() {
 //fixes and data manipulation
 
 function fixStats() {
+    player.unlocks['buildingsTab']['sun'] = 
+
     player.allTimeStats = {};
     player.thisSacStats = {};
     copyData(player.allTimeStats, START_PLAYER.allTimeStats);
@@ -641,13 +644,6 @@ function fixData(data, start) {
             if (data[item] === undefined) {
                 data[item] = start[item];
             }
-        }
-    }
-    for (var b in player.buildings) {
-        if (player.buildings[b].upgrades[1] !== undefined) {
-            delete player.buildings[b].upgrades[1];
-            delete player.buildings[b].upgrades[2];
-            delete player.buildings[b].upgrades[3];
         }
     }
 }

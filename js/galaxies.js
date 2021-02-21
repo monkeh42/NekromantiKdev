@@ -248,6 +248,7 @@ function galaxyPrestigeReset(respec=false) {
 
     resetTime();
     resetTimeCounts();
+    showTimeSubTab('timeDimSubTab');
     resetUnits();
     player.corpses = hasAchievement(41) ? new Decimal(START_PLAYER.corpsesAch41) : new Decimal(START_PLAYER.corpses)
     resetSpaceCounts();
