@@ -256,6 +256,10 @@ function galaxyPrestigeReset(respec=false) {
     resetBuildings(true);
     lockTab('unitsTab');
     lockTab('buildingsTab');
+    unlockElementsOnLoad('unitsTab', 'fastBuyers');
+    unlockElementsOnLoad('unitsTab', 'bulkBuyers');
+    unlockElementsOnLoad('unitsTab', 'prestigeBuyers');
+    unlockElementsOnLoad('unitsTab', 'advancedBuyers');
     lockTab('timeTab');
     
     
