@@ -584,6 +584,37 @@ option:active, option.active {
     margin-top: 10px;
 }
 
+.lockedGalaxyRow {
+    color: white;
+    position: relative;
+    background-color: #4b4b4b;
+    width: 175px;
+    height: 175px;
+    border: 1px solid #4b4b4b;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+.lockedGalaxyRow:after {
+    content: url("../images/xxx.png");
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    width: 175px;
+    height: 175px;
+    z-index: 2;
+    opacity: 0.95;
+}
+
+.lockedGalaxySpan {
+    position: absolute;
+    width: 150px;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+}
+
 .lockedGalaxyUpg {
     color: white;
     background: #4b4b4b url("../images/skull.png") no-repeat center;
@@ -1414,6 +1445,7 @@ option:active, option.active {
 }
 
 .galaxyTable {
+    position: relative;
     text-align: center;
     margin: 20px 7px 0;
     width: 385px;
@@ -1426,6 +1458,7 @@ option:active, option.active {
     width: 175px;
     height: 195px;
     margin: auto;
+    position: relative;
     border-right: 3px solid #661503;
 }
 
@@ -1433,6 +1466,7 @@ option:active, option.active {
     width: 175px;
     height: 195px;
     margin: auto;
+    position: relative;
     border-left: 3px solid #661503;
 }
 
@@ -1440,6 +1474,7 @@ option:active, option.active {
     width: 175px;
     height: 195px;
     margin: auto;
+    position: relative;
     border-top: 3px solid #661503;
 }
 
@@ -1447,6 +1482,7 @@ option:active, option.active {
     width: 175px;
     height: 195px;
     margin: auto;
+    position: relative;
     border-bottom: 3px solid #661503;
 }
 

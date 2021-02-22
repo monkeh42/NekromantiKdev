@@ -77,6 +77,19 @@ function hasPrereqGUpg(g, u) {
     }
 }
 
+function getGUpgsByRow(row) {
+    var upgsByRow = new Array();
+    if (row==1 || row == 4) {
+        for (let i=1; i<=4; i++) { upgsByRow.push([i.toString(), row.toString() + '1']) }
+    } else {
+        for (let i=1; i<=4; i++) {
+            upgsByRow.push([i.toString(), row.toString() + '1'])
+            upgsByRow.push([i.toString(), row.toString() + '2'])
+        }
+    }
+    return upgsByRow;
+}
+
 function canAffordGUpg(g, u) {
     if (player.galaxies.gte(GALAXIES_DATA[g].upgrades[u].cost())) {
         return hasPrereqGUpg(g, u) && !hasGUpgrade(g, u);
@@ -91,7 +104,7 @@ function buyGUpg(g, u) {
         player.galaxyUpgs[g][u].bought = true;
         addGUpgClass(g, u, 'boughtGalaxyUpg');
         remGUpgClass(g, u, 'galaxyUpg');
-        
+
         if (u == 21) {
             player.galaxyUpgs[g][22].locked = true;
             addGUpgClass(g, 22, 'lockedGalaxyUpg');
@@ -115,7 +128,52 @@ function buyGUpg(g, u) {
             remGUpgClass(g, 31, 'unclickGalaxyUpg')
             document.getElementById(GALAXIES_DATA[g].upgrades[31].textID).style.display = 'none';
         }
+        if (thisRow>1) {
+            if (!player.galaxyRowsLocked[thisRow-1]) { rowLock(thisRow-1); }
+        }
+        if (thisRow==4) {
+            unlockRows();
+        }
     }
+}
+
+function rowLock(row) {
+    let lockedRows = getGUpgsByRow(row);
+    let g, u;
+    for (let i=0; i<lockedRows.length; i++) {
+        g = lockedRows[i][0];
+        u = lockedRows[i][1];
+        if (!player.galaxyUpgs[g][u].locked && !player.galaxyUpgs[g][u].bought) {
+            displayData.push(['addClass', 'galaxyUpg'+g+'.'+u, 'lockedGalaxyRow']);
+            displayData.push(['remClass', 'galaxyUpg'+g+'.'+u, 'galaxyUpg']);
+            displayData.push(['remClass', 'galaxyUpg'+g+'.'+u, 'unclickGalaxyUpg']);
+            displayData.push(['togClass', 'text'+g+'.'+u, 'lockedGalaxySpan']);
+            player.galaxyUpgs[g][u].rowLocked = true;
+        }
+    }
+    player.galaxyRowsLocked[row] = true;
+}
+
+function unlockRows() {
+    for (r=1; r<=4; r++) {
+        unlockRow(r);
+    }
+}
+
+function unlockRow(r) {
+    let lockedRows = getGUpgsByRow(r);
+    for (let i=0; i<lockedRows.length; i++) {
+        g = lockedRows[i][0];
+        u = lockedRows[i][1];
+        if (player.galaxyUpgs[g][u].rowLocked) {
+            displayData.push(['addClass', 'galaxyUpg'+g+'.'+u, 'galaxyUpg']);
+            displayData.push(['remClass', 'galaxyUpg'+g+'.'+u, 'lockedGalaxyRow']);
+            displayData.push(['remClass', 'galaxyUpg'+g+'.'+u, 'unclickGalaxyUpg']);
+            displayData.push(['togClass', 'text'+g+'.'+u, 'lockedGalaxySpan']);
+            player.galaxyUpgs[g][u].rowLocked = false;
+        }
+    }
+    player.galaxyRowsLocked[r] = false;
 }
 
 function buyArkUpgrade(a) {
@@ -151,7 +209,10 @@ function respecGalaxiesKey() {
 function respecGalaxies() {
     player.galaxies = player.galaxies.plus(player.spentGalaxies);
     player.spentGalaxies = new Decimal(0);
+    unlockRows();
     copyData(player.galaxyUpgs, START_PLAYER.galaxyUpgs);
+    copyData(player.galaxyRowsLocked, START_PLAYER.galaxyRowsLocked);
+    loadStyles();
 }
 
 function galaxyPrestigeClick() {
@@ -282,7 +343,7 @@ function getGalaxiesBonus() {
     return boost;
 }
 
-function getNumGUpgs() {
+function getBoughtGUpgs() {
     let count = 0;
     for (let g in GALAXIES_DATA) {
         for (let u in GALAXIES_DATA[g].upgrades) {
@@ -292,7 +353,7 @@ function getNumGUpgs() {
     return count;
 }
 
-function getNumGUpgsByRow(row) {
+function getBoughtGUpgsByRow(row) {
     let count = 0;
     for (let g in GALAXIES_DATA) {
         for (let u in GALAXIES_DATA[g].upgrades) {
@@ -398,7 +459,7 @@ const GALAXIES_DATA = {
                 textID: 'text1.11',
                 cost: function() {
                     let c = 1;
-                    c += getNumGUpgsByRow(4);
+                    c += getBoughtGUpgsByRow(4);
                     return c;
                 },
                 effect: function() {
@@ -422,7 +483,7 @@ const GALAXIES_DATA = {
                 cost: function() {
                     let c = 1;
                     for (let i=1; i<this.row; i++) {
-                        c += getNumGUpgsByRow(i);
+                        c += getBoughtGUpgsByRow(i);
                     }
                     return c;
                 },
@@ -447,7 +508,7 @@ const GALAXIES_DATA = {
                 cost: function() {
                     let c = 1;
                     for (let i=1; i<this.row; i++) {
-                        c += getNumGUpgsByRow(i);
+                        c += getBoughtGUpgsByRow(i);
                     }
                     return c;
                 },
@@ -472,7 +533,7 @@ const GALAXIES_DATA = {
                 cost: function() {
                     let c = 1;
                     for (let i=1; i<this.row; i++) {
-                        c += getNumGUpgsByRow(i);
+                        c += getBoughtGUpgsByRow(i);
                     }
                     return c;
                 },
@@ -497,7 +558,7 @@ const GALAXIES_DATA = {
                 cost: function() {
                     let c = 1;
                     for (let i=1; i<this.row; i++) {
-                        c += getNumGUpgsByRow(i);
+                        c += getBoughtGUpgsByRow(i);
                     }
                     return c;
                 },
@@ -522,7 +583,7 @@ const GALAXIES_DATA = {
                 cost: function() {
                     let c = 1;
                     for (let i=1; i<this.row; i++) {
-                        c += getNumGUpgsByRow(i);
+                        c += getBoughtGUpgsByRow(i);
                     }
                     return c;
                 },
@@ -552,7 +613,7 @@ const GALAXIES_DATA = {
                 textID: 'text2.11',
                 cost: function() {
                     let c = 1;
-                    c += getNumGUpgsByRow(4);
+                    c += getBoughtGUpgsByRow(4);
                     return c;
                 },
                 effect: function() {
@@ -576,7 +637,7 @@ const GALAXIES_DATA = {
                 cost: function() {
                     let c = 1;
                     for (let i=1; i<this.row; i++) {
-                        c += getNumGUpgsByRow(i);
+                        c += getBoughtGUpgsByRow(i);
                     }
                     return c;
                 },
@@ -601,7 +662,7 @@ const GALAXIES_DATA = {
                 cost: function() {
                     let c = 1;
                     for (let i=1; i<this.row; i++) {
-                        c += getNumGUpgsByRow(i);
+                        c += getBoughtGUpgsByRow(i);
                     }
                     return c;
                 },
@@ -626,7 +687,7 @@ const GALAXIES_DATA = {
                 cost: function() {
                     let c = 1;
                     for (let i=1; i<this.row; i++) {
-                        c += getNumGUpgsByRow(i);
+                        c += getBoughtGUpgsByRow(i);
                     }
                     return c;
                 },
@@ -652,7 +713,7 @@ const GALAXIES_DATA = {
                 cost: function() {
                     let c = 1;
                     for (let i=1; i<this.row; i++) {
-                        c += getNumGUpgsByRow(i);
+                        c += getBoughtGUpgsByRow(i);
                     }
                     return c;
                 },
@@ -677,7 +738,7 @@ const GALAXIES_DATA = {
                 cost: function() {
                     let c = 1;
                     for (let i=1; i<this.row; i++) {
-                        c += getNumGUpgsByRow(i);
+                        c += getBoughtGUpgsByRow(i);
                     }
                     return c;
                 },
@@ -707,7 +768,7 @@ const GALAXIES_DATA = {
                 textID: 'text3.11',
                 cost: function() {
                     let c = 1;
-                    c += getNumGUpgsByRow(4);
+                    c += getBoughtGUpgsByRow(4);
                     return c;
                 },
                 effect: function() {
@@ -731,7 +792,7 @@ const GALAXIES_DATA = {
                 cost: function() {
                     let c = 1;
                     for (let i=1; i<this.row; i++) {
-                        c += getNumGUpgsByRow(i);
+                        c += getBoughtGUpgsByRow(i);
                     }
                     return c;
                 },
@@ -756,7 +817,7 @@ const GALAXIES_DATA = {
                 cost: function() {
                     let c = 1;
                     for (let i=1; i<this.row; i++) {
-                        c += getNumGUpgsByRow(i);
+                        c += getBoughtGUpgsByRow(i);
                     }
                     return c;
                 },
@@ -781,7 +842,7 @@ const GALAXIES_DATA = {
                 cost: function() {
                     let c = 1;
                     for (let i=1; i<this.row; i++) {
-                        c += getNumGUpgsByRow(i);
+                        c += getBoughtGUpgsByRow(i);
                     }
                     return c;
                 },
@@ -806,7 +867,7 @@ const GALAXIES_DATA = {
                 cost: function() {
                     let c = 1;
                     for (let i=1; i<this.row; i++) {
-                        c += getNumGUpgsByRow(i);
+                        c += getBoughtGUpgsByRow(i);
                     }
                     return c;
                 },
@@ -831,7 +892,7 @@ const GALAXIES_DATA = {
                 cost: function() {
                     let c = 1;
                     for (let i=1; i<this.row; i++) {
-                        c += getNumGUpgsByRow(i);
+                        c += getBoughtGUpgsByRow(i);
                     }
                     return c;
                 },
@@ -861,7 +922,7 @@ const GALAXIES_DATA = {
                 textID: 'text4.11',
                 cost: function() {
                     let c = 1;
-                    c += getNumGUpgsByRow(4);
+                    c += getBoughtGUpgsByRow(4);
                     return c;
                 },
                 effect: function() {
@@ -886,7 +947,7 @@ const GALAXIES_DATA = {
                 cost: function() {
                     let c = 1;
                     for (let i=1; i<this.row; i++) {
-                        c += getNumGUpgsByRow(i);
+                        c += getBoughtGUpgsByRow(i);
                     }
                     return c;
                 },
@@ -911,7 +972,7 @@ const GALAXIES_DATA = {
                 cost: function() {
                     let c = 1;
                     for (let i=1; i<this.row; i++) {
-                        c += getNumGUpgsByRow(i);
+                        c += getBoughtGUpgsByRow(i);
                     }
                     return c;
                 },
@@ -936,7 +997,7 @@ const GALAXIES_DATA = {
                 cost: function() {
                     let c = 1;
                     for (let i=1; i<this.row; i++) {
-                        c += getNumGUpgsByRow(i);
+                        c += getBoughtGUpgsByRow(i);
                     }
                     return c;
                 },
@@ -961,7 +1022,7 @@ const GALAXIES_DATA = {
                 cost: function() {
                     let c = 1;
                     for (let i=1; i<this.row; i++) {
-                        c += getNumGUpgsByRow(i);
+                        c += getBoughtGUpgsByRow(i);
                     }
                     return c;
                 },
@@ -986,7 +1047,7 @@ const GALAXIES_DATA = {
                 cost: function() {
                     let c = 1;
                     for (let i=1; i<this.row; i++) {
-                        c += getNumGUpgsByRow(i);
+                        c += getBoughtGUpgsByRow(i);
                     }
                     return c;
                 },

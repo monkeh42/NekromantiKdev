@@ -189,36 +189,49 @@ const START_PLAYER = {
         priority: [1, 2, 3, 4, 5, 6, 7, 8],
     },
 
+    galaxyRowsLocked: {
+        1: false,
+        2: false,
+        3: false,
+        4: false,
+    },
+
     galaxyUpgs: {
         1: {
             11: {
                 bought: false,
                 locked: false,
+                rowLocked: true,
                 boughtFor: new Decimal(0),
             },
             21: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
                 boughtFor: new Decimal(0),
             },
             22: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
                 boughtFor: new Decimal(0),
             },
             31: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
                 boughtFor: new Decimal(0),
             },
             32: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
                 boughtFor: new Decimal(0),
             },
             41: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
                 boughtFor: new Decimal(0),
             },
         },
@@ -226,31 +239,37 @@ const START_PLAYER = {
             11: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
                 boughtFor: new Decimal(0),
             },
             21: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
                 boughtFor: new Decimal(0),
             },
             22: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
                 boughtFor: new Decimal(0),
             },
             31: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
                 boughtFor: new Decimal(0),
             },
             32: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
                 boughtFor: new Decimal(0),
             },
             41: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
                 boughtFor: new Decimal(0),
             },
         },
@@ -258,31 +277,37 @@ const START_PLAYER = {
             11: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
                 boughtFor: new Decimal(0),
             },
             21: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
                 boughtFor: new Decimal(0),
             },
             22: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
                 boughtFor: new Decimal(0),
             },
             31: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
                 boughtFor: new Decimal(0),
             },
             32: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
                 boughtFor: new Decimal(0),
             },
             41: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
                 boughtFor: new Decimal(0),
             },
         },
@@ -290,31 +315,37 @@ const START_PLAYER = {
             11: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
                 boughtFor: new Decimal(0),
             },
             21: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
                 boughtFor: new Decimal(0),
             },
             22: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
                 boughtFor: new Decimal(0),
             },
             31: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
                 boughtFor: new Decimal(0),
             },
             32: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
                 boughtFor: new Decimal(0),
             },
             41: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
                 boughtFor: new Decimal(0),
             },
         },
@@ -1768,36 +1799,49 @@ function fixResetBug() {
         ],
     });
 
+    copyData(START_PLAYER.galaxyRowsLocked, {
+        1: false,
+        2: false,
+        3: false,
+        4: false,
+    });
+
     copyData(START_PLAYER.galaxyUpgs, {
         1: {
             11: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
                 boughtFor: new Decimal(0),
             },
             21: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
                 boughtFor: new Decimal(0),
             },
             22: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
                 boughtFor: new Decimal(0),
             },
             31: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
                 boughtFor: new Decimal(0),
             },
             32: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
                 boughtFor: new Decimal(0),
             },
             41: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
                 boughtFor: new Decimal(0),
             },
         },
@@ -1805,31 +1849,37 @@ function fixResetBug() {
             11: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
                 boughtFor: new Decimal(0),
             },
             21: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
                 boughtFor: new Decimal(0),
             },
             22: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
                 boughtFor: new Decimal(0),
             },
             31: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
                 boughtFor: new Decimal(0),
             },
             32: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
                 boughtFor: new Decimal(0),
             },
             41: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
                 boughtFor: new Decimal(0),
             },
         },
@@ -1837,31 +1887,37 @@ function fixResetBug() {
             11: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
                 boughtFor: new Decimal(0),
             },
             21: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
                 boughtFor: new Decimal(0),
             },
             22: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
                 boughtFor: new Decimal(0),
             },
             31: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
                 boughtFor: new Decimal(0),
             },
             32: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
                 boughtFor: new Decimal(0),
             },
             41: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
                 boughtFor: new Decimal(0),
             },
         },
@@ -1869,31 +1925,37 @@ function fixResetBug() {
             11: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
                 boughtFor: new Decimal(0),
             },
             21: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
                 boughtFor: new Decimal(0),
             },
             22: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
                 boughtFor: new Decimal(0),
             },
             31: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
                 boughtFor: new Decimal(0),
             },
             32: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
                 boughtFor: new Decimal(0),
             },
             41: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
                 boughtFor: new Decimal(0),
             },
         },

@@ -131,27 +131,29 @@ function updateTimeUpgs() {
 function updateGalaxyUpgs() {
     for (let g in GALAXIES_DATA) {
         for (let u in GALAXIES_DATA[g].upgrades) {
-            if (player.galaxyUpgs[g][u].locked) {
-                addGUpgClass(g, u, 'lockedGalaxyUpg');
-                remGUpgClass(g, u, 'galaxyUpg');
-                document.getElementById(GALAXIES_DATA[g].upgrades[u].textID).style.display = 'none';
-            } else {
-                if (hasGUpgrade(g, u)) {
-                        addGUpgClass(g, u, 'boughtGalaxyUpg');
-                        remGUpgClass(g, u, 'galaxyUpg');
-                        remGUpgClass(g, u, 'unclickGalaxyUpg');
+                if (player.galaxyUpgs[g][u].locked) {
+                    addGUpgClass(g, u, 'lockedGalaxyUpg');
+                    remGUpgClass(g, u, 'galaxyUpg');
+                    remGUpgClass(g, u, 'unclickGalaxyUpg');
+                    document.getElementById(GALAXIES_DATA[g].upgrades[u].textID).style.display = 'none';
                 } else {
-                    if (canAffordGUpg(g, u) && !document.getElementById(GALAXIES_DATA[g].upgrades[u].buttonID).classList.contains('galaxyUpg')) {
-                        addGUpgClass(g, u, 'galaxyUpg');
-                        remGUpgClass(g, u, 'unclickGalaxyUpg');
-                    } else if (!canAffordGUpg(g, u) && document.getElementById(GALAXIES_DATA[g].upgrades[u].buttonID).classList.contains('galaxyUpg')) {
-                        addGUpgClass(g, u, 'unclickGalaxyUpg');
-                        remGUpgClass(g, u, 'galaxyUpg');
-                    }
-                } 
-                document.getElementById(GALAXIES_DATA[g].upgrades[u].textID).innerHTML = `<span style="font-weight: 900;">${getGUpgName(g, u)}</span><br>${getGUpgDesc(g, u)}${GALAXIES_DATA[g].upgrades[u].requires.length>0 ? ("<br>Requires <span style=\"font-weight: 800;\">" + GALAXIES_DATA[g].upgrades[GALAXIES_DATA[g].upgrades[u].requires[0]].title + "</span>") + (GALAXIES_DATA[g].upgrades[u].requires.length>1 ? " or <span style=\"font-weight: 800;\">" + GALAXIES_DATA[g].upgrades[GALAXIES_DATA[g].upgrades[u].requires[1]].title + "</span>" : "") : ""}<br>Cost: ${formatWhole(getGUpgCost(g, u))} ${galaxyTextSingulizer(getGUpgCost(g, u))}${isDisplayEffectG(g, u) ? ("<br>Currently: " + formatDefault2(getGUpgEffect(g, u)) + GALAXIES_DATA[g].upgrades[u].displaySuffix) : ""}`;
-                document.getElementById(GALAXIES_DATA[g].upgrades[u].textID).style.display = 'block';
-            }
+                    remGUpgClass(g, u, 'lockedGalaxyUpg');
+                    document.getElementById(GALAXIES_DATA[g].upgrades[u].textID).style.display = 'block';
+                    document.getElementById(GALAXIES_DATA[g].upgrades[u].textID).innerHTML = `<span style="font-weight: 900;">${getGUpgName(g, u)}</span><br>${getGUpgDesc(g, u)}${GALAXIES_DATA[g].upgrades[u].requires.length>0 ? ("<br>Requires <span style=\"font-weight: 800;\">" + GALAXIES_DATA[g].upgrades[GALAXIES_DATA[g].upgrades[u].requires[0]].title + "</span>") + (GALAXIES_DATA[g].upgrades[u].requires.length>1 ? " or <span style=\"font-weight: 800;\">" + GALAXIES_DATA[g].upgrades[GALAXIES_DATA[g].upgrades[u].requires[1]].title + "</span>" : "") : ""}<br>Cost: ${formatWhole(getGUpgCost(g, u))} ${galaxyTextSingulizer(getGUpgCost(g, u))}${isDisplayEffectG(g, u) ? ("<br>Currently: " + formatDefault2(getGUpgEffect(g, u)) + GALAXIES_DATA[g].upgrades[u].displaySuffix) : ""}`;
+                    if (hasGUpgrade(g, u)) {
+                            addGUpgClass(g, u, 'boughtGalaxyUpg');
+                            remGUpgClass(g, u, 'galaxyUpg');
+                            remGUpgClass(g, u, 'unclickGalaxyUpg');
+                    } else {
+                        if (canAffordGUpg(g, u) && !document.getElementById(GALAXIES_DATA[g].upgrades[u].buttonID).classList.contains('galaxyUpg')) {
+                            addGUpgClass(g, u, 'galaxyUpg');
+                            remGUpgClass(g, u, 'unclickGalaxyUpg');
+                        } else if (!canAffordGUpg(g, u) && document.getElementById(GALAXIES_DATA[g].upgrades[u].buttonID).classList.contains('galaxyUpg')) {
+                            addGUpgClass(g, u, 'unclickGalaxyUpg');
+                            remGUpgClass(g, u, 'galaxyUpg');
+                        }
+                    } 
+                }
         }
     }
 }

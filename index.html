@@ -632,7 +632,7 @@
                                         <div id="prestigeSpeedLock" class="buyerSpeedLock"></div>
                                     </div>
                                     <div id="prestigeBuyerPriorityContainer" class="buyerOptionsContainer priorityContainer">
-                                        <label for="prestigeBuyerPriorityBut" style="">priority over sacrifice:</label><!-- --><button onclick="updatePrestigePriority()" name="prestigeBuyerPriorityBut" id="prestigeBuyerPriorityBut" class="buyerPriBut">YES</button><!-- -->
+                                        <label for="prestigeBuyerPriorityBut">priority over sacrifice:</label><!-- --><button onclick="updatePrestigePriority()" name="prestigeBuyerPriorityBut" id="prestigeBuyerPriorityBut" class="buyerPriBut">YES</button><!-- -->
                                     </div>
                                 </div>
                                 <div id="prestigeLockScreen"></div>
@@ -1067,9 +1067,9 @@
             <div id="galaxiesSubTab" class="galaxySubTab">
                 <div style="text-align: center; width: auto; margin: auto; position: relative; top: 25px;">
                     <span style="font-size: 17pt; font-weight: bold; color: #e32d05;">There must be loss in exchange for true power.</span><br>
-                    All galaxy upgrades have a base cost of <span style="font-size: 17pt; white-space: pre;"> 1 </span> depleted galaxy, but whenever you buy one, all others on that row and below increase in cost by 1.<br>
-                    Buying a 4th row upgrade will increase the cost of the 1st row upgrades by 1, but buying 1/2/3/4 of the 4th row upgrades at once each unlock milestones.<br>
+                    All galaxy upgrades have a base cost of <span style="font-size: 17pt; white-space: pre;"> 1 </span> depleted galaxy, but when you buy one, all others on rows below increase in cost by 1, and all rows above are locked.<br>
                     You can only take one branch at a time in each tree; once you buy an upgrade in the 2nd row, the two in the other branch will lock.<br>
+                    Buying a 4th row upgrade will increase the cost of the 1st row upgrades by 1, but unlocks all locked rows.<br>
                     A galaxy respec resets all costs to 1, and unlocks all locked upgrades.
                 </div>
                 <div style="text-align: center; position: relative; top: 50px;"><button id="galaxyRespecBut" class="galaxyBut" onclick="respecGalaxiesClick()">Respec galaxies - forces ascension</button><button id="milestonesBut" class="galaxyBut" onclick="showMilestones()">Galaxy Milestones - not yet working</button></div>
