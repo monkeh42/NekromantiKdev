@@ -862,7 +862,7 @@ const ACH_DATA = {
         }
     },
     22: {
-        title: 'Inter-dimensional Nekro-Cable',
+        title: 'Inter-Dimensional Nekro-Cable',
         desc: 'Buy one 4th Time Dimension.',
         reward: '',
         hasReward: false,
@@ -1037,14 +1037,14 @@ const ACH_DATA = {
         }
     },
     42: {
-        title: 'title',
-        desc: '',
-        reward: '',
-        hasReward: false,
+        title: 'The Slog Of Slogs',
+        desc: 'Buy <span style="font-weight: 800;">Nekro-Time</span> for the second time.',
+        reward: '<span style="font-weight: 800;">Nekro-Time</span> is never reset.',
+        hasReward: true,
         showEffect: false,
         divID: 'ach42',
         canUnlock: function() {
-            return false;
+            return hasUpgrade(3, 13) && player.ascensions.gt(0);
         },
         effect: function() {
             return new Decimal(1);

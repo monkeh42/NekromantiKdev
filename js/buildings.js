@@ -174,7 +174,7 @@ function resetBuildings(ascension=false) {
         player.unlocks['buildingsTab']['sun'] = tempSunRow1;
         player.unlocks['buildingsTab']['sunRow2'] = tempSunRow2;
     }
-    else if (!ascension) {
+    else if (!ascension && !hasAchievement(42)) {
         player.buildings[3].upgrades[13] = tempSun.upgrades[13];
     }
     player.buildings[3].upgrades[23] = tempSun.upgrades[23];
@@ -581,7 +581,7 @@ const BUILDS_DATA = {
             },
             23: {
                 title: 'Cosmogenesis',
-                desc: function() { return 'Unlock <strong>Depleted Galaxies</strong>.'; },
+                desc: function() { return 'Unlock <strong>Depleted Galaxies</strong>.<br>(This upgrade is never reset.)'; },
                 cost: new Decimal(25000000),
                 buttonID: 'sunUpg23',
                 displayEffect: false,

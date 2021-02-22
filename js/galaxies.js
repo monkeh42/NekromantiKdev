@@ -135,7 +135,7 @@ function buyArkUpgrade(a) {
 function respecGalaxiesClick() {
     if (player.ascensions.gte(1)) {
         if (player.confirmations['galaxyRespec']['click']) {
-            if (!confirm("Are you sure? This will reset ALL of your progress up to unlocking Galaxies.")) return
+            if (!confirm('Are you sure? This will reset ALL of your progress up to unlocking Galaxies.<br>(These confirmations can be disabled in options)')) return
         }
         if (canGalaxyPrestige()) { galaxyPrestigeNoConfirm(true); }
         else { galaxyPrestigeReset(true); }
@@ -145,7 +145,7 @@ function respecGalaxiesClick() {
 function respecGalaxiesKey() {
     if (player.ascensions.gte(1)) {
         if (player.confirmations['galaxyRespec']['key']) {
-            if (!confirm("Are you sure? This will reset ALL of your progress up to unlocking Galaxies.")) return
+            if (!confirm('Are you sure? This will reset ALL of your progress up to unlocking Galaxies.<br>(These confirmations can be disabled in options)')) return
         }
         if (canGalaxyPrestige()) { galaxyPrestigeNoConfirm(true); }
         else { galaxyPrestigeReset(true); }
@@ -201,7 +201,7 @@ function calculateNextGalaxy() {
 
 function galaxyPrestige(respec=false) {
     if (canGalaxyPrestige()) {
-        if (!confirm("Are you sure? This will reset ALL of your progress up to unlocking Galaxies.")) return
+        if (!confirm('Are you sure? This will reset ALL of your progress up to unlocking Galaxies.<br>(These confirmations can be disabled in options)')) return
         player.galaxies = player.galaxies.plus(calculateGalaxyGain());
         player.allTimeStats.totalGalaxies = player.allTimeStats.totalGalaxies.plus(calculateGalaxyGain());
         if (player.galaxies.gt(player.allTimeStats.bestGalaxies)) { player.allTimeStats.bestGalaxies = new Decimal(player.galaxies); }
