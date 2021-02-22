@@ -499,7 +499,7 @@ const GALAXIES_DATA = {
         id: 2,
         upgrades: {
             11: {
-                title: 'title 1.11',
+                title: 'title 2.11',
                 desc: 'The base zombie corpse multiplier is increased, 1.75 -> 2.5.',
                 requires: [],
                 bought: false,
@@ -520,7 +520,7 @@ const GALAXIES_DATA = {
                 },
             },
             21: {
-                title: 'title 1.21',
+                title: 'title 2.21',
                 desc: 'Each unit tier produces the tier below it at a rate of 1/unit/sec instead of (1/tier)/unit/sec.',
                 requires: [11],
                 bought: false,
@@ -541,7 +541,7 @@ const GALAXIES_DATA = {
                 },
             },
             22: {
-                title: 'title 1.22',
+                title: 'title 2.22',
                 desc: 'Start every sacrifice with a 5th free exterminated world that doesn\'t count towards the world prestige requirement.',
                 requires: [11],
                 bought: false,
@@ -562,7 +562,7 @@ const GALAXIES_DATA = {
                 },
             },
             31: {
-                title: 'title 1.31',
+                title: 'title 2.31',
                 desc: 'Unit production multipliers are boosted by your total galaxies.',
                 requires: [21],
                 bought: false,
@@ -584,7 +584,7 @@ const GALAXIES_DATA = {
                 },
             },
             32: {
-                title: 'title 1.32',
+                title: 'title 2.32',
                 desc: 'Exponential cost scaling for all units starts after twice as many bought.',
                 requires: [22],
                 bought: false,
@@ -605,7 +605,7 @@ const GALAXIES_DATA = {
                 },
             },
             41: {
-                title: 'title 1.41',
+                title: 'title 2.41',
                 desc: 'First time dimensions also produce Sun Eaters at a greatly reduced rate (log(x)).',
                 requires: [31, 32],
                 bought: false,
@@ -632,8 +632,8 @@ const GALAXIES_DATA = {
         id: 3,
         upgrades: {
             11: {
-                title: 'title 1.11',
-                desc: 'The effect of each second row Necropolis upgrade directly applies to the effect of the upgrade above it.',
+                title: 'title 3.11',
+                desc: 'Cube the <span style=\"font-weight: 800;\">Industrialize</span> effect.',
                 requires: [],
                 bought: false,
                 row: 1,
@@ -649,12 +649,12 @@ const GALAXIES_DATA = {
                     return player.rowCosts[this.row];
                 },
                 effect: function() {
-                    return new Decimal(1);
+                    return new Decimal(3);
                 },
             },
             21: {
-                title: 'title 1.21',
-                desc: 'Cube the <span style=\"font-weight: 800;\">Industrialize</span> effect.',
+                title: 'title 3.21',
+                desc: 'The effect of each second row Necropolis upgrade directly applies to the effect of the upgrade above it.',
                 requires: [11],
                 bought: false,
                 row: 2,
@@ -670,11 +670,11 @@ const GALAXIES_DATA = {
                     return player.rowCosts[this.row];
                 },
                 effect: function() {
-                    return new Decimal(3);
+                    return new Decimal(1);
                 },
             },
             22: {
-                title: 'title 1.22',
+                title: 'title 3.22',
                 desc: 'Exponential cost scaling for the first four construction upgrades starts after twice as many levels.',
                 requires: [11],
                 bought: false,
@@ -695,7 +695,7 @@ const GALAXIES_DATA = {
                 },
             },
             31: {
-                title: 'title 1.31',
+                title: 'title 3.31',
                 desc: 'Square your acolyte gain.',
                 requires: [21],
                 bought: false,
@@ -716,7 +716,7 @@ const GALAXIES_DATA = {
                 },
             },
             32: {
-                title: 'title 1.32',
+                title: 'title 3.32',
                 desc: 'The effects of the first four construction upgrades are each 20% stronger.',
                 requires: [22],
                 bought: false,
@@ -764,7 +764,7 @@ const GALAXIES_DATA = {
         id: 4,
         upgrades: {
             11: {
-                title: 'title 1.11',
+                title: 'title 4.11',
                 desc: 'Your total galaxies boosts time essence production.',
                 requires: [],
                 bought: false,
@@ -786,7 +786,7 @@ const GALAXIES_DATA = {
                 },
             },
             21: {
-                title: 'title 1.21',
+                title: 'title 4.21',
                 desc: 'Quadruple your time crystal gain.',
                 requires: [11],
                 bought: false,
@@ -807,7 +807,7 @@ const GALAXIES_DATA = {
                 },
             },
             22: {
-                title: 'title 1.22',
+                title: 'title 4.22',
                 desc: 'The square root of the true time essence boost affects time dimensions outside of astral enslavement.',
                 requires: [11],
                 bought: false,
@@ -828,7 +828,7 @@ const GALAXIES_DATA = {
                 },
             },
             31: {
-                title: 'title 1.31',
+                title: 'title 4.31',
                 desc: 'Both time essence boosts are based on log(x)^2 instead of log(x).',
                 requires: [21],
                 bought: false,
@@ -849,7 +849,7 @@ const GALAXIES_DATA = {
                 },
             },
             32: {
-                title: 'title 1.32',
+                title: 'title 4.32',
                 desc: 'You passively produce your astral brick production ^0.9 outside of astral enslavement.',
                 requires: [22],
                 bought: false,
@@ -870,7 +870,7 @@ const GALAXIES_DATA = {
                 },
             },
             41: {
-                title: 'title 1.41',
+                title: 'title 4.41',
                 desc: 'True and anti time essence no longer nerf the other\'s effect.',
                 requires: [31, 32],
                 bought: false,

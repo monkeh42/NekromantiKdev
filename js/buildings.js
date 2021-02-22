@@ -241,7 +241,7 @@ const BUILDS_DATA = {
                         var e = new Decimal(0.5);
                         b = Decimal.pow(b, e).times(2);
                     }
-                    if (hasGUpgrade(3, 21)) { b = b.pow(getGUpgEffect(3, 21)); }
+                    if (hasGUpgrade(3, 11)) { b = b.pow(getGUpgEffect(3, 11)); }
                     return b.plus(1);
                 }
             },
@@ -373,7 +373,7 @@ const BUILDS_DATA = {
                 effect: function() {
                     var e = Decimal.floor(player.bricks.e);
                     var b = Decimal.pow(1.2, e);
-                    if (hasGUpgrade(3, 11) && hasUpgrade(2, 21)) { b = b.times(getUpgEffect(2, 21)); }
+                    if (hasGUpgrade(3, 21) && hasUpgrade(2, 21)) { b = b.times(getUpgEffect(2, 21)); }
                     return b;
                 }
             },
@@ -391,7 +391,7 @@ const BUILDS_DATA = {
                     } else {
                         var e = Decimal.sqrt(Decimal.max(player.bricks, 1).log10());
                     }
-                    if (hasGUpgrade(3, 11) && hasUpgrade(2, 22)) { e = e.times(getUpgEffect(2, 22)); }
+                    if (hasGUpgrade(3, 21) && hasUpgrade(2, 22)) { e = e.times(getUpgEffect(2, 22)); }
 
                     return e.plus(1);
                 }
@@ -410,7 +410,7 @@ const BUILDS_DATA = {
                     } else {
                         var e = Decimal.sqrt(Decimal.max(player.bricks, 1).log10());
                     }
-                    if (hasGUpgrade(3, 11) && hasUpgrade(2, 23)) { e = e.times(getUpgEffect(2, 23)); }
+                    if (hasGUpgrade(3, 21) && hasUpgrade(2, 23)) { e = e.times(getUpgEffect(2, 23)); }
 
                     return e.plus(1);
                 }
