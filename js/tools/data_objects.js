@@ -1038,8 +1038,8 @@ const ACH_DATA = {
     },
     42: {
         title: 'The Slog Of Slogs',
-        desc: 'Buy <span style="font-weight: 800;">Nekro-Time</span> for the second time.',
-        reward: '<span style="font-weight: 800;">Nekro-Time</span> is never reset.',
+        desc: 'Buy Nekro-Time for the second time.',
+        reward: 'Nekro-Time is never reset.',
         hasReward: true,
         showEffect: false,
         divID: 'ach42',
