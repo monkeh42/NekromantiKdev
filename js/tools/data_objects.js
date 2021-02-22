@@ -1044,7 +1044,7 @@ const ACH_DATA = {
         showEffect: false,
         divID: 'ach42',
         canUnlock: function() {
-            return hasUpgrade(3, 13) && player.ascensions.gt(0);
+            return (hasUpgrade(3, 13) && player.ascensions.gt(0)) || player.ascensions.gt(1);
         },
         effect: function() {
             return new Decimal(1);
