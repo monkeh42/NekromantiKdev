@@ -326,8 +326,7 @@ function resetTime() {
 
 function resetSpaceCounts() {
     if (hasTUpgrade(14)) {
-        if (hasGUpgrade(2, 22)) { player.worlds = new Decimal(5); }
-        else { player.worlds = new Decimal(4); }
+        player.worlds = new Decimal(4);
         player.spaceResets = new Decimal(4);
         player.nextSpaceReset = [3, 8];
         lockElements('buildingsTab', 'factory');
@@ -372,6 +371,7 @@ function resetSpaceCounts() {
         lockTab('buildingsTab');
     }
     copyData(player.thisSacStats, START_PLAYER.thisSacStats);
+    if (hasGUpgrade(2, 22)) { player.worlds = player.worlds.plus(1); }
     player.thisSacStats.totalWorlds = player.worlds;
     player.thisSacStats.bestWorlds = player.worlds;
 }

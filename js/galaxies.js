@@ -542,7 +542,7 @@ const GALAXIES_DATA = {
             },
             22: {
                 title: 'title 2.22',
-                desc: 'Start every sacrifice with a 5th free exterminated world that doesn\'t count towards the world prestige requirement.',
+                desc: 'Start every sacrifice with one free exterminated world that doesn\'t count towards the world prestige requirement.',
                 requires: [11],
                 bought: false,
                 row: 2,
