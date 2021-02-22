@@ -603,8 +603,6 @@ function toggleDisplay(id, button) {
         document.getElementById(button).innerHTML = "OFF";
     }
     if (id == 'astralNoticeDisplay') { document.getElementById(id).style.display = (document.getElementById(id).style.display == 'none') && player.astralFlag ? '' : 'none' }
-    else if (id == 'worldsBonusDisplay') { document.getElementById(id).style.display = (document.getElementById(id).style.display == 'none') && player.unlocks['buildingsTab']['mainTab'] ? '' : 'none' }
-    else if (id == 'galaxiesBonusDisplay') { document.getElementById(id).style.display = (document.getElementById(id).style.display == 'none') && player.unlocks['buildingsTab']['mainTab'] ? '' : 'none' }
     else { document.getElementById(id).style.display = (document.getElementById(id).style.display == 'none') ? '' : 'none' }
 }
 
@@ -659,7 +657,7 @@ function setConfDefaults() {
 function updateHeaderDisplay() {
     for (let dKey in player.headerDisplay) {
         if (dKey == 'astralNoticeDisplay') { document.getElementById(dKey).style.display = (player.headerDisplay[dKey] && player.astralFlag) ? '' : 'none' }
-        else if (dKey == 'worldsBonusDisplay') { document.getElementById(dKey).style.display = (player.headerDisplay[dKey] && player.unlocks['buildingsTab']['mainTab']) ? '' : 'none' }
+        else if (dKey == 'worldsBonusDisplay') { document.getElementById(dKey).style.display = (player.headerDisplay[dKey] && player.unlocks['unitsTab']['spacePrestige']) ? '' : 'none' }
         else if (dKey == 'galaxiesBonusDisplay') { document.getElementById(dKey).style.display = (player.headerDisplay[dKey] && player.unlocks['galaxyTab']['mainTab']) ? '' : 'none' }
         else { document.getElementById(dKey).style.display = player.headerDisplay[dKey] ? '' : 'none' }
     }

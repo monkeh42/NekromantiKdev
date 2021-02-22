@@ -1128,7 +1128,7 @@ const UNLOCKS_DATA = {
         'spacePrestige': {
             unlocked: false,
             classNotID: false,
-            idsToShow: ['spacePresContainer'],
+            idsToShow: ['spacePresContainer', 'worldsBonusDisplay'],
             idsToHide: [],
             shouldNotify: function() {
                 return false;
@@ -1212,7 +1212,7 @@ const UNLOCKS_DATA = {
             unlocked: false,
             classNotID: false,
             notifyID: 'buildingsTabBut',
-            idsToShow: ['buildingsTabCell', 'worldsBonusDisplay'],
+            idsToShow: ['buildingsTabCell'],
             idsToHide: [],
             shouldNotify: function() {
                 return !hasTUpgrade(11);
@@ -1342,7 +1342,7 @@ const UNLOCKS_DATA = {
             unlocked: false,
             classNotID: false,
             notifyID: 'galaxyTabBut',
-            idsToShow: ['galaxyTabCell', 'galaxiesBonusDisplay'],
+            idsToShow: ['galaxyTabCell', 'galaxiesBonusDisplay', 'customizeDisplayBut'],
             idsToHide: [],
             shouldNotify: function() {
                 return true;
