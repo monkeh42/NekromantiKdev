@@ -348,13 +348,6 @@ const START_PLAYER = {
         },
     },
 
-    rowCosts: {
-        1: new Decimal(1),
-        2: new Decimal(1),
-        3: new Decimal(1),
-        4: new Decimal(1),
-    },
-
     bricks: new Decimal(0),
     brickGainExp: 0.2,
     astralFlag: false,
@@ -704,6 +697,18 @@ const START_PLAYER = {
             'click': true,
             'key': true,
         },
+    },
+
+    headerDisplay: {
+        'astralNoticeDisplay': true,
+        'unitsBoostDisplay': true,
+        'worldsBonusDisplay': true,
+        'galaxiesBonusDisplay': true,
+        'totalBonusDisplay': true,
+        'bricksDisplayHeader': false,
+        'bricksGainDisplayHeader': false,
+        'crystalsDisplayHeader': false,
+        'timeBoostDisplay': true,
     },
 
     tooltipsEnabled: false,
@@ -1207,7 +1212,7 @@ const UNLOCKS_DATA = {
             unlocked: false,
             classNotID: false,
             notifyID: 'buildingsTabBut',
-            idsToShow: ['buildingsTabCell', 'worldsBonusDisplay', 'totalBonusDisplay'],
+            idsToShow: ['buildingsTabCell', 'worldsBonusDisplay'],
             idsToHide: [],
             shouldNotify: function() {
                 return !hasTUpgrade(11);
@@ -1943,13 +1948,6 @@ function fixResetBug() {
         },
     });
 
-    copyData(START_PLAYER.rowCosts, {
-        1: new Decimal(1),
-        2: new Decimal(1),
-        3: new Decimal(1),
-        4: new Decimal(1),
-    });
-
     START_PLAYER.bricks = new Decimal(0);
     START_PLAYER.brickGainExp = 0.2;
     START_PLAYER.astralFlag = false;
@@ -2152,6 +2150,18 @@ function fixResetBug() {
             'click': true,
             'key': true,
         },
+    });
+
+    copyData(START_PLAYER.headerDisplay, {
+        'astralNoticeDisplay': true,
+        'unitsBoostDisplay': true,
+        'worldsBonusDisplay': true,
+        'galaxiesBonusDisplay': true,
+        'totalBonusDisplay': true,
+        'bricksDisplayHeader': false,
+        'bricksGainDisplayHeader': false,
+        'crystalsDisplayHeader': false,
+        'timeBoostDisplay': true,
     });
 
     START_PLAYER.tooltipsEnabled = false;

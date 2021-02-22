@@ -161,6 +161,21 @@ body {
     z-index: 2;
 }
 
+.dPopup {
+    position: absolute;
+    left: 67%;
+	top: 50%;
+    transform: translateX(50%) translateY(-50%);
+    text-align: center;
+    background-color: black;
+    border: 3px solid white;
+    box-shadow: 3px 3px #424242;
+    width: 300px;
+    border-radius: 4px;
+    z-index: 2;
+    display: none;
+}
+
 .milestonePopup {
     position: fixed;
     right: 50px;
@@ -312,6 +327,23 @@ option:active, option.active {
 }
 
 .tabBut:hover {
+    background-color: #525252;
+}
+
+.displayBut {
+    color: white;
+    background-color: #1f1f1f;
+    font-style: bold;
+    width: 185px;
+    height: 20px;
+    border: 1px solid #525252;
+    cursor: pointer;
+    border-radius: 4px;
+    font-family: 'Cinzel', serif;
+    font-size: 10pt;
+}
+
+.displayBut:hover {
     background-color: #525252;
 }
 

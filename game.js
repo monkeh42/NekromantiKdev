@@ -63,7 +63,8 @@ function loadGame() {
         copyData(player, JSON.parse(window.atob(savePlayer)));
     }
     fixData(player, START_PLAYER);
-
+    
+    if (player.rowCosts !== undefined) { delete player.rowCosts }
     if (player.allTimeStats === undefined) { fixStats(); }
 
     if (player.allTimeStats.bestCorpses.eq(0)) { player.allTimeStats.bestCorpses = new Decimal(player.corpses); }
@@ -124,7 +125,6 @@ function loadStyles() {
     for (let tab in UNLOCKS_DATA) {
         for (let key in UNLOCKS_DATA[tab]) {
             if (player.unlocks[tab][key]) { unlockElementsOnLoad(tab, key) }
-            else if (!player.unlocks[tab][key] && key == 'mainTab') { break; }
         }
     }
 
@@ -145,7 +145,9 @@ function loadStyles() {
             document.getElementById(TIME_DATA[i].maxID).classList.add('unclickableMaxT');
             document.getElementById(TIME_DATA[i].maxID).classList.remove('unitMaxT');
         }
-    }
+    } 
+
+    updateHeaderDisplay();
 
     if (canTimePrestige()) {
         document.getElementById('timePrestigeReq').style.display = 'none';
@@ -252,9 +254,8 @@ function loadStyles() {
         document.getElementById('timeSlider').classList.add('slider');
         document.getElementById('timeSlider').removeAttribute('disabled');
     }
-    updateSliderDisplay();
-
-    updateAutobuyersDisplay();
+    
+    updatePopupsEtc();
 
     for (let id in ACH_DATA) {
         document.getElementById(ACH_DATA[id].divID).setAttribute('data-title', ACH_DATA[id].desc + (ACH_DATA[id].hasReward ? ' Reward: ' + ACH_DATA[id].reward : '' ) + (ACH_DATA[id].showEffect ? ' Currently: ' + formatDefault2(ACH_DATA[id].effect()) + 'x' : '' ));
@@ -363,6 +364,7 @@ function gameLoop(diff=new Decimal(0), offline=false) {
         }
     }
     updateUnlocks();
+    updateHeaderDisplay();
     updateAchievements();
 
     if (!offline && player.unlocks['unitsTab']['autobuyers']) {
@@ -564,7 +566,6 @@ function exportGameState() {
 //fixes and data manipulation
 
 function fixStats() {
-    player.unlocks['buildingsTab']['sun'] = 
 
     player.allTimeStats = {};
     player.thisSacStats = {};

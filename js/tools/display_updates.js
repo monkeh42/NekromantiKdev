@@ -187,7 +187,9 @@ function updateCorpseDisplays() {
 
 function updateBuildingDisplays() {
     displayData.push(['html', 'brickDisplay', formatUnitRow(player.bricks)]);
+    displayData.push(['html', 'brickAmountHeader', formatUnitRow(player.bricks)]);
     displayData.push(['html', 'brickGainDisplay', ` ${(player.astralFlag ? formatUnitRow(getBricksPerSecond()) : formatWhole(0))} `]);
+    displayData.push(['html', 'brickGainHeader', ` ${(player.astralFlag ? formatUnitRow(getBricksPerSecond()) : formatWhole(0))} `]);
     displayData.push(['html', 'factoryProd', formatDefault(getBuildingProdPerSec(1))]);
     displayData.push(['html', 'factoryAmt', formatDefault(player.buildings[1].amount)]);
     //displayData.push(['html', 'factoryBuildLabel', BUILDS_DATA[1].id]);
@@ -220,6 +222,7 @@ function updateTimeDisplays() {
     displayData.push(['html', 'trueTimeNerf', formatDefault2(getTrueTimeNerf())]);
     displayData.push(['html', 'antiTimeNerf', formatDefault2(getAntiTimeNerf())]);
     displayData.push(['html', 'crystalAmt', ' ' + formatWhole(player.crystals) + ' ']);
+    displayData.push(['html', 'crystalAmountHeader', ' ' + formatWhole(player.crystals) + ' ']);
     if (player.allTimeStats.totalCrystals.gte(2000)) {
         displayData.push(['setProp', 'timePresDesc', 'display', 'none']);
         displayData.push(['setProp', 'crystalRateDesc', 'display', 'block']);
@@ -381,10 +384,7 @@ function unlockElementsOnLoad(mainTab, subTab) {
     player.unlocks[mainTab][subTab] = true;
     if (data.idsToShow.length > 0) {
         for (let i=0; i<data.idsToShow.length; i++) {
-            element = document.getElementById(data.idsToShow[i]);
-            if (element.tagName == 'TR') { displayData.push(['setProp', element.id, 'display', 'table-row']); } 
-            else if (element.tagName == 'TD') { displayData.push(['setProp', element.id, 'display', 'table-cell']); }
-            else { displayData.push(['setProp', element.id, 'display', 'block']); }
+            displayData.push(['setProp', data.idsToShow[i], 'display', '']);
         }
     }
     if (data.idsToHide.length > 0 || data.classNotID) {
@@ -449,7 +449,7 @@ function toggleAstralDisplay() {
     displayData.push(['togClass', 'astralToggle', 'astralBut']);
     displayData.push(['togClass', 'astralToggle', 'astralOn']);
     displayData.push(['html', 'astralText', player.astralFlag ? 'disable' : 'enable']);
-    displayData.push(['togDisplay', 'astralNotice']);
+    if (player.headerDisplay['astralNotice']) { displayData.push(['togDisplay', 'astralNotice']); }
     displayData.push(['html', 'normalAstral', player.astralFlag ? 'ASTRAL' : 'NORMAL']);
     displayData.push(['setProp', 'normalAstral', 'color', player.astralFlag ? '#42d35a' : 'white']);
     displayData.push(['setProp', 'normalAstral', 'color', player.astralFlag ? '#42d35a' : 'white']);
@@ -595,12 +595,88 @@ function toggleConfirmations(action, method, id) {
     }
 }
 
+function toggleDisplay(id, button) {
+    player.headerDisplay[id] = !player.headerDisplay[id];
+    if (player.headerDisplay[id]) {
+        document.getElementById(button).innerHTML = "ON";
+    } else {
+        document.getElementById(button).innerHTML = "OFF";
+    }
+    if (id == 'astralNoticeDisplay') { document.getElementById(id).style.display = (document.getElementById(id).style.display == 'none') && player.astralFlag ? '' : 'none' }
+    else if (id == 'worldsBonusDisplay') { document.getElementById(id).style.display = (document.getElementById(id).style.display == 'none') && player.unlocks['buildingsTab']['mainTab'] ? '' : 'none' }
+    else if (id == 'galaxiesBonusDisplay') { document.getElementById(id).style.display = (document.getElementById(id).style.display == 'none') && player.unlocks['buildingsTab']['mainTab'] ? '' : 'none' }
+    else { document.getElementById(id).style.display = (document.getElementById(id).style.display == 'none') ? '' : 'none' }
+}
+
 function openConfirmationsPopup() {
     document.getElementById('confirmationsPopup').style.display = 'block';
 }
 
 function closeConfirmationsPopup() {
     document.getElementById('confirmationsPopup').style.display = 'none';
+}
+
+function openDisplayPopup() {
+    document.getElementById('displayPopup').style.display = 'block';
+}
+
+function closeDisplayPopup() {
+    document.getElementById('displayPopup').style.display = 'none';
+}
+
+function updateConfirmationPopupDisplay() {
+    for (let key in player.confirmations) {
+        document.getElementById(key + "ClickBut").innerHTML = player.confirmations[key]['click'] ? "ON" : "OFF"
+        document.getElementById(key + "KeyBut").innerHTML = player.confirmations[key]['key'] ? "ON" : "OFF"
+    }
+}
+
+function updateDisplayPopupDisplay() {
+    for (let key in player.headerDisplay) {
+        document.getElementById(key + 'But').innerHTML = player.headerDisplay[key] ? "ON" : "OFF"
+    }
+}
+
+function updateTooltipButtonDisplay() {
+    document.getElementById('toggleTooltips').innerHTML = player.tooltipsEnabled ? 'TOGGLE FORMULA TOOLTIPS: ON' : 'TOGGLE FORMULA TOOLTIPS: OFF'
+}
+
+function updateHotkeyButtonDisplay() {
+    document.getElementById('toggleHotkeysBut').innerHTML = player.hotkeysOn ? 'ENABLE HOTKEYS: ON' : 'ENABLE HOTKEYS: OFF'
+}
+
+function setDisplayDefaults() {
+    copyData(player.headerDisplay, START_PLAYER.headerDisplay);
+    updatePopupsEtc();
+    updateHeaderDisplay();
+}
+
+function setConfDefaults() {
+    copyData(player.confirmations, START_PLAYER.confirmations);
+    updatePopupsEtc();
+}
+
+function updateHeaderDisplay() {
+    for (let dKey in player.headerDisplay) {
+        if (dKey == 'astralNoticeDisplay') { document.getElementById(dKey).style.display = (player.headerDisplay[dKey] && player.astralFlag) ? '' : 'none' }
+        else if (dKey == 'worldsBonusDisplay') { document.getElementById(dKey).style.display = (player.headerDisplay[dKey] && player.unlocks['buildingsTab']['mainTab']) ? '' : 'none' }
+        else if (dKey == 'galaxiesBonusDisplay') { document.getElementById(dKey).style.display = (player.headerDisplay[dKey] && player.unlocks['galaxyTab']['mainTab']) ? '' : 'none' }
+        else { document.getElementById(dKey).style.display = player.headerDisplay[dKey] ? '' : 'none' }
+    }
+}
+
+function updatePopupsEtc() {
+    updateSliderDisplay();
+
+    updateAutobuyersDisplay();
+
+    updateConfirmationPopupDisplay();
+
+    updateDisplayPopupDisplay();
+
+    updateTooltipButtonDisplay();
+
+    updateHotkeyButtonDisplay();
 }
 
 function showTab(tabName, buttonName) {
@@ -824,7 +900,6 @@ function updateUnlocks() {
     for (var tab in UNLOCKS_DATA) {
         for (var key in UNLOCKS_DATA[tab]) {
             if (!player.unlocks[tab][key] && UNLOCKS_DATA[tab][key].condition()) { unlockElements(tab, key) }
-            else if (!player.unlocks[tab][key] && key == 'mainTab') { break; }
         }
     }
     for (var i=1; i<NUM_UNITS; i++) {

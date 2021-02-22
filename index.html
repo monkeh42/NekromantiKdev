@@ -34,16 +34,20 @@
             </div>
             <br>
         </div>
-        <div style="width: 1024px; margin: auto;"><div id="versionNumber" style="text-align: right;">v0.1.2</div></div>
-        <div id="resourceDisplay" style="width: auto; margin: 15px auto 25px; display: block; text-align: center;">
+        <div id="versionNumber" style="position: absolute; top: 0; right: 0px;">vERR</div>
+        <div id="resourceDisplay" style="width: auto; margin: 0px auto 10px; display: block; text-align: center;">
             <span style="font-size: 16pt; font-weight: bold;">You have <span id="corpseAmount" style="font-size: 20pt; white-space: pre; color: #6c00b4; font-variant-numeric: tabular-nums;"> 10 </span> <span id='pluralCorpse'> corpses</span>.</span><br>
             <span>You are harvesting <span id="corpseGain" style="font-size: 17pt; font-weight: bold; white-space: pre; color: #6c00b4; font-variant-numeric: tabular-nums;"> 0 </span> <span id='pluralCorpseG'> corpses </span>/sec.<span id="devSpeedContainer" style="white-space: pre; display: none;"> (@ <span id="devSpeedDisplay">3</span>x time speed)</span></span><br>
-            <div id="astralNotice" style="color:  #1c8a2e; display: none;"><h2>Corpse production disabled due to Astral Enslavement.</h2></div>
-            <div style="font-size: 10pt; white-space: pre;">Total corpse gain multiplier from units:  <span id="totalMult" style="font-size: 12pt; font-variant-numeric: tabular-nums;">0.0x</span></div>
+            <div id="astralNoticeDisplay" style="color: #1c8a2e; display: none;"><h2>Corpse production disabled due to Astral Enslavement.</h2></div>
+            <div id="unitsBoostDisplay" style="font-size: 10pt; white-space: pre;">Total corpse gain multiplier from units:  <span id="totalMult" style="font-size: 12pt; font-variant-numeric: tabular-nums;">0.0x</span></div>
             <div id="worldsBonusDisplay" style="font-size: 10pt; white-space: pre; display: none;">You have exterminated <span id="worldsNum" style="font-size: 12pt; font-variant-numeric: tabular-nums;"> 1 </span> <span id="pluralWorld">world</span>, giving a <span id="worldsMult" style="font-size: 12pt"> 0.0x </span> bonus to corpse gain.</div>
             <div id="galaxiesBonusDisplay" style="font-size: 10pt; white-space: pre; display: none;">You have formed <span id="galaxiesNum" style="font-size: 12pt; font-variant-numeric: tabular-nums;"> 1 </span> depleted <span id="pluralGalaxy">galaxy</span>, giving a <span id="galaxiesMult" style="font-size: 12pt"> 0.0x </span> bonus to corpse gain.</div>
-            <div id="totalBonusDisplay" style="font-size: 10pt; white-space: pre; display: none;">Total corpse gain multiplier from all sources:  <span id="totalMultAll" style="font-size: 12pt; font-variant-numeric: tabular-nums;">0.0x</span></div>
+            <div id="totalBonusDisplay" style="font-size: 10pt; white-space: pre;">Total corpse gain multiplier from all sources:  <span id="totalMultAll" style="font-size: 12pt; font-variant-numeric: tabular-nums;">0.0x</span></div>
+            <div id="bricksDisplayHeader" style="font-size: 10pt; white-space: pre; display: none;">You have <span id="brickAmountHeader" style="font-size: 12pt; white-space: pre; color: #1c8a2e; font-variant-numeric: tabular-nums;"> 0 </span> astral bricks.</div>
+            <div id="bricksGainDisplayHeader" style="font-size: 10pt; white-space: pre; display: none;">You are gaining <span id="brickGainHeader" style="font-size: 12pt; white-space: pre; color: #1c8a2e; font-variant-numeric: tabular-nums;"> 0 </span> astral bricks/sec.</div>
+            <div id="crystalsDisplayHeader" style="font-size: 10pt; white-space: pre; display: none;">You have <span id="crystalAmountHeader" style="font-size: 12pt; white-space: pre; color: #006ba0; font-variant-numeric: tabular-nums;"> 0 </span> time crystals.</div>
             <div id="timeBoostDisplay" style="font-size: 10pt; white-space: pre; display: none;">Your <span id="normalAstral" style="font-size: 12pt; color: white;"> NORMAL </span> time is going <span id="timeMult" style="font-size: 12pt; font-variant-numeric: tabular-nums;"> 1.0x </span> as fast.</div>
+            <button id="customizeDisplayBut" class="displayBut" onclick="openDisplayPopup()">customize this display</button>
         </div>
     </div>
     <div id="tabButtons" id="tabButtons" style="width: 100%; margin: 15px auto 25px; display: block;">
@@ -2051,7 +2055,89 @@
                     </tr>
                 </table>
             </div>
+            <button class="displayBut" id="confDefaults" style="margin: 10px;" onclick="setConfDefaults()">defaults</button>
             <button class="optBut" id="closeConfPopup" style="margin: 10px;" onclick="closeConfirmationsPopup()">CLOSE</button>
+        </div>
+        <div class="dPopup" id="displayPopup">
+            <div>
+                <h2>Header Display</h2>
+                <table>
+                    <tr>
+                        <td>
+                            Boost from units
+                        </td>
+                        <td width="10%">
+                            <button id="unitsBoostDisplayBut" class="confBut" onclick="toggleDisplay('unitsBoostDisplay', 'unitsBoostDisplayBut')">ON</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Boost from worlds
+                        </td>
+                        <td width="10%">
+                            <button id="worldsBonusDisplayBut" class="confBut" onclick="toggleDisplay('worldsBonusDisplay', 'worldsBonusDisplayBut')">ON</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Boost from galaxies
+                        </td>
+                        <td width="10%">
+                            <button id="galaxiesBonusDisplayBut" class="confBut" onclick="toggleDisplay('galaxiesBonusDisplay', 'galaxiesBonusDisplayBut')">ON</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Total corpse boost
+                        </td>
+                        <td width="10%">
+                            <button id="totalBonusDisplayBut" class="confBut" onclick="toggleDisplay('totalBonusDisplay', 'totalBonusDisplayBut')">ON</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Astral brick amount
+                        </td>
+                        <td width="10%">
+                            <button id="bricksDisplayHeaderBut" class="confBut" onclick="toggleDisplay('bricksDisplayHeader', 'bricksDisplayHeaderBut')">OFF</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Astral brick gain
+                        </td>
+                        <td width="10%">
+                            <button id="bricksGainDisplayHeaderBut" class="confBut" onclick="toggleDisplay('bricksGainDisplayHeader', 'bricksGainDisplayHeaderBut')">OFF</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Astral enslavement notice
+                        </td>
+                        <td width="10%">
+                            <button id="astralNoticeDisplayBut" class="confBut" onclick="toggleDisplay('astralNoticeDisplay', 'astralNoticeDisplayBut')">ON</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Time crystal amount
+                        </td>
+                        <td width="10%">
+                            <button id="crystalsDisplayHeaderBut" class="confBut" onclick="toggleDisplay('crystalsDisplayHeader', 'crystalsDisplayHeaderBut')">OFF</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Time speed boost
+                        </td>
+                        <td width="10%">
+                            <button id="timeBoostDisplayBut" class="confBut" onclick="toggleDisplay('timeBoostDisplay', 'timeBoostDisplayBut')">ON</button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <button class="displayBut" id="displayDefaults" style="margin: 10px;" onclick="setDisplayDefaults()">defaults</button>
+            <button class="optBut" id="closeDisplayPopup" style="margin: 10px;" onclick="closeDisplayPopup()">CLOSE</button>
         </div>
         <div class="popup" id="achUnlockPopup">
             Achievement Unlocked!

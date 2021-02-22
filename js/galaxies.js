@@ -91,10 +91,6 @@ function buyGUpg(g, u) {
         player.galaxyUpgs[g][u].bought = true;
         addGUpgClass(g, u, 'boughtGalaxyUpg');
         remGUpgClass(g, u, 'galaxyUpg');
-
-        for (let i=thisRow+1; i<=NUM_GALAXY_ROWS; i++) {
-            player.rowCosts[i] = player.rowCosts[i].plus(1);
-        }
         
         if (u == 21) {
             player.galaxyUpgs[g][22].locked = true;
@@ -155,7 +151,6 @@ function respecGalaxiesKey() {
 function respecGalaxies() {
     player.galaxies = player.galaxies.plus(player.spentGalaxies);
     player.spentGalaxies = new Decimal(0);
-    copyData(player.rowCosts, START_PLAYER.rowCosts);
     copyData(player.galaxyUpgs, START_PLAYER.galaxyUpgs);
     loadStyles();
 }
@@ -294,6 +289,26 @@ function getGalaxiesBonus() {
     return boost;
 }
 
+function getNumGUpgs() {
+    let count = 0;
+    for (let g in GALAXIES_DATA) {
+        for (let u in GALAXIES_DATA[g].upgrades) {
+            if (hasGUpgrade(g, u)) { count++; }
+        }
+    }
+    return count;
+}
+
+function getNumGUpgsByRow(row) {
+    let count = 0;
+    for (let g in GALAXIES_DATA) {
+        for (let u in GALAXIES_DATA[g].upgrades) {
+            if (hasGUpgrade(g, u) && GALAXIES_DATA[g].upgrades[u].row == row) { count++; }
+        }
+    }
+    return count;
+}
+
 const ARK_DATA = {
     'navigation': {
         name: 'navigation',
@@ -389,7 +404,11 @@ const GALAXIES_DATA = {
                 lockImageID: '',
                 textID: 'text1.11',
                 cost: function() {
-                    return player.rowCosts[this.row];
+                    let c = 1;
+                    for (let i=1; i<this.row; i++) {
+                        c += getNumGUpgsByRow(i);
+                    }
+                    return c;
                 },
                 effect: function() {
                     return new Decimal(1);
@@ -410,7 +429,11 @@ const GALAXIES_DATA = {
                 lockImageID: 'skull1.21',
                 textID: 'text1.21',
                 cost: function() {
-                    return player.rowCosts[this.row];
+                    let c = 1;
+                    for (let i=1; i<this.row; i++) {
+                        c += getNumGUpgsByRow(i);
+                    }
+                    return c;
                 },
                 effect: function() {
                     return new Decimal(1);
@@ -431,7 +454,11 @@ const GALAXIES_DATA = {
                 lockImageID: 'skull1.22',
                 textID: 'text1.22',
                 cost: function() {
-                    return player.rowCosts[this.row];
+                    let c = 1;
+                    for (let i=1; i<this.row; i++) {
+                        c += getNumGUpgsByRow(i);
+                    }
+                    return c;
                 },
                 effect: function() {
                     return new Decimal(1);
@@ -452,7 +479,11 @@ const GALAXIES_DATA = {
                 lockImageID: 'skull1.31',
                 textID: 'text1.31',
                 cost: function() {
-                    return player.rowCosts[this.row];
+                    let c = 1;
+                    for (let i=1; i<this.row; i++) {
+                        c += getNumGUpgsByRow(i);
+                    }
+                    return c;
                 },
                 effect: function() {
                     return new Decimal(1);
@@ -473,7 +504,11 @@ const GALAXIES_DATA = {
                 lockImageID: 'skull1.32',
                 textID: 'text1.32',
                 cost: function() {
-                    return player.rowCosts[this.row];
+                    let c = 1;
+                    for (let i=1; i<this.row; i++) {
+                        c += getNumGUpgsByRow(i);
+                    }
+                    return c;
                 },
                 effect: function() {
                     return new Decimal(1);
@@ -494,7 +529,11 @@ const GALAXIES_DATA = {
                 lockImageID: '',
                 textID: 'text1.41',
                 cost: function() {
-                    return player.rowCosts[this.row];
+                    let c = 1;
+                    for (let i=1; i<this.row; i++) {
+                        c += getNumGUpgsByRow(i);
+                    }
+                    return c;
                 },
                 effect: function() {
                     return new Decimal(1);
@@ -521,7 +560,11 @@ const GALAXIES_DATA = {
                 lockImageID: '',
                 textID: 'text2.11',
                 cost: function() {
-                    return player.rowCosts[this.row];
+                    let c = 1;
+                    for (let i=1; i<this.row; i++) {
+                        c += getNumGUpgsByRow(i);
+                    }
+                    return c;
                 },
                 effect: function() {
                     return new Decimal(1);
@@ -542,7 +585,11 @@ const GALAXIES_DATA = {
                 lockImageID: 'skull2.21',
                 textID: 'text2.21',
                 cost: function() {
-                    return player.rowCosts[this.row];
+                    let c = 1;
+                    for (let i=1; i<this.row; i++) {
+                        c += getNumGUpgsByRow(i);
+                    }
+                    return c;
                 },
                 effect: function() {
                     return new Decimal(1);
@@ -563,7 +610,11 @@ const GALAXIES_DATA = {
                 lockImageID: 'skull2.22',
                 textID: 'text2.22',
                 cost: function() {
-                    return player.rowCosts[this.row];
+                    let c = 1;
+                    for (let i=1; i<this.row; i++) {
+                        c += getNumGUpgsByRow(i);
+                    }
+                    return c;
                 },
                 effect: function() {
                     return new Decimal(1);
@@ -584,7 +635,11 @@ const GALAXIES_DATA = {
                 lockImageID: 'skull2.31',
                 textID: 'text2.31',
                 cost: function() {
-                    return player.rowCosts[this.row];
+                    let c = 1;
+                    for (let i=1; i<this.row; i++) {
+                        c += getNumGUpgsByRow(i);
+                    }
+                    return c;
                 },
                 effect: function() {
                     let e = new Decimal(player.galaxies.plus(player.spentGalaxies));
@@ -606,7 +661,11 @@ const GALAXIES_DATA = {
                 lockImageID: 'skull2.32',
                 textID: 'text2.32',
                 cost: function() {
-                    return player.rowCosts[this.row];
+                    let c = 1;
+                    for (let i=1; i<this.row; i++) {
+                        c += getNumGUpgsByRow(i);
+                    }
+                    return c;
                 },
                 effect: function() {
                     return new Decimal(1);
@@ -627,7 +686,11 @@ const GALAXIES_DATA = {
                 lockImageID: '',
                 textID: 'text2.41',
                 cost: function() {
-                    return player.rowCosts[this.row];
+                    let c = 1;
+                    for (let i=1; i<this.row; i++) {
+                        c += getNumGUpgsByRow(i);
+                    }
+                    return c;
                 },
                 effect: function() {
                     return getEssenceProdPerSecond().log10();
@@ -654,7 +717,11 @@ const GALAXIES_DATA = {
                 lockImageID: '',
                 textID: 'text3.11',
                 cost: function() {
-                    return player.rowCosts[this.row];
+                    let c = 1;
+                    for (let i=1; i<this.row; i++) {
+                        c += getNumGUpgsByRow(i);
+                    }
+                    return c;
                 },
                 effect: function() {
                     return new Decimal(3);
@@ -675,7 +742,11 @@ const GALAXIES_DATA = {
                 lockImageID: 'skull3.21',
                 textID: 'text3.21',
                 cost: function() {
-                    return player.rowCosts[this.row];
+                    let c = 1;
+                    for (let i=1; i<this.row; i++) {
+                        c += getNumGUpgsByRow(i);
+                    }
+                    return c;
                 },
                 effect: function() {
                     return new Decimal(1);
@@ -696,7 +767,11 @@ const GALAXIES_DATA = {
                 lockImageID: 'skull3.22',
                 textID: 'text3.22',
                 cost: function() {
-                    return player.rowCosts[this.row];
+                    let c = 1;
+                    for (let i=1; i<this.row; i++) {
+                        c += getNumGUpgsByRow(i);
+                    }
+                    return c;
                 },
                 effect: function() {
                     return new Decimal(1);
@@ -717,7 +792,11 @@ const GALAXIES_DATA = {
                 lockImageID: 'skull3.31',
                 textID: 'text3.31',
                 cost: function() {
-                    return player.rowCosts[this.row];
+                    let c = 1;
+                    for (let i=1; i<this.row; i++) {
+                        c += getNumGUpgsByRow(i);
+                    }
+                    return c;
                 },
                 effect: function() {
                     return new Decimal(1);
@@ -738,7 +817,11 @@ const GALAXIES_DATA = {
                 lockImageID: 'skull3.32',
                 textID: 'text3.32',
                 cost: function() {
-                    return player.rowCosts[this.row];
+                    let c = 1;
+                    for (let i=1; i<this.row; i++) {
+                        c += getNumGUpgsByRow(i);
+                    }
+                    return c;
                 },
                 effect: function() {
                     return new Decimal(1.1);
@@ -759,7 +842,11 @@ const GALAXIES_DATA = {
                 lockImageID: '',
                 textID: 'text3.41',
                 cost: function() {
-                    return player.rowCosts[this.row];
+                    let c = 1;
+                    for (let i=1; i<this.row; i++) {
+                        c += getNumGUpgsByRow(i);
+                    }
+                    return c;
                 },
                 effect: function() {
                     return getTUpgEffect(33).pow(2);
@@ -786,7 +873,11 @@ const GALAXIES_DATA = {
                 lockImageID: '',
                 textID: 'text4.11',
                 cost: function() {
-                    return player.rowCosts[this.row];
+                    let c = 1;
+                    for (let i=1; i<this.row; i++) {
+                        c += getNumGUpgsByRow(i);
+                    }
+                    return c;
                 },
                 effect: function() {
                     let e = new Decimal(player.galaxies.plus(player.spentGalaxies));
@@ -808,7 +899,11 @@ const GALAXIES_DATA = {
                 lockImageID: 'skull4.21',
                 textID: 'text4.21',
                 cost: function() {
-                    return player.rowCosts[this.row];
+                    let c = 1;
+                    for (let i=1; i<this.row; i++) {
+                        c += getNumGUpgsByRow(i);
+                    }
+                    return c;
                 },
                 effect: function() {
                     return new Decimal(4);
@@ -829,7 +924,11 @@ const GALAXIES_DATA = {
                 lockImageID: 'skull4.22',
                 textID: 'text4.22',
                 cost: function() {
-                    return player.rowCosts[this.row];
+                    let c = 1;
+                    for (let i=1; i<this.row; i++) {
+                        c += getNumGUpgsByRow(i);
+                    }
+                    return c;
                 },
                 effect: function() {
                     return new Decimal(1);
@@ -850,7 +949,11 @@ const GALAXIES_DATA = {
                 lockImageID: 'skull4.31',
                 textID: 'text4.31',
                 cost: function() {
-                    return player.rowCosts[this.row];
+                    let c = 1;
+                    for (let i=1; i<this.row; i++) {
+                        c += getNumGUpgsByRow(i);
+                    }
+                    return c;
                 },
                 effect: function() {
                     return new Decimal(2);
@@ -871,7 +974,11 @@ const GALAXIES_DATA = {
                 lockImageID: 'skull4.32',
                 textID: 'text4.32',
                 cost: function() {
-                    return player.rowCosts[this.row];
+                    let c = 1;
+                    for (let i=1; i<this.row; i++) {
+                        c += getNumGUpgsByRow(i);
+                    }
+                    return c;
                 },
                 effect: function() {
                     return new Decimal(1);
@@ -892,7 +999,11 @@ const GALAXIES_DATA = {
                 lockImageID: '',
                 textID: 'text4.41',
                 cost: function() {
-                    return player.rowCosts[this.row];
+                    let c = 1;
+                    for (let i=1; i<this.row; i++) {
+                        c += getNumGUpgsByRow(i);
+                    }
+                    return c;
                 },
                 effect: function() {
                     return new Decimal(1);
