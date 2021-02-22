@@ -152,7 +152,6 @@ function respecGalaxies() {
     player.galaxies = player.galaxies.plus(player.spentGalaxies);
     player.spentGalaxies = new Decimal(0);
     copyData(player.galaxyUpgs, START_PLAYER.galaxyUpgs);
-    loadStyles();
 }
 
 function galaxyPrestigeClick() {
@@ -243,20 +242,13 @@ function galaxyPrestigeReset(respec=false) {
 
     resetTime();
     resetTimeCounts();
-    showTimeSubTab('timeDimSubTab');
     resetUnits();
-    player.corpses = hasAchievement(41) ? new Decimal(START_PLAYER.corpsesAch41) : new Decimal(START_PLAYER.corpses)
-    resetSpaceCounts();
     resetBuildingResources(false, true);
     resetBuildings(true);
-    lockTab('unitsTab');
+    lockElements('unitsTab', 'autobuyers');
     lockTab('buildingsTab');
-    unlockElementsOnLoad('unitsTab', 'fastBuyers');
-    unlockElementsOnLoad('unitsTab', 'bulkBuyers');
-    unlockElementsOnLoad('unitsTab', 'prestigeBuyer');
-    unlockElementsOnLoad('unitsTab', 'advancedBuyer');
-    unlockElementsOnLoad('unitsTab', 'spacePrestige');
-    lockTab('timeTab');
+    if (!hasAchievement(42)) { lockTab('timeTab'); }
+    else { lockElements('timeTab', 'mainTab'); }
     
     
     if (document.getElementById('respecOnAsc').checked || respec) {
@@ -264,6 +256,7 @@ function galaxyPrestigeReset(respec=false) {
     }
     document.getElementById('respecOnAsc').checked = false;
 
+    player.corpses = hasAchievement(41) ? new Decimal(START_PLAYER.corpsesAch41) : new Decimal(START_PLAYER.corpses)
     showUnitSubTab('unitsSubTab');
     showBuildingSubTab('buildingsSubTab');
     showTimeSubTab('timeDimSubTab');
@@ -405,9 +398,7 @@ const GALAXIES_DATA = {
                 textID: 'text1.11',
                 cost: function() {
                     let c = 1;
-                    for (let i=1; i<this.row; i++) {
-                        c += getNumGUpgsByRow(i);
-                    }
+                    c += getNumGUpgsByRow(4);
                     return c;
                 },
                 effect: function() {
@@ -561,9 +552,7 @@ const GALAXIES_DATA = {
                 textID: 'text2.11',
                 cost: function() {
                     let c = 1;
-                    for (let i=1; i<this.row; i++) {
-                        c += getNumGUpgsByRow(i);
-                    }
+                    c += getNumGUpgsByRow(4);
                     return c;
                 },
                 effect: function() {
@@ -718,9 +707,7 @@ const GALAXIES_DATA = {
                 textID: 'text3.11',
                 cost: function() {
                     let c = 1;
-                    for (let i=1; i<this.row; i++) {
-                        c += getNumGUpgsByRow(i);
-                    }
+                    c += getNumGUpgsByRow(4);
                     return c;
                 },
                 effect: function() {
@@ -874,9 +861,7 @@ const GALAXIES_DATA = {
                 textID: 'text4.11',
                 cost: function() {
                     let c = 1;
-                    for (let i=1; i<this.row; i++) {
-                        c += getNumGUpgsByRow(i);
-                    }
+                    c += getNumGUpgsByRow(4);
                     return c;
                 },
                 effect: function() {

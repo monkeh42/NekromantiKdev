@@ -299,12 +299,10 @@ function timePrestigeReset() {
     player.antiEssence = new Decimal(START_PLAYER.antiEssence);
     player.corpses = hasAchievement(41) ? new Decimal(START_PLAYER.corpsesAch41) : new Decimal(START_PLAYER.corpses)
     resetUnits();
-    if (!hasTUpgrade(24)) { resetBuildings(); }
-    showBuildingSubTab('buildingsSubTab');
     resetBuildingResources(true);
-    resetSpaceCounts();
+    resetBuildings();
+    showBuildingSubTab('buildingsSubTab');
     for (var i=1; i<=NUM_TIMEDIMS; i++) { player.timeDims[i].amount = player.timeDims[i].bought; }
-    lockTab('unitsTab');
     if (timeUpgUnlocked) { player.buildings[3].upgrades[13] = true; }
     save();
     loadStyles();
@@ -324,57 +322,43 @@ function resetTime() {
     copyData(player.timeDims, START_PLAYER.timeDims);
 }
 
-function resetSpaceCounts() {
+/*function resetSpaceCounts() {
+    if (!hasTUpgrade(24)) { 
+        copyData(tempSun, player.buildings[3]);
+        copyData(player.buildings, START_PLAYER.buildings);
+        copyData(player.construction, START_PLAYER.construction);
+    }
+
     if (hasTUpgrade(14)) {
         player.worlds = new Decimal(4);
         player.spaceResets = new Decimal(4);
         player.nextSpaceReset = [3, 8];
-        lockElements('buildingsTab', 'factory');
-        lockElements('buildingsTab', 'factoryRow2');
-        lockElements('buildingsTab', 'necropolis');
-        lockElements('buildingsTab', 'necropolisRow2');
     } else if (hasTUpgrade(13)) {
         player.worlds = new Decimal(3);
         player.spaceResets = new Decimal(3);
         player.nextSpaceReset = [1, 8];
-        lockElements('buildingsTab', 'factory');
-        lockElements('buildingsTab', 'factoryRow2');
-        lockElements('buildingsTab', 'necropolis');
-        lockElements('buildingsTab', 'necropolisRow2');
-        lockElements('buildingsTab', 'sun');
-        lockElements('buildingsTab', 'sunRow2');
     } else if (hasTUpgrade(12)) {
         player.worlds = new Decimal(2);
         player.spaceResets = new Decimal(2);
         player.nextSpaceReset = [1, 7];
-        lockElements('buildingsTab', 'factory');
-        lockElements('buildingsTab', 'factoryRow2');
-        lockElements('buildingsTab', 'necropolis');
-        lockElements('buildingsTab', 'necropolisRow2');
-        lockElements('buildingsTab', 'sun');
-        lockElements('buildingsTab', 'sunRow2');
     } else if (hasTUpgrade(11)) {
         player.worlds = new Decimal(1);
         player.spaceResets = new Decimal(1);
         player.nextSpaceReset = [1, 6];
-        lockElements('buildingsTab', 'factory');
-        lockElements('buildingsTab', 'factoryRow2');
-        lockElements('buildingsTab', 'necropolis');
-        lockElements('buildingsTab', 'necropolisRow2');
-        lockElements('buildingsTab', 'sun');
-        lockElements('buildingsTab', 'sunRow2');
-        lockElements('buildingsTab', 'construction');
     } else {
         player.spaceResets = new Decimal(START_PLAYER.spaceResets);
         player.worlds = new Decimal(START_PLAYER.worlds);
         player.nextSpaceReset = START_PLAYER.nextSpaceReset.slice();
-        lockTab('buildingsTab');
+        if (!hasTUpgrade(24)) { lockTab('buildingsTab'); }
     }
+    player.worlds = new Decimal(4);
+    player.spaceResets = new Decimal(4);
+    player.nextSpaceReset = [3, 8];
     copyData(player.thisSacStats, START_PLAYER.thisSacStats);
     if (hasGUpgrade(2, 22)) { player.worlds = player.worlds.plus(1); }
     player.thisSacStats.totalWorlds = player.worlds;
     player.thisSacStats.bestWorlds = player.worlds;
-}
+}*/
 
 //data
 
