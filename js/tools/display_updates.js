@@ -174,6 +174,9 @@ function updateCorpseDisplays() {
     displayData.push(['html', 'worldsMult', `${formatDefault2(getWorldsBonus())}x`]);
     displayData.push(['html', 'worldsNum', `${formatWhole(player.worlds)}`]);
     displayData.push(['html', 'pluralWorld', worldSingulizer()]);
+    displayData.push(['html', 'galaxiesMult', `${formatDefault2(getGalaxiesBonus())}x`]);
+    displayData.push(['html', 'galaxiesNum', `${formatWhole(player.allTimeStats.totalGalaxies)}`]);
+    displayData.push(['html', 'pluralGalaxy', galaxyTextSingulizer(player.allTimeStats.totalGalaxies)]);
     displayData.push(['html', 'totalMultAll', `${formatDefault2(getTotalCorpseMult())}x`]);
     displayData.push(['html', 'normalAstral', player.astralFlag ? 'ASTRAL' : 'NORMAL']);
     //displayData.push(['setProp', 'normalAstral', 'color', player.astralFlag ? '#42d35a' : 'white']);

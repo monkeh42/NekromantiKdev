@@ -35,6 +35,7 @@ function getCorpseMultFromUnits() {
 function getTotalCorpseMult() {
     var mult = getCorpseMultFromUnits();
     mult = mult.times(getWorldsBonus());
+    if (player.allTimeStats.totalGalaxies.gt(0)) { mult = mult.times(getGalaxiesBonus()); }
     if (hasUpgrade(2, 13)) { mult = mult.times(getUpgEffect(2, 13)); }
     if (hasUpgrade(1, 23)) { mult = mult.times(getUpgEffect(1, 23)); }
     return Decimal.max(mult, 1);

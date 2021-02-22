@@ -1337,7 +1337,7 @@ const UNLOCKS_DATA = {
             unlocked: false,
             classNotID: false,
             notifyID: 'galaxyTabBut',
-            idsToShow: ['galaxyTabCell'],
+            idsToShow: ['galaxyTabCell', 'galaxiesBonusDisplay'],
             idsToHide: [],
             shouldNotify: function() {
                 return true;

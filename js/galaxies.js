@@ -287,6 +287,13 @@ function resetTimeCounts() {
     copyData(player.thisAscStats, START_PLAYER.thisAscStats);
 }
 
+function getGalaxiesBonus() {
+    var b = new Decimal(player.allTimeStats.totalGalaxies)
+    var e = 1.5;
+    var boost = Decimal.max(b.pow(e).plus(1), 1);
+    return boost;
+}
+
 const ARK_DATA = {
     'navigation': {
         name: 'navigation',
