@@ -1235,19 +1235,19 @@ option:active, option.active {
 
 .buyerRadio:checked {
     background-color: #170424;
-    border: 3px solid white;
+    border: 1px solid white;
 }
 
 .buyerRadio:checked:hover {
     background-color: #170424;
-    border: 3px solid white;
+    border: 1px solid white;
     opacity: 1;
     cursor: default;
 }
 
 .buyerRadio:hover {
     background-color: #170424;
-    border: 3px solid white;
+    border: 1px solid white;
     opacity: 0.5;
 }
 
@@ -1265,12 +1265,12 @@ option:active, option.active {
 
 .buyerCheckbox:checked {
     background-color: #170424;
-    border: 3px solid white;
+    border: 1px solid white;
 }
 
 .buyerCheckbox:checked:hover {
     background-color: #170424;
-    border: 3px solid white;
+    border: 1px solid white;
     opacity: 0.5;
 }
 
@@ -1293,12 +1293,12 @@ option:active, option.active {
 
 .timeCheckbox:checked {
     background-color: #006ba0;
-    border: 3px solid white;
+    border: 1px solid white;
 }
 
 .timeCheckbox:checked:hover {
     background-color: #006ba0;
-    border: 3px solid white;
+    border: 1px solid white;
     opacity: 0.5;
 }
 
