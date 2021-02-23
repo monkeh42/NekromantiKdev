@@ -161,6 +161,7 @@ function updateGalaxyUpgs() {
 function updateResourceDisplays() {
     displayData.push(['html', 'achBoost', formatDefault2(getAchievementBoost())]);
     displayData.push(['html', 'numAch', formatWhole(getNumAchievements())]);
+    displayData.push(['html', 'numAchRows', formatWhole(getNumAchRows())]);
     updateCorpseDisplays();
     updateBuildingDisplays();
     updateTimeDisplays()
@@ -172,6 +173,9 @@ function updateCorpseDisplays() {
     displayData.push(['html', 'pluralCorpse', corpseSingulizer(false)]);
     displayData.push(['html', 'pluralCorpseG', corpseSingulizer(true)]);
     displayData.push(['html', 'corpseGain', player.astralFlag ? formatWhole(0) : formatDefault(getCorpsesPerSecond())]);
+    displayData.push(['html', 'achNum', `${formatWhole(getNumAchievements())}`]);
+    displayData.push(['html', 'achRowsNum', `${formatWhole(getNumAchRows())}`]);
+    displayData.push(['html', 'achMult', `${formatDefault2(getAchievementBoost())}x`]);
     displayData.push(['html', 'totalMult', `${formatDefault2(getCorpseMultFromUnits())}x`]);
     displayData.push(['html', 'worldsMult', `${formatDefault2(getWorldsBonus())}x`]);
     displayData.push(['html', 'worldsNum', `${formatWhole(player.worlds)}`]);

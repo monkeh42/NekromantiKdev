@@ -732,6 +732,7 @@ const START_PLAYER = {
     headerDisplay: {
         'astralNoticeDisplay': true,
         'unitsBoostDisplay': true,
+        'achBoostDisplay': false,
         'worldsBonusDisplay': true,
         'galaxiesBonusDisplay': true,
         'totalBonusDisplay': true,
@@ -2211,6 +2212,7 @@ function fixResetBug() {
     copyData(START_PLAYER.headerDisplay, {
         'astralNoticeDisplay': true,
         'unitsBoostDisplay': true,
+        'achBoostDisplay': false,
         'worldsBonusDisplay': true,
         'galaxiesBonusDisplay': true,
         'totalBonusDisplay': true,
