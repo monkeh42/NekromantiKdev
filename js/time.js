@@ -561,7 +561,7 @@ const TIME_DATA = {
         },
         24: {
             title: 'Rapid Fire',
-            desc: 'Unlock fast autobuyers, and the buildings/construction tabs are never reset on sacrifice (except bricks and resources).',
+            desc: 'Unlock fast autobuyers permanently, and the buildings/construction tabs are never reset on sacrifice (except bricks and resources).',
             cost: new Decimal(20000),
             preReq: 23,
             buttonID: 'timeUpg24',
@@ -602,7 +602,7 @@ const TIME_DATA = {
         },
         33: {
             title: 'Lightspeed',
-            desc: 'Unlock bulk autobuyers, and crystal gain is boosted based on your nekro-photons.',
+            desc: 'Unlock bulk autobuyers permanently, and crystal gain is boosted based on your nekro-photons.',
             cost: new Decimal(150000),
             preReq: 32,
             buttonID: 'timeUpg33',
@@ -617,7 +617,7 @@ const TIME_DATA = {
         },
         34: {
             title: 'Supernova',
-            desc: 'Unlock the world prestige autobuyer and the second row of Dead Sun upgrades.',
+            desc: 'Unlock the world prestige autobuyer permanently and the second row of Dead Sun upgrades.',
             cost: new Decimal(1000000),
             preReq: 33,
             buttonID: 'timeUpg34',

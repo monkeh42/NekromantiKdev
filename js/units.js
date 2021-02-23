@@ -127,9 +127,12 @@ function spacePrestige() {
         player.spaceResets = player.spaceResets.plus(1);
         player.worlds = player.worlds.plus(1);
         if (player.worlds.gt(player.thisSacStats.bestWorlds)) { player.thisSacStats.bestWorlds = new Decimal(player.worlds); }
+        if (player.worlds.gt(player.thisAscStats.bestWorlds)) { player.thisAscStats.bestWorlds = new Decimal(player.worlds); }
         if (player.worlds.gt(player.allTimeStats.bestWorlds)) { player.allTimeStats.bestWorlds = new Decimal(player.worlds); }
         player.thisSacStats.totalSpaceResets = player.thisSacStats.totalSpaceResets.plus(1);
         player.thisSacStats.totalWorlds = player.thisSacStats.totalWorlds.plus(1);
+        player.thisAscStats.totalSpaceResets = player.thisAscStats.totalSpaceResets.plus(1);
+        player.thisAscStats.totalWorlds = player.thisAscStats.totalWorlds.plus(1);
         player.allTimeStats.totalSpaceResets = player.allTimeStats.totalSpaceResets.plus(1);
         player.allTimeStats.totalWorlds = player.allTimeStats.totalWorlds.plus(1);
         spacePrestigeReset();
@@ -141,9 +144,12 @@ function spacePrestigeNoConfirm() {
         player.spaceResets = player.spaceResets.plus(1);
         player.worlds = player.worlds.plus(1);
         if (player.worlds.gt(player.thisSacStats.bestWorlds)) { player.thisSacStats.bestWorlds = new Decimal(player.worlds); }
+        if (player.worlds.gt(player.thisAscStats.bestWorlds)) { player.thisAscStats.bestWorlds = new Decimal(player.worlds); }
         if (player.worlds.gt(player.allTimeStats.bestWorlds)) { player.allTimeStats.bestWorlds = new Decimal(player.worlds); }
         player.thisSacStats.totalSpaceResets = player.thisSacStats.totalSpaceResets.plus(1);
         player.thisSacStats.totalWorlds = player.thisSacStats.totalWorlds.plus(1);
+        player.thisAscStats.totalSpaceResets = player.thisAscStats.totalSpaceResets.plus(1);
+        player.thisAscStats.totalWorlds = player.thisAscStats.totalWorlds.plus(1);
         player.allTimeStats.totalSpaceResets = player.allTimeStats.totalSpaceResets.plus(1);
         player.allTimeStats.totalWorlds = player.allTimeStats.totalWorlds.plus(1);
         spacePrestigeReset();

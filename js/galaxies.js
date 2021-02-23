@@ -128,16 +128,16 @@ function buyGUpg(g, u) {
             remGUpgClass(g, 31, 'unclickGalaxyUpg')
             document.getElementById(GALAXIES_DATA[g].upgrades[31].textID).style.display = 'none';
         }
-        if (thisRow>1) {
+        /*if (thisRow>1) {
             if (!player.galaxyRowsLocked[thisRow-1]) { rowLock(thisRow-1); }
         }
         if (thisRow==4) {
             unlockRows();
-        }
+        }*/
     }
 }
 
-function rowLock(row) {
+/*function rowLock(row) {
     let lockedRows = getGUpgsByRow(row);
     let g, u;
     for (let i=0; i<lockedRows.length; i++) {
@@ -174,7 +174,7 @@ function unlockRow(r) {
         }
     }
     player.galaxyRowsLocked[r] = false;
-}
+}*/
 
 function buyArkUpgrade(a) {
     if (!player.ark[a].bought && canAffordAUpg(a)) {
@@ -209,9 +209,9 @@ function respecGalaxiesKey() {
 function respecGalaxies() {
     player.galaxies = player.galaxies.plus(player.spentGalaxies);
     player.spentGalaxies = new Decimal(0);
-    unlockRows();
+    //unlockRows();
     copyData(player.galaxyUpgs, START_PLAYER.galaxyUpgs);
-    copyData(player.galaxyRowsLocked, START_PLAYER.galaxyRowsLocked);
+    //copyData(player.galaxyRowsLocked, START_PLAYER.galaxyRowsLocked);
     loadStyles();
 }
 
@@ -289,8 +289,10 @@ function galaxyPrestigeReset(respec=false) {
     }
     clearInterval(mainLoop);
     
-    copyData(player.autobuyers, START_PLAYER.autobuyers);
-    updateAutobuyersDisplay();
+    if (!hasAchievement(42)) {
+        copyData(player.autobuyers, START_PLAYER.autobuyers);
+        updateAutobuyersDisplay();
+    }
 
     player.pastAscRuns.lastRun.galaxyGain = calculateGalaxyGain();
     player.pastAscRuns.lastRun.timeSpent = (new Date).getTime()-player.pastAscRuns.lastRun.timeAscended;
@@ -306,9 +308,9 @@ function galaxyPrestigeReset(respec=false) {
     resetUnits();
     resetBuildingResources(false, true);
     resetBuildings(true);
-    lockElements('unitsTab', 'autobuyers');
+    if (!hasAchievement(42)) { lockElements('unitsTab', 'autobuyers'); }
     lockTab('buildingsTab');
-    if (!hasAchievement(42)) { lockTab('timeTab'); }
+    if (!hasAchievement(43)) { lockTab('timeTab'); }
     else { lockElements('timeTab', 'mainTab'); }
     
     

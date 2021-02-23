@@ -221,8 +221,10 @@ function resetBuildings(ascension=false) {
     if (hasGUpgrade(2, 22)) { player.worlds = player.worlds.plus(1); }
     player.thisSacStats.totalWorlds = player.worlds;
     player.thisSacStats.bestWorlds = player.worlds;
+    player.thisAscStats.totalWorlds = player.worlds;
+    player.thisAscStats.bestWorlds = player.worlds;
 
-    if (!hasTUpgrade(24) && tempSun.upgrades[13] && (!ascension || hasAchievement(42))) {
+    if (!hasTUpgrade(24) && tempSun.upgrades[13] && (!ascension || hasAchievement(43))) {
         unlockElements('buildingsTab', 'sun');
         player.buildings[3].upgrades[13] = tempSun.upgrades[13];
     }
@@ -624,7 +626,7 @@ const BUILDS_DATA = {
             },
             22: {
                 title: 'Menagerie of Worlds',
-                desc: function() { return `Unlock advanced sacrifice autobuyer options, and raise the sun eater base cost multiplier to ^0.67${hasAchievement(35) ? ' (0.333 after Galactic Angst).' : '.'}`; },
+                desc: function() { return `Unlock advanced sacrifice autobuyer options permanently, and raise the sun eater base cost multiplier to ^0.67${hasAchievement(35) ? ' (0.333 after Galactic Angst).' : '.'}`; },
                 cost: new Decimal(2500000),
                 buttonID: 'sunUpg22',
                 displayEffect: false,

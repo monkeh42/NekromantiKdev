@@ -189,12 +189,12 @@ const START_PLAYER = {
         priority: [1, 2, 3, 4, 5, 6, 7, 8],
     },
 
-    galaxyRowsLocked: {
+    /*galaxyRowsLocked: {
         1: false,
         2: false,
         3: false,
         4: false,
-    },
+    },*/
 
     galaxyUpgs: {
         1: {
@@ -787,6 +787,22 @@ MILES_DATA = {
             return new Decima(1);
         },
     },
+    6: {
+        canUnlock: function() {
+            return false;
+        },
+        effect: function() {
+            return new Decima(1);
+        },
+    },
+    7: {
+        canUnlock: function() {
+            return false;
+        },
+        effect: function() {
+            return new Decima(1);
+        },
+    },
 }
 
 const ACH_DATA = {
@@ -1011,7 +1027,7 @@ const ACH_DATA = {
         showEffect: false,
         divID: 'ach33',
         canUnlock: function() {
-            return (player.corpses.gte(1e100) && !player.thisSacStats.hasGoneAstral);
+            return (player.corpses.gte(1e100) && player.thisSacStats.totalBricks.eq(0));
         },
         effect: function() {
             return new Decimal(1);
@@ -1072,12 +1088,29 @@ const ACH_DATA = {
         }
     },
     42: {
+        title: 'Tedium Is Joy',
+        desc: 'Buy World Stasis 3 for the second time.',
+        reward: 'Autobuyers are unlocked permanently.',
+        hasReward: true,
+        showEffect: false,
+        divID: 'ach42',
+        canUnlock: function() {
+            return (hasTUpgrade(13) && player.ascensions.gt(0)) || player.ascensions.gt(1);
+        },
+        effect: function() {
+            return new Decimal(1);
+        },
+        onUnlock: function() {
+            return;
+        }
+    },
+    43: {
         title: 'The Slog Of Slogs',
         desc: 'Buy Nekro-Time for the second time.',
         reward: 'Nekro-Time is never reset.',
         hasReward: true,
         showEffect: false,
-        divID: 'ach42',
+        divID: 'ach43',
         canUnlock: function() {
             return (hasUpgrade(3, 13) && player.ascensions.gt(0)) || player.ascensions.gt(1);
         },
@@ -1088,32 +1121,15 @@ const ACH_DATA = {
             return;
         }
     },
-    43: {
-        title: 'title',
-        desc: '',
-        reward: '',
-        hasReward: false,
-        showEffect: false,
-        divID: 'ach43',
-        canUnlock: function() {
-            return false;
-        },
-        effect: function() {
-            return new Decimal(1);
-        },
-        onUnlock: function() {
-            return;
-        }
-    },
     44: {
-        title: 'title',
-        desc: '',
+        title: 'That\'s Pretty Darn Fast',
+        desc: 'Have your zombie corpse multiplier over 10,000 before unlocking Time Warp in this ascension.',
         reward: '',
         showEffect: false,
         hasReward: false,
         divID: 'ach44',
         canUnlock: function() {
-            return false;
+            return UNITS_DATA[1].corpseMult().gte(10000) && !player.unlocks['timeTab']['mainTab'];
         },
         effect: function() {
             return new Decimal(1);
@@ -1123,14 +1139,14 @@ const ACH_DATA = {
         }
     },
     45: {
-        title: 'title',
-        desc: '',
+        title: 'Why?',
+        desc: 'Sacrifice without enabling astral enslavement this ascension.',
         reward: '',
         showEffect: false,
         hasReward: false,
         divID: 'ach45',
         canUnlock: function() {
-            return false;
+            return player.thisAscStats.totalTimeResets.gt(0) && player.thisAscStats.totalBricks.eq(0);
         },
         effect: function() {
             return new Decimal(1);
@@ -1799,12 +1815,12 @@ function fixResetBug() {
         ],
     });
 
-    copyData(START_PLAYER.galaxyRowsLocked, {
+    /*copyData(START_PLAYER.galaxyRowsLocked, {
         1: false,
         2: false,
         3: false,
         4: false,
-    });
+    });*/
 
     copyData(START_PLAYER.galaxyUpgs, {
         1: {

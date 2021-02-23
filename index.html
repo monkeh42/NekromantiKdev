@@ -1067,13 +1067,13 @@
             <div id="galaxiesSubTab" class="galaxySubTab">
                 <div style="text-align: center; width: auto; margin: auto; position: relative; top: 25px;">
                     <span style="font-size: 17pt; font-weight: bold; color: #e32d05;">There must be loss in exchange for true power.</span><br>
-                    All galaxy upgrades have a base cost of <span style="font-size: 17pt; white-space: pre;"> 1 </span> depleted galaxy, but when you buy one, all others on rows below increase in cost by 1, and all rows above are locked.<br>
-                    You can only take one branch at a time in each tree; once you buy an upgrade in the 2nd row, the two in the other branch will lock.<br>
-                    Buying a 4th row upgrade will increase the cost of the 1st row upgrades by 1, but unlocks all locked rows.<br>
+                    All galaxy upgrades have a base cost of <span style="font-size: 17pt; white-space: pre;"> 1 </span> depleted galaxy, but when you buy one, all others on rows below it increase in cost by 1.<br>
+                    You can't take both branches in the same tree; buying an upgrade in the 2nd row will lock out the two in the other branch.<br>
+                    Buying a 4th row upgrade will increase the cost of the 1st row upgrades by 1.<br>
                     A galaxy respec resets all costs to 1, and unlocks all locked upgrades.
                 </div>
-                <div style="text-align: center; position: relative; top: 50px;"><button id="galaxyRespecBut" class="galaxyBut" onclick="respecGalaxiesClick()">Respec galaxies - forces ascension</button><button id="milestonesBut" class="galaxyBut" onclick="showMilestones()">Galaxy Milestones - not yet working</button></div>
-                <table style="text-align: center; position: relative; top: 50px;">
+                <div style="text-align: center; position: relative; top: 35px;"><button id="galaxyRespecBut" class="galaxyBut" onclick="respecGalaxiesClick()">Respec galaxies - forces ascension</button><button id="milestonesBut" class="galaxyBut" onclick="showMilestones()">Galaxy Milestones - not yet working</button></div>
+                <table style="text-align: center; position: relative; top: 25px;">
                     <tr>
                         <td>
 
@@ -1714,16 +1714,16 @@
                             <div id="ach41" class="achievement achTooltip" onmouseover="mouseoverAchievement(41)"><p>Interstellar<br>+</p></div>
                         </td>
                         <td>
-                            <div id="ach42" class="achievement achTooltip" onmouseover="mouseoverAchievement(42)"><p>The Slog Of Slogs<br>+</p></div>
+                            <div id="ach42" class="achievement achTooltip" onmouseover="mouseoverAchievement(42)"><p>Tedium Is Joy<br>+</p></div>
                         </td>
                         <td>
-                            <div id="ach43" class="achievement achTooltip" onmouseover="mouseoverAchievement(43)"><p>title</p></div>
+                            <div id="ach43" class="achievement achTooltip" onmouseover="mouseoverAchievement(43)"><p>The Slog Of Slogs<br>+</p></div>
                         </td>
                         <td>
-                            <div id="ach44" class="achievement achTooltip" onmouseover="mouseoverAchievement(44)"><p>title</p></div>
+                            <div id="ach44" class="achievement achTooltip" onmouseover="mouseoverAchievement(44)"><p>That's Pretty Darn Fast</p></div>
                         </td>
                         <td>
-                            <div id="ach45" class="achievement achTooltip" onmouseover="mouseoverAchievement(45)"><p>title</p></div>
+                            <div id="ach45" class="achievement achTooltip" onmouseover="mouseoverAchievement(45)"><p>Why?</p></div>
                         </td>
                     </tr>
                 </table>
@@ -2004,44 +2004,60 @@
             Achievement Unlocked!
         </div>
         <div class="milestonePopup" id="milestonesPopup">
-            <table style="width: 100%;">
+            <div class="cursorContainer"></div>
+            <div class="milestoneHeaderContainer">
+                <div class="milestonePopupHeader">MILESTONES</div>
+                <div class="milestonePopupHR"></div>
+            </div>
+            <table class="milestoneTable"style="width: 100%; margin-top: 49px;">
                 <tr>
                     <td class="milestoneTD">
-                        <span style="font-size: 24pt; font-weight: 800;">MILESTONES</span>
+                        <span style="font-size: 16pt;">Own four 1st row upgrades.</span><br>
+                        <span style="font-size: 11pt;">Unlock two more construction upgrades.</span>
                     </td>
                 </tr>
                 <tr>
                     <td class="milestoneTD">
-                        <span style="font-size: 16pt;">Complete one galaxy.</span><br>
-                        <span style="font-size: 11pt;">Unlock the ascension autobuyer, and all autobuyers are permanently unlocked.</span>
+                        <span style="font-size: 16pt;">Complete one upgrade tree.</span><br>
+                        <span style="font-size: 11pt;">Unlock the ascension autobuyer, and you keep <span style="font-weight: 800;">World Stasis 1-3</span> and <span style="font-weight: 800;">Star Stasis</span> permanently.</span>
                     </td>
                 </tr>
                 <tr>
                     <td class="milestoneTD">
-                        <span style="font-size: 16pt;">Complete two galaxies at once.</span><br>
-                        <span style="font-size: 11pt;">Unlock two more construction upgrades, and you keep <span style="font-weight: 800;">Rapid Fire</span> permanently.</span>
+                        <span style="font-size: 16pt;">Own four 2nd row upgrades.</span><br>
+                        <span style="font-size: 11pt;">Unlock a fourth building.</span>
                     </td>
                 </tr>
                 <tr>
                     <td class="milestoneTD">
-                        <span style="font-size: 16pt;">Complete three galaxies at once.</span><br>
-                        <span style="font-size: 11pt;">Unlock a fourth building.<br></span>
+                        <span style="font-size: 16pt;">Complete two trees at once.</span><br>
+                        <span style="font-size: 11pt;">You start every ascension with 11,111 time crystals.</span>
                     </td>
                 </tr>
                 <tr>
                     <td class="milestoneTD">
-                        <span style="font-size: 16pt;">Complete four galaxies at once.</span><br>
+                        <span style="font-size: 16pt;">Own four 3rd row upgrades.</span><br>
                         <span style="font-size: 11pt;">Unlock two more columns of time upgrades.</span>
                     </td>
                 </tr>
                 <tr>
                     <td class="milestoneTD">
-                        <span style="font-size: 16pt;">???</span><br>
-                        <span style="font-size: 11pt;">...</span>
+                        <span style="font-size: 16pt;">Complete three trees at once.</span><br>
+                        <span style="font-size: 11pt;">The corpse boost from galaxies is 1.5x stronger, and you keep <span style="font-weight: 800;">Rapid Fire</span> permanently.<br></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="milestoneTD">
+                        <span style="font-size: 16pt;">Own four 4th row upgrades.</span><br>
+                        <span style="font-size: 11pt;">You can buy both branches of all four trees.</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="milestoneTDButton">
+                        <button class="optBut" id="closeMilestonesPopup" style="margin: 22px;" onclick="hideMilestones()">CLOSE</button>
                     </td>
                 </tr>
             </table>
-            <button class="optBut" id="closeMilestonesPopup" style="margin: 25px;" onclick="hideMilestones()">CLOSE</button>
         </div>
     </div>
 </body>

@@ -223,8 +223,8 @@ function updateTimeDisplays() {
     displayData.push(['html', 'antiTimeBuff', formatDefault2(getAntiTimeBuff())]);
     displayData.push(['html', 'trueTimeNerf', formatDefault2(getTrueTimeNerf())]);
     displayData.push(['html', 'antiTimeNerf', formatDefault2(getAntiTimeNerf())]);
-    displayData.push(['html', 'crystalAmt', ' ' + formatWhole(player.crystals) + ' ']);
-    displayData.push(['html', 'crystalAmountHeader', ' ' + formatWhole(player.crystals) + ' ']);
+    displayData.push(['html', 'crystalAmt', ' ' + formatDefault(player.crystals) + ' ']);
+    displayData.push(['html', 'crystalAmountHeader', ' ' + formatDefault(player.crystals) + ' ']);
     if (player.allTimeStats.totalCrystals.gte(2000)) {
         displayData.push(['setProp', 'timePresDesc', 'display', 'none']);
         displayData.push(['setProp', 'crystalRateDesc', 'display', 'block']);
@@ -281,7 +281,7 @@ function updateTimePrestigeDisplay() {
         displayData.push(['setProp', 'timePrestigeReq', 'display', '']);
         displayData.push(['setProp', 'timePrestigeGainDesc', 'display', 'none']);
     }
-    displayData.push(['html', 'timePrestigeGain', ` ${formatWhole(calculateCrystalGain())} `]);
+    displayData.push(['html', 'timePrestigeGain', ` ${formatDefault(calculateCrystalGain())} `]);
 }
 
 function updateGalaxyPrestigeDisplay() {
