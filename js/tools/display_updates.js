@@ -217,8 +217,8 @@ function updateBuildingDisplays() {
 function updateTimeDisplays() {
     displayData.push(['html', 'trueTimeAmt', formatUnitRow(player.trueEssence)]);
     displayData.push(['html', 'antiTimeAmt', formatUnitRow(player.antiEssence)]);
-    displayData.push(['html', 'trueTimeGain', formatUnitRow(getTimeDimProdPerSecond(1).times(player.truePercent/100))]);
-    displayData.push(['html', 'antiTimeGain', formatUnitRow(getTimeDimProdPerSecond(1).times(player.antiPercent/100))]);
+    displayData.push(['html', 'trueTimeGain', formatUnitRow(getEssenceProdPerSecond().times(player.truePercent/100))]);
+    displayData.push(['html', 'antiTimeGain', formatUnitRow(getEssenceProdPerSecond().times(player.antiPercent/100))]);
     displayData.push(['html', 'trueTimeBuff', formatDefault2(getTrueTimeBuff())]);
     displayData.push(['html', 'antiTimeBuff', formatDefault2(getAntiTimeBuff())]);
     displayData.push(['html', 'trueTimeNerf', formatDefault2(getTrueTimeNerf())]);
