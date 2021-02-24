@@ -230,8 +230,6 @@ function resetBuildings(ascension=false) {
         player.buildings[3].upgrades[13] = tempSun.upgrades[13];
     }
     if (!hasTUpgrade(24) && tempSun.upgrades[23]) {
-        unlockElements('buildingsTab', 'sun');
-        unlockElements('buildingsTab', 'sunRow2');
         player.buildings[3].built = true;
         player.buildings[3].upgrades[23] = tempSun.upgrades[23];
     }
