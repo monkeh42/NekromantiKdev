@@ -233,6 +233,10 @@ function resetBuildings(ascension=false) {
         player.worlds = new Decimal(START_PLAYER.worlds);
         player.nextSpaceReset = START_PLAYER.nextSpaceReset.slice();
         lockTab('buildingsTab');
+        if (hasMilestone(1)) {
+            player.unlocks['buildingsTab']['construction'];
+            player.unlocks['buildingsTab']['constructionRow2'];
+        }
     }
     copyData(player.thisSacStats, START_PLAYER.thisSacStats);
     if (hasGUpgrade(2, 22)) { player.worlds = player.worlds.plus(1); }

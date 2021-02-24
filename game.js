@@ -705,8 +705,6 @@ function fixStats() {
     player.thisSacStats.bestCorpses = player.corpses;
     player.thisSacStats.bestWorlds = player.worlds;
     player.thisSacStats.bestBricks = player.bricks;
-
-    player.thisSacStats.hasGoneAstral = true;
 }
 
 function copyData(data, start) {
