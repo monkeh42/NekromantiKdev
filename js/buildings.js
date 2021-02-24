@@ -44,6 +44,10 @@ function getCUpgEffect(c) {
     return CONSTR_DATA[c].effect();
 }
 
+function getExtraLevels(c) {
+    return CONSTR_DATA[c].extraLevels();
+}
+
 function isBuilt(b) {
     return player.buildings[b].built;
 }
@@ -118,6 +122,15 @@ function buyCUpg(c) {
         player.construction[c] = player.construction[c].plus(1);
         if (CONSTR_DATA[c].onBuy !== undefined) { CONSTR_DATA[c].onBuy() }
     }
+    if (CONSTR_DATA[c].isTimes) { writeHTMLCUpg(c, `<span style="font-weight: 900;">${getCUpgName(c)}</span><br>${getCUpgDesc(c)}<br>Cost: ${formatDefault(getCUpgCost(c))} astral bricks<br>Current level: ${formatWhole(player.construction[c]) + (getExtraLevels(c)>0 ? ' + ' + formatWhole(getExtraLevels(c)) : '')}${isDisplayEffectC(c) ? ("<br>Currently: " + formatDefault2(getCUpgEffect(c)) + "x") : ""}`); }
+    else { writeHTMLCUpg(c, `<span style="font-weight: 900;">${getCUpgName(c)}</span><br>${getCUpgDesc(c)}<br>Cost: ${formatDefault(getCUpgCost(c))} astral bricks<br>Current level: ${formatWhole(player.construction[c]) + (getExtraLevels(c)>0 ? ' + ' + formatWhole(getExtraLevels(c)) : '')}${isDisplayEffectC(c) ? ("<br>Currently: +" + formatDefault2(getCUpgEffect(c))) : ""}`); }
+
+    if (c==5) {
+        for (let i=1; i<=4; i++) {
+            if (CONSTR_DATA[i].isTimes) { writeHTMLCUpg(i, `<span style="font-weight: 900;">${getCUpgName(i)}</span><br>${getCUpgDesc(i)}<br>Cost: ${formatDefault(getCUpgCost(i))} astral bricks<br>Current level: ${formatWhole(player.construction[i]) + (getExtraLevels(i)>0 ? ' + ' + formatWhole(getExtraLevels(i)) : '')}${isDisplayEffectC(i) ? ("<br>Currently: " + formatDefault2(getCUpgEffect(i)) + "x") : ""}`); }
+    else { writeHTMLCUpg(i, `<span style="font-weight: 900;">${getCUpgName(i)}</span><br>${getCUpgDesc(i)}<br>Cost: ${formatDefault(getCUpgCost(i))} astral bricks<br>Current level: ${formatWhole(player.construction[i]) + (getExtraLevels(i)>0 ? ' + ' + formatWhole(getExtraLevels(i)) : '')}${isDisplayEffectC(i) ? ("<br>Currently: +" + formatDefault2(getCUpgEffect(i))) : ""}`); }
+        }
+    }
 }
 
 function buyMaxConstr(upg) {
@@ -162,13 +175,17 @@ function resetBuildings(ascension=false) {
         if (hasGUpgrade(2, 22)) { player.worlds = player.worlds.plus(1); }
         player.thisSacStats.totalWorlds = player.worlds;
         player.thisSacStats.bestWorlds = player.worlds;
+        if (ascension) {
+            player.thisAscStats.totalWorlds = player.worlds;
+            player.thisAscStats.bestWorlds = player.worlds;
+        }
         return;
     }
 
     let tempSun = {};
     copyData(tempSun, player.buildings[3]);
     copyData(player.buildings, START_PLAYER.buildings);
-    copyData(player.construction, START_PLAYER.construction);
+    if (!hasMilestone(1)) { copyData(player.construction, START_PLAYER.construction); }
 
     if (hasTUpgrade(14)) {
         player.worlds = new Decimal(4);
@@ -210,7 +227,7 @@ function resetBuildings(ascension=false) {
         lockElements('buildingsTab', 'necropolisRow2');
         lockElements('buildingsTab', 'sun');
         lockElements('buildingsTab', 'sunRow2');
-        lockElements('buildingsTab', 'construction');
+        if (!hasMilestone(1)) { lockElements('buildingsTab', 'construction'); }
     } else {
         player.spaceResets = new Decimal(START_PLAYER.spaceResets);
         player.worlds = new Decimal(START_PLAYER.worlds);
@@ -221,11 +238,12 @@ function resetBuildings(ascension=false) {
     if (hasGUpgrade(2, 22)) { player.worlds = player.worlds.plus(1); }
     player.thisSacStats.totalWorlds = player.worlds;
     player.thisSacStats.bestWorlds = player.worlds;
-    player.thisAscStats.totalWorlds = player.worlds;
-    player.thisAscStats.bestWorlds = player.worlds;
+    if (ascension) {
+        player.thisAscStats.totalWorlds = player.worlds;
+        player.thisAscStats.bestWorlds = player.worlds;
+    }
 
     if (!hasTUpgrade(24) && tempSun.upgrades[13] && (!ascension || hasAchievement(43))) {
-        player.buildings[3].built = true;
         player.buildings[3].upgrades[13] = tempSun.upgrades[13];
     }
     if (!hasTUpgrade(24) && tempSun.upgrades[23]) {
@@ -650,6 +668,118 @@ const BUILDS_DATA = {
             },
         }
     },
+    4: {
+        id: 'galactic vortex',
+        tier: 4,
+        resource: 'black holes',
+        cost: new Decimal(1e60),
+        upgResource: 'black holes',
+        pBase: function()  {
+            var b = new Decimal(.001);
+            return b;
+        },
+        prod: function() {
+            var p = player.galaxies.plus(player.spentGalaxies).minus(player.buildings[this.tier].amount).times(this.pBase());
+            return Decimal.max(p, 0); 
+        },
+        resourceEff: function() {
+            return player.buildings[this.tier].amount.div(10);
+        },
+        canAffordUpg: function(upg) {
+            return player.buildings[4].amount.gte(this.upgrades[upg].cost);
+        },
+        buildingButtonID: 'vortexBuild',
+        buildingButtonClass: 'buildBut',
+        buildingButtonUnclick: 'unclickableBuildBut',
+        buildingRowID: 'vortexBuildRow',
+        buildingHeaderID: 'vortexHeaderRow',
+        upgradesRow1ID: 'vortexUpgradesRow',
+        upgradesRow2ID: 'vortexUpgradesRow2',
+        upgradeBtnClass: 'vortexUpg',
+        upgradeBtnUnclick: 'unclickVortexUpg',
+        upgradeBtnBought: 'boughtVortexUpg',
+        upgrades: {
+            11: {
+                title: '1.1',
+                desc: function() { return 'The first three construction upgrades get sqrt(x) extra levels, where x is the level of the next tier upgrade.'; },
+                cost: new Decimal(5),
+                buttonID: 'vortexUpg11',
+                displayEffect: false,
+                displayTooltip: false,
+                displayFormula: function() { return ''; },
+                effect: function() {
+                    return new Decimal(1);
+                }
+            },
+            12: {
+                title: '1.2',
+                desc: function() { return 'description'; },
+                cost: new Decimal("Infinity"),
+                buttonID: 'vortexUpg12',
+                displayEffect: false,
+                displayTooltip: false,
+                displayFormula: function() { return ''; },
+                effect: function() {
+                    return new Decimal(1);
+                }
+            },
+            13: {
+                title: '1.3',
+                desc: function() { return 'description'; },
+                cost: new Decimal("Infinity"),
+                buttonID: 'vortexUpg13',
+                displayEffect: false,
+                displayTooltip: false,
+                displayFormula: function() { return ''; },
+                effect: function() {
+                    return new Decimal(1);
+                }
+            },
+            21: {
+                title: '2.1',
+                desc: function() { return 'description'; },
+                cost: new Decimal("Infinity"),
+                buttonID: 'vortexUpg21',
+                displayEffect: false,
+                displayTooltip: false,
+                displayFormula: function() { return ''; },
+                onBuy: function() {
+                    if (player.astralFlag) {
+                        toggleAstral();
+                        loadStyles();
+                        toggleAstral();
+                    } else { loadStyles(); }
+                },
+                effect: function() {
+                    return new Decimal(1);
+                }
+            },
+            22: {
+                title: '2.2',
+                desc: function() { return 'description'; },
+                cost: new Decimal("Infinity"),
+                buttonID: 'vortexUpg22',
+                displayEffect: false,
+                displayTooltip: false,
+                displayFormula: function() { return '' },
+                effect: function() {
+                    return new Decimal(1);
+                }
+            },
+            23: {
+                title: '2.3',
+                desc: function() { return 'description'; },
+                cost: new Decimal("Infinity"),
+                buttonID: 'vortexUpg23',
+                displayEffect: false,
+                displayTooltip: false,
+                displayFormula: function() { return ''; },
+                effect: function() {
+                    return new Decimal(1);
+                }
+            },
+        }
+    },
 }
 
 const CONSTR_DATA = {
@@ -673,8 +803,13 @@ const CONSTR_DATA = {
         expCostMult: 10,
         buttonID: 'constrUpg1',
         displayEffect: true,
+        extraLevels: function() {
+            let e = CONSTR_DATA[5].effect();
+            return e[this.tier-1];
+        },
+        displayEffect: true,
         effect: function() {
-            let e = Decimal.max(1+(0.05*player.construction[this.tier]), 1);
+            let e = Decimal.max(1+(0.05*(player.construction[this.tier].plus(this.extraLevels()))), 1);
             if (hasGUpgrade(3, 32)) { e = e.times(getGUpgEffect(3, 32)); }
             return e;
         }
@@ -699,8 +834,13 @@ const CONSTR_DATA = {
         expCostMult: 10,
         buttonID: 'constrUpg2',
         displayEffect: true,
+        extraLevels: function() {
+            let e = CONSTR_DATA[5].effect();
+            return e[this.tier-1];
+        },
+        displayEffect: true,
         effect: function() {
-            let e = .02*player.construction[this.tier];
+            let e = .02*(player.construction[this.tier].plus(this.extraLevels()));
             if (hasGUpgrade(3, 32)) { e = e.times(getGUpgEffect(3, 32)); }
             return e;
         }
@@ -725,8 +865,13 @@ const CONSTR_DATA = {
         expCostMult: 10,
         buttonID: 'constrUpg3',
         displayEffect: true,
+        extraLevels: function() {
+            let e = CONSTR_DATA[5].effect();
+            return e[this.tier-1];
+        },
+        displayEffect: true,
         effect: function() {
-            let e = Decimal.max(1+(0.1*player.construction[this.tier]), 1);
+            let e = Decimal.max(1+(0.1*(player.construction[this.tier].plus(this.extraLevels()))), 1);
             if (hasGUpgrade(3, 32)) { e = e.times(getGUpgEffect(3, 32)); }
             return e;
         }
@@ -751,10 +896,61 @@ const CONSTR_DATA = {
         expCostMult: 10,
         buttonID: 'constrUpg4',
         displayEffect: true,
+        extraLevels: function() {
+            let e = CONSTR_DATA[5].effect();
+            return e[this.tier-1];
+        },
         effect: function() {
-            let e = .02*player.construction[this.tier];
+            let e = .02*(player.construction[this.tier].plus(this.extraLevels()));
             if (hasGUpgrade(3, 32)) { e = e.times(getGUpgEffect(3, 32)); }
             return e;
+        }
+    },
+    5: {
+        title: 'Putrid Renovations',
+        desc: 'Starting at level 1, the first four construction upgrades get one extra level for every [1/2/3/4] levels of this one.',
+        tier: 5,
+        baseCost: new Decimal(1e40),
+        isTimes: true,
+        cost: function() {
+            var c = this.baseCost;
+            c = c.times(Decimal.pow(this.baseCostMult, player.construction[this.tier]));
+            if (player.construction[this.tier].gte(25)) { c = c.times(Decimal.pow(this.expCostMult, addFactorial(player.construction[this.tier].minus(24)))); }
+            return c;
+        },
+        baseCostMult: 100000,
+        expCostMult: 10,
+        buttonID: 'constrUpg5',
+        displayEffect: false,
+        extraLevels: function() { return 0; },
+        effect: function() {
+            let k = player.construction[this.tier];
+            if (k==0) { return [0, 0, 0, 0]; }
+            let e = new Array(4);
+            for (let i=0; i<4; i++) { e[i] = Math.floor((k-1)/(i+1))+1}
+            return e;
+        }
+    },
+    6: {
+        title: 'Siege Nebulas',
+        desc: 'You get [x] extra depleted galaxies when you ascend with over [x^2] levels.',
+        tier: 6,
+        baseCost: new Decimal(1e50),
+        isTimes: false,
+        cost: function() {
+            var c = this.baseCost;
+            c = c.times(Decimal.pow(this.baseCostMult, player.construction[this.tier]));
+            if (player.construction[this.tier].gte(25)) { c = c.times(Decimal.pow(this.expCostMult, addFactorial(player.construction[this.tier].minus(24)))); }
+            return c;
+        },
+        baseCostMult: new Decimal(1e10),
+        expCostMult: 10,
+        buttonID: 'constrUpg6',
+        displayEffect: true,
+        extraLevels: function() { return 0; },
+        effect: function() {
+            let g = Math.floor(player.construction[this.tier].sqrt());
+            return g;
         }
     },
 }

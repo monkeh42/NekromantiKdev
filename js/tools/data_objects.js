@@ -86,6 +86,19 @@ const START_PLAYER = {
                 23: false,
             }
         },
+        4: {
+            built: false,
+            amount: new Decimal(0),
+            progress: new Decimal(0),
+            upgrades: {
+                11: false,
+                12: false,
+                13: false,
+                21: false,
+                22: false,
+                23: false,
+            }
+        },
     },
 
     construction: {
@@ -93,6 +106,8 @@ const START_PLAYER = {
         2: new Decimal(0),
         3: new Decimal(0),
         4: new Decimal(0),
+        5: new Decimal(0),
+        6: new Decimal(0),
     },
 
     timeDims: {
@@ -184,6 +199,11 @@ const START_PLAYER = {
             'on': false,
             'fast': false,
             'max': new Decimal(1),
+        },
+        11: {
+            'on': false,
+            'fast': false,
+            'amount': new Decimal(1),
         },
         
         priority: [1, 2, 3, 4, 5, 6, 7, 8],
@@ -383,6 +403,7 @@ const START_PLAYER = {
     astralFlag: false,
 
     crystals: new Decimal(0),
+    milesCrystals: new Decimal(11111),
     trueEssence: new Decimal(0),
     truePercent: 50,
     antiPercent: 50,
@@ -579,6 +600,7 @@ const START_PLAYER = {
             'BulkBuyers': false,
             'prestigeBuyer': false,
             'advancedBuyer': false,
+            'ascensionBuyer': false,
         },
         'buildingsTab': {
             'mainTab': false,
@@ -589,10 +611,14 @@ const START_PLAYER = {
             'sun': false,
             'sunRow2': false,
             'construction': false,
+            'constructionRow2': false,
+            'vortexTable': false,
+            'vortex': false,
         },
         'timeTab': {
             'mainTab': false,
             'timeUpgrades': false,
+            'timeUpgrades2': false,
         },
         'galaxyTab': {
             'mainTab': false,
@@ -601,109 +627,37 @@ const START_PLAYER = {
     },
 
     achievements: {
-        11: {
-            unlocked: false,
-            new: false,
-        },
-        12: {
-            unlocked: false,
-            new: false,
-        },
-        13: {
-            unlocked: false,
-            new: false,
-        },
-        14: {
-            unlocked: false,
-            new: false,
-        },
-        15: {
-            unlocked: false,
-            new: false,
-        },
-        21: {
-            unlocked: false,
-            new: false,
-        },
-        22: {
-            unlocked: false,
-            new: false,
-        },
-        23: {
-            unlocked: false,
-            new: false,
-        },
-        24: {
-            unlocked: false,
-            new: false,
-        },
-        25: {
-            unlocked: false,
-            new: false,
-        },
-        31: {
-            unlocked: false,
-            new: false,
-        },
-        32: {
-            unlocked: false,
-            new: false,
-        },
-        33: {
-            unlocked: false,
-            new: false,
-        },
-        34: {
-            unlocked: false,
-            new: false,
-        },
-        35: {
-            unlocked: false,
-            new: false,
-        },
-        41: {
-            unlocked: false,
-            new: false,
-        },
-        42: {
-            unlocked: false,
-            new: false,
-        },
-        43: {
-            unlocked: false,
-            new: false,
-        },
-        44: {
-            unlocked: false,
-            new: false,
-        },
-        45: {
-            unlocked: false,
-            new: false,
-        },
+        11: false,
+        12: false,
+        13: false,
+        14: false,
+        15: false,
+        21: false,
+        22: false,
+        23: false,
+        24: false,
+        25: false,
+        31: false,
+        32: false,
+        33: false,
+        34: false,
+        35: false,
+        41: false,
+        42: false,
+        43: false,
+        44: false,
+        45: false,
     },
 
     milestones: {
-        1: {
-            unlocked: false,
-            new: false,
-        },
-        2: {
-            unlocked: false,
-            new: false,
-        },
-        3: {
-            unlocked: false,
-            new: false,
-        },
-        4: {
-            unlocked: false,
-            new: false,
-        },
-        5: {
-            unlocked: false,
-            new: false,
-        },
+        1: false,
+        2: false,
+        3: false,
+        4: false,
+        5: false,
+        6: false,
+        7: false,
+        8: false,
     },
 
     confirmations: {
@@ -739,7 +693,7 @@ const START_PLAYER = {
         'bricksDisplayHeader': false,
         'bricksGainDisplayHeader': false,
         'crystalsDisplayHeader': false,
-        'timeBoostDisplay': true,
+        'timeBoostDisplay': false,
     },
 
     tooltipsEnabled: false,
@@ -751,59 +705,104 @@ const START_PLAYER = {
 MILES_DATA = {
     1: {
         canUnlock: function() {
-            return false;
+            return getBoughtGUpgsByRow(1) == 4;
         },
         effect: function() {
-            return new Decima(1);
+            return new Decimal(1);
         },
+        onUnlock: function() {
+            return;
+        },
+        isImplemented: true,
     },
     2: {
         canUnlock: function() {
-            return false;
+            return getBoughtGUpgsByRow(4) == 1;
         },
         effect: function() {
-            return new Decima(1);
+            return new Decimal(1);
         },
+        onUnlock: function() {
+            return;
+        },
+        isImplemented: true,
     },
     3: {
         canUnlock: function() {
-            return false;
+            return getBoughtGUpgsByRow(2) == 4;
         },
         effect: function() {
-            return new Decima(1);
+            return new Decimal(1);
         },
+        onUnlock: function() {
+            return;
+        },
+        isImplemented: true,
     },
     4: {
         canUnlock: function() {
-            return false;
+            return getBoughtGUpgsByRow(4) == 2;
         },
         effect: function() {
-            return new Decima(1);
+            return new Decimal(1);
         },
+        onUnlock: function() {
+            return;
+        },
+        isImplemented: true,
     },
     5: {
         canUnlock: function() {
-            return false;
+            return getBoughtGUpgsByRow(3) == 4;
         },
         effect: function() {
-            return new Decima(1);
+            return new Decimal(1);
         },
+        onUnlock: function() {
+            return;
+        },
+        isImplemented: true,
     },
     6: {
         canUnlock: function() {
-            return false;
+            return false; //getBoughtGUpgsByRow(4) == 3;
         },
         effect: function() {
-            return new Decima(1);
+            return new Decimal(1);
         },
+        onUnlock: function() {
+            return;
+        },
+        isImplemented: false,
     },
     7: {
+        canUnlock: function() {
+            return getBoughtGUpgsByRow(4) == 4;
+        },
+        effect: function() {
+            return new Decimal(1);
+        },
+        onUnlock: function() {
+            for (let g in GALAXIES_DATA) {
+                for (let u in GALAXIES_DATA[g].upgrades) {
+                    document.getElementById(GALAXIES_DATA[g].upgrades[u].buttonID).classList.remove('lockedGalaxyUpg');
+                    document.getElementById(GALAXIES_DATA[g].upgrades[u].buttonID).classList.add(canAffordGUpg(b, u) ? 'galaxyUpg' : 'unclickGalaxyUpg');
+                }
+            }
+        },
+        isImplemented: true,
+    },
+    8: {
         canUnlock: function() {
             return false;
         },
         effect: function() {
-            return new Decima(1);
+            return new Decimal(1);
         },
+        onUnlock: function() {
+            return;
+        },
+        isImplemented: false,
     },
 }
 
@@ -1246,6 +1245,20 @@ const UNLOCKS_DATA = {
                 return hasUpgrade(3, 22);
             }
         },
+        'ascensionBuyer': {
+            unlocked: false,
+            notifyID: 'autobuyersSubTabBut',
+            parentNotify: 'unitsTabBut',
+            idsToShow: ['ascensionBuyerCell'],
+            idsToHide: [],
+            //classToEnable: 'buyerList',
+            shouldNotify: function() {
+                return true;
+            },
+            condition: function() {
+                return hasMilestone(2);
+            }
+        },
     },
     'buildingsTab': {
         'mainTab': {
@@ -1330,13 +1343,52 @@ const UNLOCKS_DATA = {
             unlocked: false,
             notifyID: 'constructionSubTabBut',
             parentNotify: 'buildingsTabBut',
-            idsToShow: ['buildingsSubMenu', 'constructionSubTabBut'],
+            idsToShow: ['buildingsSubMenu', 'constructionSubTabBut', 'cUpgRow2'],
             idsToHide: [],
             shouldNotify: function() {
                 return !hasTUpgrade(12);
             },
             condition: function() {
                 return player.spaceResets.gte(2);
+            }
+        },
+        'constructionRow2': {
+            unlocked: false,
+            notifyID: 'constructionSubTabBut',
+            parentNotify: 'buildingsTabBut',
+            idsToShow: ['cUpgRow2'],
+            idsToHide: [],
+            shouldNotify: function() {
+                return true;
+            },
+            condition: function() {
+                return hasMilestone(1);
+            }
+        },
+        'vortexTable': {
+            unlocked: false,
+            notifyID: 'buildingsSubTabBut',
+            parentNotify: 'buildingsTabBut',
+            idsToShow: ['vortexTable'],
+            idsToHide: [],
+            shouldNotify: function() {
+                return true;
+            },
+            condition: function() {
+                return hasMilestone(5);
+            }
+        },
+        'vortex': {
+            unlocked: false,
+            notifyID: 'buildingsSubTabBut',
+            parentNotify: 'buildingsTabBut',
+            idsToShow: ['vortexHeaderRow', 'vortexUpgradesRow'],
+            idsToHide: ['vortexBuildRow'],
+            shouldNotify: function() {
+                return false;
+            },
+            condition: function() {
+                return isBuilt(4);
             }
         },
     },
@@ -1364,6 +1416,20 @@ const UNLOCKS_DATA = {
             },
             condition: function() {
                 return hasUpgrade(3, 13);
+            }
+        },
+        'timeUpgrades2': {
+            unlocked: false,
+            notifyID: 'timeUpgSubTabBut',
+            parentNotify: 'timeTabBut',
+            idsToShow: [],
+            idsToHide: [],
+            classToShow: 'timeUpgTDs2',
+            shouldNotify: function() {
+                return true;
+            },
+            condition: function() {
+                return hasMilestone(6);
             }
         }
     },
@@ -1595,6 +1661,19 @@ function fixResetBug() {
                 23: false,
             }
         },
+        4: {
+            built: false,
+            amount: new Decimal(0),
+            progress: new Decimal(0),
+            upgrades: {
+                11: false,
+                12: false,
+                13: false,
+                21: false,
+                22: false,
+                23: false,
+            }
+        },
     });
 
     copyData(START_PLAYER.construction, {
@@ -1602,6 +1681,8 @@ function fixResetBug() {
         2: new Decimal(0),
         3: new Decimal(0),
         4: new Decimal(0),
+        5: new Decimal(0),
+        6: new Decimal(0),
     });
 
     copyData(START_PLAYER.timeDims, {
@@ -1693,6 +1774,11 @@ function fixResetBug() {
             'on': false,
             'fast': false,
             'max': new Decimal(1),
+        },
+        11: {
+            'on': false,
+            'fast': false,
+            'amount': new Decimal(1),
         },
         priority: [1, 2, 3, 4, 5, 6, 7, 8],
     });
@@ -2011,6 +2097,7 @@ function fixResetBug() {
     START_PLAYER.astralFlag = false;
 
     START_PLAYER.crystals = new Decimal(0);
+    milesCrystals: new Decimal(11111),
     START_PLAYER.trueEssence = new Decimal(0);
     START_PLAYER.truePercent = 50;
     START_PLAYER.antiPercent = 50;
@@ -2080,6 +2167,7 @@ function fixResetBug() {
             'BulkBuyers': false,
             'prestigeBuyer': false,
             'advancedBuyer': false,
+            'ascensionBuyer': false,
         },
         'buildingsTab': {
             'mainTab': false,
@@ -2090,10 +2178,14 @@ function fixResetBug() {
             'sun': false,
             'sunRow2': false,
             'construction': false,
+            'constructionRow2': false,
+            'vortexTable': false,
+            'vortex': false,
         },
         'timeTab': {
             'mainTab': false,
             'timeUpgrades': false,
+            'timeUpgrades2': false,
         },
         'galaxyTab': {
             'mainTab': false,
@@ -2102,89 +2194,37 @@ function fixResetBug() {
     });
 
     copyData(START_PLAYER.achievements, {
-        11: {
-            unlocked: false,
-            new: false,
-        },
-        12: {
-            unlocked: false,
-            new: false,
-        },
-        13: {
-            unlocked: false,
-            new: false,
-        },
-        14: {
-            unlocked: false,
-            new: false,
-        },
-        15: {
-            unlocked: false,
-            new: false,
-        },
-        21: {
-            unlocked: false,
-            new: false,
-        },
-        22: {
-            unlocked: false,
-            new: false,
-        },
-        23: {
-            unlocked: false,
-            new: false,
-        },
-        24: {
-            unlocked: false,
-            new: false,
-        },
-        25: {
-            unlocked: false,
-            new: false,
-        },
-        31: {
-            unlocked: false,
-            new: false,
-        },
-        32: {
-            unlocked: false,
-            new: false,
-        },
-        33: {
-            unlocked: false,
-            new: false,
-        },
-        34: {
-            unlocked: false,
-            new: false,
-        },
-        35: {
-            unlocked: false,
-            new: false,
-        },
+        11: false,
+        12: false,
+        13: false,
+        14: false,
+        15: false,
+        21: false,
+        22: false,
+        23: false,
+        24: false,
+        25: false,
+        31: false,
+        32: false,
+        33: false,
+        34: false,
+        35: false,
+        41: false,
+        42: false,
+        43: false,
+        44: false,
+        45: false,
     });
 
     copyData(START_PLAYER.milestones, {
-        1: {
-            unlocked: false,
-            new: false,
-        },
-        2: {
-            unlocked: false,
-            new: false,
-        },
-        3: {
-            unlocked: false,
-            new: false,
-        },
-        4: {
-            unlocked: false,
-            new: false,
-        },
-        5: {
-            unlocked: false,
-            new: false,
-        },
+        1: false,
+        2: false,
+        3: false,
+        4: false,
+        5: false,
+        6: false,
+        7: false,
+        8: false,
     });
 
     copyData(START_PLAYER.confirmations, {
@@ -2220,7 +2260,7 @@ function fixResetBug() {
         'bricksDisplayHeader': false,
         'bricksGainDisplayHeader': false,
         'crystalsDisplayHeader': false,
-        'timeBoostDisplay': true,
+        'timeBoostDisplay': false,
     });
 
     START_PLAYER.tooltipsEnabled = false;

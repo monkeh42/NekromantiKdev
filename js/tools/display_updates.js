@@ -61,6 +61,8 @@ function updateElement(data) {
         document.getElementById(data[1]).style.setProperty(data[2], data[3]);
     } else if (data[0] == 'togDisplay') {
         document.getElementById(data[1]).style.display = document.getElementById(data[1]).style.display === 'none' ? '' : 'none'
+    } else if (data[0] == 'togVis') {
+        document.getElementById(data[1]).style.visibility = document.getElementById(data[1]).style.visibility === 'hidden' ? 'visible' : 'hidden'
     } else if (data[0] == 'html') {
         document.getElementById(data[1]).innerHTML = data[2];
     }
@@ -108,8 +110,6 @@ function updateConstrUpgs() {
             remCUpgClass(c, 'constrUpg');
             addCUpgClass(c, 'unclickableConstrUpg');
         }
-        if (CONSTR_DATA[c].isTimes) { writeHTMLCUpg(c, `<span style="font-weight: 900;">${getCUpgName(c)}</span><br>${getCUpgDesc(c)}<br>Cost: ${formatDefault(getCUpgCost(c))} astral bricks<br>Current level: ${formatWhole(player.construction[c])}${isDisplayEffectC(c) ? ("<br>Currently: " + formatDefault2(getCUpgEffect(c)) + "x") : ""}`); }
-        else { writeHTMLCUpg(c, `<span style="font-weight: 900;">${getCUpgName(c)}</span><br>${getCUpgDesc(c)}<br>Cost: ${formatDefault(getCUpgCost(c))} astral bricks<br>Current level: ${formatWhole(player.construction[c])}${isDisplayEffectC(c) ? ("<br>Currently: +" + formatDefault2(getCUpgEffect(c))) : ""}`); }
     }
 }
 
@@ -210,6 +210,9 @@ function updateBuildingDisplays() {
     //displayData.push(['html', 'sunCostLabel', formatWhole(BUILDS_DATA[3].cost)]);
     //document.getElementById('sunGainSpan').style.display = player.astralFlag ? 'block' : 'none'
     //document.getElementById('sunGainNotice').style.display = player.astralFlag ? 'none' : 'block'
+    displayData.push(['html', 'vortexProd', formatDefault(player.buildings[4].progress)]);
+    displayData.push(['html', 'vortexAmt', formatDefault(player.buildings[4].amount)]);
+    displayData.push(['html', 'blackholeEff', formatDefault2(BUILDS_DATA[4].resourceEff())]);
     displayData.push(['html', 'acolyteEff', formatDefault2(BUILDS_DATA[2].resourceEff())]);
     displayData.push(['html', 'brickKeepDisplay', ` ${formatUnitRow(getAchievementEffect(15))} `]);
     var buildingTextElements = document.getElementsByClassName('buildingResourceTexts');
@@ -324,11 +327,16 @@ function updateUnitTiers() {
             displayData.push(['remClass', UNITS_DATA[i].maxID, 'unitMax']);
             displayData.push(['addClass', UNITS_DATA[i].maxID, 'unclickableMax']);
         }
-        displayData.push(['html', UNITS_DATA[i].amountID, `<div style="min-width: 50%; float: left;">${formatUnitRow(player.units[i].amount)}</div><div style="min-width: 30%; float: left;">(${formatWholeUnitRow(player.units[i].bought)})</div>`]);
-        displayData.push(['html', UNITS_DATA[i].gainID, `<div style="min-width: 30%; float: left;">${getUnitProdPerSecond(i).gt(0) ? "(+" + formatDefault(Decimal.times((getUnitProdPerSecond(i).div(player.units[i].amount.max(1))), 100), 2) + "%/s)</div>" : ""}`]);
-        displayData.push(['html', UNITS_DATA[i].multID, `<div style="min-width: 45%; float: left;">${formatUnitRow2(UNITS_DATA[i].corpseMult())}x</div><div style="min-width: 45%; float: left;">(${(i > 1) ? formatUnitRow2(UNITS_DATA[i].prodMult()) : "~"}x)</div>`]);
-        displayData.push(['html', UNITS_DATA[i].buttonID, `Cost: ${formatWhole(UNITS_DATA[i].cost())} corpses`]);
-        displayData.push(['html', UNITS_DATA[i].maxID, canAffordUnit(i) ? `Max: ${calculateMaxUnits(i)} for &#162;${formatWhole(calculateMaxUnitsCost(i))}` : "Max: 0"]);
+        displayData.push(['html', UNITS_DATA[i].amountID, formatUnitRow(player.units[i].amount)]);
+        displayData.push(['html', UNITS_DATA[i].boughtID, formatWholeUnitRow(player.units[i].bought)]);
+        displayData.push(['html', UNITS_DATA[i].UMultID, (i > 1) ? formatUnitRow2(UNITS_DATA[i].prodMult()) : "~"]);
+        displayData.push(['html', UNITS_DATA[i].CMultID, formatUnitRow2(UNITS_DATA[i].corpseMult())]);
+        if (getUnitProdPerSecond(i).gt(0)) {
+            if (Decimal.times(getUnitProdPerSecond(i).div(player.units[i].amount.max(1)), 100).gte(0.1)) { displayData.push(['html', UNITS_DATA[i].gainID, '(+' + formatDefault(Decimal.times((getUnitProdPerSecond(i).div(player.units[i].amount.max(1))), 100), 2) + '%/s)']); }
+            else if (document.getElementById(UNITS_DATA[i].gainID).innerHTML != '(<0.1%/s)') { displayData.push(['html', UNITS_DATA[i].gainID, '(<0.1%/s)']); }
+        } else if (document.getElementById(UNITS_DATA[i].gainID).innerHTML != '') { displayData.push(['html', UNITS_DATA[i].gainID, '']) }
+        if (document.getElementById(UNITS_DATA[i].costID).innerHTML != formatWhole(UNITS_DATA[i].cost())) { displayData.push(['html', UNITS_DATA[i].costID, formatWhole(UNITS_DATA[i].cost())]); }
+        if (canAffordUnit(i)) { displayData.push(['html', UNITS_DATA[i].maxNumID, calculateMaxUnits(i)]); }
     }
 }
 
@@ -363,6 +371,7 @@ function unlockElements(mainTab, subTab) {
             element = document.getElementById(data.idsToShow[i]);
             if (element.tagName == 'TR') { displayData.push(['setProp', element.id, 'display', 'table-row']); } 
             else if (element.tagName == 'TD') { displayData.push(['setProp', element.id, 'display', 'table-cell']); }
+            else if (element.tagName == 'TABLE') { displayData.push(['setProp', element.id, 'display', 'table']); }
             else { displayData.push(['setProp', element.id, 'display', 'block']); }
         }
     }
@@ -374,6 +383,16 @@ function unlockElements(mainTab, subTab) {
     if (data.classToHide !== undefined) {
         let els = document.getElementsByClassName(data.classToHide);
         for (let i=0; i<els.length; i++) { displayData.push(['setProp', els[i].id, 'display', 'none']); }
+    }
+    if (data.classToShow !== undefined) {
+        let els = document.getElementsByClassName(data.classToHide);
+        for (let i=0; i<els.length; i++) {
+            element = document.getElementById(els[i].id);
+            if (element.tagName == 'TR') { displayData.push(['setProp', element.id, 'display', 'table-row']); } 
+            else if (element.tagName == 'TD') { displayData.push(['setProp', element.id, 'display', 'table-cell']); }
+            else if (element.tagName == 'TABLE') { displayData.push(['setProp', element.id, 'display', 'table']); }
+            else { displayData.push(['setProp', element.id, 'display', 'block']); }
+        }
     }
     if (data.classToEnable !== undefined) {
         let els = document.getElementsByClassName(data.classToEnable);
@@ -407,6 +426,16 @@ function unlockElementsOnLoad(mainTab, subTab) {
         let els = document.getElementsByClassName(data.classToHide);
         for (let i=0; i<els.length; i++) { displayData.push(['setProp', els[i].id, 'display', 'none']); }
     }
+    if (data.classToShow !== undefined) {
+        let els = document.getElementsByClassName(data.classToHide);
+        for (let i=0; i<els.length; i++) {
+            element = document.getElementById(els[i].id);
+            if (element.tagName == 'TR') { displayData.push(['setProp', element.id, 'display', 'table-row']); } 
+            else if (element.tagName == 'TD') { displayData.push(['setProp', element.id, 'display', 'table-cell']); }
+            else if (element.tagName == 'TABLE') { displayData.push(['setProp', element.id, 'display', 'table']); }
+            else { displayData.push(['setProp', element.id, 'display', 'block']); }
+        }
+    }
     if (data.classToEnable !== undefined) {
         let els = document.getElementsByClassName(data.classToEnable);
         for (let i=0; i<els.length; i++) { els[i].disabled = false; }
@@ -434,6 +463,10 @@ function lockElements(mainTab, subTab) {
         let els = document.getElementsByClassName(data.classToHide);
         for (let i=0; i<els.length; i++) { displayData.push(['setProp', els[i].id, 'display', '']); }
     }
+    if (data.classToShow !== undefined) {
+        let els = document.getElementsByClassName(data.classToHide);
+        for (let i=0; i<els.length; i++) { displayData.push(['setProp', els[i].id, 'display', 'none']); }
+    }
     if (data.classToEnable !== undefined) {
         let els = document.getElementsByClassName(data.classToEnable);
         for (let i=0; i<els.length; i++) { els[i].disabled = true; }
@@ -454,14 +487,12 @@ function formatCrystalsPerSec() {
 
 
 }
-
 function toggleAstralDisplay() {
     displayData.push(['togDisplay', 'brickGainDiv']);
     displayData.push(['togClass', 'astralToggle', 'astralBut']);
     displayData.push(['togClass', 'astralToggle', 'astralOn']);
     displayData.push(['html', 'astralText', player.astralFlag ? 'disable' : 'enable']);
     if (player.headerDisplay['astralNoticeDisplay']) { displayData.push(['togDisplay', 'astralNoticeDisplay']); }
-    if (player.headerDisplay['bricksGainDisplayHeader']) { displayData.push(['togDisplay', 'bricksGainDisplayHeader']); }
     displayData.push(['html', 'normalAstral', player.astralFlag ? 'ASTRAL' : 'NORMAL']);
     displayData.push(['setProp', 'normalAstral', 'color', player.astralFlag ? '#42d35a' : 'white']);
     displayData.push(['setProp', 'normalAstral', 'color', player.astralFlag ? '#42d35a' : 'white']);
@@ -522,6 +553,24 @@ function updateSacBuyer() {
     player.autobuyers[9]['type'] = document.getElementById('sacrificeBuyerAdvancedList').value;
 }
 
+function emptyAscension() {
+    if (document.getElementById('ascensionBuyerAmount').value == '') { document.getElementById('ascensionBuyerAmount').value = formatWholeNoComma(player.autobuyers[11]['amount']); }
+}
+
+function updateAscBuyer() {
+    if (document.getElementById('ascensionBuyerAmount').value != '') {
+        try {
+            player.autobuyers[11]['amount'] = new Decimal(document.getElementById('ascensionBuyerAmount').value);
+            if (document.getElementById('ascensionErr').style.display == '') { document.getElementById('ascensionErr').style.display = 'none' }
+        }
+        catch(err) {
+            document.getElementById('ascensionErr').style.display = '';
+            document.getElementById('ascensionErrValue').innerHTML = formatWholeNoComma(player.autobuyers[11]['amount']);
+        }
+    }
+    player.autobuyers[11]['amount'] = new Decimal(document.getElementById('ascensionBuyerAmount').value);
+}
+
 function updateMaxPrestige() {
     if (document.getElementById('maxPrestige').value != '') {
         try {
@@ -554,6 +603,10 @@ function updateAutobuyersDisplay() {
     document.getElementById('prestigeEnabledBut').innerHTML = player.autobuyers[10]['on'] ? 'ON' : 'OFF'
     document.getElementById('prestigeSpeedBut').innerHTML = player.autobuyers[10]['fast'] ? 'FAST' : 'SLOW'
     document.getElementById('maxPrestige').value = formatWholeNoComma(player.autobuyers[10]['max']);
+
+    document.getElementById('ascensionEnabledBut').innerHTML = player.autobuyers[11]['on'] ? 'ON' : 'OFF'
+    document.getElementById('ascensionSpeedBut').innerHTML = player.autobuyers[11]['fast'] ? 'FAST' : 'SLOW'
+    document.getElementById('ascensionBuyerAmount').value = formatWholeNoComma(player.autobuyers[11]['max']);
 }
 
 function updateSliderDisplay() {
@@ -623,7 +676,6 @@ function toggleDisplay(id, button) {
         document.getElementById(button).innerHTML = "OFF";
     }
     if (id == 'astralNoticeDisplay') { document.getElementById(id).style.display = (document.getElementById(id).style.display == 'none') && player.astralFlag ? '' : 'none' }
-    else if (id == 'bricksGainDisplayHeader') { document.getElementById(id).style.display = (document.getElementById(id).style.display == 'none') && player.astralFlag ? '' : 'none' }
     else { document.getElementById(id).style.display = (document.getElementById(id).style.display == 'none') ? '' : 'none' }
 }
 
@@ -652,7 +704,9 @@ function updateConfirmationPopupDisplay() {
 
 function updateDisplayPopupDisplay() {
     for (let key in player.headerDisplay) {
-        document.getElementById(key + 'But').innerHTML = player.headerDisplay[key] ? "ON" : "OFF"
+        if (key != 'achBoostDisplay') {
+            document.getElementById(key + 'But').innerHTML = player.headerDisplay[key] ? "ON" : "OFF"
+        }
     }
 }
 
@@ -678,9 +732,10 @@ function setConfDefaults() {
 function updateHeaderDisplay() {
     for (let dKey in player.headerDisplay) {
         if (dKey == 'astralNoticeDisplay') { document.getElementById(dKey).style.display = (player.headerDisplay[dKey] && player.astralFlag) ? '' : 'none' }
-        else if (dKey == 'bricksGainDisplayHeader') { document.getElementById(dKey).style.display = (player.headerDisplay[dKey] && player.astralFlag) ? '' : 'none' }
+        //else if (dKey == 'bricksGainDisplayHeader') { document.getElementById(dKey).style.display = (player.headerDisplay[dKey] && player.astralFlag) ? '' : 'none' }
         else if (dKey == 'worldsBonusDisplay') { document.getElementById(dKey).style.display = (player.headerDisplay[dKey] && player.unlocks['unitsTab']['spacePrestige']) ? '' : 'none' }
         else if (dKey == 'galaxiesBonusDisplay') { document.getElementById(dKey).style.display = (player.headerDisplay[dKey] && player.unlocks['galaxyTab']['mainTab']) ? '' : 'none' }
+        //else if (dKey == 'achBoostDisplay' || dKey == 'achNum' || dKey == 'achNumRows' || dKey == 'achMult'){}
         else { document.getElementById(dKey).style.display = player.headerDisplay[dKey] ? '' : 'none' }
     }
 }
@@ -960,6 +1015,9 @@ function updateGalaxiesDisplayed(num=0, g1='gal1', g2='gal2') {
 function showMilestones() {
     document.getElementById('milestonesPopup').style.display = 'block';
     dragElement(document.getElementById('milestonesPopup'));
+    displayData.push(['remClass', 'milestonesBut', 'milestonesNotify']);
+    displayData.push(['remClass', 'galaxiesSubTabBut', 'tabButNotify']);
+    displayData.push(['remClass', 'galaxyTabBut', 'tabButIndirectNotify']);
     //updateMilestoneDisplay();
 }
 
@@ -1030,16 +1088,14 @@ function updateUnlocks() {
 
 function updateAchievements() {
     for (let id in ACH_DATA) {
-        if (!player.achievements[id].unlocked && ACH_DATA[id].canUnlock()) {
-            ACH_DATA[id].onUnlock();
+        if (!player.achievements[id] && ACH_DATA[id].canUnlock()) {
             unlockAchievement(id)
         }
     }
 }
 
 function unlockAchievement(a) {
-    player.achievements[a].unlocked = true;
-    player.achievements[a].new = true;
+    player.achievements[a] = true;
     displayData.push(['addClass', ACH_DATA[a].divID, 'achievementUnlocked']);
     displayData.push(['addClass', ACH_DATA[a].divID, 'achievementNew']);
     displayData.push(['remClass', ACH_DATA[a].divID, 'achievement']);
@@ -1047,18 +1103,39 @@ function unlockAchievement(a) {
     displayData.push(['addClass', 'statsTabBut', 'tabButIndirectNotify']);
     displayData.push(['setProp', 'achUnlockPopup', 'opacity', '1']);
     popupShownTime = (new Date).getTime();
+    ACH_DATA[id].onUnlock();
 }
 
 function mouseoverAchievement(ach) {
-    if (player.achievements[ach].new) {
-        player.achievements[ach].new = false;
-        displayData.push(['remClass', ACH_DATA[ach].divID, 'achievementNew']);
+    if (document.getElementById(ACH_DATA[ach].divID).classList.contains('achievementNew')) {
+        document.getElementById(ACH_DATA[ach].divID).classList.remove('achievementNew');
         for (let id in player.achievements) {
-            if (player.achievements[id].new) { return; }
+            if (document.getElementById(ACH_DATA[id].divID).classList.contains('achievementNew')) { return; }
         }
-        displayData.push(['remClass', 'achSubTabBut', 'tabButNotify']);
-        displayData.push(['remClass', 'statsTabBut', 'tabButIndirectNotify']);
+        document.getElementById('achSubTabBut').remove('tabButNotify');
+        document.getElementById('achSubTabBut').remove('tabButIndirectNotify');
     }
+}
+
+function updateMilestones() {
+    for (let id in MILES_DATA) {
+        if (!player.milestones[id] && MILES_DATA[id].canUnlock()) {
+            unlockMilestone(id)
+        } else if (!MILES_DATA[id].isImplemented) { document.getElementById('milestoneRew' + id.toString()).innerHTML = '?????'; }
+    }
+}
+
+function unlockMilestone(m) {
+    player.milestones[m] = true;
+    displayData.push(['addClass', 'milestone' + m.toString(), 'milestoneTDUnlocked']);
+    displayData.push(['remClass', 'milestone' + m.toString(), 'milestoneTD']);
+    displayData.push(['addClass', 'milestonesBut', 'milestonesNotify']);
+    displayData.push(['addClass', 'galaxiesSubTabBut', 'tabButNotify']);
+    displayData.push(['addClass', 'galaxyTabBut', 'tabButIndirectNotify']);
+    displayData.push(['setProp', 'milesUnlockPopup', 'opacity', '1']);
+    displayData.push(['setProp', 'milestoneReq' + m.toString(), 'text-decoration', 'line-through']);
+    mPopupShownTime = (new Date).getTime();
+    MILES_DATA[m].onUnlock();
 }
 
 function closeOfflinePopup() {

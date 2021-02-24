@@ -310,10 +310,14 @@ function timePrestigeReset() {
 }
 
 function resetTime() {
-    for (let id in TIME_DATA.upgrades) {
-        player.timeUpgs[id] = false;
-    }
+    let firstColumn = new Array(4);
+    let rapidFire = player.timeUpgs[24];
+    for (let i=1; i<=4; i++) { firstColumn[i] = player.timeUpgs['1' + i.toString()]; }
     copyData(player.timeUpgs, START_PLAYER.timeUpgs);
+    if (hasMilestone(2)) {
+        for (let i=1; i<=4; i++) { player.timeUpgs['1' + i.toString()] = firstColumn[i]; }
+    }
+    if (hasMilestone(3)) { player.timeUpgs[24] = rapidFire; }
 
     for (var i=NUM_TIMEDIMS; i>=1; i--) {
         player.timeDims[i].amount = new Decimal(0);
@@ -546,7 +550,7 @@ const TIME_DATA = {
         },
         23: {
             title: 'Building Boost',
-            desc: 'All building resources get a production boost based on unspent time crystals.',
+            desc: 'The first three building resources get a production boost based on unspent time crystals.',
             cost: new Decimal(10000),
             preReq: 22,
             buttonID: 'timeUpg23',

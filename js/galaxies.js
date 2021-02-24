@@ -105,28 +105,30 @@ function buyGUpg(g, u) {
         addGUpgClass(g, u, 'boughtGalaxyUpg');
         remGUpgClass(g, u, 'galaxyUpg');
 
-        if (u == 21) {
-            player.galaxyUpgs[g][22].locked = true;
-            addGUpgClass(g, 22, 'lockedGalaxyUpg');
-            remGUpgClass(g, 22, 'galaxyUpg')
-            remGUpgClass(g, 22, 'unclickGalaxyUpg')
-            document.getElementById(GALAXIES_DATA[g].upgrades[22].textID).style.display = 'none';
-            player.galaxyUpgs[g][32].locked = true;
-            addGUpgClass(g, 32, 'lockedGalaxyUpg');
-            remGUpgClass(g, 32, 'galaxyUpg')
-            remGUpgClass(g, 32, 'unclickGalaxyUpg')
-            document.getElementById(GALAXIES_DATA[g].upgrades[32].textID).style.display = 'none';
-        } else if (u == 22) {
-            player.galaxyUpgs[g][21].locked = true;
-            addGUpgClass(g, 21, 'lockedGalaxyUpg');
-            remGUpgClass(g, 21, 'galaxyUpg')
-            remGUpgClass(g, 21, 'unclickGalaxyUpg')
-            document.getElementById(GALAXIES_DATA[g].upgrades[21].textID).style.display = 'none';
-            player.galaxyUpgs[g][31].locked = true;
-            addGUpgClass(g, 31, 'lockedGalaxyUpg');
-            remGUpgClass(g, 31, 'galaxyUpg')
-            remGUpgClass(g, 31, 'unclickGalaxyUpg')
-            document.getElementById(GALAXIES_DATA[g].upgrades[31].textID).style.display = 'none';
+        if (!hasMilestone(7)) {
+            if (u == 21) {
+                player.galaxyUpgs[g][22].locked = true;
+                addGUpgClass(g, 22, 'lockedGalaxyUpg');
+                remGUpgClass(g, 22, 'galaxyUpg')
+                remGUpgClass(g, 22, 'unclickGalaxyUpg')
+                document.getElementById(GALAXIES_DATA[g].upgrades[22].textID).style.display = 'none';
+                player.galaxyUpgs[g][32].locked = true;
+                addGUpgClass(g, 32, 'lockedGalaxyUpg');
+                remGUpgClass(g, 32, 'galaxyUpg')
+                remGUpgClass(g, 32, 'unclickGalaxyUpg')
+                document.getElementById(GALAXIES_DATA[g].upgrades[32].textID).style.display = 'none';
+            } else if (u == 22) {
+                player.galaxyUpgs[g][21].locked = true;
+                addGUpgClass(g, 21, 'lockedGalaxyUpg');
+                remGUpgClass(g, 21, 'galaxyUpg')
+                remGUpgClass(g, 21, 'unclickGalaxyUpg')
+                document.getElementById(GALAXIES_DATA[g].upgrades[21].textID).style.display = 'none';
+                player.galaxyUpgs[g][31].locked = true;
+                addGUpgClass(g, 31, 'lockedGalaxyUpg');
+                remGUpgClass(g, 31, 'galaxyUpg')
+                remGUpgClass(g, 31, 'unclickGalaxyUpg')
+                document.getElementById(GALAXIES_DATA[g].upgrades[31].textID).style.display = 'none';
+            }
         }
         /*if (thisRow>1) {
             if (!player.galaxyRowsLocked[thisRow-1]) { rowLock(thisRow-1); }
@@ -233,7 +235,16 @@ function calculateGalaxyGain() {
     if (player.worlds.lt(10)) { return new Decimal(0); }
     let g = new Decimal(player.worlds).div(10);
     let d = new Decimal(g.sqrt());
-    return Decimal.floor(player.worlds.pow(g.minus(d)));
+    let gals = Decimal.floor(player.worlds.pow(g.minus(d).plus(isBuilt(4) ? BUILDS_DATA[4].resourceEff() : 0)));
+    return gals.plus(getCUpgEffect(6));
+}
+
+function calculateGalaxyGainFuture(w) {
+    if (w.lt(10)) { return new Decimal(0); }
+    let g = new Decimal(w).div(10);
+    let d = new Decimal(g.sqrt());
+    let gals = Decimal.floor(w.pow(g.minus(d).plus(isBuilt(4) ? BUILDS_DATA[4].resourceEff() : 0)));
+    return gals.plus(getCUpgEffect(6));
 }
 
 function calculateNextGalaxy() {
@@ -248,7 +259,7 @@ function calculateNextGalaxy() {
             nextW = nextW.plus(1);
             g = new Decimal(nextW).div(10);
             d = new Decimal(g.sqrt());
-            newGain = Decimal.floor(nextW.pow(g.minus(d)));
+            newGain = calculateGalaxyGainFuture(nextW);
         }
         return nextW;
     }
@@ -329,18 +340,21 @@ function galaxyPrestigeReset(respec=false) {
 
 function resetTimeCounts() {
     player.timeResets = new Decimal(START_PLAYER.timeResets);
-    player.crystals = new Decimal(START_PLAYER.crystals);
+    player.crystals = new Decimal(hasMilestone(4) ? START_PLAYER.milesCrystals : START_PLAYER.crystals);
     player.trueEssence = new Decimal(START_PLAYER.trueEssence);
     player.antiEssence = new Decimal(START_PLAYER.antiEssence);
     player.truePercent = new Decimal(START_PLAYER.truePercent);
     player.antiPercent = new Decimal(START_PLAYER.antiPercent);
     copyData(player.thisAscStats, START_PLAYER.thisAscStats);
+    player.thisAscStats.bestCrystals = player.crystals;
+    player.thisAscStats.totalCrystals = player.crystals;
 }
 
 function getGalaxiesBonus() {
     var b = new Decimal(player.allTimeStats.totalGalaxies)
     var e = 1.5;
     var boost = Decimal.max(b.pow(e).plus(1), 1);
+    if (hasMilestone(3)) { boost = boost.times(1.5); }
     return boost;
 }
 

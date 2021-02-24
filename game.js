@@ -30,6 +30,8 @@ var mainLoop;
 
 var popupShownTime;
 
+var mPopupShownTime;
+
 var hidden, visibilityChange, isHidden;
 
 var displayData = new Array(0);
@@ -221,6 +223,8 @@ function loadStyles() {
             document.getElementById(UNITS_DATA[i].maxID).classList.add('unclickableMax');
             document.getElementById(UNITS_DATA[i].maxID).classList.remove('unitMax');
         }
+        displayData.push(['html', UNITS_DATA[i].costID, formatWhole(UNITS_DATA[i].cost())]);
+        if (canAffordUnit(i)) { displayData.push(['html', UNITS_DATA[i].maxNumID, calculateMaxUnits(i)]); }
     }
     for (let i=1; i<=NUM_TIMEDIMS; i++) {
         if (player.timeDims[i].unlocked) { document.getElementById(TIME_DATA[i].rowID).style.display = 'table-row'; }
@@ -261,8 +265,6 @@ function loadStyles() {
     }
 
     if (hasAchievement(15)) { document.getElementById('keptBricks').style.display = 'block'; }
-
-    if ((player.buildings[3].upgrades[13] || player.buildings[3].upgrades[23] || player.unlocks['buildingsTab']['sun']) && !player.buildings[3].built) { player.buildings[3].built = true; }
     
     for (var t in TIME_DATA.upgrades) {
         if (TIME_DATA.upgrades[t].displayTooltip) { document.getElementById(TIME_DATA.upgrades[t].buttonID).setAttribute('data-title', TIME_DATA.upgrades[t].displayFormula) }
@@ -282,6 +284,8 @@ function loadStyles() {
             document.getElementById(CONSTR_DATA[c].buttonID).classList.add('unclickableConstrUpg');
             document.getElementById(CONSTR_DATA[c].buttonID).classList.remove('constrUpg');
         }
+        if (CONSTR_DATA[c].isTimes) { writeHTMLCUpg(c, `<span style="font-weight: 900;">${getCUpgName(c)}</span><br>${getCUpgDesc(c)}<br>Cost: ${formatDefault(getCUpgCost(c))} astral bricks<br>Current level: ${formatWhole(player.construction[c]) + (getExtraLevels(c)>0 ? ' + ' + formatWhole(getExtraLevels(c)) : '')}${isDisplayEffectC(c) ? ("<br>Currently: " + formatDefault2(getCUpgEffect(c)) + "x") : ""}`); }
+        else { writeHTMLCUpg(c, `<span style="font-weight: 900;">${getCUpgName(c)}</span><br>${getCUpgDesc(c)}<br>Cost: ${formatDefault(getCUpgCost(c))} astral bricks<br>Current level: ${formatWhole(player.construction[c]) + (getExtraLevels(c)>0 ? ' + ' + formatWhole(getExtraLevels(c)) : '')}${isDisplayEffectC(c) ? ("<br>Currently: +" + formatDefault2(getCUpgEffect(c))) : ""}`); }
     }    
 
     for (var g in GALAXIES_DATA) {
@@ -346,14 +350,17 @@ function loadStyles() {
 
     for (let id in ACH_DATA) {
         document.getElementById(ACH_DATA[id].divID).setAttribute('data-title', ACH_DATA[id].desc + (ACH_DATA[id].hasReward ? ' Reward: ' + ACH_DATA[id].reward : '' ) + (ACH_DATA[id].showEffect ? ' Currently: ' + formatDefault2(ACH_DATA[id].effect()) + 'x' : '' ));
-        if (player.achievements[id].unlocked) {
+        if (player.achievements[id]) {
             document.getElementById(ACH_DATA[id].divID).classList.add('achievementUnlocked');
             document.getElementById(ACH_DATA[id].divID).classList.remove('achievement');
-            if (player.achievements[id].new) {
-                document.getElementById(ACH_DATA[id].divID).classList.add('achievementNew');
-                displayData.push(['addClass', 'achSubTabBut', 'tabButNotify']);
-                displayData.push(['addClass', 'statsTabBut', 'tabButIndirectNotify']);
-            }
+        }
+    }
+
+    for (let id in MILES_DATA) {
+        if (player.milestones[id]) {
+            document.getElementById('milestone' + id.toString()).classList.add('milestoneTDUnlocked');
+            document.getElementById('milestone' + id.toString()).classList.remove('milestone');
+            displayData.push(['setProp', 'milestoneReq' + id.toString(), 'text-decoration', 'line-through']);
         }
     }
 
@@ -453,12 +460,21 @@ function gameLoop(diff=new Decimal(0), offline=false) {
     }
     for (var b in BUILDS_DATA) {
         if (isBuilt(b)) {
-            player.buildings[b].amount = player.buildings[b].amount.plus(getBuildingProdPerSec(b).times(diff.div(1000)));
+            if (b==4) {
+                player.buildings[b].progress = player.buildings[b].progress.plus(BUILDS_DATA[b].prod());
+                if (player.buildings[b].progress.gte(100)) {
+                    player.buildings[b].progress = new Decimal(0);
+                    player.buildings[b].amount = player.buildings[b].amount.plus(1);
+                }
+            }
+            else { player.buildings[b].amount = player.buildings[b].amount.plus(getBuildingProdPerSec(b).times(diff.div(1000))); }
         }
     }
+
     updateUnlocks();
     updateHeaderDisplay();
     updateAchievements();
+    updateMilestones();
 
     if (!offline && player.unlocks['unitsTab']['autobuyers']) {
         var slowAutoBuy = (currentUpdate - player.lastAutobuy)>=(15000/DEV_SPEED);
@@ -477,6 +493,12 @@ function gameLoop(diff=new Decimal(0), offline=false) {
         if (currentUpdate-popupShownTime >= 2000) {
             displayData.push(['setProp', 'achUnlockPopup', 'opacity', '0']);
             popupShownTime = null;
+        }
+    }
+    if (!offline && mPopupShownTime !== undefined && mPopupShownTime !== null) {
+        if (currentUpdate-mPopupShownTime >= 2000) {
+            displayData.push(['setProp', 'milesUnlockPopup', 'opacity', '0']);
+            mPopupShownTime = null;
         }
     }
     if (!offline && !isHidden) { window.requestAnimationFrame(updateDisplay); }
@@ -503,6 +525,7 @@ function autobuyerTick(slow) {
     }
     if (player.autobuyers[9]['on'] && (player.autobuyers[9]['fast'] || slow)) { if (isAutoSacTriggered()) { timePrestigeNoConfirm(); } }
     if (player.autobuyers[10]['on'] && (player.autobuyers[10]['fast'] || slow)) { if (canSpacePrestige() && (player.spaceResets.lt(player.autobuyers[10]['max']) || player.autobuyers[10]['max'] == 0)) { spacePrestigeNoConfirm(); } }
+    if (player.autobuyers[11]['on'] && (player.autobuyers[11]['fast'] || slow)) { if (canGalaxyPrestige() && calculateGalaxyGain().gte(player.autobuyers[11]['amount'])) { galaxyPrestigeNoConfirm(); } }
 }
 
 function calculateOfflineTime(seconds) {
@@ -746,7 +769,7 @@ function getAchievementBoost() {
 }
 
 function hasAchievement(id) {
-    return player.achievements[id].unlocked;
+    return player.achievements[id];
 }
 
 function getAchievementEffect(id) {
@@ -756,7 +779,7 @@ function getAchievementEffect(id) {
 function getNumAchievements() {
     let count = 0;
     for (let id in ACH_DATA) {
-        if (player.achievements[id].unlocked) { count++ }
+        if (player.achievements[id]) { count++ }
     }
     return count;
 }
@@ -766,7 +789,7 @@ function getNumAchRows() {
     let yes = true;
     for (let i=1; i<=Math.floor(NUM_ACHS/5); i++) {
         for (let j=1; j<=5; j++) {
-            if (!player.achievements[i.toString() + j.toString()].unlocked) { yes = false; }
+            if (!player.achievements[i.toString() + j.toString()]) { yes = false; }
         }
         if (yes) { count++ }
         yes = true;
@@ -777,17 +800,17 @@ function getNumAchRows() {
 //milestone stuff
 
 function hasMilestone(id) {
-    return player.milestones[id].unlocked;
+    return player.milestones[id];
 }
 
 function getMilestoneEffect(id) {
-    return ACH_DATA[id].effect();
+    return MILES_DATA[id].effect();
 }
 
 function getNumMilestones() {
     let count = 0;
-    for (let id in ACH_DATA) {
-        if (player.milestones[id].unlocked) { count++ }
+    for (let id in MILES_DATA) {
+        if (player.milestones[id]) { count++ }
     }
     return count;
 }
