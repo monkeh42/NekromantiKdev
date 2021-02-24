@@ -762,7 +762,7 @@ function showTab(tabName, buttonName) {
         tab = allTabs.item(i);
         if (tab.id === tabName) {
             tab.style.display = 'block';
-            tab.classList.remove('tabButSelected');
+            document.getElementById(tab.id + 'But').classList.remove('tabButSelected');
         } else {
             tab.style.display = 'none';
             document.getElementById(tab.id + 'But').classList.remove('tabButSelected');
