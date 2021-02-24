@@ -324,7 +324,8 @@ function updateUnitTiers() {
             displayData.push(['remClass', UNITS_DATA[i].maxID, 'unitMax']);
             displayData.push(['addClass', UNITS_DATA[i].maxID, 'unclickableMax']);
         }
-        displayData.push(['html', UNITS_DATA[i].amountID, `<div style="min-width: 35%; float: left;">${formatUnitRow(player.units[i].amount)}</div><div style="min-width: 35%; float: left;">(${formatWholeUnitRow(player.units[i].bought)})</div><div style="min-width: 30%; float: left;">${getUnitProdPerSecond(i).gt(0) ? "(+" + formatDefault(Decimal.times((getUnitProdPerSecond(i).div(player.units[i].amount.max(1))), 100), 2) + "%/s)</div>" : ""}`]);
+        displayData.push(['html', UNITS_DATA[i].amountID, `<div style="min-width: 50%; float: left;">${formatUnitRow(player.units[i].amount)}</div><div style="min-width: 30%; float: left;">(${formatWholeUnitRow(player.units[i].bought)})</div>`]);
+        displayData.push(['html', UNITS_DATA[i].gainID, `<div style="min-width: 30%; float: left;">${getUnitProdPerSecond(i).gt(0) ? "(+" + formatDefault(Decimal.times((getUnitProdPerSecond(i).div(player.units[i].amount.max(1))), 100), 2) + "%/s)</div>" : ""}`]);
         displayData.push(['html', UNITS_DATA[i].multID, `<div style="min-width: 45%; float: left;">${formatUnitRow2(UNITS_DATA[i].corpseMult())}x</div><div style="min-width: 45%; float: left;">(${(i > 1) ? formatUnitRow2(UNITS_DATA[i].prodMult()) : "~"}x)</div>`]);
         displayData.push(['html', UNITS_DATA[i].buttonID, `Cost: ${formatWhole(UNITS_DATA[i].cost())} corpses`]);
         displayData.push(['html', UNITS_DATA[i].maxID, canAffordUnit(i) ? `Max: ${calculateMaxUnits(i)} for &#162;${formatWhole(calculateMaxUnitsCost(i))}` : "Max: 0"]);
@@ -344,7 +345,7 @@ function updateTDimTiers() {
             displayData.push(['remClass', TIME_DATA[i].maxID, 'unitMaxT']);
             displayData.push(['addClass', TIME_DATA[i].maxID, 'unclickableMaxT']);
         }
-        displayData.push(['html', TIME_DATA[i].amountID, `<div style="min-width: 30%; float: left;">${formatUnitRow(player.timeDims[i].amount)}</div><div style="min-width: 30%; float: left;">(${formatWholeUnitRow(player.timeDims[i].bought)})</div><div style="min-width: 40%; float: left;">${getTimeDimProdPerSecond(i + 1).gt(0) ? "(+" + formatDefault(Decimal.times((getTimeDimProdPerSecond(i + 1).div(player.timeDims[i].amount.max(1))), 100), 2) + "%/s)</div>" : ""}`]);
+        displayData.push(['html', TIME_DATA[i].amountID, `<div style="min-width: 30%; float: left;">${formatUnitRow(player.timeDims[i].amount)}</div><div style="min-width: 40%; float: left;">(${formatWholeUnitRow(player.timeDims[i].bought)})</div><div style="min-width: 30%; float: left;">${getTimeDimProdPerSecond(i + 1).gt(0) ? "(+" + formatDefault(Decimal.times((getTimeDimProdPerSecond(i + 1).div(player.timeDims[i].amount.max(1))), 100), 2) + "%/s)</div>" : ""}`]);
         displayData.push(['html', TIME_DATA[i].multID, `<div>${formatUnitRow2(TIME_DATA[i].mult())}x</div>`]);
         displayData.push(['html', TIME_DATA[i].buttonID, `Cost: ${formatWhole(TIME_DATA[i].cost())} crystals`]);
         displayData.push(['html', TIME_DATA[i].maxID, canAffordTime(i) ? `Max: ${calculateMaxTime(i)} for &#162;${formatWhole(calculateMaxTimeCost(i))}` : "Max: 0"]);
@@ -459,7 +460,8 @@ function toggleAstralDisplay() {
     displayData.push(['togClass', 'astralToggle', 'astralBut']);
     displayData.push(['togClass', 'astralToggle', 'astralOn']);
     displayData.push(['html', 'astralText', player.astralFlag ? 'disable' : 'enable']);
-    if (player.headerDisplay['astralNotice']) { displayData.push(['togDisplay', 'astralNotice']); }
+    if (player.headerDisplay['astralNoticeDisplay']) { displayData.push(['togDisplay', 'astralNoticeDisplay']); }
+    if (player.headerDisplay['bricksGainDisplayHeader']) { displayData.push(['togDisplay', 'bricksGainDisplayHeader']); }
     displayData.push(['html', 'normalAstral', player.astralFlag ? 'ASTRAL' : 'NORMAL']);
     displayData.push(['setProp', 'normalAstral', 'color', player.astralFlag ? '#42d35a' : 'white']);
     displayData.push(['setProp', 'normalAstral', 'color', player.astralFlag ? '#42d35a' : 'white']);
@@ -474,46 +476,6 @@ function toggleTimeLockDisplay() {
     displayData.push(['togClass', 'respecTimeBut', 'unclickSliderBut']);
     displayData.push(['togClass', 'timeSlider', 'sliderLocked']);
     displayData.push(['togClass', 'timeSlider', 'slider']);
-}
-
-function updateAutobuyers() {
-    /*var elements = document.getElementsByClassName('onBuyerRadio');
-    var tier = 0;
-    var pri = 0;
-    var unitName = '';
-    var firstThree = '';
-    var newPriority = new Array();
-    for (var i=0; i<elements.length; i++) {
-        unitName = '';
-        firstThree = elements[i].id.slice(0, 3);
-        for (var j=1; j<=NUM_UNITS; j++) {
-            if (UNITS_DATA[j].single.startsWith(firstThree)) {
-                tier = UNITS_DATA[j].tier;
-                unitName = UNITS_DATA[j].single.replace(' ', '');
-                pri = parseInt(document.getElementById(unitName + 'Priority').value);
-                break;
-            }
-            tier = 9;
-            unitName = 'sacrifice';
-        }
-        player.autobuyers[tier]['on'] = document.getElementById(unitName + 'BuyerOn').checked;
-        player.autobuyers[tier]['fast'] = (tier == 1) ? true : document.getElementById(unitName + 'BuyerFast').checked;
-        if (tier == 9) {
-            player.autobuyers[tier]['amount'] = new Decimal(document.getElementById(unitName + 'BuyerAmount').value);
-            player.autobuyers[tier]['type'] = document.getElementById(unitName + 'BuyerOptionsList').value;
-        } else {
-            player.autobuyers[tier]['bulk'] = document.getElementById(unitName + 'BuysBulk').checked;
-            if (newPriority[pri-1] === undefined) { newPriority[pri-1] = parseInt(tier); }
-            else { newPriority.splice(pri-1, 0, tier); }
-        }
-    }
-    player.autobuyers[10]['on'] = document.getElementById('prestigeBuyerOn').checked;
-    player.autobuyers[10]['fast'] = document.getElementById('prestigeBuyerFast').checked;
-    player.autobuyers[10]['priority'] = document.getElementById('prestigeBuyerPriorityBut').checked;
-    let sacMethod = document.getElementById('sacrificeBuyerAdvancedList');
-    document.getElementById('sacrificeBuyerAmountLabel').innerHTML = sacMethod.options[sacMethod.selectedIndex].text;
-    copyData(player.autobuyers.priority, newPriority);
-    */
 }
 
 function updateSingleBuyer(id, option, button) {
@@ -535,16 +497,42 @@ function updateBuyerOrder(tier, id) {
     }
 }
 
+function emptyPrestige() {
+    if (document.getElementById('maxPrestige').value == '') { document.getElementById('maxPrestige').value = formatWholeNoComma(player.autobuyers[10]['max']); }
+}
+
+function emptySacrifice() {
+    if (document.getElementById('sacrificeBuyerAmount').value == '') { document.getElementById('sacrificeBuyerAmount').value = formatWholeNoComma(player.autobuyers[9]['amount']); }
+}
+
 function updateSacBuyer() {
     let sacMethod = document.getElementById('sacrificeBuyerAdvancedList');
     document.getElementById('sacrificeBuyerAmountLabel').innerHTML = sacMethod.options[sacMethod.selectedIndex].text;
+    if (document.getElementById('sacrificeBuyerAmount').value != '') {
+        try {
+            player.autobuyers[9]['amount'] = new Decimal(document.getElementById('sacrificeBuyerAmount').value);
+            if (document.getElementById('sacrificeErr').style.display == '') { document.getElementById('sacrificeErr').style.display = 'none' }
+        }
+        catch(err) {
+            document.getElementById('sacrificeErr').style.display = '';
+            document.getElementById('sacrificeErrValue').innerHTML = formatWholeNoComma(player.autobuyers[9]['amount']);
+        }
+    }
     player.autobuyers[9]['amount'] = new Decimal(document.getElementById('sacrificeBuyerAmount').value);
     player.autobuyers[9]['type'] = document.getElementById('sacrificeBuyerAdvancedList').value;
 }
 
-function updatePrestigePriority() {
-    player.autobuyers[10]['priority'] = !player.autobuyers[10]['priority'];
-    document.getElementById('prestigeBuyerPriorityBut').innerHTML = player.autobuyers[10]['priority'] ? 'YES' : 'NO'
+function updateMaxPrestige() {
+    if (document.getElementById('maxPrestige').value != '') {
+        try {
+            player.autobuyers[10]['max'] = new Decimal(document.getElementById('maxPrestige').value);
+            if (document.getElementById('prestigeErr').style.display == '') { document.getElementById('prestigeErr').style.display = 'none' }
+        }
+        catch(err) {
+            document.getElementById('prestigeErr').style.display = '';
+            document.getElementById('prestigeErrValue').innerHTML = formatWholeNoComma(player.autobuyers[10]['max']);
+        }
+    }
 }
 
 function updateAutobuyersDisplay() {
@@ -565,39 +553,8 @@ function updateAutobuyersDisplay() {
 
     document.getElementById('prestigeEnabledBut').innerHTML = player.autobuyers[10]['on'] ? 'ON' : 'OFF'
     document.getElementById('prestigeSpeedBut').innerHTML = player.autobuyers[10]['fast'] ? 'FAST' : 'SLOW'
-    document.getElementById('prestigeBuyerPriorityBut').innerHTML = player.autobuyers[10]['priority'] ? 'YES' : 'NO'
+    document.getElementById('maxPrestige').value = formatWholeNoComma(player.autobuyers[10]['max']);
 }
-
-/*function updateAutobuyersDisplay() {
-    for (var i=1; i<=10; i++) {
-        if (i<9) { 
-            document.getElementById(player.autobuyers.priority[i-1].toString() + (i).toString()).selected = true;
-            var unitName = UNITS_DATA[i].single.replace(' ', '');
-            document.getElementById(unitName + 'BuyerOn').checked = player.autobuyers[i]['on'];
-            if (i!=1) { document.getElementById(unitName + 'BuyerFast').checked = player.autobuyers[i]['fast']; }
-            document.getElementById(unitName + 'BuysBulk').checked = player.autobuyers[i]['bulk'];
-            document.getElementById(unitName + 'BuyerOff').checked = !player.autobuyers[i]['on'];
-            if (i!=1) { document.getElementById(unitName + 'BuyerSlow').checked = !player.autobuyers[i]['fast']; }
-            document.getElementById(unitName + 'BuysOne').checked = !player.autobuyers[i]['bulk'];
-        } else if (i==9) {
-            document.getElementById('sacrificeBuyerOn').checked = player.autobuyers[i]['on'] ;
-            document.getElementById('sacrificeBuyerFast').checked = player.autobuyers[i]['fast'];
-            document.getElementById('sacrificeBuyerOff').checked = !player.autobuyers[i]['on'];
-            document.getElementById('sacrificeBuyerSlow').checked = !player.autobuyers[i]['fast'];
-            document.getElementById('sacrificeBuyerAmount').value = formatWholeNoComma(player.autobuyers[i]['amount']);
-            document.getElementById('sacrificeBuyerAdvancedList').options.namedItem(player.autobuyers[i]['type']).selected = true;
-            let sacMethod = document.getElementById('sacrificeBuyerAdvancedList');
-            document.getElementById('sacrificeBuyerAmountLabel').innerHTML = sacMethod.options[sacMethod.selectedIndex].text;
-            //if (player.autobuyers[i].autolock) { document.getElementById('sacrificeBuyerAutolock').checked = true; }
-        } else {
-            document.getElementById('prestigeBuyerOn').checked = player.autobuyers[i]['on'];
-            document.getElementById('prestigeBuyerFast').checked = player.autobuyers[i]['fast'];
-            document.getElementById('prestigeBuyerOff').checked = !player.autobuyers[i]['on'];
-            document.getElementById('prestigeBuyerSlow').checked = !player.autobuyers[i]['fast'];
-            document.getElementById('prestigeBuyerPriorityBut').checked = player.autobuyers[i]['priority'];
-        }
-    }
-}*/
 
 function updateSliderDisplay() {
     player.truePercent = 100 - Number(document.getElementById('timeSlider').value);
@@ -666,6 +623,7 @@ function toggleDisplay(id, button) {
         document.getElementById(button).innerHTML = "OFF";
     }
     if (id == 'astralNoticeDisplay') { document.getElementById(id).style.display = (document.getElementById(id).style.display == 'none') && player.astralFlag ? '' : 'none' }
+    else if (id == 'bricksGainDisplayHeader') { document.getElementById(id).style.display = (document.getElementById(id).style.display == 'none') && player.astralFlag ? '' : 'none' }
     else { document.getElementById(id).style.display = (document.getElementById(id).style.display == 'none') ? '' : 'none' }
 }
 
@@ -720,6 +678,7 @@ function setConfDefaults() {
 function updateHeaderDisplay() {
     for (let dKey in player.headerDisplay) {
         if (dKey == 'astralNoticeDisplay') { document.getElementById(dKey).style.display = (player.headerDisplay[dKey] && player.astralFlag) ? '' : 'none' }
+        else if (dKey == 'bricksGainDisplayHeader') { document.getElementById(dKey).style.display = (player.headerDisplay[dKey] && player.astralFlag) ? '' : 'none' }
         else if (dKey == 'worldsBonusDisplay') { document.getElementById(dKey).style.display = (player.headerDisplay[dKey] && player.unlocks['unitsTab']['spacePrestige']) ? '' : 'none' }
         else if (dKey == 'galaxiesBonusDisplay') { document.getElementById(dKey).style.display = (player.headerDisplay[dKey] && player.unlocks['galaxyTab']['mainTab']) ? '' : 'none' }
         else { document.getElementById(dKey).style.display = player.headerDisplay[dKey] ? '' : 'none' }
@@ -759,6 +718,8 @@ function showTab(tabName, buttonName) {
         displayData.push(['togClass', 'helpTabBut', 'tabButSelected'])
     }
     displayData.push(['addClass', bName, 'tabButSelected'])
+    //displayData.push(['addClass', bName + 'Small', 'tabButSelected'])
+    displayData.push(['addClass', bName + 'Mid', 'tabButSelected'])
     player.activeTabs[0] = tabName;
     if (buttonName !== undefined) { document.getElementById(buttonName).classList.remove('tabButNotify'); }
 }
@@ -904,6 +865,96 @@ function getActiveTabs() {
         }
     }
     return aTabs;
+}
+
+function showResponsive() {
+
+}
+
+function showTabR(tabName, buttonName) {
+    let bName = tabName + 'But'
+    var allTabs = document.getElementsByClassName('pageTab');
+    var tab;
+    for (var i=0; i<allTabs.length; i++) {
+        tab = allTabs.item(i);
+        if (tab.id === tabName) {
+            tab.style.display = 'block';
+            tab.classList.remove('tabButSelected');
+            document.getElementById(tab.id + 'RowSmall').classList.remove('rNavHidden');
+        } else {
+            tab.style.display = 'none';
+            document.getElementById(tab.id + 'But').classList.remove('tabButSelected');
+            document.getElementById(tab.id + 'RowSmall').classList.add('rNavHidden');
+        }
+    }
+    
+    displayData.push(['addClass', bName, 'tabButSelected'])
+    displayData.push(['addClass', bName + 'Small', 'tabButSelected'])
+    displayData.push(['addClass', bName + 'Mid', 'tabButSelected'])
+
+
+
+    player.activeTabs[0] = tabName;
+    if (buttonName !== undefined) { document.getElementById(buttonName).classList.remove('tabButNotify'); }
+}
+
+function showGalaxy(name) {
+    var allGs = document.getElementsByClassName('gal');
+    var g;
+    for (var i=0; i<allGs.length; i++) {
+        g = allGs.item(i);
+        if (g.id === name) {
+            g.style.display = 'table-cell';
+        } else {
+            g.style.display = 'none';
+        }
+    }
+    player.activeGalaxies[0] = 1;
+    player.activeGalaxies[1] = name;
+}
+
+function showGalaxies(name1, name2) {
+    var allGs = document.getElementsByClassName('gal');
+    var g;
+    for (var i=0; i<allGs.length; i++) {
+        g = allGs.item(i);
+        if (g.id === name1 || g.id === name2) {
+            g.style.display = 'table-cell';
+        } else {
+            g.style.display = 'none';
+        }
+    }
+    player.activeGalaxies[0] = 2;
+    player.activeGalaxies[1] = name1;
+    player.activeGalaxies[2] = name2;
+}
+
+function updateGalaxiesDisplayed(num=0, g1='gal1', g2='gal2') {
+    if (num == 0) { num = parseInt(document.getElementById('galDisplaySelect').value); }
+    let allGs = document.getElementsByClassName('gal');
+    switch (num) {
+        case 1:
+            document.getElementById('galButs2').style.display = 'none';
+            document.getElementById('galButs4').style.display = 'block';
+            document.getElementById('allGalaxiesTable').style.left = '436px';
+            showGalaxy(g1);
+            break;
+        case 2:
+            document.getElementById('galButs2').style.display = 'block';
+            document.getElementById('galButs4').style.display = 'none';
+            document.getElementById('allGalaxiesTable').style.left = '236px';
+            showGalaxies(g1, g2);
+            break;
+        case 4:
+            document.getElementById('galButs2').style.display = 'none';
+            document.getElementById('galButs4').style.display = 'none';
+            document.getElementById('allGalaxiesTable').style.left = '-167px';
+            for (let i=0; i<allGs.length; i++) {
+                allGs.item(i).style.display = 'table-cell';
+            }
+            player.activeGalaxies[0] = 4;
+            break;
+    }
 }
 
 function showMilestones() {

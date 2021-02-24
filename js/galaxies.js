@@ -309,7 +309,6 @@ function galaxyPrestigeReset(respec=false) {
     resetBuildingResources(false, true);
     resetBuildings(true);
     if (!hasAchievement(42)) { lockElements('unitsTab', 'autobuyers'); }
-    lockTab('buildingsTab');
     if (!hasAchievement(43)) { lockTab('timeTab'); }
     else { lockElements('timeTab', 'mainTab'); }
     

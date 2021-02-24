@@ -177,13 +177,13 @@ const START_PLAYER = {
         9: {
             'on': false,
             'fast': false,
-            'amount': new Decimal(0),
+            'amount': new Decimal(1),
             'type': 'atx',
         },
         10: {
             'on': false,
             'fast': false,
-            'priority': false,
+            'max': new Decimal(1),
         },
         
         priority: [1, 2, 3, 4, 5, 6, 7, 8],
@@ -744,6 +744,7 @@ const START_PLAYER = {
 
     tooltipsEnabled: false,
     activeTabs: ['unitsTab', 'unitsSubTab', 'buildingsSubTab', 'timeDimSubTab', 'galaxiesSubTab', 'statSubTab'],
+    activeGalaxies: [4, 'gal1', 'gal2'],
     hotkeysOn: true,
 }
 
@@ -1250,7 +1251,7 @@ const UNLOCKS_DATA = {
         'mainTab': {
             unlocked: false,
             notifyID: 'buildingsTabBut',
-            idsToShow: ['buildingsTabCell'],
+            idsToShow: ['buildingsTabCell', 'buildingsTabCellMid'],
             idsToHide: [],
             shouldNotify: function() {
                 return !hasTUpgrade(11);
@@ -1343,7 +1344,7 @@ const UNLOCKS_DATA = {
         'mainTab': {
             unlocked: false,
             notifyID: 'timeTabBut',
-            idsToShow: ['timeTabCell', 'timeBoostDisplay'],
+            idsToShow: ['timeTabCell', 'timeTabCellMid', 'timeBoostDisplay'],
             idsToHide: [],
             shouldNotify: function() {
                 return !hasAchievement(13);
@@ -1370,7 +1371,7 @@ const UNLOCKS_DATA = {
         'mainTab': {
             unlocked: false,
             notifyID: 'galaxyTabBut',
-            idsToShow: ['galaxyTabCell', 'galaxiesBonusDisplay', 'customizeDisplayBut'],
+            idsToShow: ['galaxyTabCell', 'galaxyTabCellMid', 'galaxiesBonusDisplay', 'customizeDisplayBut'],
             idsToHide: [],
             shouldNotify: function() {
                 return true;
@@ -1685,13 +1686,13 @@ function fixResetBug() {
         9: {
             'on': false,
             'fast': false,
-            'amount': new Decimal(0),
+            'amount': new Decimal(1),
             'type': 'atx',
         },
         10: {
             'on': false,
             'fast': false,
-            'priority': false,
+            'max': new Decimal(1),
         },
         priority: [1, 2, 3, 4, 5, 6, 7, 8],
     });
@@ -2224,6 +2225,7 @@ function fixResetBug() {
 
     START_PLAYER.tooltipsEnabled = false;
     START_PLAYER.activeTabs = new Array('unitsTab', 'unitsSubTab', 'buildingsSubTab', 'galaxiesSubTab', 'timeDimSubTab', 'statSubTab');
+    START_PLAYER.activeGalaxies = new Array([4, 'gal1', 'gal2']);
     START_PLAYER.hotkeysOn = true,
 
     fixData(player, START_PLAYER);

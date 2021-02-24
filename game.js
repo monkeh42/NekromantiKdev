@@ -41,14 +41,6 @@ var player = {};
 function init() {
     loadGame();
 
-    showTab(player.activeTabs[0]);
-    showUnitSubTab(player.activeTabs[1]);
-    showBuildingSubTab(player.activeTabs[2]);
-    if (player.unlocks['timeTab']['timeUpgrades']) { showTimeSubTab(player.activeTabs[3]); }
-    else { showTimeSubTab('timeDimSubTab'); }
-    if (player.activeTabs[0] == 'statsTab' && player.activeTabs[5] != 'achSubTab') { statsSubTabClick(player.activeTabs[5], player.activeTabs[5] + 'But'); }
-    else { showStatsSubTab(player.activeTabs[5]); }
-
     startGame();
 }
 
@@ -124,8 +116,93 @@ function loadGame() {
 }
 
 function loadStyles() {
-    if (displayData.length>0) {
-        updateDisplay();
+
+    /*for (let i=1; i<=4; i++) {
+        var canvasLeft = document.getElementById('leftCanvas' + i.toString());
+
+        if (canvasLeft.getContext) {
+            var ctxL = canvasLeft.getContext('2d');
+
+            ctxL.strokeStyle = '#661503';
+            ctxL.lineWidth = 5;
+            
+            ctxL.beginPath();
+            ctxL.moveTo(0, 111);
+            ctxL.lineTo(87, 0);
+            ctxL.stroke();
+
+            ctxL.beginPath();
+            ctxL.moveTo(0, 121);
+            ctxL.lineTo(87, 233);
+            ctxL.stroke();
+        }
+
+        var canvasRight = document.getElementById('rightCanvas' + i.toString());
+
+        if (canvasRight.getContext) {
+            var ctxR = canvasRight.getContext('2d');
+
+            ctxR.strokeStyle = '#661503';
+            ctxR.lineWidth = 5;
+            
+            ctxR.beginPath();
+            ctxR.moveTo(0, 0);
+            ctxR.lineTo(87, 111);
+            ctxR.stroke();
+
+            ctxR.beginPath();
+            ctxR.moveTo(0, 233);
+            ctxR.lineTo(87, 121);
+            ctxR.stroke();
+        }
+
+        var canvasTop = document.getElementById('topCanvas' + i.toString());
+
+        if (canvasTop.getContext) {
+            var ctxT = canvasTop.getContext('2d');
+
+            ctxT.strokeStyle = '#661503';
+            ctxT.lineWidth = 5;
+            
+            ctxT.beginPath();
+            ctxT.moveTo(0, 60);
+            ctxT.lineTo(38, 60);
+            ctxT.stroke();
+        }
+
+        var canvasBot = document.getElementById('botCanvas' + i.toString());
+
+        if (canvasBot.getContext) {
+            var ctxB = canvasBot.getContext('2d');
+
+            ctxB.strokeStyle = '#661503';
+            ctxB.lineWidth = 5;
+            
+            ctxB.beginPath();
+            ctxB.moveTo(0, 60);
+            ctxB.lineTo(38, 60);
+            ctxB.stroke();
+        }
+    }*/
+
+    
+
+    showTab(player.activeTabs[0]);
+    showUnitSubTab(player.activeTabs[1]);
+    showBuildingSubTab(player.activeTabs[2]);
+    if (player.unlocks['timeTab']['timeUpgrades']) { showTimeSubTab(player.activeTabs[3]); }
+    else { showTimeSubTab('timeDimSubTab'); }
+    if (player.activeTabs[0] == 'statsTab' && player.activeTabs[5] != 'achSubTab') { statsSubTabClick(player.activeTabs[5], player.activeTabs[5] + 'But'); }
+    else { showStatsSubTab(player.activeTabs[5]); }
+    if (screen.width < 1280 && screen.width > 600 && player.activeGalaxies[0] == 4) {
+        updateGalaxiesDisplayed(2, 'gal1', 'gal2');
+        document.getElementById('2gal').selected = true;
+    } else if (screen.width <= 600 && player.activeGalaxies[0] > 0) {
+        updateGalaxiesDisplayed(1, 'gal1', 'gal2');
+        document.getElementById('1gal').selected = true;
+    } else {
+        updateGalaxiesDisplayed(player.activeGalaxies[0], player.activeGalaxies[1], player.activeGalaxies[2]);
+        document.getElementById(player.activeGalaxies[0].toString() + 'gal').selected = true;
     }
 
     document.getElementById('versionNumber').innerHTML = GAME_DATA.version;
@@ -184,6 +261,8 @@ function loadStyles() {
     }
 
     if (hasAchievement(15)) { document.getElementById('keptBricks').style.display = 'block'; }
+
+    if ((player.buildings[3].upgrades[13] || player.buildings[3].upgrades[23] || player.unlocks['buildingsTab']['sun']) && !player.buildings[3].built) { player.buildings[3].built = true; }
     
     for (var t in TIME_DATA.upgrades) {
         if (TIME_DATA.upgrades[t].displayTooltip) { document.getElementById(TIME_DATA.upgrades[t].buttonID).setAttribute('data-title', TIME_DATA.upgrades[t].displayFormula) }
@@ -422,13 +501,8 @@ function autobuyerTick(slow) {
             }
         }
     }
-    if (player.autobuyers[10].priority) {
-        if (player.autobuyers[10]['on'] && (player.autobuyers[10]['fast'] || slow)) { if (canSpacePrestige()) { spacePrestigeNoConfirm(); } }
-        if (player.autobuyers[9]['on'] && (player.autobuyers[9]['fast'] || slow)) { if (isAutoSacTriggered()) { timePrestigeNoConfirm(); } }
-    } else {
-        if (player.autobuyers[9]['on'] && (player.autobuyers[9]['fast'] || slow)) { if (isAutoSacTriggered()) { timePrestigeNoConfirm(); } }
-        if (player.autobuyers[10]['on'] && (player.autobuyers[10]['fast'] || slow)) { if (canSpacePrestige()) { spacePrestigeNoConfirm(); } }
-    }
+    if (player.autobuyers[9]['on'] && (player.autobuyers[9]['fast'] || slow)) { if (isAutoSacTriggered()) { timePrestigeNoConfirm(); } }
+    if (player.autobuyers[10]['on'] && (player.autobuyers[10]['fast'] || slow)) { if (canSpacePrestige() && (player.spaceResets.lt(player.autobuyers[10]['max']) || player.autobuyers[10]['max'] == 0)) { spacePrestigeNoConfirm(); } }
 }
 
 function calculateOfflineTime(seconds) {

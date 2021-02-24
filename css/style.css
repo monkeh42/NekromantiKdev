@@ -1,9 +1,32 @@
-:root {
-    --speedDisplay: block;
-    --bulkDisplay: block;
-    --optionsDisplay: block;
-    --prestigeDisplay: block;
+.rNav {
+    position: fixed;
+    right: 50px;
+    top: 225px;
 }
+
+.rNavHidden {
+    display: none;
+}
+
+.shownOnSmall {
+    display: none;
+}
+
+.shownOnMid {
+    display: none;
+}
+
+@media screen and (max-device-width: 1279px) { /*and (min-device-width: 600px) {*/
+    .shownOnFull { display: none; }
+    .shownOnMid { display: table; }
+    .shownOnSmall { display: none; }
+}
+
+/*@media screen and (max-device-width: 600px) {
+    .shownOnFull { display: none; }
+    .shownOnMid { display: none; }
+    .shownOnSmall { display: table; }
+}*/
 
 @font-face {
     font-family: 'Cinzel';
@@ -88,7 +111,7 @@ body {
 }
 
 #game {
-    width: 1024px;
+    width: 1280px;
     margin: auto;
 }
 
@@ -304,7 +327,20 @@ option:active, option.active {
     color: white;
     background-color: #1f1f1f;
     font-style: bold;
-    width: 180px;
+    width: 178px;
+    height: 60px;
+    border: 1px solid #525252;
+    cursor: pointer;
+    border-radius: 4px;
+    font-family: 'Cinzel', serif;
+    font-size: 15pt;
+}
+
+.tabButSmall {
+    color: white;
+    background-color: #1f1f1f;
+    font-style: bold;
+    width: 200px;
     height: 60px;
     border: 1px solid #525252;
     cursor: pointer;
@@ -679,7 +715,7 @@ option:active, option.active {
 } 
 
 .buttonTD {
-    text-align: right;
+    text-align: left;
 }
 
 .unclickableUnit {
@@ -1021,7 +1057,7 @@ option:active, option.active {
     position: relative;
     font-size: 11pt;
     width: 250px;
-    min-height: 300px;;
+    min-height: 335px;;
     text-align: center;
     border: 1px solid #460573;
     border-radius: 4px;
@@ -1179,7 +1215,6 @@ option:active, option.active {
     font-weight: bold;
     opacity: 0.8;
     z-index: 2;
-    display: var(--optionsDisplay);
 }
 
 .buyerAmountContainer {
@@ -1187,7 +1222,6 @@ option:active, option.active {
 }
 
 .buyerOptionsContainerHalf {
-    margin-top: 9px;
     width: 50%;
 }
 
@@ -1232,6 +1266,15 @@ option:active, option.active {
     margin-bottom: 15px;
 }
 
+.buyerTextP {
+    width: 80px;
+    text-align: center;
+    background-color: black;
+    color: white;
+    border: 1px solid #460573;
+    margin-top: 10px;
+}
+
 .buyerList {
     width: 100px;
     background-color: black;
@@ -1247,6 +1290,13 @@ option:active, option.active {
     background-color: black;
     color: white;
     border: 1px solid #460573;
+}
+
+.galDropdown {
+    display: inline-block;
+    background-color: black;
+    color: white;
+    border: 1px solid #e32d05;
 }
 
 .buyerRadio {
@@ -1422,12 +1472,38 @@ option:active, option.active {
     color: white;
     background-color: #661503;
     font-style: bold;
-    width: 250px;
+    width: 310px;
     height: 35px;
     border: 1px solid #e32d05;
     margin: 5px;
     cursor: pointer;
     border-radius: 4px;
+}
+
+.galaxyNameBut4 {
+    color: white;
+    background-color: #661503;
+    font-style: bold;
+    width: 150px;
+    height: 35px;
+    border: 1px solid #e32d05;
+    margin: 5px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-family: 'Cinzel', serif;
+}
+
+.galaxyNameBut2 {
+    color: white;
+    background-color: #661503;
+    font-style: bold;
+    width: 310px;
+    height: 35px;
+    border: 1px solid #e32d05;
+    margin: 5px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-family: 'Cinzel', serif;
 }
 
 .galaxyBut:hover {
@@ -1444,6 +1520,18 @@ option:active, option.active {
     border-radius: 4px;
 }
 
+/*.galaxyTable {
+    position: relative;
+    text-align: center;
+    margin: 20px 0px 0;
+    width: 1020px;
+    height: 550px;
+    border: 1px solid #661503;
+    background-color: transparent;
+    border-collapse: collapse;
+    border-spacing: 0px;
+}*/
+
 .galaxyTable {
     position: relative;
     text-align: center;
@@ -1454,17 +1542,28 @@ option:active, option.active {
     border-collapse: collapse;
 }
 
-.leftGalaxyTD {
+/*.leftGalaxyTD {
     width: 175px;
     height: 195px;
     margin: auto;
     position: relative;
     border-right: 3px solid #661503;
+}*/
+
+.leftGalaxyTD {
+    margin: auto;
+    position: relative;
 }
 
-.rightGalaxyTD {
+/*.rightGalaxyTD {
     width: 175px;
     height: 195px;
+    margin: auto;
+    position: relative;
+    border-left: 3px solid #661503;
+}*/
+
+.rightGalaxyTD {
     margin: auto;
     position: relative;
     border-left: 3px solid #661503;
@@ -1478,12 +1577,32 @@ option:active, option.active {
     border-top: 3px solid #661503;
 }
 
+.bottomBorderDiv {
+    margin: auto;
+    position: relative;
+}
+
+.rightBorderDiv {
+    margin: auto;
+    position: relative;
+}
+
+.leftBorderDiv {
+    margin: auto;
+    position: relative;
+}
+
 #topBorderDiv {
     width: 175px;
     height: 195px;
     margin: auto;
     position: relative;
     border-bottom: 3px solid #661503;
+}
+
+.topBorderDiv {
+    margin: auto;
+    position: relative;
 }
 
 .arkImg {

@@ -17,6 +17,7 @@
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 </head>
 
 <body onload="init()">
@@ -28,14 +29,14 @@
             </div>
         </div>
     </div>
-    <div id="header">
+    <div id="header" style="width: 1280px; margin: auto;">
         <div id="helpDiv" style="display: none;">
             <div id="helpText">
             </div>
             <br>
         </div>
-        <div id="versionNumber" style="position: absolute; top: 0; right: 25px;">vERR</div>
-        <div id="resourceDisplay" style="width: auto; margin: 0px auto 10px; display: block; text-align: center;">
+        <div id="versionNumber" style="float: right; margin-left: -75px;">vERR</div>
+        <div id="resourceDisplay" style="width: 100%; margin: auto; display: block; text-align: center;">
             <span style="font-size: 16pt; font-weight: bold;">You have <span id="corpseAmount" style="font-size: 20pt; white-space: pre; color: #6c00b4; font-variant-numeric: tabular-nums;"> 10 </span> <span id='pluralCorpse'> corpses</span>.</span><br>
             <span>You are harvesting <span id="corpseGain" style="font-size: 17pt; font-weight: bold; white-space: pre; color: #6c00b4; font-variant-numeric: tabular-nums;"> 0 </span> <span id='pluralCorpseG'> corpses </span>/sec.<span id="devSpeedContainer" style="white-space: pre; display: none;"> (@ <span id="devSpeedDisplay">3</span>x time speed)</span></span><br>
             <div id="astralNoticeDisplay" style="color: #1c8a2e; display: none;"><h2>Corpse production disabled due to Astral Enslavement.</h2></div>
@@ -51,8 +52,45 @@
             <div id="customizeDisplayBut" style="font-size: 10pt; white-space: pre; display: none;"><button class="displayBut" onclick="openDisplayPopup()">customize this display</button></div>
         </div>
     </div>
-    <div id="tabButtons" id="tabButtons" style="width: 100%; margin: 5px auto 25px; display: block;">
-        <table style="width: auto; margin: auto;">
+    <div id="tabButtons" id="tabButtons" style="width: 1280px; margin: 10px auto 0; display: block;">
+        <!--<table style="width: auto; margin: auto;">
+            <tr id="unitsTabRowSmall" class="rNav">
+                <td>
+                    <button id="unitsTabButSmall" class="tabButSmall tabButSelected" onclick="showResponsive('unitsTab', 'unitsTabButSmall')"><div style="float: left;"><i class="fa fa-bars"></i></div>UNITS</button>
+                </td>
+            </tr>
+            <tr id="buildingsTabRowSmall" class="rNav rNavHidden">
+                <td>
+                    <button id="buildingsTabButSmall" class="tabButSmall" onclick="showResponsive('buildingsTab', 'buildingsTabButSmall')"><div style="float: left;"><i class="fa fa-bars"></i></div>BUILDINGS</button>
+                </td>
+            </tr>
+            <tr id="timeTabRowSmall" class="rNav rNavHidden">
+                <td>
+                    <button id="timeTabButSmall" class="tabButSmall" onclick="showResponsive('timeTab', 'timeTabButSmall')"><div style="float: left;"><i class="fa fa-bars"></i></div>TIME WARP</button>
+                </td>
+            </tr>
+            <tr id="galaxyTabRowSmall" class="rNav rNavHidden">
+                <td>
+                    <button id="galaxyTabButSmall" class="tabButSmall" onclick="showResponsive('galaxyTab', 'galaxyTabButSmall')"><div style="float: left;"><i class="fa fa-bars"></i></div>GALAXIES</button>
+                </td>
+            </tr>
+            <tr id="statsTabRowSmall" class="rNav rNavHidden">
+                <td>
+                    <button id="statsTabButSmall" class="tabButSmall" onclick="statsTabClickR()"><div style="float: left; margin-top: 14px;"><i class="fa fa-bars"></i></div>STATS &<br>ACHIEVEMENTS</button>
+                </td>
+            </tr>
+            <tr id="optionsTabRowSmall" class="rNav rNavHidden">
+                <td>
+                    <button id="optionsTabButSmall" class="tabButSmall" onclick="showResponsive('optionsTab', 'optionsTabButSmall')"><div style="float: left;"><i class="fa fa-bars"></i></div>OPTIONS</button>
+                </td>
+            </tr>
+            <tr id="helpTabRowSmall" class="rNav rNavHidden">
+                <td>
+                    <button id="helpTabButSmall" class="tabButSmall" onclick="showHelpR()" style="cursor: pointer !important;"><div style="float: left;"><i class="fa fa-bars"></i></div>HELP (THIS TAB)</button>
+                </td>
+            </tr>
+        </table>-->
+        <table style="width: auto; margin: auto;" class="shownOnFull">
             <tr>
                 <td id="unitsTabCell">
                     <button id="unitsTabBut" class="tabBut" onclick="showTab('unitsTab', 'unitsTabBut')">UNITS</button>
@@ -66,19 +104,46 @@
                 <td id="galaxyTabCell" style="display: none;">
                     <button id="galaxyTabBut" class="tabBut" onclick="showTab('galaxyTab', 'galaxyTabBut')">GALAXIES</button>
                 </td>
-                <td id="statsTabCell">
+                <td id="statsTabCell" class="shownOnFull">
                     <button id="statsTabBut" class="tabBut" onclick="statsTabClick()">STATS &<br>ACHIEVEMENTS</button>
                 </td>
-                <td id="optionsTabCell">
+                <td id="optionsTabCell" class="shownOnFull">
                     <button id="optionsTabBut" class="tabBut" onclick="showTab('optionsTab', 'optionsTabBut')">OPTIONS</button>
                 </td>
-                <td id="helpTabCell">
+                <td id="helpTabCell" class="shownOnFull">
                     <button id="helpTabBut" class="tabBut" onclick="showHelp()" style="cursor: pointer !important;">HELP (THIS TAB)</button>
                 </td>
             </tr>
         </table>
+        <table style="width: auto; margin: auto;" class="shownOnMid">
+            <tr>
+                <td id="unitsTabCellMid">
+                    <button id="unitsTabButMid" class="tabBut" onclick="showTab('unitsTab', 'unitsTabBut')">UNITS</button>
+                </td>
+                <td id="buildingsTabCellMid" style="display: none;">
+                    <button id="buildingsTabButMid" class="tabBut" onclick="showTab('buildingsTab', 'buildingsTabBut')">BUILDINGS</button>
+                </td>
+                <td id="timeTabCellMid" style="display: none;">
+                    <button id="timeTabButMid" class="tabBut" onclick="showTab('timeTab', 'timeTabBut')">TIME WARP</button>
+                </td>
+                <td id="galaxyTabCellMid" style="display: none;">
+                    <button id="galaxyTabButMid" class="tabBut" onclick="showTab('galaxyTab', 'galaxyTabBut')">GALAXIES</button>
+                </td>
+            </table>
+            <table style="width: auto; margin: auto;" class="shownOnMid">
+                <td id="statsTabCellMid">
+                    <button id="statsTabButMid" class="tabBut" onclick="statsTabClick()">STATS &<br>ACHIEVEMENTS</button>
+                </td>
+                <td id="optionsTabCellMid">
+                    <button id="optionsTabButMid" class="tabBut" onclick="showTab('optionsTab', 'optionsTabBut')">OPTIONS</button>
+                </td>
+                <td id="helpTabCellMid">
+                    <button id="helpTabButMid" class="tabBut" onclick="showHelp()" style="cursor: pointer !important;">HELP (THIS TAB)</button>
+                </td>
+            </tr>
+        </table>
     </div>
-    <div id="game" style="display: none;">
+    <div id="game">
         <div id="unitsTab" class="pageTab">
             <div id="unitsSubMenu" style="width: 100%; margin-top: 20px; display: none;">
                 <table style="width: auto; margin: auto;">
@@ -93,24 +158,28 @@
                 </table>
             </div>
             <div id="unitsSubTab" class="unitSubTab" style="position: relative; height: 650px;">
-                <table style="position: absolute; left: -80px; width: 1184px;">
+                <table style="width: 85%; margin: auto;">
                     <tr>
                         <td width="5%">
                             <h1>Tier</h1>
                         </td>
-                        <td width="15%">
+                        <td width="20%">
                             <h1>Unit type</h1>
                         </td>
                         <td width="20%">
                             <div style="min-width: 45%; float: left;"><h1>Corpse<br>mult</h1></div><div style="min-width: 45%; float: left;"><h1>(Unit<br>mult)</h1></div>
                         </td>
-                        <td width="30%">
-                            <div style="min-width: 33%; float: left;"><h1>Owned</h1></div><div style="width: 27%; float: left;"><h1>(Bought)</h1></div><div style="min-width: 35%; float: right; text-align: center;"><h1>Gain</h1></div>
+                        <td width="20%">
+                            <div style="min-width: 50%; float: left;"><h1>Owned</h1></div><div style="width: 30%; float: left;"><h1>(Bought)</h1></div>
                         </td>
-                        <td colspan="2" width="30%">
-                            <div style="width: 100%; text-align: center;">
-                                <button id="maxAllBut" class="unitMax" onclick="buyMaxAll()" style="margin: auto;">Max all</button>
-                            </div>
+                        <td width="10%" class="shownOnFull">
+                            <div style="float: left; text-align: center;"><h1>Gain</h1></div>
+                        </td>
+                        <td width="15%">
+
+                        </td>
+                        <td width="10%">
+                            <button id="maxAllBut" class="unitMax" onclick="buyMaxAll()" style="transform: translateX(-75%);">Max all</button>
                         </td>
                     </tr>
                     <tr height="10px"></tr>
@@ -125,12 +194,15 @@
                             <div id="zombieMult"><div style="min-width: 45%; float: left;">x1</div><div style="min-width: 45%; float: left;">(x1)</div></div>
                         </td>
                         <td>
-                            <div id="zombieAmount"><div style="min-width: 30%; float: left;">0</div><div style="width: 30%; float: left;">(0)</div><div style="width: 40%; float: left;"></div></div>
+                            <div id="zombieAmount"><div style="min-width: 50%; float: left;">0</div><div style="width: 30%; float: left;">(0)</div></div>
                         </td>
-                        <td class="buttonTD">
+                        <td class="shownOnFull">
+                            <div id="zombieGain"></div>
+                        </td>
+                        <td>
                             <button id="zombieBut" class="unitBut" onclick="buySingleUnit(1)">Cost: 10 corpses</button>
                         </td>
-                        <td class="buttonTD">
+                        <td>
                             <button id="zombieMax" class="unitMax" onclick="buyMaxUnits(1)">Max: 1 for &#162;10</button>
                         </td>
                     </tr>
@@ -145,12 +217,15 @@
                             <div id="abomMult"><div style="min-width: 45%; float: left;">x1</div><div style="min-width: 45%; float: left;">(x1)</div></div>
                         </td>
                         <td>
-                            <div id="abomAmount"><div style="min-width: 30%; float: left;">0</div><div style="width: 30%; float: left;">(0)</div><div style="width: 40%; float: right;"></div></div>
+                            <div id="abomAmount"><div style="min-width: 50%; float: left;">0</div><div style="width: 30%; float: left;">(0)</div></div>
                         </td>
-                        <td class="buttonTD">
+                        <td class="shownOnFull">
+                            <div id="abomGain"></div>
+                        </td>
+                        <td>
                             <button id="abomBut" class="unitBut" onclick="buySingleUnit(2)">Cost: 100 corpses</button>
                         </td>
-                        <td class="buttonTD">
+                        <td>
                             <button id="abomMax" class="unitMax" onclick="buyMaxUnits(2)">Max: 0</button>
                         </td>
                     </tr>
@@ -165,12 +240,15 @@
                             <div id="mageMult"><div style="min-width: 45%; float: left;">x1</div><div style="min-width: 45%; float: left;">(x1)</div></div>
                         </td>
                         <td>
-                            <div id="mageAmount"><div style="min-width: 30%; float: left;">0</div><div style="width: 30%; float: left;">(0)</div><div style="width: 40%; float: right;"></div></div>
+                            <div id="mageAmount"><div style="min-width: 50%; float: left;">0</div><div style="width: 30%; float: left;">(0)</div></div>
                         </td>
-                        <td class="buttonTD">
+                        <td class="shownOnFull">
+                            <div id="mageGain"></div>
+                        </td>
+                        <td>
                             <button id="mageBut" class="unitBut" onclick="buySingleUnit(3)">Cost: 10000 corpses</button>
                         </td>
-                        <td class="buttonTD">
+                        <td>
                             <button id="mageMax" class="unitMax" onclick="buyMaxUnits(3)">Max: 0</button>
                         </td>
                     </tr>
@@ -185,12 +263,15 @@
                             <div id="bansheeMult"><div style="min-width: 45%; float: left;">x1</div><div style="min-width: 45%; float: left;">(x1)</div></div>
                         </td>
                         <td>
-                            <div id="bansheeAmount"><div style="min-width: 30%; float: left;">0</div><div style="width: 30%; float: left;">(0)</div><div style="width: 40%; float: right;"></div></div>
+                            <div id="bansheeAmount"><div style="min-width: 50%; float: left;">0</div><div style="width: 30%; float: left;">(0)</div></div>
                         </td>
-                        <td class="buttonTD">
+                        <td class="shownOnFull">
+                            <div id="bansheeGain"></div>
+                        </td>
+                        <td>
                             <button id="bansheeBut" class="unitBut" onclick="buySingleUnit(4)">Cost: 1000000 corpses</button>
                         </td>
-                        <td class="buttonTD">
+                        <td>
                             <button id="bansheeMax" class="unitMax" onclick="buyMaxUnits(4)">Max: 0</button>
                         </td>
                     </tr>
@@ -205,12 +286,15 @@
                             <div id="lichMult"><div style="min-width: 45%; float: left;">x1</div><div style="min-width: 45%; float: left;">(x1)</div></div>
                         </td>
                         <td>
-                            <div id="lichAmount"><div style="min-width: 30%; float: left;">0</div><div style="width: 30%; float: left;">(0)</div><div style="width: 40%; float: right;"></div></div>
+                            <div id="lichAmount"><div style="min-width: 50%; float: left;">0</div><div style="width: 30%; float: left;">(0)</div></div>
                         </td>
-                        <td class="buttonTD">
+                        <td class="shownOnFull">
+                            <div id="lichGain"></div>
+                        </td>
+                        <td>
                             <button id="lichBut" class="unitBut" onclick="buySingleUnit(5)">Cost: 1000000 corpses</button>
                         </td>
-                        <td class="buttonTD">
+                        <td>
                             <button id="lichMax" class="unitMax" onclick="buyMaxUnits(5)">Max: 0</button>
                         </td>
                     </tr>
@@ -225,12 +309,15 @@
                             <div id="beheMult"><div style="min-width: 45%; float: left;">x1</div><div style="min-width: 45%; float: left;">(x1)</div></div>
                         </td>
                         <td>
-                            <div id="beheAmount"><div style="min-width: 30%; float: left;">0</div><div style="width: 30%; float: left;">(0)</div><div style="width: 40%; float: right;"></div></div>
+                            <div id="beheAmount"><div style="min-width: 50%; float: left;">0</div><div style="width: 30%; float: left;">(0)</div></div>
                         </td>
-                        <td class="buttonTD">
+                        <td class="shownOnFull">
+                            <div id="beheGain"></div>
+                        </td>
+                        <td>
                             <button id="beheBut" class="unitBut" onclick="buySingleUnit(6)">Cost: 1000000 corpses</button>
                         </td>
-                        <td class="buttonTD">
+                        <td>
                             <button id="beheMax" class="unitMax" onclick="buyMaxUnits(6)">Max: 0</button>
                         </td>
                     </tr>
@@ -245,12 +332,15 @@
                             <div id="oneMult"><div style="min-width: 45%; float: left;">x1</div><div style="min-width: 45%; float: left;">(x1)</div></div>
                         </td>
                         <td>
-                            <div id="oneAmount"><div style="min-width: 30%; float: left;">0</div><div style="width: 30%; float: left;">(0)</div><div style="width: 40%; float: right;"></div></div>
+                            <div id="oneAmount"><div style="min-width: 50%; float: left;">0</div><div style="width: 30%; float: left;">(0)</div></div>
                         </td>
-                        <td class="buttonTD">
+                        <td class="shownOnFull">
+                            <div id="oneGain"></div>
+                        </td>
+                        <td>
                             <button id="oneBut" class="unitBut" onclick="buySingleUnit(7)">Cost: 1000000 corpses</button>
                         </td>
-                        <td class="buttonTD">
+                        <td>
                             <button id="oneMax" class="unitMax" onclick="buyMaxUnits(7)">Max: 0</button>
                         </td>
                     </tr>
@@ -265,17 +355,20 @@
                             <div id="sunMult"><div style="min-width: 45%; float: left;">x1</div><div style="min-width: 45%; float: left;">(x1)</div></div>
                         </td>
                         <td>
-                            <div id="sunAmount"><div style="min-width: 30%; float: left;">0</div><div style="width: 30%; float: left;">(0)</div><div style="width: 40%; float: right;"></div></div>
+                            <div id="sunAmount"><div style="min-width: 50%; float: left;">0</div><div style="width: 30%; float: left;">(0)</div></div>
                         </td>
-                        <td class="buttonTD">
+                        <td class="shownOnFull">
+                            <div id="sunGain"></div>
+                        </td>
+                        <td>
                             <button id="sunBut" class="unitBut" onclick="buySingleUnit(8)">Cost: 1000000 corpses</button>
                         </td>
-                        <td class="buttonTD">
+                        <td>
                             <button id="sunMax" class="unitMax" onclick="buyMaxUnits(8)">Max: 0</button>
                         </td>
                     </tr>
                 </table>
-                <div id="spacePresContainer" style="text-align: center; display: none; position: relative; top: 425px;">
+                <div id="spacePresContainer" style="text-align: center; display: none; margin: 25px auto;">
                     <button id="spacePrestige" class="spacePrestigeBut" onclick="spacePrestigeClick()">
                         <span style="font-size: 15pt;">This world is dead and empty...</span><br>
                         <span id="spacePresDesc">Give up all your units and corpses to exterminate a new world. You gain a boost to corpse gain based on total exterminated worlds.<br>
@@ -288,7 +381,8 @@
                 <div id="autobuyerInfo" style="text-align: center; margin-top: 20px;">
                     Unit autobuyers attempt to buy in order from priority 1 to priority 8.<br>
                     Slow autobuyers trigger every 15 <span style="font-weight: bold;">real-world</span> seconds, unaffected by astral enslavement or time essence.<br>
-                    Once you unlock the prestige autobuyer and the fast, bulk, and advanced sacrifice upgrades, they are permanently unlocked whenever autobuyers are unlocked.
+                    Once you unlock the prestige autobuyer and the fast, bulk, and advanced sacrifice upgrades, they are permanently unlocked whenever autobuyers are unlocked.<br>
+                    Set the world prestige max to 0 for no limit.
                 </div>
                 <table style="width: auto; margin: auto; text-align: center;">
                     <tr style="height: 25px;">
@@ -322,7 +416,7 @@
                         </td>
                     </tr>
                 </table>
-                <table style="width: auto; text-align: center; position: relative;">
+                <table style="width: auto; text-align: center; margin: auto;">
                     <tr>
                         <td>
                             <div id="zombieBuyerOptions" class="autobuyerOptions">
@@ -342,7 +436,7 @@
                                     </div>
                                     <div id="zombieBuyerPriorityContainer" class="buyerOptionsContainer priorityContainer">
                                         <label for="zombiePriority">Priority:</label>
-                                        <select oninput="updateBuyerOrder(1, 'zombiePriority')" id="zombiePriority" name="zombiePriority" class="buyerDropdown">
+                                        <select onchange="updateBuyerOrder(1, 'zombiePriority')" id="zombiePriority" name="zombiePriority" class="buyerDropdown">
                                             <option id="11" class="priorityOptions" value="1" selected>1</option>
                                             <option id="12" class="priorityOptions" value="2">2</option>
                                             <option id="13" class="priorityOptions" value="3">3</option>
@@ -375,7 +469,7 @@
                                     </div>
                                     <div id="abominationBuyerPriorityContainer" class="buyerOptionsContainer priorityContainer">
                                         <label for="abominationPriority">Priority:</label>
-                                        <select oninput="updateBuyerOrder(2, 'abominationPriority')" id="abominationPriority" name="abominationPriority" class="buyerDropdown">
+                                        <select onchange="updateBuyerOrder(2, 'abominationPriority')" id="abominationPriority" name="abominationPriority" class="buyerDropdown">
                                             <option id="21" class="priorityOptions" value="1">1</option>
                                             <option id="22" class="priorityOptions" value="2" selected>2</option>
                                             <option id="23" class="priorityOptions" value="3">3</option>
@@ -407,7 +501,7 @@
                                     </div>
                                     <div id="skeletonmageBuyerPriorityContainer" class="buyerOptionsContainer priorityContainer">
                                         <label for="skeletonmagePriority">Priority:</label>
-                                        <select oninput="updateBuyerOrder(3, 'skeletonmagePriority')" id="skeletonmagePriority" name="skeletonmagePriority" class="buyerDropdown">
+                                        <select onchange="updateBuyerOrder(3, 'skeletonmagePriority')" id="skeletonmagePriority" name="skeletonmagePriority" class="buyerDropdown">
                                             <option id="31" class="priorityOptions" value="1">1</option>
                                             <option id="32" class="priorityOptions" value="2">2</option>
                                             <option id="33" class="priorityOptions" value="3" selected>3</option>
@@ -439,7 +533,7 @@
                                     </div>
                                     <div id="bansheeBuyerPriorityContainer" class="buyerOptionsContainer priorityContainer">
                                         <label for="bansheePriority">Priority:</label>
-                                        <select oninput="updateBuyerOrder(4, 'bansheePriority')" id="bansheePriority" name="bansheePriority" class="buyerDropdown">
+                                        <select onchange="updateBuyerOrder(4, 'bansheePriority')" id="bansheePriority" name="bansheePriority" class="buyerDropdown">
                                             <option id="41" class="priorityOptions" value="1">1</option>
                                             <option id="42" class="priorityOptions" value="2">2</option>
                                             <option id="43" class="priorityOptions" value="3">3</option>
@@ -473,7 +567,7 @@
                                     </div>
                                     <div id="lichBuyerPriorityContainer" class="buyerOptionsContainer priorityContainer">
                                         <label for="lichPriority">Priority:</label>
-                                        <select oninput="updateBuyerOrder(5, 'lichPriority')" id="lichPriority" name="lichPriority" class="buyerDropdown">
+                                        <select onchange="updateBuyerOrder(5, 'lichPriority')" id="lichPriority" name="lichPriority" class="buyerDropdown">
                                             <option id="51" class="priorityOptions" value="1">1</option>
                                             <option id="52" class="priorityOptions" value="2">2</option>
                                             <option id="53" class="priorityOptions" value="3">3</option>
@@ -505,7 +599,7 @@
                                     </div>
                                     <div id="behemothBuyerPriorityContainer" class="buyerOptionsContainer priorityContainer">
                                         <label for="behemothPriority">Priority:</label>
-                                        <select oninput="updateBuyerOrder(6, 'behemothPriority')" id="behemothPriority" name="behemothPriority" class="buyerDropdown">
+                                        <select onchange="updateBuyerOrder(6, 'behemothPriority')" id="behemothPriority" name="behemothPriority" class="buyerDropdown">
                                             <option id="61" class="priorityOptions" value="1">1</option>
                                             <option id="62" class="priorityOptions" value="2">2</option>
                                             <option id="63" class="priorityOptions" value="3">3</option>
@@ -537,7 +631,7 @@
                                     </div>
                                     <div id="ancientoneBuyerPriorityContainer" class="buyerOptionsContainer priorityContainer">
                                         <label for="ancientonePriority">Priority:</label>
-                                        <select oninput="updateBuyerOrder(7, ancientonePriority)" id="ancientonePriority" name="ancientonePriority" class="buyerDropdown">
+                                        <select onchange="updateBuyerOrder(7, ancientonePriority)" id="ancientonePriority" name="ancientonePriority" class="buyerDropdown">
                                             <option id="71" class="priorityOptions" value="1">1</option>
                                             <option id="72" class="priorityOptions" value="2">2</option>
                                             <option id="73" class="priorityOptions" value="3">3</option>
@@ -569,7 +663,7 @@
                                     </div>
                                     <div id="suneaterBuyerPriorityContainer" class="buyerOptionsContainer priorityContainer">
                                         <label for="suneaterPriority">Priority:</label>
-                                        <select oninput="updateBuyerOrder(8, 'suneaterPriority')" id="suneaterPriority" name="suneaterPriority" class="buyerDropdown">
+                                        <select onchange="updateBuyerOrder(8, 'suneaterPriority')" id="suneaterPriority" name="suneaterPriority" class="buyerDropdown">
                                             <option id="81" class="priorityOptions" value="1">1</option>
                                             <option id="82" class="priorityOptions" value="2">2</option>
                                             <option id="83" class="priorityOptions" value="3">3</option>
@@ -602,14 +696,14 @@
                                     <div id="sacrificeBuyerAmountsContainer" class="buyerOptionsContainerHalf">
                                         <div class="buyerOptionsContainer">
                                             <div class="buyerAmountTextContainer">
-                                                <input oninput="updateSacBuyer()" type="text" size id="sacrificeBuyerAmount" name="sacrificeBuyerConditions" class="buyerText" value="1"><br>
+                                                <input onchange="updateSacBuyer()" onblur="emptySacrifice()" type="text" size id="sacrificeBuyerAmount" name="sacrificeBuyerConditions" class="buyerText" value="1"><br>
                                                 <label id="sacrificeBuyerAmountLabel" for="sacrificeBuyerAmount" style="font-size: 10pt;">at x crystals</label>
                                             </div>
                                         </div>
                                     </div>
                                     <div id="sacrificeBuyerAdvancedContainer" class="buyerOptionsContainerHalf">
                                         <div class="buyerAmountTextContainer">
-                                            <select oninput="updateSacBuyer()" id="sacrificeBuyerAdvancedList" name="sacrificeBuyerAdvancedList" class="buyerList" size="3" disabled>
+                                            <select onchange="updateSacBuyer()" id="sacrificeBuyerAdvancedList" name="sacrificeBuyerAdvancedList" class="buyerList" size="3" disabled>
                                                 <option id="atx" value="atx" selected>at x crystals</option>
                                                 <option id="xtimes" value="xtimes">at x times last</option>
                                                 <option id="afterx" value="afterx">after x seconds</option>
@@ -617,6 +711,7 @@
                                         </div>
                                         <div id="advancedSacLock" class="buyerAdvancedContainer"></div>
                                     </div>
+                                    <span id="sacrificeErr" style="display: none;">invalid input. max set to last valid input: <span id="sacrificeErrValue"></span></span>
                                 </div>
                             </div>
                         </td>
@@ -633,8 +728,9 @@
                                         <div id="prestigeSpeedLock" class="buyerSpeedLock"></div>
                                     </div>
                                     <div id="prestigeBuyerPriorityContainer" class="buyerOptionsContainer priorityContainer">
-                                        <label for="prestigeBuyerPriorityBut">priority over sacrifice:</label><!-- --><button onclick="updatePrestigePriority()" name="prestigeBuyerPriorityBut" id="prestigeBuyerPriorityBut" class="buyerPriBut">YES</button><!-- -->
+                                        <label for="maxPrestige">max auto prestiges:</label><input onchange="updateMaxPrestige()" onblur="emptyPrestige()" type="text" size id="maxPrestige" name="maxPrestige" class="buyerTextP" value="1">
                                     </div>
+                                    <span id="prestigeErr" style="display: none;">invalid input. max set to last valid input: <span id="prestigeErrValue"></span></span>
                                 </div>
                                 <div id="prestigeLockScreen"></div>
                             </div>
@@ -679,7 +775,7 @@
                 </table>
             </div>
             <div id="buildingsSubTab" class="buildingSubTab">
-                <table style="width: 75%; margin: auto; margin-top: 20px; text-align: center; border-collapse: collapse;" class="buildingsTable">
+                <table style="width: 65%; margin: auto; margin-top: 20px; text-align: center; border-collapse: collapse;" class="buildingsTable">
                     <tr id="factoryBuildRow">
                         <td colspan="3">
                             <button id="factoryBuild" class="buildBut" onclick="buyBuilding(1)">Build the<h2><span id="factoryBuildLabel" style="font-size: 18pt;">Death Factory.</span></h2>Cost: <span id="factoryCostLabel">1,000</span> astral bricks</button>
@@ -716,7 +812,7 @@
                     </tr>
                 </table>
                 <div style="min-height: 25px;"></div>
-                <table style="width: 75%; margin: auto; margin-top: 20px; text-align: center; border-collapse: collapse;" class="buildingsTable">
+                <table style="width: 65%; margin: auto; margin-top: 20px; text-align: center; border-collapse: collapse;" class="buildingsTable">
                     <tr id="necropolisBuildRow">
                         <td colspan="3">
                             <button id="necropolisBuild" class="buildBut" onclick="buyBuilding(2)">Build the<h2><span id="necropolisBuildLabel" style="font-size: 18pt;">Necropolis.</span></h2>Cost: <span id="necropolisCostLabel">100,000</span> astral bricks</button>
@@ -754,7 +850,7 @@
                     </tr>
                 </table>
                 <div style="min-height: 25px;"></div>
-                <table style="width: 75%; margin: auto; margin-top: 20px; text-align: center; border-collapse: collapse;" class="buildingsTable">
+                <table style="width: 65%; margin: auto; margin-top: 20px; text-align: center; border-collapse: collapse;" class="buildingsTable">
                     <tr id="sunBuildRow">
                         <td colspan="3">
                             <button id="sunBuild" class="buildBut" onclick="buyBuilding(3)">Build the<h2><span id="sunBuildLabel" style="font-size: 18pt;">Dead Sun.</span></h2>Cost: <span id="sunCostLabel">1e8</span> astral bricks</button>
@@ -894,7 +990,7 @@
                         <div style="height: 100%;"></div>
                     </tr>
                 </table>
-                <table style="width: 100%; margin: auto;">
+                <table style="width: 75%; margin: auto;">
                     <tr>
                         <td width="20%">
                             <h1>Dimension</h1>
@@ -903,7 +999,7 @@
                             <div><h1>Multiplier</h1></div>
                         </td>
                         <td width="35%">
-                            <div style="min-width: 30%; float: left;"><h1>Owned</h1></div><div style="min-width: 30%; float: left;"><h1>(Bought)</h1></div><div style="min-width: 40%; float: left;"><h1>Gain</h1></div>
+                            <div style="min-width: 30%; float: left;"><h1>Owned</h1></div><div style="min-width: 40%; float: left;"><h1>(Bought)</h1></div><div style="min-width: 30%; float: left;"><h1>Gain</h1></div>
                         </td>
                         <td colspan="2" width="30%">
                             <div style="width: 100%; text-align: center;">
@@ -983,7 +1079,7 @@
                 </table>
             </div>
             <div id="timeUpgSubTab" class="timeSubTab" style="display: none;">
-                <table id="timeUpgTable" style="width: 75%; margin: auto; margin-top: 20px; text-align: center;">
+                <table id="timeUpgTable" style="width: 60%; margin: auto; margin-top: 20px; text-align: center;">
                     <tr>
                         <td class="timeUpgTDs">
                             <button id="timeUpg11" class="timeUpg" onclick="buyTUpg(11)"><strong>Upgrade 1.1</strong><br>description of upgrade</button>
@@ -1065,29 +1161,21 @@
                     </tr>
                 </table>
             </div>
-            <div id="galaxiesSubTab" class="galaxySubTab">
-                <div style="text-align: center; width: auto; margin: auto; position: relative; top: 25px;">
+            <div id="galaxiesSubTab" class="galaxySubTab" style="width: 100%; position: relative; left: 50%; transform: translateX(-50%); text-align: center;">
+                <div style="text-align: center; width: 100%; margin: auto;">
                     <span style="font-size: 17pt; font-weight: bold; color: #e32d05;">There must be loss in exchange for true power.</span><br>
                     All galaxy upgrades have a base cost of <span style="font-size: 17pt; white-space: pre;"> 1 </span> depleted galaxy, but when you buy one, all others on rows below it increase in cost by 1.<br>
                     You can't take both branches in the same tree; buying an upgrade in the 2nd row will lock out the two in the other branch.<br>
                     Buying a 4th row upgrade will increase the cost of the 1st row upgrades by 1.<br>
                     A galaxy respec resets all costs to 1, and unlocks all locked upgrades.
                 </div>
-                <div style="text-align: center; position: relative; top: 35px;"><button id="galaxyRespecBut" class="galaxyBut" onclick="respecGalaxiesClick()">Respec galaxies - forces ascension</button><button id="milestonesBut" class="galaxyBut" onclick="showMilestones()">Galaxy Milestones - not yet working</button></div>
-                <table style="text-align: center; position: relative; top: 25px;">
+                <div id="galSelect" style="text-align: center; white-space: pre; width: 100%; margin: auto;">Display  <select oninput="updateGalaxiesDisplayed()" id="galDisplaySelect" name="galDisplaySelect" class="galDropdown"><option id="1gal" class="galOptions" value="1">1</option><option id="2gal" class="galOptions" value="2">2</option><option id="4gal" class="galOptions" value="4">4</option></select>  at a time</div>
+                <div style="text-align: center; width: 100%; margin: auto;"><button id="galaxyRespecBut" class="galaxyBut" onclick="respecGalaxiesClick()">Respec galaxies - forces ascension</button><button id="milestonesBut" class="galaxyBut" onclick="showMilestones()">Galaxy Milestones - not yet working</button></div>
+                <div id="galButs2" style="text-align: center; width: 100%; margin: auto;"><button id="galaxyNameBut1" class="galaxyNameBut2" onclick="showGalaxies('gal1', 'gal2')">Andromeda/Circinus</button><button id="galaxyNameBut2" class="galaxyNameBut2" onclick="showGalaxies('gal3', 'gal4')">Sculptor Dwarf/Triangulum</button></div>
+                <div id="galButs4" style="text-align: center; width: 100%; margin: auto;"><button id="galaxyNameBut1" class="galaxyNameBut4" onclick="showGalaxy('gal1')">Andromeda</button><button id="galaxyNameBut2" class="galaxyNameBut4" onclick="showGalaxy('gal2')">Circinus</button><button id="galaxyNameBut3" class="galaxyNameBut4" onclick="showGalaxy('gal3')">Sculptor Dwarf</button><button id="galaxyNameBut4" class="galaxyNameBut4" onclick="showGalaxy('gal4')">Triangulum</button></div>
+                <table id="allGalaxiesTable" style="text-align: center; position: relative; left: -167;">
                     <tr>
-                        <td>
-
-                        </td>
-                        <td colspan="2">
-                            
-                        </td>
-                        <td>
-                            
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
+                        <td id="gal1" class="gal">
                             <table id="andromeda" class="galaxyTable">
                                 <tr>
                                     <td colspan="2">
@@ -1121,9 +1209,8 @@
                                     </td>
                                 </tr>
                             </table>
-                            
                         </td>
-                        <td>
+                        <td id="gal2" class="gal">
                             <table id="circinus" class="galaxyTable">
                                 <tr>
                                     <td colspan="2">
@@ -1158,7 +1245,7 @@
                                 </tr>
                             </table>
                         </td>
-                        <td>
+                        <td id="gal3" class="gal">
                             <table id="sculptorDwarf" class="galaxyTable">
                                 <tr>
                                     <td colspan="2">
@@ -1193,7 +1280,7 @@
                                 </tr>
                             </table>
                         </td>
-                        <td>
+                        <td id="gal4" class="gal">
                             <table id="triangulum" class="galaxyTable">
                                 <tr>
                                     <td colspan="2">
@@ -1266,7 +1353,7 @@
                 </table>
             </div>
             <div id="statSubTab" class="statSubTab">
-                <table style="width: 600px; margin: auto; text-align: center; border-collapse: collapse;">
+                <table style="width: 50%; margin: auto; text-align: center; border-collapse: collapse;">
                     <tr style="height: 25px;">
                         <div style="height: 100%;"></div>
                     </tr>
@@ -1498,7 +1585,7 @@
                 </table>
             </div>
             <div id="last10SubTab" class="statSubTab">
-                <table style="width: 75%; margin: auto; text-align: center;">
+                <table style="width: 60%; margin: auto; text-align: center;">
                     <tr style="height: 25px;">
                         <div style="height: 100%;"></div>
                     </tr>
@@ -1646,7 +1733,7 @@
                     Achievements with a '+' have an additional reward; hover to view requirements and rewards.<br>
                     <span id="achBoostTooltip" data-title="(1.1x per achievement) * (1.2x per completed row) [both multiplicative]">You have <span id="numAch" style="font-size: 17pt; white-space: pre; font-variant-numeric: tabular-nums;"> 0 </span> achievements and <span id="numAchRows" style="font-size: 17pt; white-space: pre; font-variant-numeric: tabular-nums;"> 0 </span> completed rows, boosting all units' corpse multipliers by <span id="achBoost" style="font-size: 17pt; white-space: pre; font-variant-numeric: tabular-nums;"> 0</span>x.</span>
                 </div>
-                <table style="width: 75%; margin: auto; text-align: center;">
+                <table style="width: 60%; margin: auto; text-align: center;">
                     <tr style="height: 25px;">
                         <div style="height: 100%;"></div>
                     </tr>
@@ -1731,7 +1818,7 @@
             </div>
         </div>
         <div id="optionsTab" class="pageTab">
-            <table id="optionsTable" style="width: 75%; margin: auto; text-align: center;">
+            <table id="optionsTable" style="width: 60%; margin: auto; text-align: center;">
                 <tr style="height: 25px;">
                     <div style="height: 100%;"></div>
                 </tr>
