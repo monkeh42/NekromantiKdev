@@ -16,7 +16,7 @@
     display: none;
 }
 
-@media screen and (max-device-width: 1279px) { /*and (min-device-width: 600px) {*/
+@media screen and (max-device-width: 1279px), (max-width: 1279px) { /*and (min-device-width: 600px) {*/
     .shownOnFull { display: none; }
     .shownOnMid { display: table; }
     .shownOnSmall { display: none; }
