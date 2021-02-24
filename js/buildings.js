@@ -225,7 +225,6 @@ function resetBuildings(ascension=false) {
     player.thisAscStats.bestWorlds = player.worlds;
 
     if (!hasTUpgrade(24) && tempSun.upgrades[13] && (!ascension || hasAchievement(43))) {
-        unlockElements('buildingsTab', 'sun');
         player.buildings[3].built = true;
         player.buildings[3].upgrades[13] = tempSun.upgrades[13];
     }
