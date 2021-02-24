@@ -1223,6 +1223,8 @@ const UNLOCKS_DATA = {
         },
         'prestigeBuyer': {
             unlocked: false,
+            notifyID: 'autobuyersSubTabBut',
+            parentNotify: 'unitsTabBut',
             idsToShow: [],
             idsToHide: ['prestigeLockScreen'],
             classToEnable: 'buyerPriBut',
