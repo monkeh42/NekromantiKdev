@@ -234,8 +234,8 @@ function resetBuildings(ascension=false) {
         player.nextSpaceReset = START_PLAYER.nextSpaceReset.slice();
         lockTab('buildingsTab');
         if (hasMilestone(1)) {
-            player.unlocks['buildingsTab']['construction'];
-            player.unlocks['buildingsTab']['constructionRow2'];
+            player.unlocks['buildingsTab']['construction'] = true;
+            player.unlocks['buildingsTab']['constructionRow2'] = true;
         }
     }
     copyData(player.thisSacStats, START_PLAYER.thisSacStats);
