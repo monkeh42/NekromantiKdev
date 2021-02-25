@@ -1371,7 +1371,7 @@ const UNLOCKS_DATA = {
             unlocked: false,
             notifyID: 'buildingsSubTabBut',
             parentNotify: 'buildingsTabBut',
-            idsToShow: ['vortexTable'],
+            idsToShow: ['vortexTable', 'vortexBuildRow'],
             idsToHide: [],
             shouldNotify: function() {
                 return true;
