@@ -1102,7 +1102,7 @@ function mouseoverAchievement(ach) {
     if (document.getElementById(ACH_DATA[ach].divID).classList.contains('achievementNew')) {
         document.getElementById(ACH_DATA[ach].divID).classList.remove('achievementNew');
         for (let id in player.achievements) {
-            if (document.getElementById(ACH_DATA[id].divID).classList.contains('achievementNew')) { return; }
+            if (document.getElementById(ACH_DATA[ach].divID).classList.contains('achievementNew')) { return; }
         }
         document.getElementById('achSubTabBut').remove('tabButNotify');
         document.getElementById('achSubTabBut').remove('tabButIndirectNotify');
