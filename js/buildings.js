@@ -147,6 +147,12 @@ function buyMaxAllConstr() {
 
 //prestige related
 
+function getAstralNerf() {
+    if (hasGUpgrade(1, 41)) { return 5; }
+    else if (hasGUpgrade(1, 11)) { return 8; }
+    else { return 10; }
+}
+
 function toggleAstral() {
     if (player.unlocks['buildingsTab']['mainTab']) {
         player.astralFlag = !player.astralFlag;

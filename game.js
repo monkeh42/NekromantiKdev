@@ -313,6 +313,8 @@ function loadStyles() {
         }
     }
 
+    document.getElementById('astralNerf').innerHTML = formatWhole(getAstralNerf());
+
     for (var a in ARK_DATA) {
         if (!arkIsUnlocked(a)) {
             document.getElementById(a + 'But').className = 'lockedArkUpg'
@@ -335,18 +337,18 @@ function loadStyles() {
     if (player.timeLocked) {
         document.getElementById('lockInTimeBut').classList.add('unclickSliderBut');
         document.getElementById('lockInTimeBut').classList.remove('timeSliderBut');
+        document.getElementById('respecTimeBut').classList.add('timeSliderBut');
+        document.getElementById('respecTimeBut').classList.remove('unclickSliderBut');
         document.getElementById('timeSlider').classList.add('sliderLocked');
         document.getElementById('timeSlider').classList.remove('slider');
         document.getElementById('timeSlider').disabled = true;
-    } else {
-        document.getElementById('respecTimeBut').classList.add('unclickSliderBut');
-        document.getElementById('respecTimeBut').classList.remove('timeSliderBut');
-        document.getElementById('timeSlider').classList.remove('sliderLocked');
-        document.getElementById('timeSlider').classList.add('slider');
-        document.getElementById('timeSlider').removeAttribute('disabled');
     }
     
     updatePopupsEtc();
+    if (player.tooltipsEnabled) {
+        player.tooltipsEnabled = false;
+        toggleTooltips();
+    }
 
     for (let id in ACH_DATA) {
         document.getElementById(ACH_DATA[id].divID).setAttribute('data-title', ACH_DATA[id].desc + (ACH_DATA[id].hasReward ? ' Reward: ' + ACH_DATA[id].reward : '' ) + (ACH_DATA[id].showEffect ? ' Currently: ' + formatDefault2(ACH_DATA[id].effect()) + 'x' : '' ));
@@ -408,14 +410,11 @@ function gameLoop(diff=new Decimal(0), offline=false) {
     if (diff.eq(0)) { var diff = new Decimal(currentUpdate - player.lastUpdate); }
     if (DEV_SPEED>0) { diff = diff.times(DEV_SPEED); }
     var timeBuff;
-    if (player.astralFlag) {
-        if (hasGUpgrade(1, 41)) { timeBuff = getAntiTimeBuff().div(5); }
-        else if (hasGUpgrade(1, 11)) { timeBuff = getAntiTimeBuff().div(8); }
-        else { timeBuff = getAntiTimeBuff().div(10); } 
-    } else { timeBuff = getTrueTimeBuff(); }
+    if (player.astralFlag) { timeBuff = getAntiTimeBuff().div(getAstralNerf()) }
+    else { timeBuff = getTrueTimeBuff(); }
     var realDiff = diff;
     diff = diff.times(timeBuff);
-    if (hasGUpgrade(1, 32) || hasGUpgrade(4, 22)) { realDiff = diff.times(sqrt(timeBuff)); } 
+    if (hasGUpgrade(1, 32) || hasGUpgrade(4, 22)) { realDiff = diff.times(timeBuff.sqrt()); } 
     if (player.astralFlag) {
         player.bricks = player.bricks.plus(getBricksPerSecond().times(diff.div(1000)));
         player.thisSacStats.totalBricks = player.thisSacStats.totalBricks.plus(getBricksPerSecond().times(diff.div(1000)));
@@ -460,7 +459,9 @@ function gameLoop(diff=new Decimal(0), offline=false) {
     }
     for (var b in BUILDS_DATA) {
         if (isBuilt(b)) {
-            if (b==4) {
+            if (b==3) {
+                player.buildings[b].amount = player.buildings[b].amount.plus(getBuildingProdPerSec(b).times(hasGUpgrade(1, 31) ? realDiff.div(1000) : diff.div(1000)));
+            } else if (b==4) {
                 player.buildings[b].progress = player.buildings[b].progress.plus(BUILDS_DATA[b].prod());
                 if (player.buildings[b].progress.gte(100)) {
                     player.buildings[b].progress = new Decimal(0);
@@ -825,8 +826,7 @@ document.onkeydown = function(e) {
 
 function toggleHotkeys() {
     player.hotkeysOn = !player.hotkeysOn;
-    if (player.hotkeysOn) { document.getElementById('toggleHotkeysBut').innerHTML = 'ENABLE HOTKEYS: ON'; }
-    else { document.getElementById('toggleHotkeysBut').innerHTML = 'ENABLE HOTKEYS: OFF'; }
+    document.getElementById('toggleHotkeysBut').innerHTML = player.hotkeysOn ? 'ENABLE HOTKEYS: ON' : 'ENABLE HOTKEYS: OFF'
 }
 
 function allAuto(n) {

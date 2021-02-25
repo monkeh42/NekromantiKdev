@@ -102,6 +102,7 @@ function buyGUpg(g, u) {
         player.galaxies = player.galaxies.minus(GALAXIES_DATA[g].upgrades[u].cost());
         player.spentGalaxies = player.spentGalaxies.plus(GALAXIES_DATA[g].upgrades[u].cost());
         player.galaxyUpgs[g][u].bought = true;
+        BUILDS_DATA[g].upgrades[u].onBuy();
         addGUpgClass(g, u, 'boughtGalaxyUpg');
         remGUpgClass(g, u, 'galaxyUpg');
 
@@ -213,6 +214,7 @@ function respecGalaxies() {
     player.spentGalaxies = new Decimal(0);
     //unlockRows();
     copyData(player.galaxyUpgs, START_PLAYER.galaxyUpgs);
+    displayData.push(['html', 'astralNerf', formatWhole(getAstralNerf())]);
     //copyData(player.galaxyRowsLocked, START_PLAYER.galaxyRowsLocked);
     loadStyles();
 }
@@ -480,6 +482,9 @@ const GALAXIES_DATA = {
                 effect: function() {
                     return new Decimal(1);
                 },
+                onBuy: function() {
+                    displayData.push(['html', 'astralNerf', formatWhole(getAstralNerf())]);
+                },
             },
             21: {
                 title: 'title 1.21',
@@ -504,6 +509,9 @@ const GALAXIES_DATA = {
                 },
                 effect: function() {
                     return new Decimal(1);
+                },
+                onBuy: function() {
+                    return;
                 },
             },
             22: {
@@ -530,10 +538,13 @@ const GALAXIES_DATA = {
                 effect: function() {
                     return new Decimal(1);
                 },
+                onBuy: function() {
+                    return;
+                },
             },
             31: {
                 title: 'title 1.31',
-                desc: 'Double the base photon production (2/sec -> 4/sec).',
+                desc: 'The astral time nerf doesn\'t apply to nekro-photon production (but you still only produce them during astral).',
                 requires: [21],
                 bought: false,
                 row: 3,
@@ -554,6 +565,9 @@ const GALAXIES_DATA = {
                 },
                 effect: function() {
                     return new Decimal(1);
+                },
+                onBuy: function() {
+                    return;
                 },
             },
             32: {
@@ -580,6 +594,9 @@ const GALAXIES_DATA = {
                 effect: function() {
                     return new Decimal(1);
                 },
+                onBuy: function() {
+                    return;
+                },
             },
             41: {
                 title: 'title 1.41',
@@ -604,6 +621,9 @@ const GALAXIES_DATA = {
                 },
                 effect: function() {
                     return new Decimal(1);
+                },
+                onBuy: function() {
+                    return;
                 },
             },
         },
@@ -634,6 +654,9 @@ const GALAXIES_DATA = {
                 effect: function() {
                     return new Decimal(1);
                 },
+                onBuy: function() {
+                    return;
+                },
             },
             21: {
                 title: 'title 2.21',
@@ -659,6 +682,9 @@ const GALAXIES_DATA = {
                 effect: function() {
                     return new Decimal(1);
                 },
+                onBuy: function() {
+                    return;
+                },
             },
             22: {
                 title: 'title 2.22',
@@ -683,6 +709,9 @@ const GALAXIES_DATA = {
                 },
                 effect: function() {
                     return new Decimal(1);
+                },
+                onBuy: function() {
+                    return;
                 },
             },
             31: {
@@ -710,6 +739,9 @@ const GALAXIES_DATA = {
                     let e = new Decimal(player.galaxies.plus(player.spentGalaxies));
                     return e.plus(1);
                 },
+                onBuy: function() {
+                    return;
+                },
             },
             32: {
                 title: 'title 2.32',
@@ -735,6 +767,9 @@ const GALAXIES_DATA = {
                 effect: function() {
                     return new Decimal(1);
                 },
+                onBuy: function() {
+                    return;
+                },
             },
             41: {
                 title: 'title 2.41',
@@ -759,6 +794,9 @@ const GALAXIES_DATA = {
                 },
                 effect: function() {
                     return getEssenceProdPerSecond().log10();
+                },
+                onBuy: function() {
+                    return;
                 },
             },
         },
@@ -789,6 +827,9 @@ const GALAXIES_DATA = {
                 effect: function() {
                     return new Decimal(3);
                 },
+                onBuy: function() {
+                    return;
+                },
             },
             21: {
                 title: 'title 3.21',
@@ -813,6 +854,9 @@ const GALAXIES_DATA = {
                 },
                 effect: function() {
                     return new Decimal(1);
+                },
+                onBuy: function() {
+                    return;
                 },
             },
             22: {
@@ -839,6 +883,9 @@ const GALAXIES_DATA = {
                 effect: function() {
                     return new Decimal(1);
                 },
+                onBuy: function() {
+                    return;
+                },
             },
             31: {
                 title: 'title 3.31',
@@ -863,6 +910,9 @@ const GALAXIES_DATA = {
                 },
                 effect: function() {
                     return new Decimal(1);
+                },
+                onBuy: function() {
+                    return;
                 },
             },
             32: {
@@ -889,6 +939,9 @@ const GALAXIES_DATA = {
                 effect: function() {
                     return new Decimal(1.1);
                 },
+                onBuy: function() {
+                    return;
+                },
             },
             41: {
                 title: 'title 1.41',
@@ -913,6 +966,9 @@ const GALAXIES_DATA = {
                 },
                 effect: function() {
                     return getTUpgEffect(33).pow(2);
+                },
+                onBuy: function() {
+                    return;
                 },
             },
         },
@@ -944,6 +1000,9 @@ const GALAXIES_DATA = {
                     let e = new Decimal(player.galaxies.plus(player.spentGalaxies));
                     return e.plus(1);
                 },
+                onBuy: function() {
+                    return;
+                },
             },
             21: {
                 title: 'title 4.21',
@@ -968,6 +1027,9 @@ const GALAXIES_DATA = {
                 },
                 effect: function() {
                     return new Decimal(4);
+                },
+                onBuy: function() {
+                    return;
                 },
             },
             22: {
@@ -994,6 +1056,9 @@ const GALAXIES_DATA = {
                 effect: function() {
                     return new Decimal(1);
                 },
+                onBuy: function() {
+                    return;
+                },
             },
             31: {
                 title: 'title 4.31',
@@ -1018,6 +1083,9 @@ const GALAXIES_DATA = {
                 },
                 effect: function() {
                     return new Decimal(2);
+                },
+                onBuy: function() {
+                    return;
                 },
             },
             32: {
@@ -1044,6 +1112,9 @@ const GALAXIES_DATA = {
                 effect: function() {
                     return new Decimal(1);
                 },
+                onBuy: function() {
+                    return;
+                },
             },
             41: {
                 title: 'title 4.41',
@@ -1068,6 +1139,9 @@ const GALAXIES_DATA = {
                 },
                 effect: function() {
                     return new Decimal(1);
+                },
+                onBuy: function() {
+                    displayData.push(['html', 'astralNerf', formatWhole(getAstralNerf())]);
                 },
             },
         },

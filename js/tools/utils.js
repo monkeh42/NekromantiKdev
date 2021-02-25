@@ -54,9 +54,9 @@ function formatUnitRow(decimal) {
 	if (decimal.gte("1e9000000000000000")) return 'infinity';
 	if (decimal.gte("1e100000")) return exponentialFormat(decimal, 0, false)
 	else if (decimal.gte("1e1000")) return exponentialFormat(decimal, 0)
-	else if (decimal.gte(1e6)) return exponentialFormat(decimal, 2)
-	else if (decimal.gte(1e3)) return commaFormat(decimal, 0)
-	else if (decimal.gt(0)) return commaFormat(decimal, 1)
+	else if (decimal.gte(1e6)) return exponentialFormat(decimal, 1)
+	else if (decimal.gte(10)) return commaFormat(decimal, 0)
+	else if (decimal.gt(0)) return commaFormat(decimal, 2)
 	else return formatWhole(decimal)
 }
 

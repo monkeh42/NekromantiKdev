@@ -329,10 +329,10 @@ function updateUnitTiers() {
         }
         displayData.push(['html', UNITS_DATA[i].amountID, formatUnitRow(player.units[i].amount)]);
         displayData.push(['html', UNITS_DATA[i].boughtID, formatWholeUnitRow(player.units[i].bought)]);
-        displayData.push(['html', UNITS_DATA[i].UMultID, (i > 1) ? formatUnitRow2(UNITS_DATA[i].prodMult()) : "~"]);
-        displayData.push(['html', UNITS_DATA[i].CMultID, formatUnitRow2(UNITS_DATA[i].corpseMult())]);
+        displayData.push(['html', UNITS_DATA[i].UMultID, (i > 1) ? formatUnitRow(UNITS_DATA[i].prodMult()) : "~"]);
+        displayData.push(['html', UNITS_DATA[i].CMultID, formatUnitRow(UNITS_DATA[i].corpseMult())]);
         if (getUnitProdPerSecond(i).gt(0)) {
-            if (Decimal.times(getUnitProdPerSecond(i).div(player.units[i].amount.max(1)), 100).gte(0.1)) { displayData.push(['html', UNITS_DATA[i].gainID, '(+' + formatDefault(Decimal.times((getUnitProdPerSecond(i).div(player.units[i].amount.max(1))), 100), 2) + '%/s)']); }
+            if (Decimal.times(getUnitProdPerSecond(i).div(player.units[i].amount.max(1)), 100).gte(0.1)) { displayData.push(['html', UNITS_DATA[i].gainID, '(+' + formatUnitRow(Decimal.times((getUnitProdPerSecond(i).div(player.units[i].amount.max(1))), 100), 2) + '%/s)']); }
             else if (document.getElementById(UNITS_DATA[i].gainID).innerHTML != '(<0.1%/s)') { displayData.push(['html', UNITS_DATA[i].gainID, '(<0.1%/s)']); }
         } else if (document.getElementById(UNITS_DATA[i].gainID).innerHTML != '') { displayData.push(['html', UNITS_DATA[i].gainID, '']) }
         if (document.getElementById(UNITS_DATA[i].costID).innerHTML != formatWhole(UNITS_DATA[i].cost())) { displayData.push(['html', UNITS_DATA[i].costID, formatWhole(UNITS_DATA[i].cost())]); }
@@ -353,8 +353,8 @@ function updateTDimTiers() {
             displayData.push(['remClass', TIME_DATA[i].maxID, 'unitMaxT']);
             displayData.push(['addClass', TIME_DATA[i].maxID, 'unclickableMaxT']);
         }
-        displayData.push(['html', TIME_DATA[i].amountID, `<div style="min-width: 30%; float: left;">${formatUnitRow(player.timeDims[i].amount)}</div><div style="min-width: 40%; float: left;">(${formatWholeUnitRow(player.timeDims[i].bought)})</div><div style="min-width: 30%; float: left;">${getTimeDimProdPerSecond(i + 1).gt(0) ? "(+" + formatDefault(Decimal.times((getTimeDimProdPerSecond(i + 1).div(player.timeDims[i].amount.max(1))), 100), 2) + "%/s)</div>" : ""}`]);
-        displayData.push(['html', TIME_DATA[i].multID, `<div>${formatUnitRow2(TIME_DATA[i].mult())}x</div>`]);
+        displayData.push(['html', TIME_DATA[i].amountID, `<div style="min-width: 30%; float: left;">${formatUnitRow(player.timeDims[i].amount)}</div><div style="min-width: 40%; float: left;">(${formatWholeUnitRow(player.timeDims[i].bought)})</div><div style="min-width: 30%; float: left;">${getTimeDimProdPerSecond(i + 1).gt(0) ? "(+" + formatUnitRow(Decimal.times((getTimeDimProdPerSecond(i + 1).div(player.timeDims[i].amount.max(1))), 100), 2) + "%/s)</div>" : ""}`]);
+        displayData.push(['html', TIME_DATA[i].multID, `<div>${formatUnitRow(TIME_DATA[i].mult())}x</div>`]);
         displayData.push(['html', TIME_DATA[i].buttonID, `Cost: ${formatWhole(TIME_DATA[i].cost())} crystals`]);
         displayData.push(['html', TIME_DATA[i].maxID, canAffordTime(i) ? `Max: ${calculateMaxTime(i)} for &#162;${formatWhole(calculateMaxTimeCost(i))}` : "Max: 0"]);
     }
@@ -620,8 +620,7 @@ function updateSliderDisplay() {
 
 function toggleTooltips() {
     player.tooltipsEnabled = !player.tooltipsEnabled;
-    if (player.tooltipsEnabled) { document.getElementById('toggleTooltips').innerHTML = 'TOGGLE FORMULA TOOLTIPS: ON'; }
-    else { document.getElementById('toggleTooltips').innerHTML = 'TOGGLE FORMULA TOOLTIPS: OFF'; }
+    if (player.tooltipsEnabled) { document.getElementById('toggleTooltips').innerHTML = player.tooltipsEnabled ? 'TOGGLE FORMULA TOOLTIPS: ON' : 'TOGGLE FORMULA TOOLTIPS: OFF' }
 
     document.getElementById('brickTooltip').classList.toggle('tooltip');
     document.getElementById('trueTooltip').classList.toggle('tooltip');
@@ -710,10 +709,6 @@ function updateDisplayPopupDisplay() {
     }
 }
 
-function updateTooltipButtonDisplay() {
-    document.getElementById('toggleTooltips').innerHTML = player.tooltipsEnabled ? 'TOGGLE FORMULA TOOLTIPS: ON' : 'TOGGLE FORMULA TOOLTIPS: OFF'
-}
-
 function updateHotkeyButtonDisplay() {
     document.getElementById('toggleHotkeysBut').innerHTML = player.hotkeysOn ? 'ENABLE HOTKEYS: ON' : 'ENABLE HOTKEYS: OFF'
 }
@@ -748,8 +743,6 @@ function updatePopupsEtc() {
     updateConfirmationPopupDisplay();
 
     updateDisplayPopupDisplay();
-
-    updateTooltipButtonDisplay();
 
     updateHotkeyButtonDisplay();
 }

@@ -196,22 +196,22 @@
                         <td width="5%">
                             <h1>Tier</h1>
                         </td>
-                        <td width="17.5%">
+                        <td width="15%">
                             <h1>Unit type</h1>
                         </td>
-                        <td width="10%">
+                        <td width="11%">
                             <h1>Corpse<br>mult</h1>
                         </td>
-                        <td width="10%">
+                        <td width="11%">
                             <h1>(Unit<br>mult)</h1>
                         </td>
-                        <td width="10%">
+                        <td width="11%">
                             <h1>Owned</h1>
                         </td>
-                        <td width="12.5%">
+                        <td width="10%">
                             <h1>(Bought)</h1>
                         </td>
-                        <td width="10%" class="shownOnFull">
+                        <td width="12%" class="shownOnFull">
                             <h1>Gain</h1>
                         </td>
                         <td width="15%">
@@ -468,7 +468,7 @@
                 <div id="autobuyerInfo" style="text-align: center; margin-top: 20px;">
                     Unit autobuyers attempt to buy in order from priority 1 to priority 8.<br>
                     Slow autobuyers trigger every 15 <span style="font-weight: bold;">real-world</span> seconds, unaffected by astral enslavement or time essence.<br>
-                    Once you unlock the prestige autobuyer and the fast, bulk, and advanced sacrifice upgrades, they are permanently unlocked whenever autobuyers are unlocked.<br>
+                    Once unlocked, the prestige buyer and the fast, bulk, and advanced upgrades are permanently available whenever autobuyers are.<br>
                     Set the world prestige max to 0 for no limit.
                 </div>
                 <table style="width: auto; margin: auto; text-align: center;">
@@ -864,7 +864,7 @@
                 <tr>
                     <td colspan="3" id="brickTooltip" data-title="corpse production rate ^2.0">
                         <div style="font-size: 18pt; white-space: pre;">Your unholy hordes have forged <span id="brickDisplay" style="font-size: 21pt; font-weight: bold; color: #1c8a2e; font-variant-numeric: tabular-nums;"> 0 </span> <span id="astralTextAmt" class="buildingResourceTexts">astral bricks</span>.</div>
-                        <div id="brickGainDiv" style="font-size: 15pt; white-space: pre; display: none;">You are gaining <span id="brickGainDisplay" style="font-size: 18pt; font-weight: bold; color: #1c8a2e; font-variant-numeric: tabular-nums;"> 0 </span> <span id="bricksTextGain" class="buildingResourceTexts">bricks</span>/sec. (@ 10x slower time speed)</div>
+                        <div id="brickGainDiv" style="font-size: 15pt; white-space: pre; display: none;">You are gaining <span id="brickGainDisplay" style="font-size: 18pt; font-weight: bold; color: #1c8a2e; font-variant-numeric: tabular-nums;"> 0 </span> <span id="bricksTextGain" class="buildingResourceTexts">bricks</span>/sec. (@ <span id="astralNerf">10</span>x slower time speed)</div>
                         <div id="keptBricks" style="font-size: 15pt; white-space: pre; display: none;">You will keep <span id="brickKeepDisplay" style="font-size: 18pt; font-weight: bold; color: #1c8a2e; font-variant-numeric: tabular-nums;"> 0 </span> <span id="bricksKeepGain" class="buildingResourceTexts">bricks</span> on sacrifice.</div>
                         <span style="font-size: 11pt">You can now force the dead you harvest to work for your rapidly growing empire. While Astral Enslavement is active, time goes 10x slower,
                         and you won't gain any corpses; instead, those tortured, miasmic souls will suffer tirelessly making bricks for your most unholy of foundations.<br></span>
@@ -2215,7 +2215,7 @@
                             Boost from achievements
                         </td>
                         <td width="10%">
-                            <button id="achBoostDisplayBut" class="confBut" onclick="toggleDisplay('achBoostDisplay', 'achBoostDisplayBut')">ON</button>
+                            <button id="achBoostDisplayBut" class="confBut" onclick="toggleDisplay('achBoostDisplay', 'achBoostDisplayBut')">OFF</button>
                         </td>
                     </tr>
                     <tr>

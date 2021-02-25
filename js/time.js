@@ -200,7 +200,7 @@ function respecTimeClick() {
 
             player.timeLocked = false;
             toggleTimeLockDisplay();
-            document.getElementById('timeSlider').disabled = false;
+            document.getElementById('timeSlider').removeAttribute('disabled')
             if (canTimePrestige()) { timePrestigeNoConfirm(); }
             else { timePrestigeReset(); }
         }
@@ -216,7 +216,7 @@ function respecTimeKey() {
 
             player.timeLocked = false;
             toggleTimeLockDisplay();
-            document.getElementById('timeSlider').disabled = false;
+            document.getElementById('timeSlider').removeAttribute('disabled')
             if (canTimePrestige()) { timePrestigeNoConfirm(); }
             else { timePrestigeReset(); }
         }
@@ -247,7 +247,7 @@ function timePrestige() {
         if (document.getElementById('respecOnSac').checked) {
             player.timeLocked = false;
             toggleTimeLockDisplay();
-            document.getElementById('timeSlider').disabled = false;
+            document.getElementById('timeSlider').removeAttribute('disabled')
             document.getElementById('respecOnSac').checked = false;
         }
         timePrestigeReset();
@@ -267,7 +267,7 @@ function timePrestigeNoConfirm() {
         if (document.getElementById('respecOnSac').checked) {
             player.timeLocked = false;
             toggleTimeLockDisplay();
-            document.getElementById('timeSlider').disabled = false;
+            document.getElementById('timeSlider').removeAttribute('disabled')
             document.getElementById('respecOnSac').checked = false;
         }
         timePrestigeReset();
