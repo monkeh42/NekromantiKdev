@@ -216,15 +216,14 @@ function loadStyles() {
     }
 
     for (let i=1; i<=NUM_UNITS; i++) {
-        if (player.units[i].unlocked || player.ascensions.gt(0)) { document.getElementById(UNITS_DATA[i].rowID).style.display = 'table-row'; }
+        if (player.units[i].unlocked) { document.getElementById(UNITS_DATA[i].rowID).style.display = 'table-row'; }
         if (!canAffordUnit(i)) {
             document.getElementById(UNITS_DATA[i].buttonID).classList.add('unclickableUnit');
             document.getElementById(UNITS_DATA[i].buttonID).classList.remove('unitBut');
             document.getElementById(UNITS_DATA[i].maxID).classList.add('unclickableMax');
             document.getElementById(UNITS_DATA[i].maxID).classList.remove('unitMax');
         }
-        displayData.push(['html', UNITS_DATA[i].costID, formatWhole(UNITS_DATA[i].cost())]);
-        if (canAffordUnit(i)) { displayData.push(['html', UNITS_DATA[i].maxNumID, calculateMaxUnits(i)]); }
+        document.getElementById(UNITS_DATA[i].costID).innerHTML = formatWhole(UNITS_DATA[i].cost());
     }
     for (let i=1; i<=NUM_TIMEDIMS; i++) {
         if (player.timeDims[i].unlocked) { document.getElementById(TIME_DATA[i].rowID).style.display = 'table-row'; }
@@ -234,6 +233,7 @@ function loadStyles() {
             document.getElementById(TIME_DATA[i].maxID).classList.add('unclickableMaxT');
             document.getElementById(TIME_DATA[i].maxID).classList.remove('unitMaxT');
         }
+        document.getElementById(TIME_DATA[i].costID).innerHTML = formatWhole(TIME_DATA[i].cost());
     } 
 
     updateHeaderDisplay();
@@ -261,6 +261,10 @@ function loadStyles() {
                     document.getElementById(BUILDS_DATA[b].upgrades[u].buttonID).classList.remove(BUILDS_DATA[b].upgradeBtnClass);
                 }
             }
+            document.getElementById('bUpgName' + b.toString() + '.' + u.toString()).innerHTML = getUpgName(b, u);
+            document.getElementById('bUpgDesc' + b.toString() + '.' + u.toString()).innerHTML = getUpgDesc(b, u);
+            document.getElementById('bUpgCost' + b.toString() + '.' + u.toString()).innerHTML = formatDefault2(getUpgCost(b, u)) + ' ' + getUpgResourceName(b);
+            if (isDisplayEffect(b, u)) { document.getElementById(b.toString() + '.' + u.toString() + 'Effect').style.display = '' }
         }
     }
 
@@ -278,6 +282,10 @@ function loadStyles() {
                 document.getElementById(TIME_DATA.upgrades[t].buttonID).classList.remove('timeUpg');
             }
         }
+        document.getElementById('tUpgName' + t.toString()).innerHTML = getTUpgName(t);
+        document.getElementById('tUpgDesc' + t.toString()).innerHTML = getTUpgDesc(t);
+        document.getElementById('tUpgCost' + t.toString()).innerHTML = formatDefault2(getTUpgCost(t)) + ' time crystals';
+        if (isDisplayEffectT(t)) { document.getElementById(t.toString() + 'TEffect').style.display = '' }
     }
     for (var c in CONSTR_DATA) {
         if (!canAffordCUpg(c)) {
@@ -460,7 +468,7 @@ function gameLoop(diff=new Decimal(0), offline=false) {
     for (var b in BUILDS_DATA) {
         if (isBuilt(b)) {
             if (b==3) {
-                player.buildings[b].amount = player.buildings[b].amount.plus(getBuildingProdPerSec(b).times(hasGUpgrade(1, 31) ? realDiff.div(1000) : diff.div(1000)));
+                player.buildings[b].amount = player.buildings[b].amount.plus(getBuildingProdPerSec(b).times(hasGUpgrade(1, 31) ? diff.times(getAstralNerf()).div(1000) : diff.div(1000)));
             } else if (b==4) {
                 player.buildings[b].progress = player.buildings[b].progress.plus(BUILDS_DATA[b].prod());
                 if (player.buildings[b].progress.gte(100)) {

@@ -55,6 +55,7 @@ function buySingleUnit(tier) {
         player.corpses = player.corpses.minus(UNITS_DATA[tier].cost());
         player.units[tier].amount = player.units[tier].amount.plus(1);
         player.units[tier].bought = player.units[tier].bought.plus(1);
+        document.getElementById(UNITS_DATA[tier].costID).innerHTML = formatWhole(UNITS_DATA[tier].cost())
         //allDisplay();
     }
 }
@@ -65,6 +66,7 @@ function buyMaxUnits(tier) {
         player.corpses = player.corpses.minus(calculateMaxUnitsCost(tier));
         player.units[tier].amount = player.units[tier].amount.plus(totalBought);
         player.units[tier].bought = player.units[tier].bought.plus(totalBought);
+        document.getElementById(UNITS_DATA[tier].costID).innerHTML = formatWhole(UNITS_DATA[tier].cost())
         //allDisplay();
     }
 }

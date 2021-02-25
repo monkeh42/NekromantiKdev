@@ -96,7 +96,7 @@ function updateBuildingUpgs() {
                     remBUpgClass(b, u, BUILDS_DATA[b].upgradeBtnClass);
                 }
             }
-            writeHTMLBUpg(b, u, `<span style="font-weight: 900;">${getUpgName(b, u)}</span><br>${getUpgDesc(b, u)}<br>Cost: ${formatWhole(getUpgCost(b, u))} ${BUILDS_DATA[b].upgResource}${isDisplayEffect(b, u) ? ("<br>Currently: " + formatDefault2(getUpgEffect(b, u)) + "x") : ""}`);
+            displayData.push(['html', 'bUpgEffect' + b.toString() + '.' + u.toString(), `${isDisplayEffect(b, u) ? formatDefault2(getUpgEffect(b, u)) : ""}`]);
         }
     }
 }
@@ -124,7 +124,7 @@ function updateTimeUpgs() {
                 addTUpgClass(t, 'unclickableTimeUpg');
             }
         }
-        writeHTMLTUpg(t, `<span style="font-weight: 900;">${getTUpgName(t)}</span><br>${getTUpgDesc(t)}${(TIME_DATA.upgrades[t].preReq != null) ? "<br>Requires <span style=\"font-weight: 800;\">" + TIME_DATA.upgrades[TIME_DATA.upgrades[t].preReq].title + "</span>" : ""}<br>Cost: ${formatWhole(getTUpgCost(t))} time crystals${isDisplayEffectT(t) ? ("<br>Currently: " + formatDefault2(getTUpgEffect(t)) + "x") : ""}`);
+        displayData.push(['html', 'tUpgEffect' + t.toString(), `${isDisplayEffectT(t) ? formatDefault2(getTUpgEffect(t)) : ""}`]);
     }
 }
 
@@ -335,7 +335,6 @@ function updateUnitTiers() {
             if (Decimal.times(getUnitProdPerSecond(i).div(player.units[i].amount.max(1)), 100).gte(0.1)) { displayData.push(['html', UNITS_DATA[i].gainID, '(+' + formatUnitRow(Decimal.times((getUnitProdPerSecond(i).div(player.units[i].amount.max(1))), 100), 2) + '%/s)']); }
             else if (document.getElementById(UNITS_DATA[i].gainID).innerHTML != '(<0.1%/s)') { displayData.push(['html', UNITS_DATA[i].gainID, '(<0.1%/s)']); }
         } else if (document.getElementById(UNITS_DATA[i].gainID).innerHTML != '') { displayData.push(['html', UNITS_DATA[i].gainID, '']) }
-        if (document.getElementById(UNITS_DATA[i].costID).innerHTML != formatWhole(UNITS_DATA[i].cost())) { displayData.push(['html', UNITS_DATA[i].costID, formatWhole(UNITS_DATA[i].cost())]); }
         if (canAffordUnit(i)) { displayData.push(['html', UNITS_DATA[i].maxNumID, calculateMaxUnits(i)]); }
     }
 }
@@ -355,8 +354,7 @@ function updateTDimTiers() {
         }
         displayData.push(['html', TIME_DATA[i].amountID, `<div style="min-width: 30%; float: left;">${formatUnitRow(player.timeDims[i].amount)}</div><div style="min-width: 40%; float: left;">(${formatWholeUnitRow(player.timeDims[i].bought)})</div><div style="min-width: 30%; float: left;">${getTimeDimProdPerSecond(i + 1).gt(0) ? "(+" + formatUnitRow(Decimal.times((getTimeDimProdPerSecond(i + 1).div(player.timeDims[i].amount.max(1))), 100), 2) + "%/s)</div>" : ""}`]);
         displayData.push(['html', TIME_DATA[i].multID, `<div>${formatUnitRow(TIME_DATA[i].mult())}x</div>`]);
-        displayData.push(['html', TIME_DATA[i].buttonID, `Cost: ${formatWhole(TIME_DATA[i].cost())} crystals`]);
-        displayData.push(['html', TIME_DATA[i].maxID, canAffordTime(i) ? `Max: ${calculateMaxTime(i)} for &#162;${formatWhole(calculateMaxTimeCost(i))}` : "Max: 0"]);
+        displayData.push(['html', TIME_DATA[i].maxAmtID, canAffordTime(i) ? formatWhole(calculateMaxTime(i)) : '0']);
     }
 }
 

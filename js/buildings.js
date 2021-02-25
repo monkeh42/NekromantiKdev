@@ -4,6 +4,10 @@ function getResourceEff(b) {
     return BUILDS_DATA[b].resourceEff();
 }
 
+function getUpgResourceName(b) {
+    return BUILDS_DATA[b].upgResource;
+}
+
 function getDisplaySymbol(b, u) {
     return BUILDS_DATA[b].upgrades[u].displayEffect[1];
 }
@@ -166,14 +170,14 @@ function resetBuildingResources(sacrifice=false, ascension=false) {
     if (!hasAchievement(15) || ascension) { player.bricks = new Decimal(START_PLAYER.bricks); }
     else if (sacrifice) { player.bricks = new Decimal(getAchievementEffect(15)); } 
     for (var b in BUILDS_DATA) {
-        player.buildings[b].amount = new Decimal(START_PLAYER.buildings[b].amount);
+        if (b!=4) { player.buildings[b].amount = new Decimal(START_PLAYER.buildings[b].amount); }
     }
 }
 
 function resetBuildings(ascension=false) {
     if (player.astralFlag) { toggleAstral(); }
     
-    if (hasTUpgrade(24)) {
+    if (hasTUpgrade(24) && !ascension) {
         player.worlds = new Decimal(4);
         player.spaceResets = new Decimal(4);
         player.nextSpaceReset = [3, 8];
@@ -189,61 +193,53 @@ function resetBuildings(ascension=false) {
     }
 
     let tempSun = {};
+    let tempVortex = {};
+    copyData(tempVortex, player.buildings[4]);
     copyData(tempSun, player.buildings[3]);
     copyData(player.buildings, START_PLAYER.buildings);
+    copyData(player.buildings[4], tempVortex);
     if (!hasMilestone(1)) { copyData(player.construction, START_PLAYER.construction); }
+    copyData(player.unlocks['buildingsTab'], START_PLAYER.unlocks['buildingsTab']);
+    if (hasMilestone(1)) {
+        player.unlocks['buildingsTab']['construction'] = true;
+        player.unlocks['buildingsTab']['constructionRow2'] = true;
+    }
 
     if (hasTUpgrade(14)) {
         player.worlds = new Decimal(4);
         player.spaceResets = new Decimal(4);
         player.nextSpaceReset = [3, 8];
-        copyData(player.buildings[3], tempSun);
+        if (!ascension) { copyData(player.buildings[3], tempSun); }
         player.buildings[3].amount = new Decimal(0);
-        lockElements('buildingsTab', 'factory');
-        lockElements('buildingsTab', 'factoryRow2');
-        lockElements('buildingsTab', 'necropolis');
-        lockElements('buildingsTab', 'necropolisRow2');
+        player.unlocks['buildingsTab']['mainTab'] = true;
+        player.unlocks['buildingsTab']['construction'] = true;
     } else if (hasTUpgrade(13)) {
         player.worlds = new Decimal(3);
         player.spaceResets = new Decimal(3);
         player.nextSpaceReset = [1, 8];
-        lockElements('buildingsTab', 'factory');
-        lockElements('buildingsTab', 'factoryRow2');
-        lockElements('buildingsTab', 'necropolis');
-        lockElements('buildingsTab', 'necropolisRow2');
-        lockElements('buildingsTab', 'sun');
-        lockElements('buildingsTab', 'sunRow2');
+        player.unlocks['buildingsTab']['mainTab'] = true;
+        player.unlocks['buildingsTab']['construction'] = true;
     } else if (hasTUpgrade(12)) {
         player.worlds = new Decimal(2);
         player.spaceResets = new Decimal(2);
         player.nextSpaceReset = [1, 7];
-        lockElements('buildingsTab', 'factory');
-        lockElements('buildingsTab', 'factoryRow2');
-        lockElements('buildingsTab', 'necropolis');
-        lockElements('buildingsTab', 'necropolisRow2');
-        lockElements('buildingsTab', 'sun');
-        lockElements('buildingsTab', 'sunRow2');
+        player.unlocks['buildingsTab']['mainTab'] = true;
+        player.unlocks['buildingsTab']['construction'] = true;
     } else if (hasTUpgrade(11)) {
         player.worlds = new Decimal(1);
         player.spaceResets = new Decimal(1);
         player.nextSpaceReset = [1, 6];
-        lockElements('buildingsTab', 'factory');
-        lockElements('buildingsTab', 'factoryRow2');
-        lockElements('buildingsTab', 'necropolis');
-        lockElements('buildingsTab', 'necropolisRow2');
-        lockElements('buildingsTab', 'sun');
-        lockElements('buildingsTab', 'sunRow2');
-        if (!hasMilestone(1)) { lockElements('buildingsTab', 'construction'); }
+        player.unlocks['buildingsTab']['mainTab'] = true;
     } else {
         player.spaceResets = new Decimal(START_PLAYER.spaceResets);
         player.worlds = new Decimal(START_PLAYER.worlds);
         player.nextSpaceReset = START_PLAYER.nextSpaceReset.slice();
-        lockTab('buildingsTab');
-        if (hasMilestone(1)) {
-            player.unlocks['buildingsTab']['construction'] = true;
-            player.unlocks['buildingsTab']['constructionRow2'] = true;
-        }
     }
+
+    for (let key in player.unlocks['buildingsTab']) {
+        if (!player.unlocks['buildingsTab'][key]) { lockElements('buildingsTab', key) }
+    }
+
     copyData(player.thisSacStats, START_PLAYER.thisSacStats);
     if (hasGUpgrade(2, 22)) { player.worlds = player.worlds.plus(1); }
     player.thisSacStats.totalWorlds = player.worlds;
@@ -253,11 +249,10 @@ function resetBuildings(ascension=false) {
         player.thisAscStats.bestWorlds = player.worlds;
     }
 
-    if (!hasTUpgrade(24) && tempSun.upgrades[13] && (!ascension || hasAchievement(43))) {
+    if (tempSun.upgrades[13] && (!ascension || hasAchievement(43))) {
         player.buildings[3].upgrades[13] = tempSun.upgrades[13];
     }
-    if (!hasTUpgrade(24) && tempSun.upgrades[23]) {
-        player.buildings[3].built = true;
+    if (tempSun.upgrades[23]) {
         player.buildings[3].upgrades[23] = tempSun.upgrades[23];
     }
 }

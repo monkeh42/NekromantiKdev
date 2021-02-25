@@ -191,7 +191,7 @@
                 </table>
             </div>
             <div id="unitsSubTab" class="unitSubTab" style="position: relative; height: 650px;">
-                <table style="width: 85%; margin: auto;">
+                <table id="unitsTable" style="width: 85%; margin: auto;" cellpadding="1px">
                     <tr>
                         <td width="5%">
                             <h1>Tier</h1>
@@ -904,24 +904,54 @@
                     </tr>
                     <tr id="factoryUpgradesRow1" style="display: none;">
                         <td>
-                            <button id="factoryUpg11" class="factoryUpg" onclick="buyBUpg(1, 11)"></button>
+                            <button id="factoryUpg11" class="factoryUpg" onclick="buyBUpg(1, 11)">
+                                <span id="bUpgName1.11" style="font-weight: 900;"></span><br>
+                                <span id="bUpgDesc1.11"></span><br>
+                                <span>Cost: <span id="bUpgCost1.11"></span></span><br>
+                                <span id="1.11Effect" style="display: none;">Currently: <span id="bUpgEffect1.11"></span>x</span>
+                            </button>
                         </td>
                         <td>
-                            <button id="factoryUpg12" class="factoryUpg" onclick="buyBUpg(1, 12)"></button>
+                            <button id="factoryUpg12" class="factoryUpg" onclick="buyBUpg(1, 12)">
+                                <span id="bUpgName1.12" style="font-weight: 900;"></span><br>
+                                <span id="bUpgDesc1.12"></span><br>
+                                <span>Cost: <span id="bUpgCost1.12"></span></span><br>
+                                <span id="1.12Effect" style="display: none;">Currently: <span id="bUpgEffect1.12"></span>x</span>
+                            </button>
                         </td>
                         <td>
-                            <button id="factoryUpg13" class="factoryUpg" onclick="buyBUpg(1, 13)"></button>
+                            <button id="factoryUpg13" class="factoryUpg" onclick="buyBUpg(1, 13)">
+                                <span id="bUpgName1.13" style="font-weight: 900;"></span><br>
+                                <span id="bUpgDesc1.13"></span><br>
+                                <span>Cost: <span id="bUpgCost1.13"></span></span><br>
+                                <span id="1.13Effect" style="display: none;">Currently: <span id="bUpgEffect1.13"></span>x</span>
+                            </button>
                         </td>
                     </tr>
                     <tr id="factoryUpgradesRow2" style="display: none;">
                         <td>
-                            <button id="factoryUpg21" class="factoryUpg" onclick="buyBUpg(1, 21)"></button>
+                            <button id="factoryUpg21" class="factoryUpg" onclick="buyBUpg(1, 21)">
+                                <span id="bUpgName1.21" style="font-weight: 900;"></span><br>
+                                <span id="bUpgDesc1.21"></span><br>
+                                <span>Cost: <span id="bUpgCost1.21"></span></span><br>
+                                <span id="1.21Effect" style="display: none;">Currently: <span id="bUpgEffect1.21"></span>x</span>
+                            </button>
                         </td>
                         <td>
-                            <button id="factoryUpg22" class="factoryUpg" onclick="buyBUpg(1, 22)"></button>
+                            <button id="factoryUpg22" class="factoryUpg" onclick="buyBUpg(1, 22)">
+                                <span id="bUpgName1.22" style="font-weight: 900;"></span><br>
+                                <span id="bUpgDesc1.22"></span><br>
+                                <span>Cost: <span id="bUpgCost1.22"></span></span><br>
+                                <span id="1.22Effect" style="display: none;">Currently: <span id="bUpgEffect1.22"></span>x</span>
+                            </button>
                         </td>
                         <td>
-                            <button id="factoryUpg23" class="factoryUpg" onclick="buyBUpg(1, 23)"></button>
+                            <button id="factoryUpg23" class="factoryUpg" onclick="buyBUpg(1, 23)">
+                                <span id="bUpgName1.23" style="font-weight: 900;"></span><br>
+                                <span id="bUpgDesc1.23"></span><br>
+                                <span>Cost: <span id="bUpgCost1.23"></span></span><br>
+                                <span id="1.23Effect" style="display: none;">Currently: <span id="bUpgEffect1.23"></span>x</span>
+                            </button>
                         </td>
                     </tr>
                 </table>
@@ -942,24 +972,54 @@
                     </tr>
                     <tr id="necropolisUpgradesRow1" style="display: none;">
                         <td>
-                            <button id="necropolisUpg11" class="necropolisUpg" onclick="buyBUpg(2, 11)"><strong>Upgrade 1</strong><br>description of upgrade</button>
+                            <button id="necropolisUpg11" class="necropolisUpg" onclick="buyBUpg(2, 11)">
+                                <span id="bUpgName2.11" style="font-weight: 900;"></span><br>
+                                <span id="bUpgDesc2.11"></span><br>
+                                <span>Cost: <span id="bUpgCost2.11"></span></span><br>
+                                <span id="2.11Effect" style="display: none;">Currently: <span id="bUpgEffect2.11"></span>x</span>
+                            </button>
                         </td>
                         <td>
-                            <button id="necropolisUpg12" class="necropolisUpg" onclick="buyBUpg(2, 12)"><strong>Upgrade 2</strong><br>description of upgrade</button>
+                            <button id="necropolisUpg12" class="necropolisUpg" onclick="buyBUpg(2, 12)">
+                                <span id="bUpgName2.12" style="font-weight: 900;"></span><br>
+                                <span id="bUpgDesc2.12"></span><br>
+                                <span>Cost: <span id="bUpgCost2.12"></span></span><br>
+                                <span id="2.12Effect" style="display: none;">Currently: <span id="bUpgEffect2.12"></span>x</span>
+                            </button>
                         </td>
                         <td>
-                            <button id="necropolisUpg13" class="necropolisUpg" onclick="buyBUpg(2, 13)"><strong>Upgrade 3</strong><br>description of upgrade</button>
+                            <button id="necropolisUpg13" class="necropolisUpg" onclick="buyBUpg(2, 13)">
+                                <span id="bUpgName2.13" style="font-weight: 900;"></span><br>
+                                <span id="bUpgDesc2.13"></span><br>
+                                <span>Cost: <span id="bUpgCost2.13"></span></span><br>
+                                <span id="2.13Effect" style="display: none;">Currently: <span id="bUpgEffect2.13"></span>x</span>
+                            </button>
                         </td>
                     </tr>
                     <tr id="necropolisUpgradesRow2" style="display: none;">
                         <td>
-                            <button id="necropolisUpg21" class="necropolisUpg" onclick="buyBUpg(2, 21)"><strong>Upgrade 4</strong><br>description of upgrade</button>
+                            <button id="necropolisUpg21" class="necropolisUpg" onclick="buyBUpg(2, 21)">
+                                <span id="bUpgName2.21" style="font-weight: 900;"></span><br>
+                                <span id="bUpgDesc2.21"></span><br>
+                                <span>Cost: <span id="bUpgCost2.21"></span></span><br>
+                                <span id="2.21Effect" style="display: none;">Currently: <span id="bUpgEffect2.21"></span>x</span>
+                            </button>
                         </td>
                         <td>
-                            <button id="necropolisUpg22" class="necropolisUpg" onclick="buyBUpg(2, 22)"><strong>Upgrade 5</strong><br>description of upgrade</button>
+                            <button id="necropolisUpg22" class="necropolisUpg" onclick="buyBUpg(2, 22)">
+                                <span id="bUpgName2.22" style="font-weight: 900;"></span><br>
+                                <span id="bUpgDesc2.22"></span><br>
+                                <span>Cost: <span id="bUpgCost2.22"></span></span><br>
+                                <span id="2.22Effect" style="display: none;">Currently: <span id="bUpgEffect2.22"></span>x</span>
+                            </button>
                         </td>
                         <td>
-                            <button id="necropolisUpg23" class="necropolisUpg" onclick="buyBUpg(2, 23)"><strong>Upgrade 6</strong><br>description of upgrade</button>
+                            <button id="necropolisUpg23" class="necropolisUpg" onclick="buyBUpg(2, 23)">
+                                <span id="bUpgName2.23" style="font-weight: 900;"></span><br>
+                                <span id="bUpgDesc2.23"></span><br>
+                                <span>Cost: <span id="bUpgCost2.23"></span></span><br>
+                                <span id="2.23Effect" style="display: none;">Currently: <span id="bUpgEffect2.23"></span>x</span>
+                            </button>
                         </td>
                     </tr>
                 </table>
@@ -980,24 +1040,54 @@
                     </tr>
                     <tr id="sunUpgradesRow" style="display: none;">
                         <td>
-                            <button id="sunUpg11" class="sunUpg" onclick="buyBUpg(3, 11)"><strong>Upgrade 1</strong><br>description of upgrade</button>
+                            <button id="sunUpg11" class="sunUpg" onclick="buyBUpg(3, 11)">
+                                <span id="bUpgName3.11" style="font-weight: 900;"></span><br>
+                                <span id="bUpgDesc3.11"></span><br>
+                                <span>Cost: <span id="bUpgCost3.11"></span></span><br>
+                                <span id="3.11Effect" style="display: none;">Currently: <span id="bUpgEffect3.11"></span>x</span>
+                            </button>
                         </td>
                         <td>
-                            <button id="sunUpg12" class="sunUpg" onclick="buyBUpg(3, 12)"><strong>Upgrade 2</strong><br>description of upgrade</button>
+                            <button id="sunUpg12" class="sunUpg" onclick="buyBUpg(3, 12)">
+                                <span id="bUpgName3.12" style="font-weight: 900;"></span><br>
+                                <span id="bUpgDesc3.12"></span><br>
+                                <span>Cost: <span id="bUpgCost3.12"></span></span><br>
+                                <span id="3.12Effect" style="display: none;">Currently: <span id="bUpgEffect3.12"></span>x</span>
+                            </button>
                         </td>
                         <td>
-                            <button id="sunUpg13" class="sunUpg" onclick="buyBUpg(3, 13)"><strong>Upgrade 3</strong><br>description of upgrade</button>
+                            <button id="sunUpg13" class="sunUpg" onclick="buyBUpg(3, 13)">
+                                <span id="bUpgName3.13" style="font-weight: 900;"></span><br>
+                                <span id="bUpgDesc3.13"></span><br>
+                                <span>Cost: <span id="bUpgCost3.13"></span></span><br>
+                                <span id="3.13Effect" style="display: none;">Currently: <span id="bUpgEffect3.13"></span>x</span>
+                            </button>
                         </td>
                     </tr>
                     <tr id="sunUpgradesRow2" style="display: none;">
                         <td>
-                            <button id="sunUpg21" class="sunUpg" onclick="buyBUpg(3, 21)"><strong>Upgrade 1</strong><br>description of upgrade</button>
+                            <button id="sunUpg21" class="sunUpg" onclick="buyBUpg(3, 21)">
+                                <span id="bUpgName3.21" style="font-weight: 900;"></span><br>
+                                <span id="bUpgDesc3.21"></span><br>
+                                <span>Cost: <span id="bUpgCost3.21"></span></span><br>
+                                <span id="3.21Effect" style="display: none;">Currently: <span id="bUpgEffect3.21"></span>x</span>
+                            </button>
                         </td>
                         <td>
-                            <button id="sunUpg22" class="sunUpg" onclick="buyBUpg(3, 22)"><strong>Upgrade 2</strong><br>description of upgrade</button>
+                            <button id="sunUpg22" class="sunUpg" onclick="buyBUpg(3, 22)">
+                                <span id="bUpgName3.22" style="font-weight: 900;"></span><br>
+                                <span id="bUpgDesc3.22"></span><br>
+                                <span>Cost: <span id="bUpgCost3.22"></span></span><br>
+                                <span id="3.22Effect" style="display: none;">Currently: <span id="bUpgEffect3.22"></span>x</span>
+                            </button>
                         </td>
                         <td>
-                            <button id="sunUpg23" class="sunUpg" onclick="buyBUpg(3, 23)"><strong>Upgrade 3</strong><br>description of upgrade</button>
+                            <button id="sunUpg23" class="sunUpg" onclick="buyBUpg(3, 23)">
+                                <span id="bUpgName3.23" style="font-weight: 900;"></span><br>
+                                <span id="bUpgDesc3.23"></span><br>
+                                <span>Cost: <span id="bUpgCost3.23"></span></span><br>
+                                <span id="3.23Effect" style="display: none;">Currently: <span id="bUpgEffect3.23"></span>x</span>
+                            </button>
                         </td>
                     </tr>
                 </table>
@@ -1020,24 +1110,54 @@
                     <tr id="vortexUpgradesRow" style="display: none;">
                         <td colspan="3">Upgrades coming soon!</td>
                         <td style="display: none;">
-                            <button id="vortexUpg11" class="vortexUpg" onclick="buyBUpg(3, 11)"><strong>Upgrade 1</strong><br>description of upgrade</button>
+                            <button id="vortexUpg11" class="vortexUpg" onclick="buyBUpg(4, 11)">
+                                <span id="bUpgName4.11" style="font-weight: 900;"></span><br>
+                                <span id="bUpgDesc4.11"></span><br>
+                                <span>Cost: <span id="bUpgCost4.11"></span></span><br>
+                                <span id="4.11Effect" style="display: none;">Currently: <span id="bUpgEffect4.11"></span>x</span>
+                            </button>
                         </td>
                         <td style="display: none;">
-                            <button id="vortexUpg12" class="vortexUpg" onclick="buyBUpg(3, 12)"><strong>Upgrade 2</strong><br>description of upgrade</button>
+                            <button id="vortexUpg12" class="vortexUpg" onclick="buyBUpg(4, 12)">
+                                <span id="bUpgName4.12" style="font-weight: 900;"></span><br>
+                                <span id="bUpgDesc4.12"></span><br>
+                                <span>Cost: <span id="bUpgCost4.12"></span></span><br>
+                                <span id="4.12Effect" style="display: none;">Currently: <span id="bUpgEffect4.12"></span>x</span>
+                            </button>
                         </td>
                         <td style="display: none;">
-                            <button id="vortexUpg13" class="vortexUpg" onclick="buyBUpg(3, 13)"><strong>Upgrade 3</strong><br>description of upgrade</button>
+                            <button id="vortexUpg13" class="vortexUpg" onclick="buyBUpg(4, 13)">
+                                <span id="bUpgName4.13" style="font-weight: 900;"></span><br>
+                                <span id="bUpgDesc4.13"></span><br>
+                                <span>Cost: <span id="bUpgCost4.13"></span></span><br>
+                                <span id="4.13Effect" style="display: none;">Currently: <span id="bUpgEffect4.13"></span>x</span>
+                            </button>
                         </td>
                     </tr>
                     <tr id="vortexUpgradesRow2" style="display: none;">
                         <td>
-                            <button id="vortexUpg21" class="vortexUpg" onclick="buyBUpg(3, 21)"><strong>Upgrade 1</strong><br>description of upgrade</button>
+                            <button id="vortexUpg21" class="vortexUpg" onclick="buyBUpg(4, 21)">
+                                <span id="bUpgName4.21" style="font-weight: 900;"></span><br>
+                                <span id="bUpgDesc4.21"></span><br>
+                                <span>Cost: <span id="bUpgCost4.21"></span></span><br>
+                                <span id="4.21Effect" style="display: none;">Currently: <span id="bUpgEffect4.21"></span>x</span>
+                            </button>
                         </td>
                         <td>
-                            <button id="vortexUpg22" class="vortexUpg" onclick="buyBUpg(3, 22)"><strong>Upgrade 2</strong><br>description of upgrade</button>
+                            <button id="vortexUpg22" class="vortexUpg" onclick="buyBUpg(4, 22)">
+                                <span id="bUpgName4.22" style="font-weight: 900;"></span><br>
+                                <span id="bUpgDesc4.22"></span><br>
+                                <span>Cost: <span id="bUpgCost4.22"></span></span><br>
+                                <span id="4.22Effect" style="display: none;">Currently: <span id="bUpgEffect4.22"></span>x</span>
+                            </button>
                         </td>
                         <td>
-                            <button id="vortexUpg23" class="vortexUpg" onclick="buyBUpg(3, 23)"><strong>Upgrade 3</strong><br>description of upgrade</button>
+                            <button id="vortexUpg23" class="vortexUpg" onclick="buyBUpg(4, 23)">
+                                <span id="bUpgName4.23" style="font-weight: 900;"></span><br>
+                                <span id="bUpgDesc4.23"></span><br>
+                                <span>Cost: <span id="bUpgCost4.23"></span></span><br>
+                                <span id="4.23Effect" style="display: none;">Currently: <span id="bUpgEffect4.23"></span>x</span>
+                            </button>
                         </td>
                     </tr>
                 </table>
@@ -1185,10 +1305,10 @@
                             <div id="timeAmount1"><div style="min-width: 30%; float: left;">0</div><div style="min-width: 50%; float: left;">(0)</div><div style="min-width: 20%; float: right; text-align: center;"></div></div>
                         </td>
                         <td class="buttonTD">
-                            <button id="timeBut1" class="unitButT" onclick="buySingleTime(1)">Cost: 10 crystals</button>
+                            <button id="timeBut1" class="unitButT" onclick="buySingleTime(1)">Cost: <span id="dim1Cost">10</span> crystals</button>
                         </td>
                         <td class="buttonTD">
-                            <button id="timeMax1" class="unitMaxT" onclick="buyMaxTime(1)">Max: 1 for &#162;10</button>
+                            <button id="timeMax1" class="unitMaxT" onclick="buyMaxTime(1)">Buy max (<span id="dim1Max">0</span>)</button>
                         </td>
                     </tr>
                     <tr id="timeRow2" style="display: none;">
@@ -1202,10 +1322,10 @@
                             <div id="timeAmount2"><div style="min-width: 30%; float: left;">0</div><div style="min-width: 50%; float: left;">(0)</div><div style="min-width: 20%; float: right; text-align: center;"></div></div>
                         </td>
                         <td class="buttonTD">
-                            <button id="timeBut2" class="unitButT" onclick="buySingleTime(2)">Cost: 100 crystals</button>
+                            <button id="timeBut2" class="unitButT" onclick="buySingleTime(2)">Cost: <span id="dim2Cost">100</span> crystals</button>
                         </td>
                         <td class="buttonTD">
-                            <button id="timeMax2" class="unitMaxT" onclick="buyMaxTime(2)">Max: 1 for &#162;10</button>
+                            <button id="timeMax2" class="unitMaxT" onclick="buyMaxTime(2)">Buy max (<span id="dim2Max">0</span>)</button>
                         </td>
                     </tr>
                     <tr id="timeRow3" style="display: none;">
@@ -1219,10 +1339,10 @@
                             <div id="timeAmount3"><div style="min-width: 30%; float: left;">0</div><div style="min-width: 50%; float: left;">(0)</div><div style="min-width: 20%; float: right; text-align: center;"></div></div>
                         </td>
                         <td class="buttonTD">
-                            <button id="timeBut3" class="unitButT" onclick="buySingleTime(3)">Cost: 1e6 crystals</button>
+                            <button id="timeBut3" class="unitButT" onclick="buySingleTime(3)">Cost: <span id="dim3Cost">1e6</span> crystals</button>
                         </td>
                         <td class="buttonTD">
-                            <button id="timeMax3" class="unitMaxT" onclick="buyMaxTime(3)">Max: 1 for &#162;10</button>
+                            <button id="timeMax3" class="unitMaxT" onclick="buyMaxTime(3)">Buy max (<span id="dim3Max">0</span>)</button>
                         </td>
                     </tr>
                     <tr id="timeRow4" style="display: none;">
@@ -1236,10 +1356,10 @@
                             <div id="timeAmount4"><div style="min-width: 30%; float: left;">0</div><div style="min-width: 50%; float: left;">(0)</div><div style="min-width: 20%; float: right; text-align: center;"></div></div>
                         </td>
                         <td class="buttonTD">
-                            <button id="timeBut4" class="unitButT" onclick="buySingleTime(4)">Cost: 1e9 crystals</button>
+                            <button id="timeBut4" class="unitButT" onclick="buySingleTime(4)">Cost: <span id="dim4Cost">1e9</span> crystals</button>
                         </td>
                         <td class="buttonTD">
-                            <button id="timeMax4" class="unitMaxT" onclick="buyMaxTime(4)">Max: 1 for &#162;10</button>
+                            <button id="timeMax4" class="unitMaxT" onclick="buyMaxTime(4)">Buy max (<span id="dim4Max">0</span>)</button>
                         </td>
                     </tr>
                 </table>
@@ -1248,70 +1368,170 @@
                 <table id="timeUpgTable" style="width: 60%; margin: auto; margin-top: 20px; text-align: center;">
                     <tr>
                         <td class="timeUpgTDs2">
-                            <button id="timeUpg41" class="timeUpg" onclick="buyTUpg(41)"><strong>Upgrade 4.1</strong><br>description of upgrade</button>
+                            <button id="timeUpg41" class="timeUpg" onclick="buyTUpg(41)">
+                                <span id="tUpgName41" style="font-weight: 900;"></span><br>
+                                <span id="tUpgDesc41"></span><br>
+                                <span>Cost: <span id="tUpgCost41"></span></span><br>
+                                <span id="41TEffect" style="display: none;">Currently: <span id="tUpgEffect41"></span>x</span>
+                            </button>
                         </td>
                         <td class="timeUpgTDs">
-                            <button id="timeUpg11" class="timeUpg" onclick="buyTUpg(11)"><strong>Upgrade 1.1</strong><br>description of upgrade</button>
+                            <button id="timeUpg11" class="timeUpg" onclick="buyTUpg(11)">
+                                <span id="tUpgName11" style="font-weight: 900;"></span><br>
+                                <span id="tUpgDesc11"></span><br>
+                                <span>Cost: <span id="tUpgCost11"></span></span><br>
+                                <span id="11TEffect" style="display: none;">Currently: <span id="tUpgEffect11"></span>x</span>
+                            </button>
                         </td>
                         <td class="timeUpgTDs">
-                            <button id="timeUpg21" class="timeUpg" onclick="buyTUpg(21)"><strong>Upgrade 2.1</strong><br>description of upgrade</button>
+                            <button id="timeUpg21" class="timeUpg" onclick="buyTUpg(21)">
+                                <span id="tUpgName21" style="font-weight: 900;"></span><br>
+                                <span id="tUpgDesc21"></span><br>
+                                <span>Cost: <span id="tUpgCost21"></span></span><br>
+                                <span id="21TEffect" style="display: none;">Currently: <span id="tUpgEffect21"></span>x</span>
+                            </button>
                         </td>
                         <td class="timeUpgTDs">
-                            <button id="timeUpg31" class="timeUpg" onclick="buyTUpg(31)"><strong>Upgrade 3.1</strong><br>description of upgrade</button>
+                            <button id="timeUpg31" class="timeUpg" onclick="buyTUpg(31)">
+                                <span id="tUpgName31" style="font-weight: 900;"></span><br>
+                                <span id="tUpgDesc31"></span><br>
+                                <span>Cost: <span id="tUpgCost31"></span></span><br>
+                                <span id="31TEffect" style="display: none;">Currently: <span id="tUpgEffect31"></span>x</span>
+                            </button>
                         </td>
                         <td class="timeUpgTDs2">
-                            <button id="timeUpg51" class="timeUpg" onclick="buyTUpg(51)"><strong>Upgrade 5.1</strong><br>description of upgrade</button>
+                            <button id="timeUpg51" class="timeUpg" onclick="buyTUpg(51)">
+                                <span id="tUpgName51" style="font-weight: 900;"></span><br>
+                                <span id="tUpgDesc51"></span><br>
+                                <span>Cost: <span id="tUpgCost51"></span></span><br>
+                                <span id="51TEffect" style="display: none;">Currently: <span id="tUpgEffect51"></span>x</span>
+                            </button>
                         </td>
                     </tr>
                     <tr>
                         <td class="timeUpgTDs2">
-                            <button id="timeUpg42" class="timeUpg" onclick="buyTUpg(42)"><strong>Upgrade 4.2</strong><br>description of upgrade</button>
+                            <button id="timeUpg42" class="timeUpg" onclick="buyTUpg(42)">
+                                <span id="tUpgName42" style="font-weight: 900;"></span><br>
+                                <span id="tUpgDesc42"></span><br>
+                                <span>Cost: <span id="tUpgCost42"></span></span><br>
+                                <span id="42TEffect" style="display: none;">Currently: <span id="tUpgEffect42"></span>x</span>
+                            </button>
                         </td>
                         <td class="timeUpgTDs">
-                            <button id="timeUpg12" class="timeUpg" onclick="buyTUpg(12)"><strong>Upgrade 1.2</strong><br>description of upgrade</button>
+                            <button id="timeUpg12" class="timeUpg" onclick="buyTUpg(12)">
+                                <span id="tUpgName12" style="font-weight: 900;"></span><br>
+                                <span id="tUpgDesc12"></span><br>
+                                <span>Cost: <span id="tUpgCost12"></span></span><br>
+                                <span id="12TEffect" style="display: none;">Currently: <span id="tUpgEffect12"></span>x</span>
+                            </button>
                         </td>
                         <td class="timeUpgTDs">
-                            <button id="timeUpg22" class="timeUpg" onclick="buyTUpg(22)"><strong>Upgrade 2.2</strong><br>description of upgrade</button>
+                            <button id="timeUpg22" class="timeUpg" onclick="buyTUpg(22)">
+                                <span id="tUpgName22" style="font-weight: 900;"></span><br>
+                                <span id="tUpgDesc22"></span><br>
+                                <span>Cost: <span id="tUpgCost22"></span></span><br>
+                                <span id="22TEffect" style="display: none;">Currently: <span id="tUpgEffect22"></span>x</span>
+                            </button>
                         </td>
                         <td class="timeUpgTDs">
-                            <button id="timeUpg32" class="timeUpg" onclick="buyTUpg(32)"><strong>Upgrade 3.2</strong><br>description of upgrade</button>
+                            <button id="timeUpg32" class="timeUpg" onclick="buyTUpg(32)">
+                                <span id="tUpgName32" style="font-weight: 900;"></span><br>
+                                <span id="tUpgDesc32"></span><br>
+                                <span>Cost: <span id="tUpgCost32"></span></span><br>
+                                <span id="32TEffect" style="display: none;">Currently: <span id="tUpgEffect32"></span>x</span>
+                            </button>
                         </td>
                         <td class="timeUpgTDs2">
-                            <button id="timeUpg52" class="timeUpg" onclick="buyTUpg(52)"><strong>Upgrade 5.2</strong><br>description of upgrade</button>
+                            <button id="timeUpg52" class="timeUpg" onclick="buyTUpg(52)">
+                                <span id="tUpgName52" style="font-weight: 900;"></span><br>
+                                <span id="tUpgDesc52"></span><br>
+                                <span>Cost: <span id="tUpgCost52"></span></span><br>
+                                <span id="52TEffect" style="display: none;">Currently: <span id="tUpgEffect52"></span>x</span>
+                            </button>
                         </td>
                     </tr>
                     <tr>
                         <td class="timeUpgTDs2">
-                            <button id="timeUpg43" class="timeUpg" onclick="buyTUpg(43)"><strong>Upgrade 4.3</strong><br>description of upgrade</button>
+                            <button id="timeUpg43" class="timeUpg" onclick="buyTUpg(43)">
+                                <span id="tUpgName43" style="font-weight: 900;"></span><br>
+                                <span id="tUpgDesc43"></span><br>
+                                <span>Cost: <span id="tUpgCost43"></span></span><br>
+                                <span id="43TEffect" style="display: none;">Currently: <span id="tUpgEffect43"></span>x</span>
+                            </button>
                         </td>
                         <td class="timeUpgTDs">
-                            <button id="timeUpg13" class="timeUpg" onclick="buyTUpg(13)"><strong>Upgrade 1.3</strong><br>description of upgrade</button>
+                            <button id="timeUpg13" class="timeUpg" onclick="buyTUpg(13)">
+                                <span id="tUpgName13" style="font-weight: 900;"></span><br>
+                                <span id="tUpgDesc13"></span><br>
+                                <span>Cost: <span id="tUpgCost13"></span></span><br>
+                                <span id="13TEffect" style="display: none;">Currently: <span id="tUpgEffect13"></span>x</span>
+                            </button>
                         </td>
                         <td class="timeUpgTDs">
-                            <button id="timeUpg23" class="timeUpg" onclick="buyTUpg(23)"><strong>Upgrade 2.3</strong><br>description of upgrade</button>
+                            <button id="timeUpg23" class="timeUpg" onclick="buyTUpg(23)">
+                                <span id="tUpgName23" style="font-weight: 900;"></span><br>
+                                <span id="tUpgDesc23"></span><br>
+                                <span>Cost: <span id="tUpgCost23"></span></span><br>
+                                <span id="23TEffect" style="display: none;">Currently: <span id="tUpgEffect23"></span>x</span>
+                            </button>
                         </td>
                         <td class="timeUpgTDs">
-                            <button id="timeUpg33" class="timeUpg" onclick="buyTUpg(33)"><strong>Upgrade 3.3</strong><br>description of upgrade</button>
+                            <button id="timeUpg33" class="timeUpg" onclick="buyTUpg(33)">
+                                <span id="tUpgName33" style="font-weight: 900;"></span><br>
+                                <span id="tUpgDesc33"></span><br>
+                                <span>Cost: <span id="tUpgCost33"></span></span><br>
+                                <span id="33TEffect" style="display: none;">Currently: <span id="tUpgEffect33"></span>x</span>
+                            </button>
                         </td>
                         <td class="timeUpgTDs2">
-                            <button id="timeUpg53" class="timeUpg" onclick="buyTUpg(53)"><strong>Upgrade 5.3</strong><br>description of upgrade</button>
+                            <button id="timeUpg53" class="timeUpg" onclick="buyTUpg(53)">
+                                <span id="tUpgName53" style="font-weight: 900;"></span><br>
+                                <span id="tUpgDesc53"></span><br>
+                                <span>Cost: <span id="tUpgCost53"></span></span><br>
+                                <span id="53TEffect" style="display: none;">Currently: <span id="tUpgEffect53"></span>x</span>
+                            </button>
                         </td>
                     </tr>
                     <tr>
                         <td class="timeUpgTDs2">
-                            <button id="timeUpg44" class="timeUpg" onclick="buyTUpg(44)"><strong>Upgrade 4.4</strong><br>description of upgrade</button>
+                            <button id="timeUpg44" class="timeUpg" onclick="buyTUpg(44)">
+                                <span id="tUpgName44" style="font-weight: 900;"></span><br>
+                                <span id="tUpgDesc44"></span><br>
+                                <span>Cost: <span id="tUpgCost44"></span></span><br>
+                                <span id="44TEffect" style="display: none;">Currently: <span id="tUpgEffect44"></span>x</span>
+                            </button>
                         </td>
                         <td class="timeUpgTDs">
-                            <button id="timeUpg14" class="timeUpg" onclick="buyTUpg(14)"><strong>Upgrade 1.4</strong><br>description of upgrade</button>
+                            <button id="timeUpg14" class="timeUpg" onclick="buyTUpg(14)">
+                                <span id="tUpgName14" style="font-weight: 900;"></span><br>
+                                <span id="tUpgDesc14"></span><br>
+                                <span>Cost: <span id="tUpgCost14"></span></span><br>
+                                <span id="14TEffect" style="display: none;">Currently: <span id="tUpgEffect14"></span>x</span>
+                            </button>
                         </td>
                         <td class="timeUpgTDs">
-                            <button id="timeUpg24" class="timeUpg" onclick="buyTUpg(24)"><strong>Upgrade 2.4</strong><br>description of upgrade</button>
+                            <button id="timeUpg24" class="timeUpg" onclick="buyTUpg(24)">
+                                <span id="tUpgName24" style="font-weight: 900;"></span><br>
+                                <span id="tUpgDesc24"></span><br>
+                                <span>Cost: <span id="tUpgCost24"></span></span><br>
+                                <span id="24TEffect" style="display: none;">Currently: <span id="tUpgEffect24"></span>x</span>
+                            </button>
                         </td>
                         <td class="timeUpgTDs">
-                            <button id="timeUpg34" class="timeUpg" onclick="buyTUpg(34)"><strong>Upgrade 3.4</strong><br>description of upgrade</button>
+                            <button id="timeUpg34" class="timeUpg" onclick="buyTUpg(34)">
+                                <span id="tUpgName34" style="font-weight: 900;"></span><br>
+                                <span id="tUpgDesc34"></span><br>
+                                <span>Cost: <span id="tUpgCost34"></span></span><br>
+                                <span id="34TEffect" style="display: none;">Currently: <span id="tUpgEffect34"></span>x</span>
+                            </button>
                         </td>
                         <td class="timeUpgTDs2">
-                            <button id="timeUpg54" class="timeUpg" onclick="buyTUpg(34)"><strong>Upgrade 5.4</strong><br>description of upgrade</button>
+                            <button id="timeUpg54" class="timeUpg" onclick="buyTUpg(54)">
+                                <span id="tUpgName54" style="font-weight: 900;"></span><br>
+                                <span id="tUpgDesc54"></span><br>
+                                <span>Cost: <span id="tUpgCost54"></span></span><br>
+                                <span id="54TEffect" style="display: none;">Currently: <span id="tUpgEffect54"></span>x</span>
+                            </button>
                         </td>
                     </tr>
                 </table>

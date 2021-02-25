@@ -131,6 +131,7 @@ function buySingleTime(tier) {
         player.crystals = player.crystals.minus(TIME_DATA[tier].cost());
         player.timeDims[tier].amount = player.timeDims[tier].amount.plus(1);
         player.timeDims[tier].bought = player.timeDims[tier].bought.plus(1);
+        document.getElementById(TIME_DATA[tier].costID).innerHTML = formatWhole(TIME_DATA[tier].cost());
         //allDisplay();
     }
 }
@@ -141,6 +142,7 @@ function buyMaxTime(tier) {
         player.crystals = player.crystals.minus(calculateMaxTimeCost(tier));
         player.timeDims[tier].amount = player.timeDims[tier].amount.plus(totalBought);
         player.timeDims[tier].bought = player.timeDims[tier].bought.plus(totalBought);
+        document.getElementById(TIME_DATA[tier].costID).innerHTML = formatWhole(TIME_DATA[tier].cost());
         //allDisplay();
     }
 }
@@ -388,6 +390,8 @@ const TIME_DATA = {
         tier: 1,
         buttonID: "timeBut1",
         maxID: "timeMax1",
+        maxAmtID: 'dim1Max',
+        costID: 'dim1Cost',
         amountID: "timeAmount1",
         multID: "timeMult1",
         rowID: "timeRow1",
@@ -413,6 +417,8 @@ const TIME_DATA = {
         tier: 2,
         buttonID: "timeBut2",
         maxID: "timeMax2",
+        maxAmtID: 'dim2Max',
+        costID: 'dim2Cost',
         amountID: "timeAmount2",
         multID: "timeMult2",
         rowID: "timeRow2",
@@ -438,6 +444,8 @@ const TIME_DATA = {
         tier: 3,
         buttonID: "timeBut3",
         maxID: "timeMax3",
+        maxAmtID: 'dim3Max',
+        costID: 'dim3Cost',
         amountID: "timeAmount3",
         multID: "timeMult3",
         rowID: "timeRow3",
@@ -463,6 +471,8 @@ const TIME_DATA = {
         tier: 4,
         buttonID: "timeBut4",
         maxID: "timeMax4",
+        maxAmtID: 'dim4Max',
+        costID: 'dim4Cost',
         amountID: "timeAmount4",
         multID: "timeMult4",
         rowID: "timeRow4",

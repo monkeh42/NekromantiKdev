@@ -20,6 +20,11 @@
     .shownOnFull { display: none; }
     .shownOnMid { display: table; }
     .shownOnSmall { display: none; }
+    #unitsTable { width: 73% !important; }
+    #unitsTable tr {
+        height: 50px;
+        min-height: 50px;
+    }
 }
 
 /*@media screen and (max-device-width: 600px) {

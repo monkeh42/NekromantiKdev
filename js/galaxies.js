@@ -623,7 +623,7 @@ const GALAXIES_DATA = {
                     return new Decimal(1);
                 },
                 onBuy: function() {
-                    return;
+                    displayData.push(['html', 'astralNerf', formatWhole(getAstralNerf())]);
                 },
             },
         },
