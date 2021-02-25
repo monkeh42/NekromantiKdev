@@ -199,7 +199,7 @@ const UNITS_DATA = {
         expCostStartCost: new Decimal(1e21),
         cost: function() {
             var c = this.baseCost;
-            var e = hasGUpgrade(2, 32) ? this.expCostStart : this.expCostStart*2
+            var e = hasGUpgrade(2, 32) ? this.expCostStart*2 : this.expCostStart
             c = c.times(this.baseCostMult.pow(player.units[this.tier].bought));
             if (player.units[this.tier].bought.gte(e)) { c = c.times(Decimal.pow(this.expCostMult, addFactorial(player.units[this.tier].bought.minus(e)))); }
             return c;
@@ -245,7 +245,7 @@ const UNITS_DATA = {
         expCostStartCost: new Decimal(1e30),
         cost: function() {
             var c = this.baseCost;
-            var e = hasGUpgrade(2, 32) ? this.expCostStart : this.expCostStart*2
+            var e = hasGUpgrade(2, 32) ? this.expCostStart*2 : this.expCostStart
             c = c.times(this.baseCostMult.pow(player.units[this.tier].bought));
             if (player.units[this.tier].bought.gte(e)) { c = c.times(Decimal.pow(this.expCostMult, addFactorial(player.units[this.tier].bought.minus(e)))); }
             return c;
@@ -291,7 +291,7 @@ const UNITS_DATA = {
         expCostStartCost: new Decimal(1e32),
         cost: function() {
             var c = this.baseCost;
-            var e = hasGUpgrade(2, 32) ? this.expCostStart : this.expCostStart*2
+            var e = hasGUpgrade(2, 32) ? this.expCostStart*2 : this.expCostStart
             c = c.times(this.baseCostMult.pow(player.units[this.tier].bought));
             if (player.units[this.tier].bought.gte(e)) { c = c.times(Decimal.pow(this.expCostMult, addFactorial(player.units[this.tier].bought.minus(e)))); }
             return c;
@@ -336,7 +336,7 @@ const UNITS_DATA = {
         expCostStartCost: new Decimal(1e36),
         cost: function() {
             var c = this.baseCost;
-            var e = hasGUpgrade(2, 32) ? this.expCostStart : this.expCostStart*2
+            var e = hasGUpgrade(2, 32) ? this.expCostStart*2 : this.expCostStart
             c = c.times(this.baseCostMult.pow(player.units[this.tier].bought));
             if (player.units[this.tier].bought.gte(e)) { c = c.times(Decimal.pow(this.expCostMult, addFactorial(player.units[this.tier].bought.minus(e)))); }
             return c;
@@ -381,7 +381,7 @@ const UNITS_DATA = {
         expCostStartCost: new Decimal(1e49),
         cost: function() {
             var c = this.baseCost;
-            var e = hasGUpgrade(2, 32) ? this.expCostStart : this.expCostStart*2
+            var e = hasGUpgrade(2, 32) ? this.expCostStart*2 : this.expCostStart
             c = c.times(this.baseCostMult.pow(player.units[this.tier].bought));
             if (player.units[this.tier].bought.gte(e)) { c = c.times(Decimal.pow(this.expCostMult, addFactorial(player.units[this.tier].bought.minus(e)))); }
             return c;
@@ -426,7 +426,7 @@ const UNITS_DATA = {
         expCostStartCost: new Decimal(1e58),
         cost: function() {
             var c = this.baseCost;
-            var e = hasGUpgrade(2, 32) ? this.expCostStart : this.expCostStart*2
+            var e = hasGUpgrade(2, 32) ? this.expCostStart*2 : this.expCostStart
             c = c.times(this.baseCostMult.pow(player.units[this.tier].bought));
             if (player.units[this.tier].bought.gte(e)) { c = c.times(Decimal.pow(this.expCostMult, addFactorial(player.units[this.tier].bought.minus(e)))); }
             return c;
@@ -471,7 +471,7 @@ const UNITS_DATA = {
         expCostStartCost: new Decimal(1e55),
         cost: function() {
             var c = this.baseCost;
-            var e = hasGUpgrade(2, 32) ? this.expCostStart : this.expCostStart*2
+            var e = hasGUpgrade(2, 32) ? this.expCostStart*2 : this.expCostStart
             c = c.times(this.baseCostMult.pow(player.units[this.tier].bought));
             if (player.units[this.tier].bought.gte(e)) { c = c.times(Decimal.pow(this.expCostMult, addFactorial(player.units[this.tier].bought.minus(e)))); }
             return c;
@@ -517,7 +517,7 @@ const UNITS_DATA = {
         cost: function() {
             var c = this.baseCost;
             var m = this.baseCostMult;
-            var e = hasGUpgrade(2, 32) ? this.expCostStart : this.expCostStart*2
+            var e = hasGUpgrade(2, 32) ? this.expCostStart*2 : this.expCostStart
             if (hasUpgrade(3, 22)) { m = Decimal.pow(m, getUpgEffect(3, 22)); }
             c = c.times(m.pow(player.units[this.tier].bought));
             if (player.units[this.tier].bought.gte(e)) { c = c.times(Decimal.pow(this.expCostMult, addFactorial(player.units[this.tier].bought.minus(e)))); }
