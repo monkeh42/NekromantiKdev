@@ -208,7 +208,7 @@ function loadStyles() {
     }
 
     document.getElementById('versionNumber').innerHTML = GAME_DATA.version;
-    if (!hasMilestone(5)) { player.unlocks['buildingsTab']['vortexTable'] = false; }
+
     for (let tab in UNLOCKS_DATA) {
         for (let key in UNLOCKS_DATA[tab]) {
             if (player.unlocks[tab][key]) { unlockElementsOnLoad(tab, key) }
