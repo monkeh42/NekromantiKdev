@@ -199,19 +199,19 @@
                         <td width="15%">
                             <h1>Unit type</h1>
                         </td>
-                        <td width="11%">
+                        <td width="10%">
                             <h1>Corpse<br>mult</h1>
                         </td>
-                        <td width="11%">
+                        <td width="10%">
                             <h1>(Unit<br>mult)</h1>
                         </td>
-                        <td width="11%">
+                        <td width="10%">
                             <h1>Owned</h1>
                         </td>
                         <td width="10%">
                             <h1>(Bought)</h1>
                         </td>
-                        <td width="12%" class="shownOnFull">
+                        <td width="15%" class="shownOnFull">
                             <h1>Gain</h1>
                         </td>
                         <td width="15%">
@@ -230,10 +230,10 @@
                             Zombies
                         </td>
                         <td>
-                            <span id="zombieCMult">x1</span>
+                            <span id="zombieCMult">1</span>x
                         </td>
                         <td>
-                            (<span id="zombieUMult">x1</span>)
+                            (<span id="zombieUMult">1</span>x)
                         </td>
                         <td>
                             <span id="zombieAmount">0</span>
@@ -259,10 +259,10 @@
                             Abominations
                         </td>
                         <td>
-                            <span id="abomCMult">x1</span>
+                            <span id="abomCMult">1</span>x
                         </td>
                         <td>
-                            (<span id="abomUMult">x1</span>)
+                            (<span id="abomUMult">1</span>x)
                         </td>
                         <td>
                             <span id="abomAmount">0</span>
@@ -288,10 +288,10 @@
                             Skeleton Mages
                         </td>
                         <td>
-                            <span id="mageCMult">x1</span>
+                            <span id="mageCMult">1</span>x
                         </td>
                         <td>
-                            (<span id="mageUMult">x1</span>)
+                            (<span id="mageUMult">1</span>x)
                         </td>
                         <td>
                             <span id="mageAmount">0</span>
@@ -317,10 +317,10 @@
                             Banshees
                         </td>
                         <td>
-                            <span id="bansheeCMult">x1</span>
+                            <span id="bansheeCMult">1</span>x
                         </td>
                         <td>
-                            (<span id="bansheeUMult">x1</span>)
+                            (<span id="bansheeUMult">1</span>x)
                         </td>
                         <td>
                             <span id="bansheeAmount">0</span>
@@ -346,10 +346,10 @@
                             Liches
                         </td>
                         <td>
-                            <span id="lichCMult">x1</span>
+                            <span id="lichCMult">1</span>x
                         </td>
                         <td>
-                            (<span id="lichUMult">x1</span>)
+                            (<span id="lichUMult">1</span>x)
                         </td>
                         <td>
                             <span id="lichAmount">0</span>
@@ -375,10 +375,10 @@
                             Behemoths
                         </td>
                         <td>
-                            <span id="beheCMult">x1</span>
+                            <span id="beheCMult">1</span>x
                         </td>
                         <td>
-                            (<span id="beheUMult">x1</span>)
+                            (<span id="beheUMult">1</span>x)
                         </td>
                         <td>
                             <span id="beheAmount">0</span>
@@ -404,10 +404,10 @@
                             Ancient Ones
                         </td>
                         <td>
-                            <span id="oneCMult">x1</span>
+                            <span id="oneCMult">1</span>x
                         </td>
                         <td>
-                            (<span id="oneUMult">x1</span>)
+                            (<span id="oneUMult">1</span>x)
                         </td>
                         <td>
                             <span id="oneAmount">0</span>
@@ -433,10 +433,10 @@
                             Sun Eaters
                         </td>
                         <td>
-                            <span id="sunCMult">x1</span>
+                            <span id="sunCMult">1</span>x
                         </td>
                         <td>
-                            (<span id="sunUMult">x1</span>)
+                            (<span id="sunUMult">1</span>x)
                         </td>
                         <td>
                             <span id="sunAmount">0</span>
@@ -1321,7 +1321,7 @@
             <table style="width: 75%; margin: auto auto; text-align: center;">
                 <tr>
                     <div id="galaxyPresContainer" style="text-align: center; margin: 25px;">
-                        <button id="galaxyPrestige" class="galaxyPrestigeBut" data-title="floor(10^(corpses_exponent/20 - 0.65))" onclick="galaxyPrestigeClick()">
+                        <button id="galaxyPrestige" class="galaxyPrestigeBut" data-title="floor(worlds^(worlds/10 - sqrt(worlds/10)))" onclick="galaxyPrestigeClick()">
                             <span style="font-size: 21pt; font-weight: bold;">ASCENSION</span><br>
                             <span id="galaxyPresDesc">Ascend your mortal form and gain true infernal might - gather your exterminated worlds and form a Depleted Galaxy to rule.<br>
                             This resets everything that sacrifice does.</span><br>

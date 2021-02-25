@@ -421,10 +421,10 @@ function gameLoop(diff=new Decimal(0), offline=false) {
         player.thisAscStats.totalBricks = player.thisAscStats.totalBricks.plus(getBricksPerSecond().times(diff.div(1000)));
         player.allTimeStats.totalBricks = player.allTimeStats.totalBricks.plus(getBricksPerSecond().times(diff.div(1000)));
         if (hasGUpgrade(1, 22)) {
-            player.corpses = player.corpses.plus(getCorpsesPerSecond().times(diff.div(1000)).times(.01));
-            player.thisSacStats.totalCorpses = player.thisSacStats.totalCorpses.plus(getCorpsesPerSecond().times(diff.div(1000)).times(.01));
-            player.thisAscStats.totalCorpses = player.thisAscStats.totalCorpses.plus(getCorpsesPerSecond().times(diff.div(1000)).times(.01));
-            player.allTimeStats.totalCorpses = player.allTimeStats.totalCorpses.plus(getCorpsesPerSecond().times(diff.div(1000)).times(.01));
+            player.corpses = player.corpses.plus(getGUpgEffect(1, 22).times(diff.div(1000)));
+            player.thisSacStats.totalCorpses = player.thisSacStats.totalCorpses.plus(getGUpgEffect(1, 22).times(diff.div(1000)));
+            player.thisAscStats.totalCorpses = player.thisAscStats.totalCorpses.plus(getGUpgEffect(1, 22).times(diff.div(1000)));
+            player.allTimeStats.totalCorpses = player.allTimeStats.totalCorpses.plus(getGUpgEffect(1, 22).times(diff.div(1000)));
         }
     } else {
         player.corpses = player.corpses.plus(getCorpsesPerSecond().times(diff.div(1000)));
@@ -432,10 +432,10 @@ function gameLoop(diff=new Decimal(0), offline=false) {
         player.thisAscStats.totalCorpses = player.thisAscStats.totalCorpses.plus(getCorpsesPerSecond().times(diff.div(1000)));
         player.allTimeStats.totalCorpses = player.allTimeStats.totalCorpses.plus(getCorpsesPerSecond().times(diff.div(1000)));
         if (hasGUpgrade(4, 32)) {
-            player.bricks = player.bricks.plus(getBricksPerSecond().times(diff.div(1000)).pow(0.9));
-            player.thisSacStats.totalBricks = player.thisSacStats.totalBricks.plus(getBricksPerSecond().times(diff.div(1000)).pow(0.9));
-            player.thisAscStats.totalBricks = player.thisAscStats.totalBricks.plus(getBricksPerSecond().times(diff.div(1000)).pow(0.9));
-            player.allTimeStats.totalBricks = player.allTimeStats.totalBricks.plus(getBricksPerSecond().times(diff.div(1000)).pow(0.9));
+            player.bricks = player.bricks.plus(getGUpgEffect(4, 32).times(diff.div(1000)));
+            player.thisSacStats.totalBricks = player.thisSacStats.totalBricks.plus(getGUpgEffect(4, 32).times(diff.div(1000)));
+            player.thisAscStats.totalBricks = player.thisAscStats.totalBricks.plus(getGUpgEffect(4, 32).times(diff.div(1000)));
+            player.allTimeStats.totalBricks = player.allTimeStats.totalBricks.plus(getGUpgEffect(4, 32).times(diff.div(1000)));
         }
     }
     if (player.corpses.gt(player.thisSacStats.bestCorpses)) { player.thisSacStats.bestCorpses = new Decimal(player.corpses); }

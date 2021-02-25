@@ -102,7 +102,7 @@ function buyGUpg(g, u) {
         player.galaxies = player.galaxies.minus(GALAXIES_DATA[g].upgrades[u].cost());
         player.spentGalaxies = player.spentGalaxies.plus(GALAXIES_DATA[g].upgrades[u].cost());
         player.galaxyUpgs[g][u].bought = true;
-        BUILDS_DATA[g].upgrades[u].onBuy();
+        GALAXIES_DATA[g].upgrades[u].onBuy();
         addGUpgClass(g, u, 'boughtGalaxyUpg');
         remGUpgClass(g, u, 'galaxyUpg');
 
@@ -521,8 +521,8 @@ const GALAXIES_DATA = {
                 bought: false,
                 row: 2,
                 position: 1,
-                displayEffect: false,
-                displaySuffix: '',
+                displayEffect: true,
+                displaySuffix: '/sec',
                 displayTooltip: false,
                 displayFormula: '',
                 buttonID: 'galaxyUpg1.22',
@@ -536,7 +536,7 @@ const GALAXIES_DATA = {
                     return c;
                 },
                 effect: function() {
-                    return new Decimal(1);
+                    return player.astralFlag ? getCorpsesPerSecond().times(.01) : new Decimal(1);
                 },
                 onBuy: function() {
                     return;
@@ -577,8 +577,8 @@ const GALAXIES_DATA = {
                 bought: false,
                 row: 3,
                 position: 1,
-                displayEffect: false,
-                displaySuffix: '',
+                displayEffect: true,
+                displaySuffix: 'x',
                 displayTooltip: false,
                 displayFormula: '',
                 buttonID: 'galaxyUpg1.32',
@@ -592,7 +592,7 @@ const GALAXIES_DATA = {
                     return c;
                 },
                 effect: function() {
-                    return new Decimal(1);
+                    return player.astralFlag ? getAntiTimeBuff().sqrt() : new Decimal(1);
                 },
                 onBuy: function() {
                     return;
@@ -723,8 +723,8 @@ const GALAXIES_DATA = {
                 position: -1,
                 displayEffect: true,
                 displaySuffix: 'x',
-                displayTooltip: false,
-                displayFormula: '',
+                displayTooltip: true,
+                displayFormula: '1 + x',
                 buttonID: 'galaxyUpg2.31',
                 lockImageID: 'skull2.31',
                 textID: 'text2.31',
@@ -773,15 +773,15 @@ const GALAXIES_DATA = {
             },
             41: {
                 title: 'title 2.41',
-                desc: 'First time dimensions also produce Sun Eaters at a greatly reduced rate (log(x)).',
+                desc: 'First time dimensions also produce Sun Eaters at a greatly reduced rate.',
                 requires: [31, 32],
                 bought: false,
                 row: 4,
                 position: 0,
                 displayEffect: true,
                 displaySuffix: '/sec',
-                displayTooltip: false,
-                displayFormula: '',
+                displayTooltip: true,
+                displayFormula: 'log(x)',
                 buttonID: 'galaxyUpg2.41',
                 lockImageID: '',
                 textID: 'text2.41',
@@ -944,7 +944,7 @@ const GALAXIES_DATA = {
                 },
             },
             41: {
-                title: 'title 1.41',
+                title: 'title 3.41',
                 desc: 'The <span style=\"font-weight: 800;\">Lightspeed</span> effect squared also applies to the production of corpses and astral bricks.',
                 requires: [31, 32],
                 bought: false,
@@ -965,7 +965,7 @@ const GALAXIES_DATA = {
                     return c;
                 },
                 effect: function() {
-                    return getTUpgEffect(33).pow(2);
+                    return hasTUpgrade(23) ? getTUpgEffect(33).pow(2) : new Decimal(1)
                 },
                 onBuy: function() {
                     return;
@@ -1039,8 +1039,8 @@ const GALAXIES_DATA = {
                 bought: false,
                 row: 2,
                 position: 1,
-                displayEffect: false,
-                displaySuffix: '',
+                displayEffect: true,
+                displaySuffix: 'x',
                 displayTooltip: false,
                 displayFormula: '',
                 buttonID: 'galaxyUpg4.22',
@@ -1054,7 +1054,7 @@ const GALAXIES_DATA = {
                     return c;
                 },
                 effect: function() {
-                    return new Decimal(1);
+                    return player.astralFlag ? new Decimal(1) : getTrueTimeBuff().sqrt()
                 },
                 onBuy: function() {
                     return;
@@ -1090,13 +1090,13 @@ const GALAXIES_DATA = {
             },
             32: {
                 title: 'title 4.32',
-                desc: 'You passively produce your astral brick production ^0.9 outside of astral enslavement.',
+                desc: 'You passively produce your astral brick production ^0.9 outside of astral enslavement (but still affected by the astral time nerf).',
                 requires: [22],
                 bought: false,
                 row: 3,
                 position: 1,
-                displayEffect: false,
-                displaySuffix: '',
+                displayEffect: true,
+                displaySuffix: '/sec (real time)',
                 displayTooltip: false,
                 displayFormula: '',
                 buttonID: 'galaxyUpg4.32',
@@ -1110,7 +1110,7 @@ const GALAXIES_DATA = {
                     return c;
                 },
                 effect: function() {
-                    return new Decimal(1);
+                    return player.astralFlag ? new Decimal(0) : getBricksPerSecond().pow(0.9).div(getAstralNerf())
                 },
                 onBuy: function() {
                     return;

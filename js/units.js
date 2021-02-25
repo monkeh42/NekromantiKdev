@@ -11,13 +11,11 @@ function canUnlock(tier) {
 //production/calculation
 
 function getCorpsesPerSecond() {
-    let c = player.units[1].amount.gt(0) ? player.units[1].amount.times(getTotalCorpseMult()) : new Decimal(0);
-    if (hasGUpgrade(3, 41)) { c = c.times(getGUpgEffect(3, 41)); }
-    return c;
+    return player.units[1].amount.gt(0) ? player.units[1].amount.times(getTotalCorpseMult()) : new Decimal(0);
 }
 
 function getUnitProdPerSecond(tier) {
-    if (tier == NUM_UNITS) { return (hasGUpgrade(2, 41)) ? new Decimal(getEssenceProdPerSecond().log10()) : new Decimal(0); }
+    if (tier == NUM_UNITS) { return (hasGUpgrade(2, 41)) ? new Decimal(Decimal.max(getEssenceProdPerSecond(), 1).log10()) : new Decimal(0); }
     let p = player.units[tier+1].amount;
     if (!hasGUpgrade(2, 21)) { p = p.div(tier+1); }
     return p.times(UNITS_DATA[tier+1].prodMult());
@@ -38,6 +36,7 @@ function getTotalCorpseMult() {
     if (player.allTimeStats.totalGalaxies.gt(0)) { mult = mult.times(getGalaxiesBonus()); }
     if (hasUpgrade(2, 13)) { mult = mult.times(getUpgEffect(2, 13)); }
     if (hasUpgrade(1, 23)) { mult = mult.times(getUpgEffect(1, 23)); }
+    if (hasGUpgrade(3, 41)) { mult = mult.times(getGUpgEffect(3, 41)); }
     return Decimal.max(mult, 1);
 }
 

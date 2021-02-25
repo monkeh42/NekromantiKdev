@@ -192,10 +192,10 @@ function updateCorpseDisplays() {
 }
 
 function updateBuildingDisplays() {
-    displayData.push(['html', 'brickDisplay', formatUnitRow(player.bricks)]);
+    displayData.push(['html', 'brickDisplay', formatDefault(player.bricks)]);
     displayData.push(['html', 'brickAmountHeader', formatUnitRow(player.bricks)]);
-    displayData.push(['html', 'brickGainDisplay', ` ${(player.astralFlag ? formatUnitRow(getBricksPerSecond()) : formatWhole(0))} `]);
-    displayData.push(['html', 'brickGainHeader', ` ${(player.astralFlag ? formatUnitRow(getBricksPerSecond()) : formatWhole(0))} `]);
+    displayData.push(['html', 'brickGainDisplay', ` ${(player.astralFlag ? formatDefault(getBricksPerSecond()) : formatWhole(0))} `]);
+    displayData.push(['html', 'brickGainHeader', ` ${(formatUnitRow(player.astralFlag ? getBricksPerSecond() : (hasGUpgrade(4, 32) ? getBricksPerSecond().pow(0.9) : formatWhole(0))))} `]);
     displayData.push(['html', 'factoryProd', formatDefault(getBuildingProdPerSec(1))]);
     displayData.push(['html', 'factoryAmt', formatDefault(player.buildings[1].amount)]);
     //displayData.push(['html', 'factoryBuildLabel', BUILDS_DATA[1].id]);
@@ -214,7 +214,7 @@ function updateBuildingDisplays() {
     displayData.push(['html', 'vortexAmt', formatDefault(player.buildings[4].amount)]);
     displayData.push(['html', 'blackholeEff', formatDefault2(BUILDS_DATA[4].resourceEff())]);
     displayData.push(['html', 'acolyteEff', formatDefault2(BUILDS_DATA[2].resourceEff())]);
-    displayData.push(['html', 'brickKeepDisplay', ` ${formatUnitRow(getAchievementEffect(15))} `]);
+    displayData.push(['html', 'brickKeepDisplay', ` ${formatDefault(getAchievementEffect(15))} `]);
     var buildingTextElements = document.getElementsByClassName('buildingResourceTexts');
     for (var el=0; el<buildingTextElements.length; el++) {
         displayData.push(['html', buildingTextElements[el].id, buildingSingulizer(buildingTextElements[el].id)]);
@@ -630,6 +630,8 @@ function toggleTooltips() {
     document.getElementById('sunTooltip').classList.toggle('tooltip');
     document.getElementById('timePrestige').classList.toggle('tooltip');
     document.getElementById('achBoostTooltip').classList.toggle('tooltip');
+    document.getElementById('galaxyPrestige').classList.toggle('tooltip');
+    
     for (let b in BUILDS_DATA) {
         for (let u in BUILDS_DATA[b].upgrades) {
             if (BUILDS_DATA[b].upgrades[u].displayTooltip) { document.getElementById(BUILDS_DATA[b].upgrades[u].buttonID).classList.toggle('tooltip'); }
@@ -755,19 +757,18 @@ function showTab(tabName, buttonName) {
         tab = allTabs.item(i);
         if (tab.id === tabName) {
             tab.style.display = 'block';
-            document.getElementById(tab.id + 'But').classList.remove('tabButSelected');
+            document.getElementById(bName + 'Mid').classList.add('tabButSelected');
+            document.getElementById(tab.id + 'But').classList.add('tabButSelected');
         } else {
             tab.style.display = 'none';
             document.getElementById(tab.id + 'But').classList.remove('tabButSelected');
         }
     }
     if (document.getElementById('helpDiv').style.display != 'none') {
-        displayData.push(['togDisplay', 'helpDiv']);
-        displayData.push(['togClass', 'helpTabBut', 'tabButSelected'])
+        document.getElementById('helpDiv').style.display =  'none';
+        document.getElementById('helpTabCell').classList.remove('tabButSelected');
+        document.getElementById('helpTabCellMid').classList.remove('tabButSelected');
     }
-    displayData.push(['addClass', bName, 'tabButSelected'])
-    //displayData.push(['addClass', bName + 'Small', 'tabButSelected'])
-    displayData.push(['addClass', bName + 'Mid', 'tabButSelected'])
     player.activeTabs[0] = tabName;
     if (buttonName !== undefined) { document.getElementById(buttonName).classList.remove('tabButNotify'); }
 }
