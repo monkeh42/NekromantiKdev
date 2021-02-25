@@ -1097,7 +1097,7 @@ function unlockAchievement(a) {
     displayData.push(['addClass', 'statsTabBut', 'tabButIndirectNotify']);
     displayData.push(['setProp', 'achUnlockPopup', 'opacity', '1']);
     popupShownTime = (new Date).getTime();
-    ACH_DATA[id].onUnlock();
+    ACH_DATA[a].onUnlock();
 }
 
 function mouseoverAchievement(ach) {
