@@ -1099,14 +1099,12 @@ function unlockAchievement(a) {
 }
 
 function mouseoverAchievement(ach) {
-    if (document.getElementById(ACH_DATA[ach].divID).classList.contains('achievementNew')) {
-        document.getElementById(ACH_DATA[ach].divID).classList.remove('achievementNew');
-        for (let id in player.achievements) {
-            if (document.getElementById(ACH_DATA[ach].divID).classList.contains('achievementNew')) { return; }
-        }
-        document.getElementById('statsTabBut').classList.remove('tabButIndirectNotify');
-        document.getElementById('achSubTabBut').classList.remove('tabButNotify');
+    if (document.getElementById(ACH_DATA[ach].divID).classList.contains('achievementNew')) { document.getElementById(ACH_DATA[ach].divID).classList.remove('achievementNew'); }
+    for (let id in player.achievements) {
+        if (document.getElementById(ACH_DATA[ach].divID).classList.contains('achievementNew')) { return; }
     }
+    document.getElementById('statsTabBut').classList.remove('tabButIndirectNotify');
+    document.getElementById('achSubTabBut').classList.remove('tabButNotify');
 }
 
 function updateMilestones() {
