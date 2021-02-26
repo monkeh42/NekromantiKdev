@@ -1104,7 +1104,7 @@ function mouseoverAchievement(ach) {
         for (let id in player.achievements) {
             if (document.getElementById(ACH_DATA[ach].divID).classList.contains('achievementNew')) { return; }
         }
-        document.getElementById('achSubTabBut').classList.remove('tabButNotify');
+        document.getElementById('statsTabBut').classList.remove('tabButNotify');
         document.getElementById('achSubTabBut').classList.remove('tabButIndirectNotify');
     }
 }
