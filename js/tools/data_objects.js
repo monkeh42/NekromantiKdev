@@ -1508,9 +1508,9 @@ const UNLOCKS_DATA = {
         },
         'customizeDisplay': {
             unlocked: false,
-            notifyID: 'displayBut',
+            notifyID: 'customizeDisplayBut',
             parentNotify: 'optionsTabBut',
-            idsToShow: ['customizeDisplayBut'],
+            idsToShow: ['customizeDisplayButDiv'],
             idsToHide: [],
             shouldNotify: function() {
                 return true;

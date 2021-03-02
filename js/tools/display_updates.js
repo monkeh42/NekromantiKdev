@@ -720,7 +720,7 @@ function closeConfirmationsPopup() {
 }
 
 function openDisplayPopup() {
-    document.getElementById('displayBut').classList.remove('tabButNotify');
+    document.getElementById('customizeDisplayBut').classList.remove('tabButNotify');
     document.getElementById('optionsTabBut').classList.remove('tabButIndirectNotify');    
     document.getElementById('displayPopup').style.display = 'block';
 }
