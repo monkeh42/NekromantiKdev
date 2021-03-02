@@ -2,7 +2,7 @@
 
 const GAME_DATA = {
     author: 'monkeh42',
-    version: 'v0.3.1_d.5',
+    version: 'v0.3.1_d.4',
 }
 
 const NUM_UNITS = 8;
@@ -55,12 +55,10 @@ function loadGame() {
         copyData(player, START_PLAYER);
     } else {
         copyData(player, JSON.parse(window.atob(savePlayer)));
-        if (Object.keys(player).length == 0) { copyData(player, START_PLAYER); }
     }
-    if (player.version == GAME_DATA.version) { fixData(player, START_PLAYER); }
-    else { updateVersion(); }
+    fixData(player, START_PLAYER);
     
-    /*if (player.rowCosts !== undefined) { delete player.rowCosts }
+    if (player.rowCosts !== undefined) { delete player.rowCosts }
     if (player.allTimeStats === undefined) { fixStats(); }
 
     if (player.allTimeStats.bestCorpses.eq(0)) { player.allTimeStats.bestCorpses = new Decimal(player.corpses); }
@@ -88,7 +86,7 @@ function loadGame() {
     if (player.thisAscStats.totalCrystals.eq(0)) { player.thisAscStats.totalCrystals = new Decimal(player.crystals); }
 
     if (player.allTimeStats.totalTimeResets.gt(player.timeResets)) { player.allTimeStats.totalTimeResets = new Decimal(player.timeResets); }
-    if (player.displayData !== undefined) { delete player.displayData; }*/
+    if (player.displayData !== undefined) { delete player.displayData; }
 
     if (typeof document.hidden !== "undefined") { // Opera 12.10 and Firefox 18 and later support
         hidden = "hidden";
@@ -209,14 +207,6 @@ function loadStyles() {
         document.getElementById(player.activeGalaxies[0].toString() + 'gal').selected = true;
     }
 
-    document.getElementById('realTimeDisplayBut').innerHTML = player.displayRealTime ? 'toggle time displays: REAL TIME' : 'toggle time displays: GAME TIME'
-    let elements = document.getElementsByClassName('secDisplay');
-    let el;
-    for (let i=0; i<elements.length; i++) {
-        el = elements.item(i);
-        el.innerHTML = player.displayRealTime ? 'real sec' : 'sec'
-    }
-
     document.getElementById('versionNumber').innerHTML = GAME_DATA.version;
     if (!hasMilestone(5)) { player.unlocks['buildingsTab']['vortexTable'] = false; }
     for (let tab in UNLOCKS_DATA) {
@@ -296,26 +286,14 @@ function loadStyles() {
         document.getElementById('tUpgDesc' + t.toString()).innerHTML = getTUpgDesc(t);
         document.getElementById('tUpgCost' + t.toString()).innerHTML = formatDefault2(getTUpgCost(t)) + ' time crystals';
         if (isDisplayEffectT(t)) { document.getElementById(t.toString() + 'TEffect').style.display = '' }
-        if (TIME_DATA.upgrades[t].preReq != null) { document.getElementById('tUpgRequires' + t.toString()).innerHTML = TIME_DATA.upgrades[TIME_DATA.upgrades[t].preReq].title; }
     }
-
-    document.getElementById('timeUpgBuyerBut').innerHTML = player.autobuyers['time']['on'] ? 'Time Upgrade Cols 1-3 Autobuyer: ON' : 'Time Upgrade Cols 1-3 Autobuyer: OFF'
-    if (hasMilestone(6)) { document.getElementById('extraColsNotice').style.display = ''; }
-
     for (var c in CONSTR_DATA) {
         if (!canAffordCUpg(c)) {
             document.getElementById(CONSTR_DATA[c].buttonID).classList.add('unclickableConstrUpg');
             document.getElementById(CONSTR_DATA[c].buttonID).classList.remove('constrUpg');
         }
-        document.getElementById('cUpgName' + c.toString()).innerHTML = getCUpgName(c);
-        document.getElementById('cUpgDesc' + c.toString()).innerHTML = getCUpgDesc(c);
-        document.getElementById('cUpgCost' + c.toString()).innerHTML = formatDefault(getCUpgCost(c));
-        document.getElementById('cUpgLevel' + c.toString()).innerHTML = formatWhole(player.construction[c]) + (getExtraLevels(c)>0 ? ' + ' + formatWhole(getExtraLevels(c)) : '');
-        if (isDisplayEffectC(c)) {
-            document.getElementById('c' + c.toString() + 'Effect').style.display = '';
-            if (c==5) { document.getElementById('cUpgEffect' + c.toString()).innerHTML = `[+${formatWhole(player.construction[5])}/+${formatWhole(player.construction[5].gt(0) ? Decimal.floor(player.construction[5].minus(1).div(2).plus(1)) : '0')}/+${formatWhole(player.construction[5].gt(0) ? Decimal.floor(player.construction[5].minus(1).div(3).plus(1)) : '0')}/+${formatWhole(player.construction[5].gt(0) ? Decimal.floor(player.construction[5].minus(1).div(4).plus(1)) : '0')}]` }
-            else { document.getElementById('cUpgEffect' + c.toString()).innerHTML = CONSTR_DATA[c].isTimes ? formatDefault2(getCUpgEffect(c)) + CONSTR_DATA[c].displaySuffix : '+' + formatDefault2(getCUpgEffect(c)) }
-        }
+        if (CONSTR_DATA[c].isTimes) { writeHTMLCUpg(c, `<span style="font-weight: 900;">${getCUpgName(c)}</span><br>${getCUpgDesc(c)}<br>Cost: ${formatDefault(getCUpgCost(c))} astral bricks<br>Current level: ${formatWhole(player.construction[c]) + (getExtraLevels(c)>0 ? ' + ' + formatWhole(getExtraLevels(c)) : '')}${isDisplayEffectC(c) ? ("<br>Currently: " + formatDefault2(getCUpgEffect(c)) + "x") : ""}`); }
+        else { writeHTMLCUpg(c, `<span style="font-weight: 900;">${getCUpgName(c)}</span><br>${getCUpgDesc(c)}<br>Cost: ${formatDefault(getCUpgCost(c))} astral bricks<br>Current level: ${formatWhole(player.construction[c]) + (getExtraLevels(c)>0 ? ' + ' + formatWhole(getExtraLevels(c)) : '')}${isDisplayEffectC(c) ? ("<br>Currently: +" + formatDefault2(getCUpgEffect(c))) : ""}`); }
     }    
 
     for (var g in GALAXIES_DATA) {
@@ -342,8 +320,6 @@ function loadStyles() {
             }
         }
     }
-
-    document.getElementById('dontResetSliderBox').checked = player.dontResetSlider;
 
     document.getElementById('astralNerf').innerHTML = formatWhole(getAstralNerf());
 
@@ -494,7 +470,7 @@ function gameLoop(diff=new Decimal(0), offline=false) {
             if (b==3) {
                 player.buildings[b].amount = player.buildings[b].amount.plus(getBuildingProdPerSec(b).times(hasGUpgrade(1, 31) ? diff.times(getAstralNerf()).div(1000) : diff.div(1000)));
             } else if (b==4) {
-                player.buildings[b].progress = player.buildings[b].progress.plus(getBuildingProdPerSec(b).times(diff.div(1000)));
+                player.buildings[b].progress = player.buildings[b].progress.plus(BUILDS_DATA[b].prod());
                 if (player.buildings[b].progress.gte(100)) {
                     player.buildings[b].progress = new Decimal(0);
                     player.buildings[b].amount = player.buildings[b].amount.plus(1);
@@ -559,16 +535,6 @@ function autobuyerTick(slow) {
     if (player.autobuyers[9]['on'] && (player.autobuyers[9]['fast'] || slow)) { if (isAutoSacTriggered()) { timePrestigeNoConfirm(); } }
     if (player.autobuyers[10]['on'] && (player.autobuyers[10]['fast'] || slow)) { if (canSpacePrestige() && (player.spaceResets.lt(player.autobuyers[10]['max']) || player.autobuyers[10]['max'] == 0)) { spacePrestigeNoConfirm(); } }
     if (player.autobuyers[11]['on'] && (player.autobuyers[11]['fast'] || slow)) { if (canGalaxyPrestige() && calculateGalaxyGain().gte(player.autobuyers[11]['amount'])) { galaxyPrestigeNoConfirm(); } }
-    for (let i=4; i>0; i--) {
-        if (player.autobuyers[12][i]) { buyMaxTime(i); }
-    }
-    if (player.autobuyers['time']['on']) {
-        for (let x=1; x<=3; x++) {
-            for (let y=1; y<=4; y++) {
-                if (canAffordTUpg(x.toString() + y.toString())) { buyTUpg(x.toString() + y.toString()); }
-            }
-        }
-    }
 }
 
 function calculateOfflineTime(seconds) {
@@ -684,8 +650,7 @@ function importSave() {
         }
     }
     
-    if (player.version == GAME_DATA.version) { fixData(player, START_PLAYER); }
-    else { updateVersion(); }
+    fixData(player, START_PLAYER);
     save();
     window.location.reload();
 }
@@ -720,7 +685,7 @@ function exportGameState() {
 
 //fixes and data manipulation
 
-/*function fixStats() {
+function fixStats() {
 
     player.allTimeStats = {};
     player.thisSacStats = {};
@@ -749,7 +714,7 @@ function exportGameState() {
     player.thisSacStats.bestCorpses = player.corpses;
     player.thisSacStats.bestWorlds = player.worlds;
     player.thisSacStats.bestBricks = player.bricks;
-}*/
+}
 
 function copyData(data, start) {
     for (item in start) {
@@ -800,61 +765,6 @@ function fixData(data, start) {
             }
         }
     }
-}
-
-function updateVersion() {
-    let tempPlayer = {};
-    copyData(tempPlayer, player);
-    player = {};
-    fixResetBug();
-    copyData(player, START_PLAYER);
-    updateVersionData(player, tempPlayer);
-    tempPlayer = {};
-}
-
-function updateVersionData(newP, oldP) {
-    for (item in newP) {
-        if (newP[item] == null) {
-            if (oldP[item] !== undefined) {
-                if (oldP[item] == null) {
-                    newP[item] = oldP[item];
-                } else {                    
-                    updateVersionData(newP[item], oldP[item]);
-                }
-            }
-        } else if (Array.isArray(newP[item])) {
-            if (oldP[item] !== undefined) {
-                newP[item] = [];
-            }
-            updateVersionData(newP[item], oldP[item]);
-        } else if (newP[item] instanceof Decimal) {
-            if (oldP[item] !== undefined) {
-                newP[item] = new Decimal(oldP[item]);
-            }
-        } else if ((!!newP[item]) && (typeof newP[item] === "object")) {
-            if (oldP[item] !== undefined) {
-                newP[item] = {};
-            }
-            updateVersionData(newP[item], oldP[item]);
-        } else {
-            if (oldP[item] !== undefined && item != 'version') {
-                newP[item] = oldP[item];
-            }
-        }
-    }
-}
-
-//misc
-
-function getRealTimeMultiplier() {
-    let mult = new Decimal(1);
-    if (player.astralFlag) {
-        mult = mult.div(getAstralNerf());
-        mult = mult.times(getAntiTimeBuff());
-    } else {
-        mult = mult.times(getTrueTimeBuff());
-    }
-    return mult;
 }
 
 //achievement stuff

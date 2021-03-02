@@ -257,7 +257,7 @@ function calculateNextGalaxy() {
         let newGain = new Decimal(0);
         let g = new Decimal(0);
         let d = new Decimal(0)
-        while (newGain.lte(next)) {
+        while (newGain.neq(next)) {
             nextW = nextW.plus(1);
             g = new Decimal(nextW).div(10);
             d = new Decimal(g.sqrt());
@@ -295,7 +295,7 @@ function galaxyPrestigeNoConfirm(respec=false) {
 
 function galaxyPrestigeReset(respec=false) {
     if (player.astralFlag) { toggleAstral(); }
-    if (player.timeLocked && !player.dontResetSlider) {
+    if (player.timeLocked) {
         player.timeLocked = false;
         toggleTimeLockDisplay();
         document.getElementById('timeSlider').disabled = false;
@@ -311,7 +311,8 @@ function galaxyPrestigeReset(respec=false) {
     player.pastAscRuns.lastRun.timeSpent = (new Date).getTime()-player.pastAscRuns.lastRun.timeAscended;
     player.pastAscRuns.lastRun.timeAscended = (new Date).getTime();
     if (player.pastAscRuns.lastRun.galaxyGain.gt(player.allTimeStats.bestGalaxyGain)) { player.allTimeStats.bestGalaxyGain = new Decimal(player.pastAscRuns.lastRun.galaxyGain) }
-    for (var i=9; i>=0; i--) { copyData(player.pastAscRuns.lastTen[i], player.pastAscRuns.lastTen[i-1]); }
+    if (player.pastAscRuns.lastRun.galaxyGain.div(player.pastAscRuns.lastRun.timeSpent/60000).gt(player.allTimeStats.bestGalaxyRate)) { player.allTimeStats.bestGalaxyRate = new Decimal(player.pastAscRuns.lastRun.galaxyGain.div(player.pastAscRuns.lastRun.timeSpent/60000)) }
+    for (var i=9; i>0; i--) { copyData(player.pastAscRuns.lastTen[i], player.pastAscRuns.lastTen[i-1]); }
     copyData(player.pastAscRuns.lastTen[0], player.pastAscRuns.lastRun);
     copyData(player.pastRuns, START_PLAYER.pastRuns);
 
@@ -344,10 +345,8 @@ function resetTimeCounts() {
     player.crystals = new Decimal(hasMilestone(4) ? START_PLAYER.milesCrystals : START_PLAYER.crystals);
     player.trueEssence = new Decimal(START_PLAYER.trueEssence);
     player.antiEssence = new Decimal(START_PLAYER.antiEssence);
-    if (!player.dontResetSlider) {
-        player.truePercent = new Decimal(START_PLAYER.truePercent);
-        player.antiPercent = new Decimal(START_PLAYER.antiPercent);
-    }
+    player.truePercent = new Decimal(START_PLAYER.truePercent);
+    player.antiPercent = new Decimal(START_PLAYER.antiPercent);
     copyData(player.thisAscStats, START_PLAYER.thisAscStats);
     player.thisAscStats.bestCrystals = player.crystals;
     player.thisAscStats.totalCrystals = player.crystals;
@@ -463,7 +462,7 @@ const GALAXIES_DATA = {
         upgrades: {
             11: {
                 title: 'title 1.11',
-                desc: 'Decrease the astral enslavement time nerf from 10x -> 5x.',
+                desc: 'Decrease the astral enslavement time nerf from 10x -> 8x.',
                 requires: [],
                 bought: false,
                 row: 1,
@@ -489,7 +488,7 @@ const GALAXIES_DATA = {
             },
             21: {
                 title: 'title 1.21',
-                desc: 'Increase the exponent on the astral brick production formula from ^0.2 -> ^0.3.',
+                desc: 'Increase the exponent on the astral brick production formula from ^0.2 -> ^0.25.',
                 requires: [11],
                 bought: false,
                 row: 2,
@@ -601,7 +600,7 @@ const GALAXIES_DATA = {
             },
             41: {
                 title: 'title 1.41',
-                desc: 'Decrease the astral enslavement time nerf even more, 5x -> 2x.',
+                desc: 'Decrease the astral enslavement time nerf even more, 8x -> 5x.',
                 requires: [31, 32],
                 bought: false,
                 row: 4,
@@ -717,7 +716,7 @@ const GALAXIES_DATA = {
             },
             31: {
                 title: 'title 2.31',
-                desc: 'Your total galaxies multiply unit production multipliers.',
+                desc: 'Unit production multipliers are boosted by your total galaxies.',
                 requires: [21],
                 bought: false,
                 row: 3,
@@ -794,7 +793,7 @@ const GALAXIES_DATA = {
                     return c;
                 },
                 effect: function() {
-                    return hasUpgrade(4, 13) ? getEssenceProdPerSecond().ln() : getEssenceProdPerSecond().log10();
+                    return getEssenceProdPerSecond().log10();
                 },
                 onBuy: function() {
                     return;
@@ -938,7 +937,7 @@ const GALAXIES_DATA = {
                     return c;
                 },
                 effect: function() {
-                    return new Decimal(1.2);
+                    return new Decimal(1.1);
                 },
                 onBuy: function() {
                     return;
@@ -980,7 +979,7 @@ const GALAXIES_DATA = {
         upgrades: {
             11: {
                 title: 'title 4.11',
-                desc: 'Your total galaxies multiply time essence production.',
+                desc: 'Your total galaxies boosts time essence production.',
                 requires: [],
                 bought: false,
                 row: 1,
@@ -1091,7 +1090,7 @@ const GALAXIES_DATA = {
             },
             32: {
                 title: 'title 4.32',
-                desc: 'You passively produce your astral brick production ^0.9 outside of astral enslavement (still affected by the astral time nerf).',
+                desc: 'You passively produce your astral brick production ^0.9 outside of astral enslavement (but still affected by the astral time nerf).',
                 requires: [22],
                 bought: false,
                 row: 3,

@@ -38,7 +38,7 @@
         <div id="versionNumber" style="float: right; margin-left: -75px;">vERR</div>
         <div id="resourceDisplay" style="width: 100%; margin: auto; display: block; text-align: center;">
             <span style="font-size: 16pt; font-weight: bold;">You have <span id="corpseAmount" style="font-size: 20pt; white-space: pre; color: #6c00b4; font-variant-numeric: tabular-nums;"> 10 </span> <span id='pluralCorpse'> corpses</span>.</span><br>
-            <span>You are harvesting <span id="corpseGain" style="font-size: 17pt; font-weight: bold; white-space: pre; color: #6c00b4; font-variant-numeric: tabular-nums;"> 0 </span> <span id='pluralCorpseG'> corpses </span>/<span class="secDisplay">sec</span>.<span id="devSpeedContainer" style="white-space: pre; display: none;"> (@ <span id="devSpeedDisplay">3</span>x time speed)</span></span><br>
+            <span>You are harvesting <span id="corpseGain" style="font-size: 17pt; font-weight: bold; white-space: pre; color: #6c00b4; font-variant-numeric: tabular-nums;"> 0 </span> <span id='pluralCorpseG'> corpses </span>/sec.<span id="devSpeedContainer" style="white-space: pre; display: none;"> (@ <span id="devSpeedDisplay">3</span>x time speed)</span></span><br>
             <div id="astralNoticeDisplay" style="color: #1c8a2e; display: none;"><h2>Corpse production disabled due to Astral Enslavement.</h2></div>
             <!--<div id="headerLeft" style="width: 50%; height: 90px; float: left;">
                 <div id="unitsBoostDisplay" style="width: 50%; float: left; font-size: 10pt; white-space: pre;">Total corpse gain multiplier from units:  <span id="totalMult" style="font-size: 12pt; font-variant-numeric: tabular-nums;">0.0x</span></div>
@@ -64,7 +64,7 @@
                     <td><div id="crystalsDisplayHeader" style=" font-size: 10pt; white-space: pre; display: none;">You have <span id="crystalAmountHeader" style="font-size: 12pt; white-space: pre; color: #006ba0; font-variant-numeric: tabular-nums;"> 0 </span> time crystals.</div></td>
                 </tr>
                 <tr>
-                    <td><div id="bricksGainDisplayHeader" style="font-size: 10pt; white-space: pre;">You are gaining <span id="brickGainHeader" style="font-size: 12pt; white-space: pre; color: #1c8a2e; font-variant-numeric: tabular-nums;"> 0 </span> astral bricks/<span class="secDisplay">sec</span>.</div></td>
+                    <td><div id="bricksGainDisplayHeader" style="font-size: 10pt; white-space: pre;">You are gaining <span id="brickGainHeader" style="font-size: 12pt; white-space: pre; color: #1c8a2e; font-variant-numeric: tabular-nums;"> 0 </span> astral bricks/sec.</div></td>
                     <td><div id="totalBonusDisplay" style="font-size: 10pt; white-space: pre;">Total corpse gain multiplier from all sources:  <span id="totalMultAll" style="font-size: 12pt; font-variant-numeric: tabular-nums;">0.0x</span></div></td>
                     <td><div id="timeBoostDisplay" style=" font-size: 10pt; white-space: pre; display: none;">Your <span id="normalAstral" style="font-size: 12pt; color: white;"> NORMAL </span> time is going <span id="timeMult" style="font-size: 12pt; font-variant-numeric: tabular-nums;"> 1.0x </span> as fast.</div></td>
                 </tr>
@@ -460,7 +460,6 @@
                         <span style="font-size: 15pt;">This world is dead and empty...</span><br>
                         <span id="spacePresDesc">Give up all your units and corpses to exterminate a new world. You gain a boost to corpse gain based on total exterminated worlds.<br>
                         This World Prestige will unlock <span id="spacePresUnlock">Buildings</span> and a new unit tier.</span><br>
-                        <span id="numWorldsGainDisplay" style="font-size: 13pt; display: none;">Gain <span id="numWorldsGain" style="font-size: 17pt; white-space: pre; font-variant-numeric: tabular-nums;"> 1 </span> exterminated world<br></span>
                         <span id="prestigeReq" style="font-size: 13pt;">Requires <span style="font-size: 17pt; white-space: pre;"> 1 </span> Liches</span>
                     </button>
                 </div>
@@ -817,7 +816,7 @@
                                                 <div id="prestigeSpeedLock" class="buyerSpeedLock"></div>
                                             </div>
                                             <div id="prestigeBuyerPriorityContainer" class="buyerOptionsContainer priorityContainer">
-                                                <label for="maxPrestige">max auto prestiges:</label><input onchange="updateMaxPrestige()" onblur="emptyPrestige()" type="text" size id="maxPrestige" name="maxPrestige" class="buyerTextP" value="0">
+                                                <label for="maxPrestige">max auto prestiges:</label><input onchange="updateMaxPrestige()" onblur="emptyPrestige()" type="text" size id="maxPrestige" name="maxPrestige" class="buyerTextP" value="1">
                                             </div>
                                             <span id="prestigeErr" style="display: none;">invalid input. value set to last valid input: <span id="prestigeErrValue"></span></span>
                                         </div>
@@ -844,25 +843,6 @@
                                         </div>
                                     </div>
                                 </td>
-                                <td id="timeDimBuyerCell" style="display: none;">
-                                    <div id="timeDimBuyerOptions" class="autobuyerOptions">
-                                        <div class="buyerFrame">
-                                            <h2>Time Dimensions</h2>
-                                            <div id="timeDim1EnabledContainer" class="dimBuyerOptionsContainer">
-                                                <label for="timeDim1But">first:</label><br><!-- --><button onclick="updateDimBuyer(1, 'timeDim1But')" name="timeDim1But" id="timeDim1But" class="buyerEnabledBut" style="margin-bottom: 10px;">OFF</button><!-- -->
-                                            </div>
-                                            <div id="timeDim2EnabledContainer" class="dimBuyerOptionsContainer">
-                                                <label for="timeDim2But">second:</label><br><!-- --><button onclick="updateDimBuyer(2, 'timeDim2But')" name="timeDim2But" id="timeDim2But" class="buyerEnabledBut" style="margin-bottom: 10px;">OFF</button><!-- -->
-                                            </div>
-                                            <div id="timeDim3EnabledContainer" class="dimBuyerOptionsContainer">
-                                                <label for="timeDim3But">third:</label><br><!-- --><button onclick="updateDimBuyer(3, 'timeDim3But')" name="timeDim3But" id="timeDim3But" class="buyerEnabledBut" style="margin-bottom: 10px;">OFF</button><!-- -->
-                                            </div>
-                                            <div id="timeDim4EnabledContainer" class="dimBuyerOptionsContainer">
-                                                <label for="timeDim4But">fourth:</label><br><!-- --><button onclick="updateDimBuyer(4, 'timeDim4But')" name="timeDim4But" id="timeDim4But" class="buyerEnabledBut" style="margin-bottom: 10px;">OFF</button><!-- -->
-                                            </div>
-                                        </div>
-                                    </div>
-                                </td>
                             </tr>
                             <tr>
                                 <td></td>
@@ -884,7 +864,7 @@
                 <tr>
                     <td colspan="3" id="brickTooltip" data-title="corpse production rate ^2.0">
                         <div style="font-size: 18pt; white-space: pre;">Your unholy hordes have forged <span id="brickDisplay" style="font-size: 21pt; font-weight: bold; color: #1c8a2e; font-variant-numeric: tabular-nums;"> 0 </span> <span id="astralTextAmt" class="buildingResourceTexts">astral bricks</span>.</div>
-                        <div id="brickGainDiv" style="font-size: 15pt; white-space: pre; display: none;">You are gaining <span id="brickGainDisplay" style="font-size: 18pt; font-weight: bold; color: #1c8a2e; font-variant-numeric: tabular-nums;"> 0 </span> <span id="bricksTextGain" class="buildingResourceTexts">bricks</span>/<span class="secDisplay">sec</span>. (@ <span id="astralNerf">10</span>x slower time speed)</div>
+                        <div id="brickGainDiv" style="font-size: 15pt; white-space: pre; display: none;">You are gaining <span id="brickGainDisplay" style="font-size: 18pt; font-weight: bold; color: #1c8a2e; font-variant-numeric: tabular-nums;"> 0 </span> <span id="bricksTextGain" class="buildingResourceTexts">bricks</span>/sec. (@ <span id="astralNerf">10</span>x slower time speed)</div>
                         <div id="keptBricks" style="font-size: 15pt; white-space: pre; display: none;">You will keep <span id="brickKeepDisplay" style="font-size: 18pt; font-weight: bold; color: #1c8a2e; font-variant-numeric: tabular-nums;"> 0 </span> <span id="bricksKeepGain" class="buildingResourceTexts">bricks</span> on sacrifice.</div>
                         <span style="font-size: 11pt">You can now force the dead you harvest to work for your rapidly growing empire. While Astral Enslavement is active, time goes 10x slower,
                         and you won't gain any corpses; instead, those tortured, miasmic souls will suffer tirelessly making bricks for your most unholy of foundations.<br></span>
@@ -919,7 +899,7 @@
                         <td colspan="3">
                             <h2 style="font-size: 18pt;">DEATH FACTORY</h2>
                             <div id="factoryTooltip" data-title="log(x)^0.5">you have <span id="factoryAmt" style="font-size: 17pt; white-space: pre; font-variant-numeric: tabular-nums;"> 0 </span> <span id="armamentsTextAmt" class="buildingResourceTexts">armaments</span>.<br>
-                            you are producing <span id="factoryProd" style="font-size: 17pt; white-space: pre; font-variant-numeric: tabular-nums;"> 0 </span> <span id="armamentsTextGain" class="buildingResourceTexts">armaments</span>/<span class="secDisplay">sec</span> (based on your zombies).</div>
+                            you are producing <span id="factoryProd" style="font-size: 17pt; white-space: pre; font-variant-numeric: tabular-nums;"> 0 </span> <span id="armamentsTextGain" class="buildingResourceTexts">armaments</span>/sec (production is based on your zombies).</div>
                         </td>
                     </tr>
                     <tr id="factoryUpgradesRow1" style="display: none;">
@@ -928,7 +908,7 @@
                                 <span id="bUpgName1.11" style="font-weight: 900;"></span><br>
                                 <span id="bUpgDesc1.11"></span><br>
                                 <span>Cost: <span id="bUpgCost1.11"></span></span><br>
-                                <span id="1.11Effect" style="display: none;">Currently: <span id="bUpgEffect1.11"></span></span>
+                                <span id="1.11Effect" style="display: none;">Currently: <span id="bUpgEffect1.11"></span>x</span>
                             </button>
                         </td>
                         <td>
@@ -936,7 +916,7 @@
                                 <span id="bUpgName1.12" style="font-weight: 900;"></span><br>
                                 <span id="bUpgDesc1.12"></span><br>
                                 <span>Cost: <span id="bUpgCost1.12"></span></span><br>
-                                <span id="1.12Effect" style="display: none;">Currently: <span id="bUpgEffect1.12"></span></span>
+                                <span id="1.12Effect" style="display: none;">Currently: <span id="bUpgEffect1.12"></span>x</span>
                             </button>
                         </td>
                         <td>
@@ -944,7 +924,7 @@
                                 <span id="bUpgName1.13" style="font-weight: 900;"></span><br>
                                 <span id="bUpgDesc1.13"></span><br>
                                 <span>Cost: <span id="bUpgCost1.13"></span></span><br>
-                                <span id="1.13Effect" style="display: none;">Currently: <span id="bUpgEffect1.13"></span></span>
+                                <span id="1.13Effect" style="display: none;">Currently: <span id="bUpgEffect1.13"></span>x</span>
                             </button>
                         </td>
                     </tr>
@@ -954,7 +934,7 @@
                                 <span id="bUpgName1.21" style="font-weight: 900;"></span><br>
                                 <span id="bUpgDesc1.21"></span><br>
                                 <span>Cost: <span id="bUpgCost1.21"></span></span><br>
-                                <span id="1.21Effect" style="display: none;">Currently: <span id="bUpgEffect1.21"></span></span>
+                                <span id="1.21Effect" style="display: none;">Currently: <span id="bUpgEffect1.21"></span>x</span>
                             </button>
                         </td>
                         <td>
@@ -962,7 +942,7 @@
                                 <span id="bUpgName1.22" style="font-weight: 900;"></span><br>
                                 <span id="bUpgDesc1.22"></span><br>
                                 <span>Cost: <span id="bUpgCost1.22"></span></span><br>
-                                <span id="1.22Effect" style="display: none;">Currently: <span id="bUpgEffect1.22"></span></span>
+                                <span id="1.22Effect" style="display: none;">Currently: <span id="bUpgEffect1.22"></span>x</span>
                             </button>
                         </td>
                         <td>
@@ -970,7 +950,7 @@
                                 <span id="bUpgName1.23" style="font-weight: 900;"></span><br>
                                 <span id="bUpgDesc1.23"></span><br>
                                 <span>Cost: <span id="bUpgCost1.23"></span></span><br>
-                                <span id="1.23Effect" style="display: none;">Currently: <span id="bUpgEffect1.23"></span></span>
+                                <span id="1.23Effect" style="display: none;">Currently: <span id="bUpgEffect1.23"></span>x</span>
                             </button>
                         </td>
                     </tr>
@@ -986,7 +966,7 @@
                         <td colspan="3">
                             <h2 style="font-size: 18pt;">NECROPOLIS</h2>
                             <div id="necropolisTooltip" data-title="gain: x^0.2&#xA;effect: 1 + log(x)">you have <span id="necropolisAmt" style="font-size: 17pt; white-space: pre; font-variant-numeric: tabular-nums;"> 0 </span> <span id="acolytesTextAmt" class="buildingResourceTexts">acolytes</span>.<br>
-                            you are producing <span id="necropolisProd" style="font-size: 17pt; white-space: pre; font-variant-numeric: tabular-nums;"> 0 </span> <span id="acolytesTextGain" class="buildingResourceTexts">acolytes</span>/<span class="secDisplay">sec</span> (based on your bought sun eaters).<br>
+                            you are producing <span id="necropolisProd" style="font-size: 17pt; white-space: pre; font-variant-numeric: tabular-nums;"> 0 </span> <span id="acolytesTextGain" class="buildingResourceTexts">acolytes</span>/sec (production is based on your bought sun eaters).<br>
                             your acolytes chant into the astral abyss, boosting your astral brick gain by <span id="acolyteEff" style="font-size: 17pt; white-space: pre; font-variant-numeric: tabular-nums;"> 0</span>x.</div>
                         </td>
                     </tr>
@@ -996,7 +976,7 @@
                                 <span id="bUpgName2.11" style="font-weight: 900;"></span><br>
                                 <span id="bUpgDesc2.11"></span><br>
                                 <span>Cost: <span id="bUpgCost2.11"></span></span><br>
-                                <span id="2.11Effect" style="display: none;">Currently: <span id="bUpgEffect2.11"></span></span>
+                                <span id="2.11Effect" style="display: none;">Currently: <span id="bUpgEffect2.11"></span>x</span>
                             </button>
                         </td>
                         <td>
@@ -1004,7 +984,7 @@
                                 <span id="bUpgName2.12" style="font-weight: 900;"></span><br>
                                 <span id="bUpgDesc2.12"></span><br>
                                 <span>Cost: <span id="bUpgCost2.12"></span></span><br>
-                                <span id="2.12Effect" style="display: none;">Currently: <span id="bUpgEffect2.12"></span></span>
+                                <span id="2.12Effect" style="display: none;">Currently: <span id="bUpgEffect2.12"></span>x</span>
                             </button>
                         </td>
                         <td>
@@ -1012,7 +992,7 @@
                                 <span id="bUpgName2.13" style="font-weight: 900;"></span><br>
                                 <span id="bUpgDesc2.13"></span><br>
                                 <span>Cost: <span id="bUpgCost2.13"></span></span><br>
-                                <span id="2.13Effect" style="display: none;">Currently: <span id="bUpgEffect2.13"></span></span>
+                                <span id="2.13Effect" style="display: none;">Currently: <span id="bUpgEffect2.13"></span>x</span>
                             </button>
                         </td>
                     </tr>
@@ -1022,7 +1002,7 @@
                                 <span id="bUpgName2.21" style="font-weight: 900;"></span><br>
                                 <span id="bUpgDesc2.21"></span><br>
                                 <span>Cost: <span id="bUpgCost2.21"></span></span><br>
-                                <span id="2.21Effect" style="display: none;">Currently: <span id="bUpgEffect2.21"></span></span>
+                                <span id="2.21Effect" style="display: none;">Currently: <span id="bUpgEffect2.21"></span>x</span>
                             </button>
                         </td>
                         <td>
@@ -1030,7 +1010,7 @@
                                 <span id="bUpgName2.22" style="font-weight: 900;"></span><br>
                                 <span id="bUpgDesc2.22"></span><br>
                                 <span>Cost: <span id="bUpgCost2.22"></span></span><br>
-                                <span id="2.22Effect" style="display: none;">Currently: <span id="bUpgEffect2.22"></span></span>
+                                <span id="2.22Effect" style="display: none;">Currently: <span id="bUpgEffect2.22"></span>x</span>
                             </button>
                         </td>
                         <td>
@@ -1038,7 +1018,7 @@
                                 <span id="bUpgName2.23" style="font-weight: 900;"></span><br>
                                 <span id="bUpgDesc2.23"></span><br>
                                 <span>Cost: <span id="bUpgCost2.23"></span></span><br>
-                                <span id="2.23Effect" style="display: none;">Currently: <span id="bUpgEffect2.23"></span></span>
+                                <span id="2.23Effect" style="display: none;">Currently: <span id="bUpgEffect2.23"></span>x</span>
                             </button>
                         </td>
                     </tr>
@@ -1054,8 +1034,8 @@
                         <td colspan="3">
                             <h2 style="font-size: 18pt;">DEAD SUN</h2>
                             <div id="sunTooltip" data-title="2/sec">you have <span id="sunAmt" style="font-size: 17pt; white-space: pre; font-variant-numeric: tabular-nums;"> 0 </span> <span id="photonsTextAmt" class="buildingResourceTexts">nekro-photons</span>.<br>
-                            <span id="sunGainSpan" style="display: none;">you are producing <span id="sunProd" style="font-size: 17pt; white-space: pre; font-variant-numeric: tabular-nums;"> 5 </span> <span id="photonsTextGain" class="buildingResourceTexts">nekro-photons</span>/<span class="secDisplay">sec</span>, but only during astral enslavement.<br></span>
-                            <div id="sunGainNotice" style="height: 25px; min-height: 25px; margin-top: 5px;">Nekro-photon production is disabled outside of astral enslavement.</div></div>
+                            <span id="sunGainSpan" style="display: none;">you are producing <span id="sunProd" style="font-size: 17pt; white-space: pre; font-variant-numeric: tabular-nums;"> 5 </span> <span id="photonsTextGain" class="buildingResourceTexts">nekro-photons</span>/sec, but only during astral enslavement.</span><br>
+                            <span id="sunGainNotice">Nekro-photon production is disabled outside of astral enslavement.</span></div>
                         </td>
                     </tr>
                     <tr id="sunUpgradesRow" style="display: none;">
@@ -1064,7 +1044,7 @@
                                 <span id="bUpgName3.11" style="font-weight: 900;"></span><br>
                                 <span id="bUpgDesc3.11"></span><br>
                                 <span>Cost: <span id="bUpgCost3.11"></span></span><br>
-                                <span id="3.11Effect" style="display: none;">Currently: <span id="bUpgEffect3.11"></span></span>
+                                <span id="3.11Effect" style="display: none;">Currently: <span id="bUpgEffect3.11"></span>x</span>
                             </button>
                         </td>
                         <td>
@@ -1072,7 +1052,7 @@
                                 <span id="bUpgName3.12" style="font-weight: 900;"></span><br>
                                 <span id="bUpgDesc3.12"></span><br>
                                 <span>Cost: <span id="bUpgCost3.12"></span></span><br>
-                                <span id="3.12Effect" style="display: none;">Currently: <span id="bUpgEffect3.12"></span></span>
+                                <span id="3.12Effect" style="display: none;">Currently: <span id="bUpgEffect3.12"></span>x</span>
                             </button>
                         </td>
                         <td>
@@ -1080,7 +1060,7 @@
                                 <span id="bUpgName3.13" style="font-weight: 900;"></span><br>
                                 <span id="bUpgDesc3.13"></span><br>
                                 <span>Cost: <span id="bUpgCost3.13"></span></span><br>
-                                <span id="3.13Effect" style="display: none;">Currently: <span id="bUpgEffect3.13"></span></span>
+                                <span id="3.13Effect" style="display: none;">Currently: <span id="bUpgEffect3.13"></span>x</span>
                             </button>
                         </td>
                     </tr>
@@ -1090,7 +1070,7 @@
                                 <span id="bUpgName3.21" style="font-weight: 900;"></span><br>
                                 <span id="bUpgDesc3.21"></span><br>
                                 <span>Cost: <span id="bUpgCost3.21"></span></span><br>
-                                <span id="3.21Effect" style="display: none;">Currently: <span id="bUpgEffect3.21"></span></span>
+                                <span id="3.21Effect" style="display: none;">Currently: <span id="bUpgEffect3.21"></span>x</span>
                             </button>
                         </td>
                         <td>
@@ -1098,7 +1078,7 @@
                                 <span id="bUpgName3.22" style="font-weight: 900;"></span><br>
                                 <span id="bUpgDesc3.22"></span><br>
                                 <span>Cost: <span id="bUpgCost3.22"></span></span><br>
-                                <span id="3.22Effect" style="display: none;">Currently: <span id="bUpgEffect3.22"></span></span>
+                                <span id="3.22Effect" style="display: none;">Currently: <span id="bUpgEffect3.22"></span>x</span>
                             </button>
                         </td>
                         <td>
@@ -1106,7 +1086,7 @@
                                 <span id="bUpgName3.23" style="font-weight: 900;"></span><br>
                                 <span id="bUpgDesc3.23"></span><br>
                                 <span>Cost: <span id="bUpgCost3.23"></span></span><br>
-                                <span id="3.23Effect" style="display: none;">Currently: <span id="bUpgEffect3.23"></span></span>
+                                <span id="3.23Effect" style="display: none;">Currently: <span id="bUpgEffect3.23"></span>x</span>
                             </button>
                         </td>
                     </tr>
@@ -1123,33 +1103,34 @@
                             <h2 style="font-size: 18pt;">GALACTIC VORTEX</h2>
                             <div id="vortexTooltip" data-title="2/sec">you have <span id="vortexAmt" style="font-size: 17pt; white-space: pre; font-variant-numeric: tabular-nums;"> 0 </span> <span id="photonsTextAmt" class="buildingResourceTexts">black holes</span>.<br>
                             <span id="vortexGainSpan">your next black hole is <span id="vortexProd" style="font-size: 17pt; white-space: pre; font-variant-numeric: tabular-nums;"> 0</span>% complete. Progress is based on your total depleted galaxies minus your black holes.</span><br>
-                            Your black holes each add 0.05 to the depleted galaxy gain exponent. Currently: +<span id="blackholeEff" style="font-size: 17pt; white-space: pre; font-variant-numeric: tabular-nums;">0</span><br>
+                            Your black holes each add 0.1 to the depleted galaxy gain exponent. Currently: +<span id="blackholeEff" style="font-size: 17pt; white-space: pre; font-variant-numeric: tabular-nums;">0</span>
                             <span id="vortexGainNotice">The galactic vortex, black holes, and black hole production progress are never reset.</span></div>
                         </td>
                     </tr>
                     <tr id="vortexUpgradesRow" style="display: none;">
-                        <td>
+                        <td colspan="3">Upgrades coming soon!</td>
+                        <td style="display: none;">
                             <button id="vortexUpg11" class="vortexUpg" onclick="buyBUpg(4, 11)">
                                 <span id="bUpgName4.11" style="font-weight: 900;"></span><br>
                                 <span id="bUpgDesc4.11"></span><br>
                                 <span>Cost: <span id="bUpgCost4.11"></span></span><br>
-                                <span id="4.11Effect" style="display: none;">Currently: +<span id="bUpgEffect4.11"></span></span>
+                                <span id="4.11Effect" style="display: none;">Currently: <span id="bUpgEffect4.11"></span>x</span>
                             </button>
                         </td>
-                        <td>
+                        <td style="display: none;">
                             <button id="vortexUpg12" class="vortexUpg" onclick="buyBUpg(4, 12)">
                                 <span id="bUpgName4.12" style="font-weight: 900;"></span><br>
                                 <span id="bUpgDesc4.12"></span><br>
                                 <span>Cost: <span id="bUpgCost4.12"></span></span><br>
-                                <span id="4.12Effect" style="display: none;">Currently: <span id="bUpgEffect4.12"></span></span>
+                                <span id="4.12Effect" style="display: none;">Currently: <span id="bUpgEffect4.12"></span>x</span>
                             </button>
                         </td>
-                        <td>
+                        <td style="display: none;">
                             <button id="vortexUpg13" class="vortexUpg" onclick="buyBUpg(4, 13)">
                                 <span id="bUpgName4.13" style="font-weight: 900;"></span><br>
                                 <span id="bUpgDesc4.13"></span><br>
                                 <span>Cost: <span id="bUpgCost4.13"></span></span><br>
-                                <span id="4.13Effect" style="display: none;">Currently: <span id="bUpgEffect4.13"></span></span>
+                                <span id="4.13Effect" style="display: none;">Currently: <span id="bUpgEffect4.13"></span>x</span>
                             </button>
                         </td>
                     </tr>
@@ -1159,7 +1140,7 @@
                                 <span id="bUpgName4.21" style="font-weight: 900;"></span><br>
                                 <span id="bUpgDesc4.21"></span><br>
                                 <span>Cost: <span id="bUpgCost4.21"></span></span><br>
-                                <span id="4.21Effect">Currently: <span id="bUpgEffect4.21"></span>x</span>
+                                <span id="4.21Effect" style="display: none;">Currently: <span id="bUpgEffect4.21"></span>x</span>
                             </button>
                         </td>
                         <td>
@@ -1167,7 +1148,7 @@
                                 <span id="bUpgName4.22" style="font-weight: 900;"></span><br>
                                 <span id="bUpgDesc4.22"></span><br>
                                 <span>Cost: <span id="bUpgCost4.22"></span></span><br>
-                                <span id="4.22Effect">Currently: <span id="bUpgEffect4.22"></span>x</span>
+                                <span id="4.22Effect" style="display: none;">Currently: <span id="bUpgEffect4.22"></span>x</span>
                             </button>
                         </td>
                         <td>
@@ -1175,7 +1156,7 @@
                                 <span id="bUpgName4.23" style="font-weight: 900;"></span><br>
                                 <span id="bUpgDesc4.23"></span><br>
                                 <span>Cost: <span id="bUpgCost4.23"></span></span><br>
-                                <span id="4.23Effect">Currently: <span id="bUpgEffect4.23"></span>x</span>
+                                <span id="4.23Effect" style="display: none;">Currently: <span id="bUpgEffect4.23"></span>x</span>
                             </button>
                         </td>
                     </tr>
@@ -1183,7 +1164,7 @@
                 <div style="min-height: 25px;"></div>
             </div>
             <div id="constructionSubTab" class="buildingSubTab" style="display: none;">
-                <table style="width: 75%; margin: auto; margin-top: 20px; text-align: center; border-collapse: collapse;" class="constrTable">
+                <table style="width: 75%; margin: auto; margin-top: 20px; text-align: center; border-collapse: collapse;">
                     <tr id="cUpgHeaderRow">
                         <td colspan="4">
                             <h2 style="font-size: 18pt;">CONSTRUCTION UPGRADES</h2>
@@ -1192,66 +1173,30 @@
                     </tr>
                     <tr id="cUpgRow">
                         <td>
-                            <button id="constrUpg1" class="constrUpg" onclick="buyCUpg(1)">
-                                <span id="cUpgName1" style="font-weight: 900;"></span><br>
-                                <span id="cUpgDesc1"></span><br>
-                                <span>Cost: <span id="cUpgCost1"></span></span><br>
-                                <span>Level: <span id="cUpgLevel1">0</span></span><br>
-                                <span id="c1Effect" style="display: none;">Currently: <span id="cUpgEffect1"></span></span>
-                            </button>
+                            <button id="constrUpg1" class="constrUpg" onclick="buyCUpg(1)"><strong>Upgrade 1</strong><br>description of upgrade</button>
                             <button id="maxConstr1" class="constrMax" onclick="buyMaxConstr(1)">Buy max</button>
                         </td>
                         <td>
-                            <button id="constrUpg2" class="constrUpg" onclick="buyCUpg(2)">
-                                <span id="cUpgName2" style="font-weight: 900;"></span><br>
-                                <span id="cUpgDesc2"></span><br>
-                                <span>Cost: <span id="cUpgCost2"></span></span><br>
-                                <span>Level: <span id="cUpgLevel2">0</span></span><br>
-                                <span id="c2Effect" style="display: none;">Currently: <span id="cUpgEffect2"></span></span>
-                            </button>
+                            <button id="constrUpg2" class="constrUpg" onclick="buyCUpg(2)"><strong>Upgrade 2</strong><br>description of upgrade</button>
                             <button id="maxConstr2" class="constrMax" onclick="buyMaxConstr(2)">Buy max</button>
                         </td>
                         <td>
-                            <button id="constrUpg3" class="constrUpg" onclick="buyCUpg(3)">
-                                <span id="cUpgName3" style="font-weight: 900;"></span><br>
-                                <span id="cUpgDesc3"></span><br>
-                                <span>Cost: <span id="cUpgCost3"></span></span><br>
-                                <span>Level: <span id="cUpgLevel3">0</span></span><br>
-                                <span id="c3Effect" style="display: none;">Currently: <span id="cUpgEffect3"></span></span>
-                            </button>
+                            <button id="constrUpg3" class="constrUpg" onclick="buyCUpg(3)"><strong>Upgrade 3</strong><br>description of upgrade</button>
                             <button id="maxConstr3" class="constrMax" onclick="buyMaxConstr(3)">Buy max</button>
                         </td>
                         <td>
-                            <button id="constrUpg4" class="constrUpg" onclick="buyCUpg(4)">
-                                <span id="cUpgName4" style="font-weight: 900;"></span><br>
-                                <span id="cUpgDesc4"></span><br>
-                                <span>Cost: <span id="cUpgCost4"></span></span><br>
-                                <span>Level: <span id="cUpgLevel4">0</span></span><br>
-                                <span id="c4Effect" style="display: none;">Currently: <span id="cUpgEffect4"></span></span>
-                            </button>
+                            <button id="constrUpg4" class="constrUpg" onclick="buyCUpg(4)"><strong>Upgrade 3</strong><br>description of upgrade</button>
                             <button id="maxConstr4" class="constrMax" onclick="buyMaxConstr(4)">Buy max</button>
                         </td>
                     </tr>
                     <tr id="cUpgRow2" style="display: none;">
                         <td></td>
                         <td>
-                            <button id="constrUpg5" class="constrUpg" onclick="buyCUpg(5)">
-                                <span id="cUpgName5" style="font-weight: 900;"></span><br>
-                                <span id="cUpgDesc5"></span><br>
-                                <span>Cost: <span id="cUpgCost5"></span></span><br>
-                                <span>Level: <span id="cUpgLevel5">0</span></span><br>
-                                <span id="c5Effect" style="display: none;">Currently: <span id="cUpgEffect5"></span></span>
-                            </button>
+                            <button id="constrUpg5" class="constrUpg" onclick="buyCUpg(5)"><strong>Upgrade 5</strong><br>description of upgrade</button>
                             <button id="maxConstr5" class="constrMax" onclick="buyMaxConstr(5)">Buy max</button>
                         </td>
                         <td>
-                            <button id="constrUpg6" class="constrUpg" onclick="buyCUpg(6)">
-                                <span id="cUpgName6" style="font-weight: 900;"></span><br>
-                                <span id="cUpgDesc6"></span><br>
-                                <span>Cost: <span id="cUpgCost6"></span></span><br>
-                                <span>Level: <span id="cUpgLevel6">0</span></span><br>
-                                <span id="c6Effect" style="display: none;">Currently: <span id="cUpgEffect6"></span></span>
-                            </button>
+                            <button id="constrUpg6" class="constrUpg" onclick="buyCUpg(6)"><strong>Upgrade 6</strong><br>description of upgrade</button>
                             <button id="maxConstr6" class="constrMax" onclick="buyMaxConstr(6)">Buy max</button>
                         </td>
                         <td></td>
@@ -1276,7 +1221,7 @@
                 <tr>
                     <td width="100px;">
                         <div class="timeLabelLeft">TRUE<br>TIME</div>
-                        <div><span id="trueTimeAmt" style="color: #006ba0; font-weight: bold; font-variant-numeric: tabular-nums;">0</span><br>essence</span><br>+<span id="trueTimeGain" style="color: #006ba0; font-weight: bold; font-variant-numeric: tabular-nums;">0</span><br>per <span class="secDisplay">sec</span></div>
+                        <div><span id="trueTimeAmt" style="color: #006ba0; font-weight: bold; font-variant-numeric: tabular-nums;">0</span><br>essence</span><br>+<span id="trueTimeGain" style="color: #006ba0; font-weight: bold; font-variant-numeric: tabular-nums;">0</span><br>per sec</div>
                     </td>
                     <td><div style="width: 100%;">You have <span id="crystalAmt" style="font-size: 17pt; white-space: pre; color: #006ba0; font-weight: bold; font-variant-numeric: tabular-nums;"> 0 </span> <span id="crystalsTextAmt" class="timeResourceTexts">time crystals</span></div>
                         <div style="min-width: 100%; min-height: 30px;"></div>
@@ -1285,7 +1230,7 @@
                     </td>
                     <td width="100px;">
                         <div class="timeLabelRight">ANTI<br>TIME</div>
-                        <div><span id="antiTimeAmt" style="color: #006ba0; font-weight: bold; font-variant-numeric: tabular-nums;">0</span><br>essence</span><br>+<span id="antiTimeGain" style="color: #006ba0; font-weight: bold; font-variant-numeric: tabular-nums;">0</span><br>per <span class="secDisplay">sec</span></div>
+                        <div><span id="antiTimeAmt" style="color: #006ba0; font-weight: bold; font-variant-numeric: tabular-nums;">0</span><br>essence</span><br>+<span id="antiTimeGain" style="color: #006ba0; font-weight: bold; font-variant-numeric: tabular-nums;">0</span><br>per sec</div>
                     </td>
                 </tr>
                 <tr>
@@ -1420,11 +1365,9 @@
                 </table>
             </div>
             <div id="timeUpgSubTab" class="timeSubTab" style="display: none;">
-                <div id="extraColsNotice" style="text-align: center; margin: 10px auto; display: none;">The two additional columns of upgrades from milestone 6 are never reset.</div>
-                <div id="timeUpgBuyerDiv" style="text-align: center; margin: auto; display: none;"><button id="timeUpgBuyerBut" class="timeSliderBut" style="font-family: Cinzel;" onclick="toggleTimeUpgBuyer()">Time Upgrade Cols 1-3 Autobuyer: OFF</button></div>
                 <table id="timeUpgTable" style="width: 60%; margin: auto; margin-top: 20px; text-align: center;">
                     <tr>
-                        <td id="tUpg41" class="timeUpgTDs2">
+                        <td class="timeUpgTDs2">
                             <button id="timeUpg41" class="timeUpg" onclick="buyTUpg(41)">
                                 <span id="tUpgName41" style="font-weight: 900;"></span><br>
                                 <span id="tUpgDesc41"></span><br>
@@ -1456,7 +1399,7 @@
                                 <span id="31TEffect" style="display: none;">Currently: <span id="tUpgEffect31"></span>x</span>
                             </button>
                         </td>
-                        <td id="tUpg51" class="timeUpgTDs2">
+                        <td class="timeUpgTDs2">
                             <button id="timeUpg51" class="timeUpg" onclick="buyTUpg(51)">
                                 <span id="tUpgName51" style="font-weight: 900;"></span><br>
                                 <span id="tUpgDesc51"></span><br>
@@ -1466,11 +1409,10 @@
                         </td>
                     </tr>
                     <tr>
-                        <td id="tUpg42" class="timeUpgTDs2">
+                        <td class="timeUpgTDs2">
                             <button id="timeUpg42" class="timeUpg" onclick="buyTUpg(42)">
                                 <span id="tUpgName42" style="font-weight: 900;"></span><br>
                                 <span id="tUpgDesc42"></span><br>
-                                <span>Requires: <span id="tUpgRequires42" style="font-weight: 900;"></span></span><br>
                                 <span>Cost: <span id="tUpgCost42"></span></span><br>
                                 <span id="42TEffect" style="display: none;">Currently: <span id="tUpgEffect42"></span>x</span>
                             </button>
@@ -1479,7 +1421,6 @@
                             <button id="timeUpg12" class="timeUpg" onclick="buyTUpg(12)">
                                 <span id="tUpgName12" style="font-weight: 900;"></span><br>
                                 <span id="tUpgDesc12"></span><br>
-                                <span>Requires: <span id="tUpgRequires12" style="font-weight: 900;"></span></span><br>
                                 <span>Cost: <span id="tUpgCost12"></span></span><br>
                                 <span id="12TEffect" style="display: none;">Currently: <span id="tUpgEffect12"></span>x</span>
                             </button>
@@ -1488,7 +1429,6 @@
                             <button id="timeUpg22" class="timeUpg" onclick="buyTUpg(22)">
                                 <span id="tUpgName22" style="font-weight: 900;"></span><br>
                                 <span id="tUpgDesc22"></span><br>
-                                <span>Requires: <span id="tUpgRequires22" style="font-weight: 900;"></span></span><br>
                                 <span>Cost: <span id="tUpgCost22"></span></span><br>
                                 <span id="22TEffect" style="display: none;">Currently: <span id="tUpgEffect22"></span>x</span>
                             </button>
@@ -1497,27 +1437,24 @@
                             <button id="timeUpg32" class="timeUpg" onclick="buyTUpg(32)">
                                 <span id="tUpgName32" style="font-weight: 900;"></span><br>
                                 <span id="tUpgDesc32"></span><br>
-                                <span>Requires: <span id="tUpgRequires32" style="font-weight: 900;"></span></span><br>
                                 <span>Cost: <span id="tUpgCost32"></span></span><br>
                                 <span id="32TEffect" style="display: none;">Currently: <span id="tUpgEffect32"></span>x</span>
                             </button>
                         </td>
-                        <td id="tUpg52" class="timeUpgTDs2">
+                        <td class="timeUpgTDs2">
                             <button id="timeUpg52" class="timeUpg" onclick="buyTUpg(52)">
                                 <span id="tUpgName52" style="font-weight: 900;"></span><br>
                                 <span id="tUpgDesc52"></span><br>
-                                <span>Requires: <span id="tUpgRequires52" style="font-weight: 900;"></span></span><br>
                                 <span>Cost: <span id="tUpgCost52"></span></span><br>
                                 <span id="52TEffect" style="display: none;">Currently: <span id="tUpgEffect52"></span>x</span>
                             </button>
                         </td>
                     </tr>
                     <tr>
-                        <td id="tUpg43" class="timeUpgTDs2">
+                        <td class="timeUpgTDs2">
                             <button id="timeUpg43" class="timeUpg" onclick="buyTUpg(43)">
                                 <span id="tUpgName43" style="font-weight: 900;"></span><br>
                                 <span id="tUpgDesc43"></span><br>
-                                <span>Requires: <span id="tUpgRequires43" style="font-weight: 900;"></span></span><br>
                                 <span>Cost: <span id="tUpgCost43"></span></span><br>
                                 <span id="43TEffect" style="display: none;">Currently: <span id="tUpgEffect43"></span>x</span>
                             </button>
@@ -1526,7 +1463,6 @@
                             <button id="timeUpg13" class="timeUpg" onclick="buyTUpg(13)">
                                 <span id="tUpgName13" style="font-weight: 900;"></span><br>
                                 <span id="tUpgDesc13"></span><br>
-                                <span>Requires: <span id="tUpgRequires13" style="font-weight: 900;"></span></span><br>
                                 <span>Cost: <span id="tUpgCost13"></span></span><br>
                                 <span id="13TEffect" style="display: none;">Currently: <span id="tUpgEffect13"></span>x</span>
                             </button>
@@ -1535,7 +1471,6 @@
                             <button id="timeUpg23" class="timeUpg" onclick="buyTUpg(23)">
                                 <span id="tUpgName23" style="font-weight: 900;"></span><br>
                                 <span id="tUpgDesc23"></span><br>
-                                <span>Requires: <span id="tUpgRequires23" style="font-weight: 900;"></span></span><br>
                                 <span>Cost: <span id="tUpgCost23"></span></span><br>
                                 <span id="23TEffect" style="display: none;">Currently: <span id="tUpgEffect23"></span>x</span>
                             </button>
@@ -1544,27 +1479,24 @@
                             <button id="timeUpg33" class="timeUpg" onclick="buyTUpg(33)">
                                 <span id="tUpgName33" style="font-weight: 900;"></span><br>
                                 <span id="tUpgDesc33"></span><br>
-                                <span>Requires: <span id="tUpgRequires33" style="font-weight: 900;"></span></span><br>
                                 <span>Cost: <span id="tUpgCost33"></span></span><br>
                                 <span id="33TEffect" style="display: none;">Currently: <span id="tUpgEffect33"></span>x</span>
                             </button>
                         </td>
-                        <td id="tUpg53" class="timeUpgTDs2">
+                        <td class="timeUpgTDs2">
                             <button id="timeUpg53" class="timeUpg" onclick="buyTUpg(53)">
                                 <span id="tUpgName53" style="font-weight: 900;"></span><br>
                                 <span id="tUpgDesc53"></span><br>
-                                <span>Requires: <span id="tUpgRequires53" style="font-weight: 900;"></span></span><br>
                                 <span>Cost: <span id="tUpgCost53"></span></span><br>
                                 <span id="53TEffect" style="display: none;">Currently: <span id="tUpgEffect53"></span>x</span>
                             </button>
                         </td>
                     </tr>
                     <tr>
-                        <td id="tUpg44" class="timeUpgTDs2">
+                        <td class="timeUpgTDs2">
                             <button id="timeUpg44" class="timeUpg" onclick="buyTUpg(44)">
                                 <span id="tUpgName44" style="font-weight: 900;"></span><br>
                                 <span id="tUpgDesc44"></span><br>
-                                <span>Requires: <span id="tUpgRequires44" style="font-weight: 900;"></span></span><br>
                                 <span>Cost: <span id="tUpgCost44"></span></span><br>
                                 <span id="44TEffect" style="display: none;">Currently: <span id="tUpgEffect44"></span>x</span>
                             </button>
@@ -1573,7 +1505,6 @@
                             <button id="timeUpg14" class="timeUpg" onclick="buyTUpg(14)">
                                 <span id="tUpgName14" style="font-weight: 900;"></span><br>
                                 <span id="tUpgDesc14"></span><br>
-                                <span>Requires: <span id="tUpgRequires14" style="font-weight: 900;"></span></span><br>
                                 <span>Cost: <span id="tUpgCost14"></span></span><br>
                                 <span id="14TEffect" style="display: none;">Currently: <span id="tUpgEffect14"></span>x</span>
                             </button>
@@ -1582,7 +1513,6 @@
                             <button id="timeUpg24" class="timeUpg" onclick="buyTUpg(24)">
                                 <span id="tUpgName24" style="font-weight: 900;"></span><br>
                                 <span id="tUpgDesc24"></span><br>
-                                <span>Requires: <span id="tUpgRequires24" style="font-weight: 900;"></span></span><br>
                                 <span>Cost: <span id="tUpgCost24"></span></span><br>
                                 <span id="24TEffect" style="display: none;">Currently: <span id="tUpgEffect24"></span>x</span>
                             </button>
@@ -1591,16 +1521,14 @@
                             <button id="timeUpg34" class="timeUpg" onclick="buyTUpg(34)">
                                 <span id="tUpgName34" style="font-weight: 900;"></span><br>
                                 <span id="tUpgDesc34"></span><br>
-                                <span>Requires: <span id="tUpgRequires34" style="font-weight: 900;"></span></span><br>
                                 <span>Cost: <span id="tUpgCost34"></span></span><br>
                                 <span id="34TEffect" style="display: none;">Currently: <span id="tUpgEffect34"></span>x</span>
                             </button>
                         </td>
-                        <td id="tUpg54" class="timeUpgTDs2">
+                        <td class="timeUpgTDs2">
                             <button id="timeUpg54" class="timeUpg" onclick="buyTUpg(54)">
                                 <span id="tUpgName54" style="font-weight: 900;"></span><br>
                                 <span id="tUpgDesc54"></span><br>
-                                <span>Requires: <span id="tUpgRequires54" style="font-weight: 900;"></span></span><br>
                                 <span>Cost: <span id="tUpgCost54"></span></span><br>
                                 <span id="54TEffect" style="display: none;">Currently: <span id="tUpgEffect54"></span>x</span>
                             </button>
@@ -1621,8 +1549,7 @@
                             <span id="galaxyPrestigeGainDesc" style="font-size: 15pt; display: none;">Gain <span id="galaxyPrestigeGain" style="font-size: 17pt; white-space: pre; font-variant-numeric: tabular-nums;"> 1 </span> <span id="galaxyTextGain" class="galaxyResourceTexts">depleted galaxy</span></span><br>
                             <span id="galaxyPrestigeNextDesc" style="font-size: 11pt; display: none;">Next at <span id="galaxyPrestigeNext" style="font-size: 13pt; white-space: pre; font-variant-numeric: tabular-nums;"> 1 </span> exterminated worlds</span>
                         </button><br>
-                        <input type="checkbox" id="respecOnAsc" class="galaxyCheckbox" style="margin-top: 10px;"> Respec galaxies on next ascension<br>
-                        <input type="checkbox" id="dontResetSliderBox" class="galaxyCheckbox" style="margin-top: 10px;" onchange="updateDontResetSlider()"> Don't respec time slider on ascension
+                        <input type="checkbox" id="respecOnAsc" class="galaxyCheckbox" style="margin-top: 10px;"> Respec galaxies on next ascension
                     </div>
                 </tr>
                 <tr>
@@ -1655,7 +1582,7 @@
                 <div id="galSelect" style="text-align: center; white-space: pre; width: 100%; margin: auto;">Display  <select oninput="updateGalaxiesDisplayed()" id="galDisplaySelect" name="galDisplaySelect" class="galDropdown"><option id="1gal" class="galOptions" value="1">1</option><option id="2gal" class="galOptions" value="2">2</option><option id="4gal" class="galOptions" value="4">4</option></select>  at a time</div>
                 <div id="galButs2" style="text-align: center; width: 100%; margin: auto;"><button id="galaxyNameBut1" class="galaxyNameBut2" onclick="showGalaxies('gal1', 'gal2')">Andromeda/Circinus</button><button id="galaxyNameBut2" class="galaxyNameBut2" onclick="showGalaxies('gal3', 'gal4')">Sculptor Dwarf/Triangulum</button></div>
                 <div id="galButs4" style="text-align: center; width: 100%; margin: auto;"><button id="galaxyNameBut1" class="galaxyNameBut4" onclick="showGalaxy('gal1')">Andromeda</button><button id="galaxyNameBut2" class="galaxyNameBut4" onclick="showGalaxy('gal2')">Circinus</button><button id="galaxyNameBut3" class="galaxyNameBut4" onclick="showGalaxy('gal3')">Sculptor Dwarf</button><button id="galaxyNameBut4" class="galaxyNameBut4" onclick="showGalaxy('gal4')">Triangulum</button></div>
-                <div style="text-align: center; width: 100%; margin: auto;"><button id="galaxyRespecBut" class="galaxyBut" onclick="respecGalaxiesClick()">Respec galaxies - forces ascension</button><button id="milestonesBut" class="galaxyBut" onclick="showMilestones()">Galaxy Milestones</button></div>
+                <div style="text-align: center; width: 100%; margin: auto;"><button id="galaxyRespecBut" class="galaxyBut" onclick="respecGalaxiesClick()">Respec galaxies - forces ascension</button><button id="milestonesBut" class="galaxyBut" onclick="showMilestones()">Galaxy Milestones - five of seven implemented</button></div>
                 <table id="allGalaxiesTable" style="text-align: center; position: relative; left: -167;">
                     <tr>
                         <td id="gal1" class="gal">
@@ -2297,23 +2224,6 @@
                             <div id="ach45" class="achievement achTooltip" onmouseover="mouseoverAchievement(45)"><p>Why?</p></div>
                         </td>
                     </tr>
-                    <tr>
-                        <td>
-                            <div id="ach51" class="achievement achTooltip" onmouseover="mouseoverAchievement(51)"><p>Multi-Galactic<br>+</p></div>
-                        </td>
-                        <td>
-                            <div id="ach52" class="achievement achTooltip" onmouseover="mouseoverAchievement(52)"><p>...</p></div>
-                        </td>
-                        <td>
-                            <div id="ach53" class="achievement achTooltip" onmouseover="mouseoverAchievement(53)"><p>Black Hole, Shmlack Hole<br>+</p></div>
-                        </td>
-                        <td>
-                            <div id="ach54" class="achievement achTooltip" onmouseover="mouseoverAchievement(54)"><p>...</p></div>
-                        </td>
-                        <td>
-                            <div id="ach55" class="achievement achTooltip" onmouseover="mouseoverAchievement(55)"><p>...</p></div>
-                        </td>
-                    </tr>
                 </table>
             </div>
         </div>
@@ -2371,13 +2281,9 @@
                         <a href="docs/changelog.html" target="_blank"><button id="helpBut" class="optBut">CHANGELOG</button></a>
                     </td>
                 </tr>
-                <tr style="height: 10px;">
+                <tr style="height: 25px;">
                     <div style="height: 100%;"></div>
                 </tr>
-                <tr>
-                    <td colspan="4">
-                        <button id="realTimeDisplayBut" class="displayBut" onclick="toggleRealTimeDisplays()">toggle time displays: GAME TIME</button>
-                    </td>
                 <tr>
                     <td colspan="4">
                         <label id="exportTextLabel" for="exportText" style="display: none;">Paste your save here...</label>
@@ -2636,13 +2542,13 @@
                 <tr>
                     <td class="milestoneTD" id="milestone4">
                         <span id="milestoneReq4" style="font-size: 16pt;">Complete two trees at once.</span><br>
-                        <span id="milestoneRew4" style="font-size: 11pt;">Start every ascension with 11,111 time crystals.</span>
+                        <span id="milestoneRew4" style="font-size: 11pt;">You start every ascension with 11,111 time crystals.</span>
                     </td>
                 </tr>
                 <tr>
                     <td class="milestoneTD" id="milestone5">
                         <span id="milestoneReq5" style="font-size: 16pt;">Own four 3rd row upgrades.</span><br>
-                        <span id="milestoneRew5" style="font-size: 11pt;">Unlock a fourth building and the time dimension autobuyer.</span>
+                        <span id="milestoneRew5" style="font-size: 11pt;">Unlock a fourth building.</span>
                     </td>
                 </tr>
                 <tr>
@@ -2655,6 +2561,11 @@
                     <td class="milestoneTD" id="milestone7">
                         <span id="milestoneReq7" style="font-size: 16pt;">Own four 4th row upgrades.</span><br>
                         <span id="milestoneRew7" style="font-size: 11pt;">Unlock <span style="font-weight: 800;">Vile Research</span>. (COMING SOON!)</span>
+                </tr>
+                <tr>
+                    <td class="milestoneTD" id="milestone8">
+                        <span id="milestoneReq8" style="font-size: 16pt;">???</span><br>
+                        <span id="milestoneRew8" style="font-size: 11pt;">Unlock <span style="font-weight: 800;">Vile Research</span>.</span>
                     </td>
                 </tr>
                 <!--<tr>

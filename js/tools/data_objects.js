@@ -146,14 +146,6 @@ const START_PLAYER = {
         32: false,
         33: false,
         34: false,
-        41: false,
-        42: false,
-        43: false,
-        44: false,
-        51: false,
-        52: false,
-        53: false,
-        54: false,
     },
 
     autobuyers: {
@@ -206,129 +198,175 @@ const START_PLAYER = {
         10: {
             'on': false,
             'fast': false,
-            'max': new Decimal(0),
+            'max': new Decimal(1),
         },
         11: {
             'on': false,
             'fast': false,
             'amount': new Decimal(1),
         },
-        12: {
-            1: false,
-            2: false,
-            3: false,
-            4: false,
-        },
-        'time': {
-            'on': false,
-        },
         
         priority: [1, 2, 3, 4, 5, 6, 7, 8],
     },
+
+    /*galaxyRowsLocked: {
+        1: false,
+        2: false,
+        3: false,
+        4: false,
+    },*/
 
     galaxyUpgs: {
         1: {
             11: {
                 bought: false,
                 locked: false,
+                rowLocked: true,
+                boughtFor: new Decimal(0),
             },
             21: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
+                boughtFor: new Decimal(0),
             },
             22: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
+                boughtFor: new Decimal(0),
             },
             31: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
+                boughtFor: new Decimal(0),
             },
             32: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
+                boughtFor: new Decimal(0),
             },
             41: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
+                boughtFor: new Decimal(0),
             },
         },
         2: {
             11: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
+                boughtFor: new Decimal(0),
             },
             21: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
+                boughtFor: new Decimal(0),
             },
             22: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
+                boughtFor: new Decimal(0),
             },
             31: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
+                boughtFor: new Decimal(0),
             },
             32: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
+                boughtFor: new Decimal(0),
             },
             41: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
+                boughtFor: new Decimal(0),
             },
         },
         3: {
             11: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
+                boughtFor: new Decimal(0),
             },
             21: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
+                boughtFor: new Decimal(0),
             },
             22: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
+                boughtFor: new Decimal(0),
             },
             31: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
+                boughtFor: new Decimal(0),
             },
             32: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
+                boughtFor: new Decimal(0),
             },
             41: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
+                boughtFor: new Decimal(0),
             },
         },
         4: {
             11: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
+                boughtFor: new Decimal(0),
             },
             21: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
+                boughtFor: new Decimal(0),
             },
             22: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
+                boughtFor: new Decimal(0),
             },
             31: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
+                boughtFor: new Decimal(0),
             },
             32: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
+                boughtFor: new Decimal(0),
             },
             41: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
+                boughtFor: new Decimal(0),
             },
         },
     },
@@ -392,6 +430,7 @@ const START_PLAYER = {
         bestCrystalGain: new Decimal(0),
         bestCrystalRate: new Decimal(0),
         bestGalaxyGain: new Decimal(0),
+        bestGalaxyRate: new Decimal(0),
         bestCorpses: new Decimal(0),
         bestWorlds: new Decimal(0),
         bestBricks: new Decimal(0),
@@ -409,7 +448,7 @@ const START_PLAYER = {
         bestWorlds: new Decimal(0),
         bestBricks: new Decimal(0),
 
-        wentAstral: false,
+        hasGoneAstral: false,
     },
 
     thisAscStats: {
@@ -426,8 +465,6 @@ const START_PLAYER = {
         bestWorlds: new Decimal(0),
         bestBricks: new Decimal(0),
         bestCrystals: new Decimal(0),
-
-        wentAstral: false,
     },
 
     pastRuns: {
@@ -564,7 +601,6 @@ const START_PLAYER = {
             'prestigeBuyer': false,
             'advancedBuyer': false,
             'ascensionBuyer': false,
-            'timeDimBuyer': false,
         },
         'buildingsTab': {
             'mainTab': false,
@@ -586,7 +622,6 @@ const START_PLAYER = {
         },
         'galaxyTab': {
             'mainTab': false,
-            'customizeDisplay': false,
             'arkTab': false,
         },
     },
@@ -612,11 +647,6 @@ const START_PLAYER = {
         43: false,
         44: false,
         45: false,
-        51: false,
-        52: false,
-        53: false,
-        54: false,
-        55: false,
     },
 
     milestones: {
@@ -627,6 +657,7 @@ const START_PLAYER = {
         5: false,
         6: false,
         7: false,
+        8: false,
     },
 
     confirmations: {
@@ -666,12 +697,9 @@ const START_PLAYER = {
     },
 
     tooltipsEnabled: false,
-    displayRealTime: false,
     activeTabs: ['unitsTab', 'unitsSubTab', 'buildingsSubTab', 'timeDimSubTab', 'galaxiesSubTab', 'statSubTab'],
     activeGalaxies: [4, 'gal1', 'gal2'],
     hotkeysOn: true,
-    dontResetSlider: false,
-    version: 'v0.3.1_d.5',
 }
 
 MILES_DATA = {
@@ -737,15 +765,15 @@ MILES_DATA = {
     },
     6: {
         canUnlock: function() {
-            return getBoughtGUpgsByRow(4) == 3;
+            return false; //getBoughtGUpgsByRow(4) == 3;
         },
         effect: function() {
             return new Decimal(1);
         },
         onUnlock: function() {
-            document.getElementById('extraColsNotice').style.display = '';
+            return;
         },
-        isImplemented: true,
+        isImplemented: false,
     },
     7: {
         canUnlock: function() {
@@ -757,13 +785,24 @@ MILES_DATA = {
         onUnlock: function() {
             for (let g in GALAXIES_DATA) {
                 for (let u in GALAXIES_DATA[g].upgrades) {
-                    player.galaxyUpgs[g][u].locked = false;
                     document.getElementById(GALAXIES_DATA[g].upgrades[u].buttonID).classList.remove('lockedGalaxyUpg');
-                    document.getElementById(GALAXIES_DATA[g].upgrades[u].buttonID).classList.add(canAffordGUpg(g, u) ? 'galaxyUpg' : 'unclickGalaxyUpg');
+                    document.getElementById(GALAXIES_DATA[g].upgrades[u].buttonID).classList.add(canAffordGUpg(b, u) ? 'galaxyUpg' : 'unclickGalaxyUpg');
                 }
             }
         },
         isImplemented: true,
+    },
+    8: {
+        canUnlock: function() {
+            return false;
+        },
+        effect: function() {
+            return new Decimal(1);
+        },
+        onUnlock: function() {
+            return;
+        },
+        isImplemented: false,
     },
 }
 
@@ -969,8 +1008,8 @@ const ACH_DATA = {
         showEffect: false,
         divID: 'ach32',
         canUnlock: function() {
-            for (let i=1; i<=4; i++) {
-                if (player.construction[i].lt(25)) { return false; }
+            for (let id in CONSTR_DATA) {
+                if (player.construction[id].lt(25)) { return false; }
             }
             return true;
         },
@@ -1108,92 +1147,7 @@ const ACH_DATA = {
         hasReward: false,
         divID: 'ach45',
         canUnlock: function() {
-            return player.thisAscStats.totalTimeResets.gt(0) && !player.thisAscStats.wentAstral;
-        },
-        effect: function() {
-            return new Decimal(1);
-        },
-        onUnlock: function() {
-            return;
-        }
-    },
-    51: {
-        title: 'Multi-Galactic',
-        desc: 'Ascend for more than one galaxy.',
-        reward: 'Nekro-photons are only reset if the Dead Sun is reset.',
-        hasReward: true,
-        showEffect: false,
-        divID: 'ach51',
-        canUnlock: function() {
-            return player.allTimeStats.bestGalaxyGain.gt(1);
-        },
-        effect: function() {
-            return new Decimal(1);
-        },
-        onUnlock: function() {
-            return;
-        }
-    },
-    52: {
-        title: '',
-        desc: '',
-        reward: '',
-        hasReward: false,
-        showEffect: false,
-        divID: 'ach52',
-        canUnlock: function() {
-            return false;
-        },
-        effect: function() {
-            return new Decimal(1);
-        },
-        onUnlock: function() {
-            return;
-        }
-    },
-    53: {
-        title: 'Black Hole, Shmlack Hole',
-        desc: 'Build the Galactic Vortex.',
-        reward: 'Buildings don\'t reset on ascension (except bricks and resources).',
-        hasReward: true,
-        showEffect: false,
-        divID: 'ach53',
-        canUnlock: function() {
-            return player.buildings[4].built;
-        },
-        effect: function() {
-            return new Decimal(1);
-        },
-        onUnlock: function() {
-            return;
-        }
-    },
-    54: {
-        title: '',
-        desc: '',
-        reward: '',
-        hasReward: false,
-        showEffect: false,
-        divID: 'ach54',
-        canUnlock: function() {
-            return false;
-        },
-        effect: function() {
-            return new Decimal(1);
-        },
-        onUnlock: function() {
-            return;
-        }
-    },
-    55: {
-        title: '',
-        desc: '',
-        reward: '',
-        hasReward: false,
-        showEffect: false,
-        divID: 'ach55',
-        canUnlock: function() {
-            return false;
+            return player.thisAscStats.totalTimeResets.gt(0) && player.thisAscStats.totalBricks.eq(0);
         },
         effect: function() {
             return new Decimal(1);
@@ -1307,20 +1261,6 @@ const UNLOCKS_DATA = {
                 return hasMilestone(2);
             }
         },
-        'timeDimBuyer': {
-            unlocked: false,
-            notifyID: 'autobuyersSubTabBut',
-            parentNotify: 'unitsTabBut',
-            idsToShow: ['timeDimBuyerCell'],
-            idsToHide: [],
-            //classToEnable: 'buyerList',
-            shouldNotify: function() {
-                return true;
-            },
-            condition: function() {
-                return hasMilestone(5);
-            }
-        },
     },
     'buildingsTab': {
         'mainTab': {
@@ -1405,7 +1345,7 @@ const UNLOCKS_DATA = {
             unlocked: false,
             notifyID: 'constructionSubTabBut',
             parentNotify: 'buildingsTabBut',
-            idsToShow: ['buildingsSubMenu', 'constructionSubTabBut'],
+            idsToShow: ['buildingsSubMenu', 'constructionSubTabBut', 'cUpgRow2'],
             idsToHide: [],
             shouldNotify: function() {
                 return !hasTUpgrade(12);
@@ -1442,7 +1382,9 @@ const UNLOCKS_DATA = {
         },
         'vortex': {
             unlocked: false,
-            idsToShow: ['vortexHeaderRow', 'vortexUpgradesRow', 'numWorldsGainDisplay'],
+            notifyID: 'buildingsSubTabBut',
+            parentNotify: 'buildingsTabBut',
+            idsToShow: ['vortexHeaderRow', 'vortexUpgradesRow'],
             idsToHide: ['vortexBuildRow'],
             shouldNotify: function() {
                 return false;
@@ -1482,7 +1424,7 @@ const UNLOCKS_DATA = {
             unlocked: false,
             notifyID: 'timeUpgSubTabBut',
             parentNotify: 'timeTabBut',
-            idsToShow: ['timeUpgBuyerDiv'],
+            idsToShow: [],
             idsToHide: [],
             classToShow: 'timeUpgTDs2',
             shouldNotify: function() {
@@ -1491,32 +1433,19 @@ const UNLOCKS_DATA = {
             condition: function() {
                 return hasMilestone(6);
             }
-        },
+        }
     },
     'galaxyTab': {
         'mainTab': {
             unlocked: false,
             notifyID: 'galaxyTabBut',
-            idsToShow: ['galaxyTabCell', 'galaxyTabCellMid', 'galaxiesBonusDisplay'],
+            idsToShow: ['galaxyTabCell', 'galaxyTabCellMid', 'galaxiesBonusDisplay', 'customizeDisplayBut'],
             idsToHide: [],
             shouldNotify: function() {
                 return true;
             },
             condition: function() {
                 return hasUpgrade(3, 23);
-            }
-        },
-        'customizeDisplay': {
-            unlocked: false,
-            notifyID: 'displayBut',
-            parentNotify: 'optionsTabBut',
-            idsToShow: ['customizeDisplayBut'],
-            idsToHide: [],
-            shouldNotify: function() {
-                return true;
-            },
-            condition: function() {
-                return player.ascensions.gt(0);
             }
         },
         'arkTab': {
@@ -1694,7 +1623,7 @@ function fixResetBug() {
     
     // this is [number of units, tier]
     START_PLAYER.nextSpaceReset = new Array(1, 5);
-    START_PLAYER.spaceResets = new Decimal(0);
+    START_PLAYER.spaceResets = new Decimal(0)
     START_PLAYER.worlds = new Decimal(0);
 
     copyData(START_PLAYER.buildings, {
@@ -1794,14 +1723,6 @@ function fixResetBug() {
         32: false,
         33: false,
         34: false,
-        41: false,
-        42: false,
-        43: false,
-        44: false,
-        51: false,
-        52: false,
-        53: false,
-        54: false,
     });
 
     copyData(START_PLAYER.autobuyers, {
@@ -1854,21 +1775,12 @@ function fixResetBug() {
         10: {
             'on': false,
             'fast': false,
-            'max': new Decimal(0),
+            'max': new Decimal(1),
         },
         11: {
             'on': false,
             'fast': false,
             'amount': new Decimal(1),
-        },
-        12: {
-            1: false,
-            2: false,
-            3: false,
-            4: false,
-        },
-        'time': {
-            'on': false,
         },
         priority: [1, 2, 3, 4, 5, 6, 7, 8],
     });
@@ -1993,114 +1905,169 @@ function fixResetBug() {
         ],
     });
 
+    /*copyData(START_PLAYER.galaxyRowsLocked, {
+        1: false,
+        2: false,
+        3: false,
+        4: false,
+    });*/
+
     copyData(START_PLAYER.galaxyUpgs, {
         1: {
             11: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
+                boughtFor: new Decimal(0),
             },
             21: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
+                boughtFor: new Decimal(0),
             },
             22: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
+                boughtFor: new Decimal(0),
             },
             31: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
+                boughtFor: new Decimal(0),
             },
             32: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
+                boughtFor: new Decimal(0),
             },
             41: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
+                boughtFor: new Decimal(0),
             },
         },
         2: {
             11: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
+                boughtFor: new Decimal(0),
             },
             21: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
+                boughtFor: new Decimal(0),
             },
             22: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
+                boughtFor: new Decimal(0),
             },
             31: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
+                boughtFor: new Decimal(0),
             },
             32: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
+                boughtFor: new Decimal(0),
             },
             41: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
+                boughtFor: new Decimal(0),
             },
         },
         3: {
             11: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
+                boughtFor: new Decimal(0),
             },
             21: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
+                boughtFor: new Decimal(0),
             },
             22: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
+                boughtFor: new Decimal(0),
             },
             31: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
+                boughtFor: new Decimal(0),
             },
             32: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
+                boughtFor: new Decimal(0),
             },
             41: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
+                boughtFor: new Decimal(0),
             },
         },
         4: {
             11: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
+                boughtFor: new Decimal(0),
             },
             21: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
+                boughtFor: new Decimal(0),
             },
             22: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
+                boughtFor: new Decimal(0),
             },
             31: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
+                boughtFor: new Decimal(0),
             },
             32: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
+                boughtFor: new Decimal(0),
             },
             41: {
                 bought: false,
                 locked: false,
+                rowLocked: false,
+                boughtFor: new Decimal(0),
             },
         },
     });
 
-    copyData(START_PLAYER.ark, {
+    copyData(START_PLAYER.arkUpgs, {
         'engines': {
             unlocked: false,
             bought: false,
@@ -2132,17 +2099,13 @@ function fixResetBug() {
     START_PLAYER.astralFlag = false;
 
     START_PLAYER.crystals = new Decimal(0);
-    START_PLAYER.milesCrystals = new Decimal(11111);
+    milesCrystals: new Decimal(11111),
     START_PLAYER.trueEssence = new Decimal(0);
     START_PLAYER.truePercent = 50;
     START_PLAYER.antiPercent = 50;
     START_PLAYER.antiEssence = new Decimal(0);
     START_PLAYER.timeResets = new Decimal(0);
     START_PLAYER.timeLocked = false;
-
-    START_PLAYER.galaxies = new Decimal(0);
-    START_PLAYER.spentGalaxies = new Decimal(0);
-    START_PLAYER.ascensions = new Decimal(0);
     
     copyData(START_PLAYER.allTimeStats, {
         totalCorpses: new Decimal(0),
@@ -2157,7 +2120,6 @@ function fixResetBug() {
 
         bestCrystalGain: new Decimal(0),
         bestCrystalRate: new Decimal(0),
-        bestGalaxyGain: new Decimal(0),
         bestCorpses: new Decimal(0),
         bestWorlds: new Decimal(0),
         bestBricks: new Decimal(0),
@@ -2175,7 +2137,7 @@ function fixResetBug() {
         bestWorlds: new Decimal(0),
         bestBricks: new Decimal(0),
 
-        wentAstral: false,
+        hasGoneAstral: false,
     });
 
     copyData(START_PLAYER.thisAscStats, {
@@ -2192,8 +2154,6 @@ function fixResetBug() {
         bestWorlds: new Decimal(0),
         bestBricks: new Decimal(0),
         bestCrystals: new Decimal(0),
-
-        wentAstral: false,
     });
     
     START_PLAYER.lastUpdate = new Date();
@@ -2210,7 +2170,6 @@ function fixResetBug() {
             'prestigeBuyer': false,
             'advancedBuyer': false,
             'ascensionBuyer': false,
-            'timeDimBuyer': false,
         },
         'buildingsTab': {
             'mainTab': false,
@@ -2232,7 +2191,6 @@ function fixResetBug() {
         },
         'galaxyTab': {
             'mainTab': false,
-            'customizeDisplay': false,
             'arkTab': false,
         },
     });
@@ -2258,11 +2216,6 @@ function fixResetBug() {
         43: false,
         44: false,
         45: false,
-        51: false,
-        52: false,
-        53: false,
-        54: false,
-        55: false,
     });
 
     copyData(START_PLAYER.milestones, {
@@ -2273,6 +2226,7 @@ function fixResetBug() {
         5: false,
         6: false,
         7: false,
+        8: false,
     });
 
     copyData(START_PLAYER.confirmations, {
@@ -2312,12 +2266,9 @@ function fixResetBug() {
     });
 
     START_PLAYER.tooltipsEnabled = false;
-    START_PLAYER.displayRealTime = false;
-    START_PLAYER.activeTabs = new Array('unitsTab', 'unitsSubTab', 'buildingsSubTab', 'timeDimSubTab', 'galaxiesSubTab', 'statSubTab');
+    START_PLAYER.activeTabs = new Array('unitsTab', 'unitsSubTab', 'buildingsSubTab', 'galaxiesSubTab', 'timeDimSubTab', 'statSubTab');
     START_PLAYER.activeGalaxies = new Array([4, 'gal1', 'gal2']);
-    START_PLAYER.hotkeysOn = true;
-    START_PLAYER.dontResetSlider = false;
-    START_PLAYER.version = 'v0.3.1_d.5';
+    START_PLAYER.hotkeysOn = true,
 
     fixData(player, START_PLAYER);
     save();

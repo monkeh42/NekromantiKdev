@@ -96,8 +96,7 @@ function updateBuildingUpgs() {
                     remBUpgClass(b, u, BUILDS_DATA[b].upgradeBtnClass);
                 }
             }
-            if (b==4 && u==12) { displayData.push(['html', 'bUpgEffect4.12', `[+${Decimal.floor(player.construction[1].sqrt())}/+${Decimal.floor(player.construction[2].sqrt())}/+${Decimal.floor(player.construction[3].sqrt())}]`]); }
-            else { displayData.push(['html', 'bUpgEffect' + b.toString() + '.' + u.toString(), `${isDisplayEffect(b, u) ? formatDefault2(getUpgEffect(b, u)) + BUILDS_DATA[b].upgrades[u].displaySuffix : ""}`]); }
+            displayData.push(['html', 'bUpgEffect' + b.toString() + '.' + u.toString(), `${isDisplayEffect(b, u) ? formatDefault2(getUpgEffect(b, u)) : ""}`]);
         }
     }
 }
@@ -173,7 +172,7 @@ function updateCorpseDisplays() {
     displayData.push(['html', 'corpseAmount', formatDefault(player.corpses)]);
     displayData.push(['html', 'pluralCorpse', corpseSingulizer(false)]);
     displayData.push(['html', 'pluralCorpseG', corpseSingulizer(true)]);
-    displayData.push(['html', 'corpseGain', player.astralFlag ? (hasGUpgrade(1, 22) ? formatDefault(getCorpsesPerSecond().times(.01)) : formatWhole(0)) : formatDefault(player.displayRealTime ? getCorpsesPerSecond().times(getRealTimeMultiplier()) : getCorpsesPerSecond())]);
+    displayData.push(['html', 'corpseGain', player.astralFlag ? formatWhole(0) : formatDefault(getCorpsesPerSecond())]);
     displayData.push(['html', 'achNum', `${formatWhole(getNumAchievements())}`]);
     displayData.push(['html', 'achRowsNum', `${formatWhole(getNumAchRows())}`]);
     displayData.push(['html', 'achMult', `${formatDefault2(getAchievementBoost())}x`]);
@@ -195,17 +194,17 @@ function updateCorpseDisplays() {
 function updateBuildingDisplays() {
     displayData.push(['html', 'brickDisplay', formatDefault(player.bricks)]);
     displayData.push(['html', 'brickAmountHeader', formatUnitRow(player.bricks)]);
-    displayData.push(['html', 'brickGainDisplay', ` ${(formatUnitRow(player.astralFlag ? (player.displayRealTime ? getBricksPerSecond().times(getRealTimeMultiplier()) : getBricksPerSecond()) : (hasGUpgrade(4, 32) ? getBricksPerSecond().pow(0.9) : formatWhole(0))))} `]);
-    displayData.push(['html', 'brickGainHeader', ` ${(formatUnitRow(player.astralFlag ? (player.displayRealTime ? getBricksPerSecond().times(getRealTimeMultiplier()) : getBricksPerSecond()) : (hasGUpgrade(4, 32) ? getBricksPerSecond().pow(0.9) : formatWhole(0))))} `]);
-    displayData.push(['html', 'factoryProd', formatDefault(player.displayRealTime ? getBuildingProdPerSec(1).times(getRealTimeMultiplier()) : getBuildingProdPerSec(1))]);
+    displayData.push(['html', 'brickGainDisplay', ` ${(player.astralFlag ? formatDefault(getBricksPerSecond()) : formatWhole(0))} `]);
+    displayData.push(['html', 'brickGainHeader', ` ${(formatUnitRow(player.astralFlag ? getBricksPerSecond() : (hasGUpgrade(4, 32) ? getBricksPerSecond().pow(0.9) : formatWhole(0))))} `]);
+    displayData.push(['html', 'factoryProd', formatDefault(getBuildingProdPerSec(1))]);
     displayData.push(['html', 'factoryAmt', formatDefault(player.buildings[1].amount)]);
     //displayData.push(['html', 'factoryBuildLabel', BUILDS_DATA[1].id]);
     //displayData.push(['html', 'factoryCostLabel', formatWhole(BUILDS_DATA[1].cost)]);
-    displayData.push(['html', 'necropolisProd', formatDefault(player.displayRealTime ? getBuildingProdPerSec(2).times(getRealTimeMultiplier()) : getBuildingProdPerSec(2))]);
+    displayData.push(['html', 'necropolisProd', formatDefault(getBuildingProdPerSec(2))]);
     displayData.push(['html', 'necropolisAmt', formatDefault(player.buildings[2].amount)]);
     //displayData.push(['html', 'necropolisBuildLabel', BUILDS_DATA[2].id]);
     //displayData.push(['html', 'necropolisCostLabel', formatWhole(BUILDS_DATA[2].cost)]);
-    displayData.push(['html', 'sunProd', formatDefault(player.displayRealTime ? getBuildingProdPerSec(3).times(getRealTimeMultiplier()) : getBuildingProdPerSec(3))]);
+    displayData.push(['html', 'sunProd', formatDefault(getBuildingProdPerSec(3))]);
     displayData.push(['html', 'sunAmt', formatDefault(player.buildings[3].amount)]);
     //displayData.push(['html', 'sunBuildLabel', BUILDS_DATA[3].id]);
     //displayData.push(['html', 'sunCostLabel', formatWhole(BUILDS_DATA[3].cost)]);
@@ -223,13 +222,10 @@ function updateBuildingDisplays() {
 }
 
 function updateTimeDisplays() {
-    let timeDimTimeMult = new Decimal(1);
-    if (hasGUpgrade(1, 32) && player.astralFlag) { timeDimTimeMult = getAntiTimeBuff().sqrt(); }
-    else if (hasGUpgrade(4, 22) && !player.astralFlag) { timeDimTimeMult = getTrueTimeBuff().sqrt(); }
     displayData.push(['html', 'trueTimeAmt', formatUnitRow(player.trueEssence)]);
     displayData.push(['html', 'antiTimeAmt', formatUnitRow(player.antiEssence)]);
-    displayData.push(['html', 'trueTimeGain', formatUnitRow(player.displayRealTime ? getEssenceProdPerSecond().times(player.truePercent/100).times(timeDimTimeMult) : getEssenceProdPerSecond().times(player.truePercent/100))]);
-    displayData.push(['html', 'antiTimeGain', formatUnitRow(player.displayRealTime ? getEssenceProdPerSecond().times(player.antiPercent/100).times(timeDimTimeMult) : getEssenceProdPerSecond().times(player.antiPercent/100))]);
+    displayData.push(['html', 'trueTimeGain', formatUnitRow(getEssenceProdPerSecond().times(player.truePercent/100))]);
+    displayData.push(['html', 'antiTimeGain', formatUnitRow(getEssenceProdPerSecond().times(player.antiPercent/100))]);
     displayData.push(['html', 'trueTimeBuff', formatDefault2(getTrueTimeBuff())]);
     displayData.push(['html', 'antiTimeBuff', formatDefault2(getAntiTimeBuff())]);
     displayData.push(['html', 'trueTimeNerf', formatDefault2(getTrueTimeNerf())]);
@@ -267,7 +263,6 @@ function updateSpacePrestigeDisplay() {
         remPresClass('space', 'spacePrestigeBut');
         addPresClass('space', 'unclickablePrestige');
     }
-    displayData.push(['html', 'numWorldsGain', formatWhole(calculateWorldsGain())]);
     if (player.spaceResets.lt(3)) {
         displayData.push(['setProp', 'spacePresDesc', 'display', 'block']);
         if (player.spaceResets.gt(1)) {
@@ -337,11 +332,10 @@ function updateUnitTiers() {
         displayData.push(['html', UNITS_DATA[i].UMultID, (i > 1) ? formatUnitRow(UNITS_DATA[i].prodMult()) : "~"]);
         displayData.push(['html', UNITS_DATA[i].CMultID, formatUnitRow(UNITS_DATA[i].corpseMult())]);
         if (getUnitProdPerSecond(i).gt(0)) {
-            if (Decimal.times(getUnitProdPerSecond(i).div(player.units[i].amount.max(1)), 100).gte(0.1)) { displayData.push(['html', UNITS_DATA[i].gainID, '(+' + formatUnitRow(Decimal.times((player.displayRealTime ? getUnitProdPerSecond(i).div(player.units[i].amount.max(1)).times(getRealTimeMultiplier()) : getUnitProdPerSecond(i).div(player.units[i].amount.max(1))), 100), 2) + '%/s)']); }
+            if (Decimal.times(getUnitProdPerSecond(i).div(player.units[i].amount.max(1)), 100).gte(0.1)) { displayData.push(['html', UNITS_DATA[i].gainID, '(+' + formatUnitRow(Decimal.times((getUnitProdPerSecond(i).div(player.units[i].amount.max(1))), 100), 2) + '%/s)']); }
             else if (document.getElementById(UNITS_DATA[i].gainID).innerHTML != '(<0.1%/s)') { displayData.push(['html', UNITS_DATA[i].gainID, '(<0.1%/s)']); }
         } else if (document.getElementById(UNITS_DATA[i].gainID).innerHTML != '') { displayData.push(['html', UNITS_DATA[i].gainID, '']) }
         if (canAffordUnit(i)) { displayData.push(['html', UNITS_DATA[i].maxNumID, calculateMaxUnits(i)]); }
-        else { displayData.push(['html', UNITS_DATA[i].maxNumID, '0']); }
     }
 }
 
@@ -358,7 +352,7 @@ function updateTDimTiers() {
             displayData.push(['remClass', TIME_DATA[i].maxID, 'unitMaxT']);
             displayData.push(['addClass', TIME_DATA[i].maxID, 'unclickableMaxT']);
         }
-        displayData.push(['html', TIME_DATA[i].amountID, `<div style="min-width: 30%; float: left;">${formatUnitRow(player.timeDims[i].amount)}</div><div style="min-width: 40%; float: left;">(${formatWholeUnitRow(player.timeDims[i].bought)})</div><div style="min-width: 30%; float: left;">${getTimeDimProdPerSecond(i + 1).gt(0) ? "(+" + formatUnitRow(Decimal.times((player.displayRealTime ? getTimeDimProdPerSecond(i + 1).div(player.timeDims[i].amount.max(1)).times(getRealTimeMultiplier()) : getTimeDimProdPerSecond(i + 1).div(player.timeDims[i].amount.max(1))), 100), 2) + "%/s)</div>" : ""}`]);
+        displayData.push(['html', TIME_DATA[i].amountID, `<div style="min-width: 30%; float: left;">${formatUnitRow(player.timeDims[i].amount)}</div><div style="min-width: 40%; float: left;">(${formatWholeUnitRow(player.timeDims[i].bought)})</div><div style="min-width: 30%; float: left;">${getTimeDimProdPerSecond(i + 1).gt(0) ? "(+" + formatUnitRow(Decimal.times((getTimeDimProdPerSecond(i + 1).div(player.timeDims[i].amount.max(1))), 100), 2) + "%/s)</div>" : ""}`]);
         displayData.push(['html', TIME_DATA[i].multID, `<div>${formatUnitRow(TIME_DATA[i].mult())}x</div>`]);
         displayData.push(['html', TIME_DATA[i].maxAmtID, canAffordTime(i) ? formatWhole(calculateMaxTime(i)) : '0']);
     }
@@ -389,7 +383,7 @@ function unlockElements(mainTab, subTab) {
         for (let i=0; i<els.length; i++) { displayData.push(['setProp', els[i].id, 'display', 'none']); }
     }
     if (data.classToShow !== undefined) {
-        let els = document.getElementsByClassName(data.classToShow);
+        let els = document.getElementsByClassName(data.classToHide);
         for (let i=0; i<els.length; i++) {
             element = document.getElementById(els[i].id);
             if (element.tagName == 'TR') { displayData.push(['setProp', element.id, 'display', 'table-row']); } 
@@ -418,7 +412,6 @@ function unlockElementsOnLoad(mainTab, subTab) {
             element = document.getElementById(data.idsToShow[i]);
             if (element.tagName == 'TR') { displayData.push(['setProp', element.id, 'display', 'table-row']); } 
             else if (element.tagName == 'TD') { displayData.push(['setProp', element.id, 'display', 'table-cell']); }
-            else if (element.tagName == 'TABLE') { displayData.push(['setProp', element.id, 'display', 'table']); }
             else { displayData.push(['setProp', element.id, 'display', 'block']); }
         }
     }
@@ -432,7 +425,7 @@ function unlockElementsOnLoad(mainTab, subTab) {
         for (let i=0; i<els.length; i++) { displayData.push(['setProp', els[i].id, 'display', 'none']); }
     }
     if (data.classToShow !== undefined) {
-        let els = document.getElementsByClassName(data.classToShow);
+        let els = document.getElementsByClassName(data.classToHide);
         for (let i=0; i<els.length; i++) {
             element = document.getElementById(els[i].id);
             if (element.tagName == 'TR') { displayData.push(['setProp', element.id, 'display', 'table-row']); } 
@@ -461,7 +454,6 @@ function lockElements(mainTab, subTab) {
             element = document.getElementById(data.idsToHide[i]);
             if (element.tagName == 'TR') { displayData.push(['setProp', element.id, 'display', 'table-row']); } 
             else if (element.tagName == 'TD') { displayData.push(['setProp', element.id, 'display', 'table-cell']); }
-            else if (element.tagName == 'TABLE') { displayData.push(['setProp', element.id, 'display', 'table']); }
             else { displayData.push(['setProp', data.idsToHide[i], 'display', 'block']); }
         }
     }
@@ -513,11 +505,6 @@ function toggleTimeLockDisplay() {
     displayData.push(['togClass', 'respecTimeBut', 'unclickSliderBut']);
     displayData.push(['togClass', 'timeSlider', 'sliderLocked']);
     displayData.push(['togClass', 'timeSlider', 'slider']);
-}
-
-function updateDimBuyer(tier, button) {
-    player.autobuyers[12][tier] = !player.autobuyers[12][tier];
-    document.getElementById(button).innerHTML = player.autobuyers[12][tier] ? 'ON' : 'OFF'
 }
 
 function updateSingleBuyer(id, option, button) {
@@ -618,15 +605,6 @@ function updateAutobuyersDisplay() {
     document.getElementById('ascensionEnabledBut').innerHTML = player.autobuyers[11]['on'] ? 'ON' : 'OFF'
     document.getElementById('ascensionSpeedBut').innerHTML = player.autobuyers[11]['fast'] ? 'FAST' : 'SLOW'
     document.getElementById('ascensionBuyerAmount').value = formatWholeNoComma(player.autobuyers[11]['max']);
-
-    for (let j=1; j<=NUM_TIMEDIMS; j++) {
-        document.getElementById('timeDim' + j.toString() + 'But').innerHTML = player.autobuyers[12][j] ? 'ON' : 'OFF'
-    }
-}
-
-function toggleTimeUpgBuyer() {
-    player.autobuyers['time']['on'] = !player.autobuyers['time']['on'];
-    document.getElementById('timeUpgBuyerBut').innerHTML = player.autobuyers['time']['on'] ? 'Time Upgrade Cols 1-3 Autobuyer: ON' : 'Time Upgrade Cols 1-3 Autobuyer: OFF'
 }
 
 function updateSliderDisplay() {
@@ -637,17 +615,6 @@ function updateSliderDisplay() {
 }
 
 //generic UI stuff (tabs, toggles, popups etc)
-
-function toggleRealTimeDisplays() {
-    player.displayRealTime = !player.displayRealTime;
-    document.getElementById('realTimeDisplayBut').innerHTML = player.displayRealTime ? 'toggle time displays: REAL TIME' : 'toggle time displays: GAME TIME'
-    let elements = document.getElementsByClassName('secDisplay');
-    let el;
-    for (let i=0; i<elements.length; i++) {
-        el = elements.item(i);
-        el.innerHTML = player.displayRealTime ? 'real sec' : 'sec'
-    }
-}
 
 function toggleTooltips() {
     player.tooltipsEnabled = !player.tooltipsEnabled;
@@ -720,8 +687,6 @@ function closeConfirmationsPopup() {
 }
 
 function openDisplayPopup() {
-    document.getElementById('displayBut').classList.remove('tabButNotify');
-    document.getElementById('optionsTabBut').classList.remove('tabButIndirectNotify');    
     document.getElementById('displayPopup').style.display = 'block';
 }
 
@@ -1091,11 +1056,7 @@ function dragElement(elmnt) {
       document.onmouseup = null;
       document.onmousemove = null;
     }
-}
-
-function updateDontResetSlider() {
-    player.dontResetSlider = document.getElementById('dontResetSliderBox').checked;
-}
+  }
 
 function updateUnlocks() {
     for (var tab in UNLOCKS_DATA) {
@@ -1104,7 +1065,7 @@ function updateUnlocks() {
         }
     }
     for (var i=1; i<NUM_UNITS; i++) {
-        if ((player.units[i].bought.gte(1) && canUnlock(i+1)) || hasMilestone(2)) {
+        if ((player.units[i].bought.gte(1) && canUnlock(i+1)) || player.ascensions.gt(0)) {
             player.units[i+1].unlocked = true;
             displayData.push(['setProp', UNITS_DATA[i+1].rowID, 'display', 'table-row']);
         } 
