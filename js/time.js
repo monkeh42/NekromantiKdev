@@ -1,7 +1,7 @@
 //misc info functions
 
 function hasPrereqTUpg(t) {
-    if (t==11 || t==21 || t==31) { return true; }
+    if (t==11 || t==21 || t==31 || t==41 || t==51) { return true; }
     else { return player.timeUpgs[TIME_DATA.upgrades[t].preReq]; }
 }
 
@@ -49,7 +49,8 @@ function calculateCrystalGain() {
         var ret = Decimal.floor(Decimal.pow(10, (player.thisSacStats.bestCorpses.e/div) - 0.65));
         if (hasTUpgrade(21)) { ret = ret.times(2); }
         if (hasTUpgrade(33)) { ret = ret.times(getTUpgEffect(33)); }
-        if (hasGUpgrade(4, 21)) { ret = ret.times(getGUpgEffect(4, 21)) }
+        if (hasGUpgrade(4, 21)) { ret = ret.times(getGUpgEffect(4, 21)); }
+        if (hasTUpgrade(53)) { ret = ret.times(getTUpgEffect(53)); }
         return ret;
     } else {
         return new Decimal(0);
@@ -297,8 +298,10 @@ function timePrestigeReset() {
     if (player.thisAscStats.bestCrystalRate.gt(player.allTimeStats.bestCrystalRate)) { player.allTimeStats.bestCrystalRate = new Decimal(player.thisAscStats.bestCrystalRate) }
     for (var i=9; i>0; i--) { copyData(player.pastRuns.lastTen[i], player.pastRuns.lastTen[i-1]); }
     copyData(player.pastRuns.lastTen[0], player.pastRuns.lastRun);
-    player.trueEssence = new Decimal(START_PLAYER.trueEssence);
-    player.antiEssence = new Decimal(START_PLAYER.antiEssence);
+    if (!hasTUpgrade(54)) {
+        player.trueEssence = new Decimal(START_PLAYER.trueEssence);
+        player.antiEssence = new Decimal(START_PLAYER.antiEssence);
+    }
     player.corpses = hasAchievement(41) ? new Decimal(START_PLAYER.corpsesAch41) : new Decimal(START_PLAYER.corpses)
     resetUnits();
     resetBuildingResources(true);
@@ -313,13 +316,24 @@ function timePrestigeReset() {
 
 function resetTime() {
     let firstColumn = new Array(4);
+    let newColumns = {};
     let rapidFire = player.timeUpgs[24];
-    for (let i=1; i<=4; i++) { firstColumn[i] = player.timeUpgs['1' + i.toString()]; }
+    for (let i=1; i<=4; i++) {
+        firstColumn[i] = player.timeUpgs['1' + i.toString()];
+        newColumns['4' + i.toString()] = player.timeUpgs['4' + i.toString()];
+        newColumns['5' + i.toString()] = player.timeUpgs['5' + i.toString()];
+    }
     copyData(player.timeUpgs, START_PLAYER.timeUpgs);
     if (hasMilestone(2)) {
         for (let i=1; i<=4; i++) { player.timeUpgs['1' + i.toString()] = firstColumn[i]; }
     }
     if (hasMilestone(3)) { player.timeUpgs[24] = rapidFire; }
+    if (hasMilestone(6)) {
+        for (let i=1; i<=4; i++) {
+            player.timeUpgs['4' + i.toString()] = newColumns['4' + i.toString()];
+            player.timeUpgs['5' + i.toString()] = newColumns['5' + i.toString()];
+        }
+    }
 
     for (var i=NUM_TIMEDIMS; i>=1; i--) {
         player.timeDims[i].amount = new Decimal(0);
@@ -381,7 +395,7 @@ const TIME_DATA = {
             return c;
         },
         mult: function() {
-            var m = new Decimal(2);
+            var m = hasTUpgrade(51) ? new Decimal(2.5) : new Decimal(2)
             if (player.timeDims[this.tier].bought.eq(0)) { return new Decimal(1); }
             m = m.pow(player.timeDims[this.tier].bought-1);
             if (hasTUpgrade(31)) { m = m.times(getTUpgEffect(31)); }
@@ -554,7 +568,7 @@ const TIME_DATA = {
             displayFormula: '1 + 7.5*log(x)',
             effect: function() {
                 var e = player.crystals;
-                e = e.log10()*7.5;
+                e = hasUpgrade(4, 13) ? e.ln()*7.5 : e.log10()*7.5;
                 return 1 + e;
             }
         },
@@ -569,7 +583,7 @@ const TIME_DATA = {
             displayFormula: '1 + log(x)',
             effect: function() {
                 var e = player.crystals;
-                e = e.log10();
+                e = hasUpgrade(4, 13) ? e.ln() : e.log10();
                 return 1 + e;
             }
         },
@@ -597,7 +611,7 @@ const TIME_DATA = {
             displayFormula: '1 + 10*log(x)',
             effect: function() {
                 var e = player.crystals;
-                e = e.log10()*10
+                e = hasUpgrade(4, 13) ? e.ln()*10 : e.log10()*10
                 return 1 + e;
             }
         },
@@ -635,6 +649,114 @@ const TIME_DATA = {
             cost: new Decimal(1000000),
             preReq: 33,
             buttonID: 'timeUpg34',
+            displayEffect: false,
+            displayTooltip: false,
+            displayFormula: '',
+            effect: function() {
+                return new Decimal(1);
+            }
+        },
+        41: {
+            title: 'Unholy Paradox, Manbat',
+            desc: 'Outside of astral enslavement, the True Time Essence effect applies directly to corpse production.',
+            cost: new Decimal(1e12),
+            preReq: null,
+            buttonID: 'timeUpg41',
+            displayEffect: true,
+            displayTooltip: false,
+            displayFormula: '',
+            effect: function() {
+                return player.astralFlag ? new Decimal(1) : getTrueTimeBuff()
+            }
+        },
+        42: {
+            title: 'Corpse Boost',
+            desc: 'Unspent galaxies multiply corpse production.',
+            cost: new Decimal(1e15),
+            preReq: 41,
+            buttonID: 'timeUpg42',
+            displayEffect: true,
+            displayTooltip: true,
+            displayFormula: '1 + x',
+            effect: function() {
+                let e = player.galaxies;
+                return 1 + e;
+            }
+        },
+        43: {
+            title: 'Armament Boost',
+            desc: 'Unspent galaxies multiply the Industrialize effect.',
+            cost: new Decimal(1e20),
+            preReq: 42,
+            buttonID: 'timeUpg43',
+            displayEffect: true,
+            displayTooltip: true,
+            displayFormula: '1 + x',
+            effect: function() {
+                var e = player.galaxies;
+                return 1 + e;
+            }
+        },
+        44: {
+            title: 'Prestigious',
+            desc: 'World Prestige no longer resets your corpses.',
+            cost: new Decimal(1e30),
+            preReq: 43,
+            buttonID: 'timeUpg44',
+            displayEffect: false,
+            displayTooltip: false,
+            displayFormula: '',
+            effect: function() {
+                return new Decimal(1);
+            }
+        },
+        51: {
+            title: 'Buy More',
+            desc: 'Increase the base multiplier per bought time dimension from 2x -> 2.5x.',
+            cost: new Decimal(1e12),
+            preReq: null,
+            buttonID: 'timeUpg51',
+            displayEffect: false,
+            displayTooltip: false,
+            displayFormula: '',
+            effect: function() {
+                return new Decimal(1);
+            }
+        },
+        52: {
+            title: 'Brick Boost',
+            desc: 'Unspent galaxies multiply astral brick production.',
+            cost: new Decimal(1e15),
+            preReq: 51,
+            buttonID: 'timeUpg52',
+            displayEffect: true,
+            displayTooltip: true,
+            displayFormula: '1 + x',
+            effect: function() {
+                var e = player.galaxies;
+                return 1 + e;
+            }
+        },
+        53: {
+            title: 'Crystal Boost',
+            desc: 'Unspent galaxies multiply time crystal gain.',
+            cost: new Decimal(1e20),
+            preReq: 52,
+            buttonID: 'timeUpg53',
+            displayEffect: true,
+            displayTooltip: true,
+            displayFormula: '1 + x',
+            effect: function() {
+                var e = player.galaxies;
+                return 1 + e;
+            }
+        },
+        54: {
+            title: 'Sacrificial',
+            desc: 'Sacrifice no longer resets your time essence.',
+            cost: new Decimal(1e30),
+            preReq: 53,
+            buttonID: 'timeUpg54',
             displayEffect: false,
             displayTooltip: false,
             displayFormula: '',
