@@ -11,11 +11,15 @@ function canUnlock(tier) {
 //production/calculation
 
 function getCorpsesPerSecond() {
-    return player.units[1].amount.gt(0) ? player.units[1].amount.times(getTotalCorpseMult()) : new Decimal(0);
+    let c = player.units[1].amount.gt(0) ? player.units[1].amount.times(getTotalCorpseMult()) : new Decimal(0);
+    if (hasTUpgrade(41)) { c = c.times(getTUpgEffect(41)); }
+    
+    if (hasTUpgrade(42)) { c = c.times(getTUpgEffect(42)); }
+    return c;
 }
 
 function getUnitProdPerSecond(tier) {
-    if (tier == NUM_UNITS) { return (hasGUpgrade(2, 41)) ? new Decimal(Decimal.max(getEssenceProdPerSecond(), 1).log10()) : new Decimal(0); }
+    if (tier == NUM_UNITS) { return (hasGUpgrade(2, 41)) ? (hasUpgrade(4, 13) ? new Decimal(Decimal.max(getEssenceProdPerSecond(), 1).ln()) : new Decimal(Decimal.max(getEssenceProdPerSecond(), 1).log10())) : new Decimal(0); }
     let p = player.units[tier+1].amount;
     if (!hasGUpgrade(2, 21)) { p = p.div(tier+1); }
     return p.times(UNITS_DATA[tier+1].prodMult());
@@ -106,6 +110,11 @@ function buyMaxAll() {
 
 //prestige related
 
+function calculateWorldsGain() {
+    if (canSpacePrestige) { return hasUpgrade(4, 11) ? getUpgEffect(4, 11).plus(1) : new Decimal(1) }
+    else { return new Decimal(0) }
+}
+
 function canSpacePrestige() {
     return player.units[player.nextSpaceReset[1]].bought.gte(player.nextSpaceReset[0]);
 }
@@ -125,34 +134,36 @@ function spacePrestige() {
         if (player.confirmations['worldPrestige']) {
             if (!confirm('Are you sure? This will reset ALL of your corpses, units, and astral bricks.<br>(These confirmations can be disabled in options)')) return
         }
-        player.spaceResets = player.spaceResets.plus(1);
-        player.worlds = player.worlds.plus(1);
+        let worldsGain = calculateWorldsGain();
+        player.spaceResets = player.spaceResets.plus(worldsGain);
+        player.worlds = player.worlds.plus(worldsGain);
         if (player.worlds.gt(player.thisSacStats.bestWorlds)) { player.thisSacStats.bestWorlds = new Decimal(player.worlds); }
         if (player.worlds.gt(player.thisAscStats.bestWorlds)) { player.thisAscStats.bestWorlds = new Decimal(player.worlds); }
         if (player.worlds.gt(player.allTimeStats.bestWorlds)) { player.allTimeStats.bestWorlds = new Decimal(player.worlds); }
-        player.thisSacStats.totalSpaceResets = player.thisSacStats.totalSpaceResets.plus(1);
-        player.thisSacStats.totalWorlds = player.thisSacStats.totalWorlds.plus(1);
-        player.thisAscStats.totalSpaceResets = player.thisAscStats.totalSpaceResets.plus(1);
-        player.thisAscStats.totalWorlds = player.thisAscStats.totalWorlds.plus(1);
-        player.allTimeStats.totalSpaceResets = player.allTimeStats.totalSpaceResets.plus(1);
-        player.allTimeStats.totalWorlds = player.allTimeStats.totalWorlds.plus(1);
+        player.thisSacStats.totalSpaceResets = player.thisSacStats.totalSpaceResets.plus(worldsGain);
+        player.thisSacStats.totalWorlds = player.thisSacStats.totalWorlds.plus(worldsGain);
+        player.thisAscStats.totalSpaceResets = player.thisAscStats.totalSpaceResets.plus(worldsGain);
+        player.thisAscStats.totalWorlds = player.thisAscStats.totalWorlds.plus(worldsGain);
+        player.allTimeStats.totalSpaceResets = player.allTimeStats.totalSpaceResets.plus(worldsGain);
+        player.allTimeStats.totalWorlds = player.allTimeStats.totalWorlds.plus(worldsGain);
         spacePrestigeReset();
     }
 }
 
 function spacePrestigeNoConfirm() {
     if (canSpacePrestige()) {
-        player.spaceResets = player.spaceResets.plus(1);
-        player.worlds = player.worlds.plus(1);
+        let worldsGain = calculateWorldsGain();
+        player.spaceResets = player.spaceResets.plus(worldsGain);
+        player.worlds = player.worlds.plus(worldsGain);
         if (player.worlds.gt(player.thisSacStats.bestWorlds)) { player.thisSacStats.bestWorlds = new Decimal(player.worlds); }
         if (player.worlds.gt(player.thisAscStats.bestWorlds)) { player.thisAscStats.bestWorlds = new Decimal(player.worlds); }
         if (player.worlds.gt(player.allTimeStats.bestWorlds)) { player.allTimeStats.bestWorlds = new Decimal(player.worlds); }
-        player.thisSacStats.totalSpaceResets = player.thisSacStats.totalSpaceResets.plus(1);
-        player.thisSacStats.totalWorlds = player.thisSacStats.totalWorlds.plus(1);
-        player.thisAscStats.totalSpaceResets = player.thisAscStats.totalSpaceResets.plus(1);
-        player.thisAscStats.totalWorlds = player.thisAscStats.totalWorlds.plus(1);
-        player.allTimeStats.totalSpaceResets = player.allTimeStats.totalSpaceResets.plus(1);
-        player.allTimeStats.totalWorlds = player.allTimeStats.totalWorlds.plus(1);
+        player.thisSacStats.totalSpaceResets = player.thisSacStats.totalSpaceResets.plus(worldsGain);
+        player.thisSacStats.totalWorlds = player.thisSacStats.totalWorlds.plus(worldsGain);
+        player.thisAscStats.totalSpaceResets = player.thisAscStats.totalSpaceResets.plus(worldsGain);
+        player.thisAscStats.totalWorlds = player.thisAscStats.totalWorlds.plus(worldsGain);
+        player.allTimeStats.totalSpaceResets = player.allTimeStats.totalSpaceResets.plus(worldsGain);
+        player.allTimeStats.totalWorlds = player.allTimeStats.totalWorlds.plus(worldsGain);
         spacePrestigeReset();
     }
 }
@@ -165,10 +176,11 @@ function spacePrestigeReset() {
     resetUnits();
     resetBuildingResources();
     //unitSetup(START_PLAYER);
-    player.corpses = hasAchievement(41) ? new Decimal(START_PLAYER.corpsesAch41) : new Decimal(START_PLAYER.corpses)
+    if (!hasTUpgrade(44)) { player.corpses = hasAchievement(41) ? new Decimal(START_PLAYER.corpsesAch41) : new Decimal(START_PLAYER.corpses) }
     //allDisplay();
     
     save();
+    loadStyles();
     startInterval();
 }
 
