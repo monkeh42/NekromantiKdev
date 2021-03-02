@@ -825,8 +825,8 @@ function updateVersionData(newP, oldP) {
         } else if (Array.isArray(newP[item])) {
             if (oldP[item] !== undefined) {
                 newP[item] = [];
+                updateVersionData(newP[item], oldP[item]);
             }
-            updateVersionData(newP[item], oldP[item]);
         } else if (newP[item] instanceof Decimal) {
             if (oldP[item] !== undefined) {
                 newP[item] = new Decimal(oldP[item]);
@@ -834,8 +834,8 @@ function updateVersionData(newP, oldP) {
         } else if ((!!newP[item]) && (typeof newP[item] === "object")) {
             if (oldP[item] !== undefined) {
                 newP[item] = {};
+                updateVersionData(newP[item], oldP[item]);
             }
-            updateVersionData(newP[item], oldP[item]);
         } else {
             if (oldP[item] !== undefined && item != 'version') {
                 newP[item] = oldP[item];
