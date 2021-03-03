@@ -256,6 +256,10 @@ button:focus, select:focus {
     outline: none;
 }
 
+button > * {
+    pointer-events: none;
+}
+
 option:active, option.active {
     background-color: white;
     color: black;
