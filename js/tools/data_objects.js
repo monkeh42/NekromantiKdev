@@ -749,7 +749,7 @@ MILES_DATA = {
     },
     7: {
         canUnlock: function() {
-            return getBoughtGUpgsByRow(4) == 4;
+            return false; //getBoughtGUpgsByRow(4) == 4;
         },
         effect: function() {
             return new Decimal(1);
