@@ -674,7 +674,7 @@ const START_PLAYER = {
     version: 'v0.3.1_d.5',
 }
 
-MILES_DATA = {
+const MILES_DATA = {
     1: {
         canUnlock: function() {
             return getBoughtGUpgsByRow(1) == 4;
