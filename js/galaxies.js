@@ -129,6 +129,15 @@ function buyGUpg(g, u) {
             remGUpgClass(g, 31, 'unclickGalaxyUpg')
             document.getElementById(GALAXIES_DATA[g].upgrades[31].textID).style.display = 'none';
         }
+
+        for (let gg in GALAXIES_DATA) {
+            for (let uu in GALAXIES_DATA[gg].upgrades) {
+                if (GALAXIES_DATA[gg].upgrades[uu].row>thisRow || (GALAXIES_DATA[gg].upgrades[uu].row==1 && thisRow==4)) {
+                    document.getElementById('gUpgCost' + gg.toString() + '.' + uu.toString()).innerHTML = formatWhole(getGUpgCost(gg, uu)) + ' ' + galaxyTextSingulizer(getGUpgCost(gg, uu));
+                }
+            }
+        }
+
         /*if (thisRow>1) {
             if (!player.galaxyRowsLocked[thisRow-1]) { rowLock(thisRow-1); }
         }

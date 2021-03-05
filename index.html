@@ -151,24 +151,26 @@
         <table style="width: auto; margin: auto;" class="shownOnMid">
             <tr>
                 <td id="unitsTabCellMid">
-                    <button id="unitsTabButMid" class="tabBut" onclick="showTab('unitsTab', 'unitsTabBut')">UNITS</button>
+                    <button id="unitsTabButMid" class="tabBut" onclick="showTab('unitsTab', 'unitsTabButMid')">UNITS</button>
                 </td>
                 <td id="buildingsTabCellMid" style="display: none;">
-                    <button id="buildingsTabButMid" class="tabBut" onclick="showTab('buildingsTab', 'buildingsTabBut')">BUILDINGS</button>
+                    <button id="buildingsTabButMid" class="tabBut" onclick="showTab('buildingsTab', 'buildingsTabButMid')">BUILDINGS</button>
                 </td>
                 <td id="timeTabCellMid" style="display: none;">
-                    <button id="timeTabButMid" class="tabBut" onclick="showTab('timeTab', 'timeTabBut')">TIME WARP</button>
+                    <button id="timeTabButMid" class="tabBut" onclick="showTab('timeTab', 'timeTabButMid')">TIME WARP</button>
                 </td>
                 <td id="galaxyTabCellMid" style="display: none;">
-                    <button id="galaxyTabButMid" class="tabBut" onclick="showTab('galaxyTab', 'galaxyTabBut')">GALAXIES</button>
+                    <button id="galaxyTabButMid" class="tabBut" onclick="showTab('galaxyTab', 'galaxyTabButMid')">GALAXIES</button>
                 </td>
-            </table>
-            <table style="width: auto; margin: auto;" class="shownOnMid">
+            </tr>
+        </table>
+        <table style="width: auto; margin: auto;" class="shownOnMid">
+            <tr>
                 <td id="statsTabCellMid">
                     <button id="statsTabButMid" class="tabBut" onclick="statsTabClick()">STATS &<br>ACHIEVEMENTS</button>
                 </td>
                 <td id="optionsTabCellMid">
-                    <button id="optionsTabButMid" class="tabBut" onclick="showTab('optionsTab', 'optionsTabBut')">OPTIONS</button>
+                    <button id="optionsTabButMid" class="tabBut" onclick="showTab('optionsTab', 'optionsTabButMid')">OPTIONS</button>
                 </td>
                 <td id="helpTabCellMid">
                     <button id="helpTabButMid" class="tabBut" onclick="showHelp()" style="cursor: pointer !important;">HELP (THIS TAB)</button>
@@ -459,7 +461,7 @@
                     <button id="spacePrestige" class="spacePrestigeBut" onclick="spacePrestigeClick()">
                         <span style="font-size: 15pt;">This world is dead and empty...</span><br>
                         <span id="spacePresDesc">Give up all your units and corpses to exterminate a new world. You gain a boost to corpse gain based on total exterminated worlds.<br>
-                        This World Prestige will unlock <span id="spacePresUnlock">Buildings</span> and a new unit tier.</span><br>
+                        This World Prestige will unlock <span id="spacePresUnlock">Buildings</span> and a new unit tier.</span>
                         <span id="numWorldsGainDisplay" style="font-size: 13pt; display: none;">Gain <span id="numWorldsGain" style="font-size: 17pt; white-space: pre; font-variant-numeric: tabular-nums;"> 1 </span> exterminated world<br></span>
                         <span id="prestigeReq" style="font-size: 13pt;">Requires <span style="font-size: 17pt; white-space: pre;"> 1 </span> Liches</span>
                     </button>
@@ -1667,28 +1669,80 @@
                                 </tr>
                                 <tr>
                                     <td colspan="2">
-                                        <div id="topBorderDiv"><button id="galaxyUpg1.11" class="galaxyUpg" onclick="buyGUpg(1, 11)"><span id="text1.11"></span></button></div>
+                                        <div id="topBorderDiv">
+                                            <button id="galaxyUpg1.11" class="galaxyUpg" onclick="buyGUpg(1, 11)">
+                                                <span id="text1.11">
+                                                    <span id="gUpgName1.11" style="font-weight: 900;"></span><br>
+                                                    <span id="gUpgDesc1.11"></span><br>
+                                                    <span style="display: none;">Requires: <span id="gUpgRequires1.11"></span></span>
+                                                    <span>Cost: <span id="gUpgCost1.11"></span></span><br>
+                                                    <span id="1.11GEffect" style="display: none;">Currently: <span id="gUpgEffect1.11"></span></span>
+                                                </span>
+                                            </button>
+                                        </div>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td class="leftGalaxyTD">
-                                        <button id="galaxyUpg1.21" class="galaxyUpg" onclick="buyGUpg(1, 21)"><span id="text1.21"></span></button>
+                                        <button id="galaxyUpg1.21" class="galaxyUpg" onclick="buyGUpg(1, 21)">
+                                            <span id="text1.21">
+                                                <span id="gUpgName1.21" style="font-weight: 900;"></span><br>
+                                                <span id="gUpgDesc1.21"></span><br>
+                                                <span class="gUpgRequires">Requires: <span id="gUpgRequires1.21"></span></span><br>
+                                                <span>Cost: <span id="gUpgCost1.21"></span> </span><br>
+                                                <span id="1.21GEffect" style="display: none;">Currently: <span id="gUpgEffect1.21"></span></span>
+                                            </span>
+                                        </button>
                                     </td>
                                     <td class="rightGalaxyTD">
-                                        <button id="galaxyUpg1.22" class="galaxyUpg" onclick="buyGUpg(1, 22)"><span id="text1.22"></span></button>
+                                        <button id="galaxyUpg1.22" class="galaxyUpg" onclick="buyGUpg(1, 22)">
+                                            <span id="text1.22">
+                                                <span id="gUpgName1.22" style="font-weight: 900;"></span><br>
+                                                <span id="gUpgDesc1.22"></span><br>
+                                                <span class="gUpgRequires">Requires: <span id="gUpgRequires1.22"></span></span><br>
+                                                <span>Cost: <span id="gUpgCost1.22"></span></span><br>
+                                                <span id="1.22GEffect" style="display: none;">Currently: <span id="gUpgEffect1.22"></span></span>
+                                            </span>
+                                        </button>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td class="leftGalaxyTD">
-                                        <button id="galaxyUpg1.31" class="galaxyUpg" onclick="buyGUpg(1, 31)"><span id="text1.31"></span></button>
+                                        <button id="galaxyUpg1.31" class="galaxyUpg" onclick="buyGUpg(1, 31)">
+                                            <span id="text1.31">
+                                                <span id="gUpgName1.31" style="font-weight: 900;"></span><br>
+                                                <span id="gUpgDesc1.31"></span><br>
+                                                <span class="gUpgRequires">Requires: <span id="gUpgRequires1.31"></span></span><br>
+                                                <span>Cost: <span id="gUpgCost1.31"></span></span><br>
+                                                <span id="1.31GEffect" style="display: none;">Currently: <span id="gUpgEffect1.31"></span></span>
+                                            </span>
+                                        </button>
                                     </td>
                                     <td class="rightGalaxyTD">
-                                        <button id="galaxyUpg1.32" class="galaxyUpg" onclick="buyGUpg(1, 32)"><span id="text1.32"></span></button>
+                                        <button id="galaxyUpg1.32" class="galaxyUpg" onclick="buyGUpg(1, 32)">
+                                            <span id="text1.32">
+                                                <span id="gUpgName1.32" style="font-weight: 900;"></span><br>
+                                                <span id="gUpgDesc1.32"></span><br>
+                                                <span class="gUpgRequires">Requires: <span id="gUpgRequires1.32"></span></span><br>
+                                                <span>Cost: <span id="gUpgCost1.32"></span></span><br>
+                                                <span id="1.32GEffect" style="display: none;">Currently: <span id="gUpgEffect1.32"></span></span>
+                                            </span>
+                                        </button>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td colspan="2">
-                                        <div id="bottomBorderDiv"><button id="galaxyUpg1.41" class="galaxyUpg" onclick="buyGUpg(1, 41)"><span id="text1.41"></span></button></div>
+                                        <div id="bottomBorderDiv">
+                                            <button id="galaxyUpg1.41" class="galaxyUpg" onclick="buyGUpg(1, 41)">
+                                                <span id="text1.41">
+                                                    <span id="gUpgName1.41" style="font-weight: 900;"></span><br>
+                                                    <span id="gUpgDesc1.41"></span><br>
+                                                    <span class="gUpgRequires">Requires: <span id="gUpgRequires1.41"></span></span><br>
+                                                    <span>Cost: <span id="gUpgCost1.41"></span></span><br>
+                                                    <span id="1.41GEffect" style="display: none;">Currently: <span id="gUpgEffect1.41"></span></span>
+                                                </span>
+                                            </button>   
+                                        </div>
                                     </td>
                                 </tr>
                             </table>
@@ -1702,28 +1756,80 @@
                                 </tr>
                                 <tr>
                                     <td colspan="2">
-                                        <div id="topBorderDiv"><button id="galaxyUpg2.11" class="galaxyUpg" onclick="buyGUpg(2, 11)"><span id="text2.11"></span></button></div>
+                                        <div id="topBorderDiv">
+                                            <button id="galaxyUpg2.11" class="galaxyUpg" onclick="buyGUpg(2, 11)">
+                                                <span id="text2.11">
+                                                    <span id="gUpgName2.11" style="font-weight: 900;"></span><br>
+                                                    <span id="gUpgDesc2.11"></span><br>
+                                                    <span style="display: none;">Requires: <span id="gUpgRequires2.11"></span></span>
+                                                    <span>Cost: <span id="gUpgCost2.11"></span></span><br>
+                                                    <span id="2.11GEffect" style="display: none;">Currently: <span id="gUpgEffect2.11"></span></span>
+                                                </span>
+                                            </button>
+                                        </div>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td class="leftGalaxyTD">
-                                        <button id="galaxyUpg2.21" class="galaxyUpg" onclick="buyGUpg(2, 21)"><span id="text2.21"></span></button>
+                                        <button id="galaxyUpg2.21" class="galaxyUpg" onclick="buyGUpg(2, 21)">
+                                            <span id="text2.21">
+                                                <span id="gUpgName2.21" style="font-weight: 900;"></span><br>
+                                                <span id="gUpgDesc2.21"></span><br>
+                                                <span class="gUpgRequires">Requires: <span id="gUpgRequires2.21"></span></span><br>
+                                                <span>Cost: <span id="gUpgCost2.21"></span></span><br>
+                                                <span id="2.21GEffect" style="display: none;">Currently: <span id="gUpgEffect2.21"></span></span>
+                                            </span>
+                                        </button>
                                     </td>
                                     <td class="rightGalaxyTD">
-                                        <button id="galaxyUpg2.22" class="galaxyUpg" onclick="buyGUpg(2, 22)"><span id="text2.22"></span></button>
+                                        <button id="galaxyUpg2.22" class="galaxyUpg" onclick="buyGUpg(2, 22)">
+                                            <span id="text2.22">
+                                                <span id="gUpgName2.22" style="font-weight: 900;"></span><br>
+                                                <span id="gUpgDesc2.22"></span><br>
+                                                <span class="gUpgRequires">Requires: <span id="gUpgRequires2.22"></span></span><br>
+                                                <span>Cost: <span id="gUpgCost2.22"></span></span><br>
+                                                <span id="2.22GEffect" style="display: none;">Currently: <span id="gUpgEffect2.22"></span></span>
+                                            </span>
+                                        </button>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td class="leftGalaxyTD">
-                                        <button id="galaxyUpg2.31" class="galaxyUpg" onclick="buyGUpg(2, 31)"><span id="text2.31"></span></button>
+                                        <button id="galaxyUpg2.31" class="galaxyUpg" onclick="buyGUpg(2, 31)">
+                                            <span id="text2.31">
+                                                <span id="gUpgName2.31" style="font-weight: 900;"></span><br>
+                                                <span id="gUpgDesc2.31"></span><br>
+                                                <span class="gUpgRequires">Requires: <span id="gUpgRequires2.31"></span></span><br>
+                                                <span>Cost: <span id="gUpgCost2.31"></span></span><br>
+                                                <span id="2.31GEffect" style="display: none;">Currently: <span id="gUpgEffect2.31"></span></span>
+                                            </span>
+                                        </button>
                                     </td>
                                     <td class="rightGalaxyTD">
-                                        <button id="galaxyUpg2.32" class="galaxyUpg" onclick="buyGUpg(2, 32)"><span id="text2.32"></span></button>
+                                        <button id="galaxyUpg2.32" class="galaxyUpg" onclick="buyGUpg(2, 32)">
+                                            <span id="text2.32">
+                                                <span id="gUpgName2.32" style="font-weight: 900;"></span><br>
+                                                <span id="gUpgDesc2.32"></span><br>
+                                                <span class="gUpgRequires">Requires: <span id="gUpgRequires2.32"></span></span><br>
+                                                <span>Cost: <span id="gUpgCost2.32"></span></span><br>
+                                                <span id="2.32GEffect" style="display: none;">Currently: <span id="gUpgEffect2.32"></span></span>
+                                            </span>
+                                        </button>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td colspan="2">
-                                        <div id="bottomBorderDiv"><button id="galaxyUpg2.41" class="galaxyUpg" onclick="buyGUpg(2, 41)"><span id="text2.41"></span></button></div>
+                                        <div id="bottomBorderDiv">
+                                            <button id="galaxyUpg2.41" class="galaxyUpg" onclick="buyGUpg(2, 41)">
+                                                <span id="text2.41">
+                                                    <span id="gUpgName2.41" style="font-weight: 900;"></span><br>
+                                                    <span id="gUpgDesc2.41"></span><br>
+                                                    <span class="gUpgRequires">Requires: <span id="gUpgRequires2.41"></span></span><br>
+                                                    <span>Cost: <span id="gUpgCost2.41"></span></span><br>
+                                                    <span id="2.41GEffect" style="display: none;">Currently: <span id="gUpgEffect2.41"></span></span>
+                                                </span>
+                                            </button>   
+                                        </div>
                                     </td>
                                 </tr>
                             </table>
@@ -1737,28 +1843,80 @@
                                 </tr>
                                 <tr>
                                     <td colspan="2">
-                                        <div id="topBorderDiv"><button id="galaxyUpg3.11" class="galaxyUpg" onclick="buyGUpg(3, 11)"><span id="text3.11"></span></button></div>
+                                        <div id="topBorderDiv">
+                                            <button id="galaxyUpg3.11" class="galaxyUpg" onclick="buyGUpg(3, 11)">
+                                                <span id="text3.11">
+                                                    <span id="gUpgName3.11" style="font-weight: 900;"></span><br>
+                                                    <span id="gUpgDesc3.11"></span><br>
+                                                    <span style="display: none;">Requires: <span id="gUpgRequires3.11"></span></span>
+                                                    <span>Cost: <span id="gUpgCost3.11"></span></span><br>
+                                                    <span id="3.11GEffect" style="display: none;">Currently: <span id="gUpgEffect3.11"></span></span>
+                                                </span>
+                                            </button>
+                                        </div>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td class="leftGalaxyTD">
-                                        <button id="galaxyUpg3.21" class="galaxyUpg" onclick="buyGUpg(3, 21)"><span id="text3.21"></span></button>
+                                        <button id="galaxyUpg3.21" class="galaxyUpg" onclick="buyGUpg(3, 21)">
+                                            <span id="text3.21">
+                                                <span id="gUpgName3.21" style="font-weight: 900;"></span><br>
+                                                <span id="gUpgDesc3.21"></span><br>
+                                                <span class="gUpgRequires">Requires: <span id="gUpgRequires3.21"></span></span><br>
+                                                <span>Cost: <span id="gUpgCost3.21"></span></span><br>
+                                                <span id="3.21GEffect" style="display: none;">Currently: <span id="gUpgEffect3.21"></span></span>
+                                            </span>
+                                        </button>
                                     </td>
                                     <td class="rightGalaxyTD">
-                                        <button id="galaxyUpg3.22" class="galaxyUpg" onclick="buyGUpg(3, 22)"><span id="text3.22"></span></button>
+                                        <button id="galaxyUpg3.22" class="galaxyUpg" onclick="buyGUpg(3, 22)">
+                                            <span id="text3.22">
+                                                <span id="gUpgName3.22" style="font-weight: 900;"></span><br>
+                                                <span id="gUpgDesc3.22"></span><br>
+                                                <span class="gUpgRequires">Requires: <span id="gUpgRequires3.22"></span></span><br>
+                                                <span>Cost: <span id="gUpgCost3.22"></span></span><br>
+                                                <span id="3.22GEffect" style="display: none;">Currently: <span id="gUpgEffect3.22"></span></span>
+                                            </span>
+                                        </button>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td class="leftGalaxyTD">
-                                        <button id="galaxyUpg3.31" class="galaxyUpg" onclick="buyGUpg(3, 31)"><span id="text3.31"></span></button>
+                                        <button id="galaxyUpg3.31" class="galaxyUpg" onclick="buyGUpg(3, 31)">
+                                            <span id="text3.31">
+                                                <span id="gUpgName3.31" style="font-weight: 900;"></span><br>
+                                                <span id="gUpgDesc3.31"></span><br>
+                                                <span class="gUpgRequires">Requires: <span id="gUpgRequires3.31"></span></span><br>
+                                                <span>Cost: <span id="gUpgCost3.31"></span></span><br>
+                                                <span id="3.31GEffect" style="display: none;">Currently: <span id="gUpgEffect3.31"></span></span>
+                                            </span>
+                                        </button>
                                     </td>
                                     <td class="rightGalaxyTD">
-                                        <button id="galaxyUpg3.32" class="galaxyUpg" onclick="buyGUpg(3, 32)"><span id="text3.32"></span></button>
+                                        <button id="galaxyUpg3.32" class="galaxyUpg" onclick="buyGUpg(3, 32)">
+                                            <span id="text3.32">
+                                                <span id="gUpgName3.32" style="font-weight: 900;"></span><br>
+                                                <span id="gUpgDesc3.32"></span><br>
+                                                <span class="gUpgRequires">Requires: <span id="gUpgRequires3.32"></span></span><br>
+                                                <span>Cost: <span id="gUpgCost3.32"></span></span><br>
+                                                <span id="3.32GEffect" style="display: none;">Currently: <span id="gUpgEffect3.32"></span></span>
+                                            </span>
+                                        </button>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td colspan="2">
-                                        <div id="bottomBorderDiv"><button id="galaxyUpg3.41" class="galaxyUpg" onclick="buyGUpg(3, 41)"><span id="text3.41"></span></button></div>
+                                        <div id="bottomBorderDiv">
+                                            <button id="galaxyUpg3.41" class="galaxyUpg" onclick="buyGUpg(3, 41)">
+                                                <span id="text3.41">
+                                                    <span id="gUpgName3.41" style="font-weight: 900;"></span><br>
+                                                    <span id="gUpgDesc3.41"></span><br>
+                                                    <span class="gUpgRequires">Requires: <span id="gUpgRequires3.41"></span></span><br>
+                                                    <span>Cost: <span id="gUpgCost3.41"></span></span><br>
+                                                    <span id="3.41GEffect" style="display: none;">Currently: <span id="gUpgEffect3.41"></span></span>
+                                                </span>
+                                            </button>   
+                                        </div>
                                     </td>
                                 </tr>
                             </table>
@@ -1772,28 +1930,80 @@
                                 </tr>
                                 <tr>
                                     <td colspan="2">
-                                        <div id="topBorderDiv"><button id="galaxyUpg4.11" class="galaxyUpg" onclick="buyGUpg(4, 11)"><span id="text4.11"></span></button></div>
+                                        <div id="topBorderDiv">
+                                            <button id="galaxyUpg4.11" class="galaxyUpg" onclick="buyGUpg(4, 11)">
+                                                <span id="text4.11">
+                                                    <span id="gUpgName4.11" style="font-weight: 900;"></span><br>
+                                                    <span id="gUpgDesc4.11"></span><br>
+                                                    <span style="display: none;">Requires: <span id="gUpgRequires4.11"></span></span>
+                                                    <span>Cost: <span id="gUpgCost4.11"></span></span><br>
+                                                    <span id="4.11GEffect" style="display: none;">Currently: <span id="gUpgEffect4.11"></span></span>
+                                                </span>
+                                            </button>
+                                        </div>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td class="leftGalaxyTD">
-                                        <button id="galaxyUpg4.21" class="galaxyUpg" onclick="buyGUpg(4, 21)"><span id="text4.21"></span></button>
+                                        <button id="galaxyUpg4.21" class="galaxyUpg" onclick="buyGUpg(4, 21)">
+                                            <span id="text4.21">
+                                                <span id="gUpgName4.21" style="font-weight: 900;"></span><br>
+                                                <span id="gUpgDesc4.21"></span><br>
+                                                <span class="gUpgRequires">Requires: <span id="gUpgRequires4.21"></span></span><br>
+                                                <span>Cost: <span id="gUpgCost4.21"></span></span><br>
+                                                <span id="4.21GEffect" style="display: none;">Currently: <span id="gUpgEffect4.21"></span></span>
+                                            </span>
+                                        </button>
                                     </td>
                                     <td class="rightGalaxyTD">
-                                        <button id="galaxyUpg4.22" class="galaxyUpg" onclick="buyGUpg(4, 22)"><span id="text4.22"></span></button>
+                                        <button id="galaxyUpg4.22" class="galaxyUpg" onclick="buyGUpg(4, 22)">
+                                            <span id="text4.22">
+                                                <span id="gUpgName4.22" style="font-weight: 900;"></span><br>
+                                                <span id="gUpgDesc4.22"></span><br>
+                                                <span class="gUpgRequires">Requires: <span id="gUpgRequires4.22"></span></span><br>
+                                                <span>Cost: <span id="gUpgCost4.22"></span></span><br>
+                                                <span id="4.22GEffect" style="display: none;">Currently: <span id="gUpgEffect4.22"></span></span>
+                                            </span>
+                                        </button>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td class="leftGalaxyTD">
-                                        <button id="galaxyUpg4.31" class="galaxyUpg" onclick="buyGUpg(4, 31)"><span id="text4.31"></span></button>
+                                        <button id="galaxyUpg4.31" class="galaxyUpg" onclick="buyGUpg(4, 31)">
+                                            <span id="text4.31">
+                                                <span id="gUpgName4.31" style="font-weight: 900;"></span><br>
+                                                <span id="gUpgDesc4.31"></span><br>
+                                                <span class="gUpgRequires">Requires: <span id="gUpgRequires4.31"></span></span><br>
+                                                <span>Cost: <span id="gUpgCost4.31"></span></span><br>
+                                                <span id="4.31GEffect" style="display: none;">Currently: <span id="gUpgEffect4.31"></span></span>
+                                            </span>
+                                        </button>
                                     </td>
                                     <td class="rightGalaxyTD">
-                                        <button id="galaxyUpg4.32" class="galaxyUpg" onclick="buyGUpg(4, 32)"><span id="text4.32"></span></button>
+                                        <button id="galaxyUpg4.32" class="galaxyUpg" onclick="buyGUpg(4, 32)">
+                                            <span id="text4.32">
+                                                <span id="gUpgName4.32" style="font-weight: 900;"></span><br>
+                                                <span id="gUpgDesc4.32"></span><br>
+                                                <span class="gUpgRequires">Requires: <span id="gUpgRequires4.32"></span></span><br>
+                                                <span>Cost: <span id="gUpgCost4.32"></span></span><br>
+                                                <span id="4.32GEffect" style="display: none;">Currently: <span id="gUpgEffect4.32"></span></span>
+                                            </span>
+                                        </button>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td colspan="2">
-                                        <div id="bottomBorderDiv"><button id="galaxyUpg4.41" class="galaxyUpg" onclick="buyGUpg(4, 41)"><span id="text4.41"></span></button></div>
+                                        <div id="bottomBorderDiv">
+                                            <button id="galaxyUpg4.41" class="galaxyUpg" onclick="buyGUpg(4, 41)">
+                                                <span id="text4.41">
+                                                    <span id="gUpgName4.41" style="font-weight: 900;"></span><br>
+                                                    <span id="gUpgDesc4.41"></span><br>
+                                                    <span class="gUpgRequires">Requires: <span id="gUpgRequires4.41"></span></span><br>
+                                                    <span>Cost: <span id="gUpgCost4.41"></span></span><br>
+                                                    <span id="4.41GEffect" style="display: none;">Currently: <span id="gUpgEffect4.41"></span></span>
+                                                </span>
+                                            </button>   
+                                        </div>
                                     </td>
                                 </tr>
                             </table>
@@ -2141,7 +2351,7 @@
                 <div style="margin-top: 50px; text-align: center;">
                     <span style="font-size: 48px; font-weight: bold;">coming soon</span>
                 </div>
-                <!--<table style="width: 75%; margin: auto; text-align: center;">
+                <table style="width: 75%; margin: auto; text-align: center;">
                     <tr style="height: 25px;">
                         <div style="height: 100%;"></div>
                     </tr>
@@ -2160,55 +2370,55 @@
                     </tr>
                     <tr>
                         <td>
-                            <span id="last1" class="last10AscRuns"></span>
+                            <span id="lastAsc1" class="last10AscRuns"></span>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <span id="last2" class="last10AscRuns"></span>
+                            <span id="lastAsc2" class="last10AscRuns"></span>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <span id="last3" class="last10AscRuns"></span>
+                            <span id="lastAsc3" class="last10AscRuns"></span>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <span id="last4" class="last10AscRuns"></span>
+                            <span id="lastAsc4" class="last10AscRuns"></span>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <span id="last5" class="last10AscRuns"></span>
+                            <span id="lastAsc5" class="last10AscRuns"></span>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <span id="last6" class="last10AscRuns"></span>
+                            <span id="lastAsc6" class="last10AscRuns"></span>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <span id="last7" class="last10AscRuns"></span>
+                            <span id="lastAsc7" class="last10AscRuns"></span>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <span id="last8" class="last10AscRuns"></span>
+                            <span id="lastAsc8" class="last10AscRuns"></span>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <span id="last9" class="last10AscRuns"></span>
+                            <span id="lastAsc9" class="last10AscRuns"></span>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <span id="last10" class="last10AscRuns"></span>
+                            <span id="lastAsc10" class="last10AscRuns"></span>
                         </td>
                     </tr>
-                </table>-->
+                </table>
             </div>
             <div id="achSubTab" class="statSubTab" style="display: none;">
                 <div id="achievementsInfo" style="text-align: center; margin-top: 20px;">

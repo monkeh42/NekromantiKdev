@@ -433,7 +433,7 @@ const BUILDS_DATA = {
         cost: new Decimal(1e5),
         upgResource: 'astral bricks',
         pBase: function()  {
-            var b = player.units[8].amount;
+            var b = player.units[8].bought;
             return b;
         },
         pExp: function() {
@@ -770,7 +770,7 @@ const BUILDS_DATA = {
                 }
             },
             13: {
-                title: '1.3',
+                title: 'Ultra-Solar',
                 desc: function() { return `ALL upgrade formulas based on log(x) are now based on ln(x) (<span style="font-weight: 800;">Solar Flares</span> still appplies to building upgrades).`; },
                 cost: new Decimal(100),
                 buttonID: 'vortexUpg13',

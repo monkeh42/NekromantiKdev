@@ -191,7 +191,7 @@ function loadStyles() {
 
     
 
-    showTab(player.activeTabs[0]);
+    showTab(player.activeTabs[0], true);
     showUnitSubTab(player.activeTabs[1]);
     showBuildingSubTab(player.activeTabs[2]);
     if (player.unlocks['timeTab']['timeUpgrades']) { showTimeSubTab(player.activeTabs[3]); }
@@ -327,8 +327,7 @@ function loadStyles() {
                 document.getElementById(GALAXIES_DATA[g].upgrades[u].textID).style.display = 'none';
             } else {
                 document.getElementById(GALAXIES_DATA[g].upgrades[u].buttonID).classList.remove('lockedGalaxyUpg');
-                document.getElementById(GALAXIES_DATA[g].upgrades[u].textID).style.display = 'block';
-                document.getElementById(GALAXIES_DATA[g].upgrades[u].textID).innerHTML = `${getGUpgDesc(g, u)}<br><br>Cost: ${formatWhole(getGUpgCost(g, u))} ${galaxyTextSingulizer(getGUpgCost(g, u))}${isDisplayEffectG(g, u) ? ("<br>Currently: " + formatDefault2(getGUpgEffect(g, u)) + "x") : ""}`;
+                document.getElementById(GALAXIES_DATA[g].upgrades[u].textID).style.display = '';
                 if (hasGUpgrade(g, u)) { 
                     document.getElementById(GALAXIES_DATA[g].upgrades[u].buttonID).classList.add('boughtGalaxyUpg'); 
                     document.getElementById(GALAXIES_DATA[g].upgrades[u].buttonID).classList.remove('galaxyUpg');//+ ((player.tooltipsEnabled && isDisplayTooltipG(g, u)) ? ' tooltip' : '') }
@@ -340,6 +339,12 @@ function loadStyles() {
                     }
                 }
             }
+            document.getElementById('gUpgName' + g.toString() + '.' + u.toString()).innerHTML = getGUpgName(g, u); 
+            document.getElementById('gUpgDesc' + g.toString() + '.' + u.toString()).innerHTML = getGUpgDesc(g, u); 
+            if (GALAXIES_DATA[g].upgrades[u].requires.length>0) { document.getElementById('gUpgRequires' + g.toString() + '.' + u.toString()).innerHTML = `<span style=\"font-weight: 800;\">${GALAXIES_DATA[g].upgrades[GALAXIES_DATA[g].upgrades[u].requires[0]].title}</span>${(GALAXIES_DATA[g].upgrades[u].requires.length>1 ? " or <span style=\"font-weight: 800;\">" + GALAXIES_DATA[g].upgrades[GALAXIES_DATA[g].upgrades[u].requires[1]].title + "</span>" : "")}`; }
+            document.getElementById('gUpgCost' + g.toString() + '.' + u.toString()).innerHTML = formatWhole(getGUpgCost(g, u)) + ' ' + galaxyTextSingulizer(getGUpgCost(g, u)); 
+            if (isDisplayEffectG(g, u)) { document.getElementById('gUpgEffect' + g.toString() + '.' + u.toString()).innerHTML = formatDefault2(getGUpgEffect(g, u)) + GALAXIES_DATA[g].upgrades[u].displaySuffix; }
+            else { document.getElementById(g.toString() + '.' + u.toString() + 'GEffect').style.display = 'none'; }
         }
     }
 

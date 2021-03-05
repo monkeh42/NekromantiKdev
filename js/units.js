@@ -19,7 +19,7 @@ function getCorpsesPerSecond() {
 }
 
 function getUnitProdPerSecond(tier) {
-    if (tier == NUM_UNITS) { return (hasGUpgrade(2, 41)) ? (hasUpgrade(4, 13) ? new Decimal(Decimal.max(getEssenceProdPerSecond(), 1).ln()) : new Decimal(Decimal.max(getEssenceProdPerSecond(), 1).log10())) : new Decimal(0); }
+    if (tier == NUM_UNITS) { return (hasGUpgrade(2, 41)) ? new Decimal(Decimal.max(getEssenceProdPerSecond(), 1).log10()) : new Decimal(0); }
     let p = player.units[tier+1].amount;
     if (!hasGUpgrade(2, 21)) { p = p.div(tier+1); }
     return p.times(UNITS_DATA[tier+1].prodMult());

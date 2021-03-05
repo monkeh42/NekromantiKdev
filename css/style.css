@@ -252,6 +252,14 @@ h5 {
     font-size: 24pt;
 }
 
+h6 {
+    font-family: 'Cinzel', serif;
+    font-weight: bold;
+    font-size: 18pt;
+    margin-top: 0.4em;
+    margin-bottom: 0.4em;
+}
+
 button:focus, select:focus {
     outline: none;
 }
@@ -1568,7 +1576,7 @@ option:active, option.active {
     font-family: 'Cinzel', serif;
 }
 
-.galaxyBut:hover {
+.galaxyBut:hover, .galaxyNameBut4:hover, .galaxyNameBut2:hover {
     background-color: #e32d05;
 }
 
