@@ -1135,8 +1135,8 @@ const ACH_DATA = {
         }
     },
     52: {
-        title: '',
-        desc: '',
+        title: 'We\'ve All Been There',
+        desc: 'Hint: do something utterly pointless.',
         reward: '',
         hasReward: false,
         showEffect: false,
@@ -1169,8 +1169,8 @@ const ACH_DATA = {
         }
     },
     54: {
-        title: '',
-        desc: '',
+        title: 'Astral Fiend',
+        desc: 'Sacrifice with more astral bricks than corpses.',
         reward: '',
         hasReward: false,
         showEffect: false,
@@ -1186,8 +1186,8 @@ const ACH_DATA = {
         }
     },
     55: {
-        title: '',
-        desc: '',
+        title: 'Dear God, Why?',
+        desc: 'Ascend without any galaxy upgrades (your first ascension doesn\'t count).',
         reward: '',
         hasReward: false,
         showEffect: false,

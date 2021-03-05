@@ -217,6 +217,7 @@ function respecGalaxiesKey() {
 }
 
 function respecGalaxies() {
+    if (getBoughtGUpgs().eq(0) && !hasAchievement(52)) { unlockAchievement(52); }
     player.galaxies = player.galaxies.plus(player.spentGalaxies);
     player.spentGalaxies = new Decimal(0);
     //unlockRows();
@@ -276,6 +277,7 @@ function calculateNextGalaxy() {
 
 function galaxyPrestige(respec=false) {
     if (canGalaxyPrestige()) {
+        if (getBoughtGUpgs().eq(0) && player.ascensions.gt(0) && !hasAchievement(55)) { unlockAchievement(55); }
         if (!confirm('Are you sure? This will reset ALL of your progress up to unlocking Galaxies.<br>(These confirmations can be disabled in options)')) return
         player.galaxies = player.galaxies.plus(calculateGalaxyGain());
         player.allTimeStats.totalGalaxies = player.allTimeStats.totalGalaxies.plus(calculateGalaxyGain());
@@ -288,6 +290,7 @@ function galaxyPrestige(respec=false) {
 
 function galaxyPrestigeNoConfirm(respec=false) {
     if (canGalaxyPrestige()) {
+        if (getBoughtGUpgs().eq(0) && player.ascensions.gt(0) && !hasAchievement(55)) { unlockAchievement(55); }
         player.galaxies = player.galaxies.plus(calculateGalaxyGain());
         player.allTimeStats.totalGalaxies = player.allTimeStats.totalGalaxies.plus(calculateGalaxyGain());
         if (player.galaxies.gt(player.allTimeStats.bestGalaxies)) { player.allTimeStats.bestGalaxies = new Decimal(player.galaxies); }
@@ -478,7 +481,7 @@ const GALAXIES_DATA = {
                 displayEffect: false,
                 displaySuffix: '',
                 displayTooltip: false,
-                displayFormula: '',
+                displayFormula: function() { return '' },
                 buttonID: 'galaxyUpg1.11',
                 lockImageID: '',
                 textID: 'text1.11',
@@ -504,7 +507,7 @@ const GALAXIES_DATA = {
                 displayEffect: false,
                 displaySuffix: '',
                 displayTooltip: false,
-                displayFormula: '',
+                displayFormula: function() { return '' },
                 buttonID: 'galaxyUpg1.21',
                 lockImageID: 'skull1.21',
                 textID: 'text1.21',
@@ -532,7 +535,7 @@ const GALAXIES_DATA = {
                 displayEffect: true,
                 displaySuffix: '/sec',
                 displayTooltip: false,
-                displayFormula: '',
+                displayFormula: function() { return '' },
                 buttonID: 'galaxyUpg1.22',
                 lockImageID: 'skull1.22',
                 textID: 'text1.22',
@@ -560,7 +563,7 @@ const GALAXIES_DATA = {
                 displayEffect: false,
                 displaySuffix: '',
                 displayTooltip: false,
-                displayFormula: '',
+                displayFormula: function() { return '' },
                 buttonID: 'galaxyUpg1.31',
                 lockImageID: 'skull1.31',
                 textID: 'text1.31',
@@ -588,7 +591,7 @@ const GALAXIES_DATA = {
                 displayEffect: true,
                 displaySuffix: 'x',
                 displayTooltip: false,
-                displayFormula: '',
+                displayFormula: function() { return '' },
                 buttonID: 'galaxyUpg1.32',
                 lockImageID: 'skull1.32',
                 textID: 'text1.32',
@@ -616,7 +619,7 @@ const GALAXIES_DATA = {
                 displayEffect: false,
                 displaySuffix: '',
                 displayTooltip: false,
-                displayFormula: '',
+                displayFormula: function() { return '' },
                 buttonID: 'galaxyUpg1.41',
                 lockImageID: '',
                 textID: 'text1.41',
@@ -650,7 +653,7 @@ const GALAXIES_DATA = {
                 displayEffect: false,
                 displaySuffix: '',
                 displayTooltip: false,
-                displayFormula: '',
+                displayFormula: function() { return '' },
                 buttonID: 'galaxyUpg2.11',
                 lockImageID: '',
                 textID: 'text2.11',
@@ -676,7 +679,7 @@ const GALAXIES_DATA = {
                 displayEffect: false,
                 displaySuffix: '',
                 displayTooltip: false,
-                displayFormula: '',
+                displayFormula: function() { return '' },
                 buttonID: 'galaxyUpg2.21',
                 lockImageID: 'skull2.21',
                 textID: 'text2.21',
@@ -704,7 +707,7 @@ const GALAXIES_DATA = {
                 displayEffect: false,
                 displaySuffix: '',
                 displayTooltip: false,
-                displayFormula: '',
+                displayFormula: function() { return '' },
                 buttonID: 'galaxyUpg2.22',
                 lockImageID: 'skull2.22',
                 textID: 'text2.22',
@@ -732,7 +735,7 @@ const GALAXIES_DATA = {
                 displayEffect: true,
                 displaySuffix: 'x',
                 displayTooltip: true,
-                displayFormula: '1 + x',
+                displayFormula: function() { return '1 + x' },
                 buttonID: 'galaxyUpg2.31',
                 lockImageID: 'skull2.31',
                 textID: 'text2.31',
@@ -761,7 +764,7 @@ const GALAXIES_DATA = {
                 displayEffect: false,
                 displaySuffix: '',
                 displayTooltip: false,
-                displayFormula: '',
+                displayFormula: function() { return '' },
                 buttonID: 'galaxyUpg2.32',
                 lockImageID: 'skull2.32',
                 textID: 'text2.32',
@@ -789,7 +792,7 @@ const GALAXIES_DATA = {
                 displayEffect: true,
                 displaySuffix: '/sec',
                 displayTooltip: true,
-                displayFormula: 'log(x)',
+                displayFormula: function() { return `${hasUpgrade(4, 13) ? "ln(x)" : "log(x)"}` },
                 buttonID: 'galaxyUpg2.41',
                 lockImageID: '',
                 textID: 'text2.41',
@@ -823,7 +826,7 @@ const GALAXIES_DATA = {
                 displayEffect: false,
                 displaySuffix: '',
                 displayTooltip: false,
-                displayFormula: '',
+                displayFormula: function() { return '' },
                 buttonID: 'galaxyUpg3.11',
                 lockImageID: '',
                 textID: 'text3.11',
@@ -849,7 +852,7 @@ const GALAXIES_DATA = {
                 displayEffect: false,
                 displaySuffix: '',
                 displayTooltip: false,
-                displayFormula: '',
+                displayFormula: function() { return '' },
                 buttonID: 'galaxyUpg3.21',
                 lockImageID: 'skull3.21',
                 textID: 'text3.21',
@@ -877,7 +880,7 @@ const GALAXIES_DATA = {
                 displayEffect: false,
                 displaySuffix: '',
                 displayTooltip: false,
-                displayFormula: '',
+                displayFormula: function() { return '' },
                 buttonID: 'galaxyUpg3.22',
                 lockImageID: 'skull3.22',
                 textID: 'text3.22',
@@ -905,7 +908,7 @@ const GALAXIES_DATA = {
                 displayEffect: false,
                 displaySuffix: '',
                 displayTooltip: false,
-                displayFormula: '',
+                displayFormula: function() { return '' },
                 buttonID: 'galaxyUpg3.31',
                 lockImageID: 'skull3.31',
                 textID: 'text3.31',
@@ -933,7 +936,7 @@ const GALAXIES_DATA = {
                 displayEffect: false,
                 displaySuffix: '',
                 displayTooltip: false,
-                displayFormula: '',
+                displayFormula: function() { return '' },
                 buttonID: 'galaxyUpg3.32',
                 lockImageID: 'skull3.32',
                 textID: 'text3.32',
@@ -961,7 +964,7 @@ const GALAXIES_DATA = {
                 displayEffect: true,
                 displaySuffix: 'x',
                 displayTooltip: false,
-                displayFormula: '',
+                displayFormula: function() { return '' },
                 buttonID: 'galaxyUpg3.41',
                 lockImageID: '',
                 textID: 'text3.41',
@@ -995,7 +998,7 @@ const GALAXIES_DATA = {
                 displayEffect: true,
                 displaySuffix: 'x',
                 displayTooltip: true,
-                displayFormula: '1 + x',
+                displayFormula: function() { return '1 + x' },
                 buttonID: 'galaxyUpg4.11',
                 lockImageID: '',
                 textID: 'text4.11',
@@ -1022,7 +1025,7 @@ const GALAXIES_DATA = {
                 displayEffect: false,
                 displaySuffix: '',
                 displayTooltip: false,
-                displayFormula: '',
+                displayFormula: function() { return '' },
                 buttonID: 'galaxyUpg4.21',
                 lockImageID: 'skull4.21',
                 textID: 'text4.21',
@@ -1050,7 +1053,7 @@ const GALAXIES_DATA = {
                 displayEffect: true,
                 displaySuffix: 'x',
                 displayTooltip: false,
-                displayFormula: '',
+                displayFormula: function() { return '' },
                 buttonID: 'galaxyUpg4.22',
                 lockImageID: 'skull4.22',
                 textID: 'text4.22',
@@ -1078,7 +1081,7 @@ const GALAXIES_DATA = {
                 displayEffect: false,
                 displaySuffix: '',
                 displayTooltip: false,
-                displayFormula: '',
+                displayFormula: function() { return '' },
                 buttonID: 'galaxyUpg4.31',
                 lockImageID: 'skull4.31',
                 textID: 'text4.31',
@@ -1106,7 +1109,7 @@ const GALAXIES_DATA = {
                 displayEffect: true,
                 displaySuffix: '/sec (real time)',
                 displayTooltip: false,
-                displayFormula: '',
+                displayFormula: function() { return '' },
                 buttonID: 'galaxyUpg4.32',
                 lockImageID: 'skull4.32',
                 textID: 'text4.32',
@@ -1134,7 +1137,7 @@ const GALAXIES_DATA = {
                 displayEffect: false,
                 displaySuffix: '',
                 displayTooltip: false,
-                displayFormula: '',
+                displayFormula: function() { return '' },
                 buttonID: 'galaxyUpg4.41',
                 lockImageID: '',
                 textID: 'text4.41',

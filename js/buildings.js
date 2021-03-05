@@ -328,7 +328,7 @@ const BUILDS_DATA = {
                 displayEffect: true,
                 displaySuffix: 'x',
                 displayTooltip: true,
-                displayFormula: function() { return hasUpgrade(3, 21) ? '1 + 2*log(x)' : '1 + 2*sqrt(log(x))'; },
+                displayFormula: function() { return hasUpgrade(4, 13) ? (hasUpgrade(3, 21) ? '1 + 2*ln(x)' : '1 + 2*sqrt(ln(x))') : (hasUpgrade(3, 21) ? '1 + 2*log(x)' : '1 + 2*sqrt(log(x))') },
                 effect: function() {
                     if (hasUpgrade(3, 21)) {
                         var b = hasUpgrade(4, 13) ? new Decimal(Decimal.max(player.buildings[1].amount, 1).ln()) : new Decimal(Decimal.max(player.buildings[1].amount, 1).log10());
@@ -378,7 +378,7 @@ const BUILDS_DATA = {
                 displayEffect: true,
                 displaySuffix: 'x',
                 displayTooltip: true,
-                displayFormula: function() { return hasUpgrade(3, 21) ? '1 + log(x)' : '1 + sqrt(log(x))'; },
+                displayFormula: function() { return hasUpgrade(4, 13) ? (hasUpgrade(3, 21) ? '1 + ln(x)' : '1 + sqrt(ln(x))') : (hasUpgrade(3, 21) ? '1 + log(x)' : '1 + sqrt(log(x))') },
                 effect: function() {
                     if (hasUpgrade(3, 21)) {
                         var b = hasUpgrade(4, 13) ? new Decimal(Decimal.max(player.units[2].amount, 1).ln()) : new Decimal(Decimal.max(player.units[2].amount, 1).log10());
@@ -411,7 +411,7 @@ const BUILDS_DATA = {
                 displayEffect: true,
                 displaySuffix: 'x',
                 displayTooltip: true,
-                displayFormula: function() { return hasUpgrade(3, 21) ? '1 + log(x)^4' : '1 + log(x)^2'; },
+                displayFormula: function() { return hasUpgrade(4, 13) ? (hasUpgrade(3, 21) ? '1 + ln(x)^4' : '1 + ln(x)^2') : (hasUpgrade(3, 21) ? '1 + log(x)^4' : '1 + log(x)^2') },
                 effect: function() {
                     if (hasUpgrade(3, 21)) {
                         var b = Decimal.max(player.corpses, 1);
@@ -489,7 +489,7 @@ const BUILDS_DATA = {
                 displayEffect: true,
                 displaySuffix: 'x',
                 displayTooltip: true,
-                displayFormula: function() { return hasUpgrade(3, 21) ? '1 + log(x)' : '1 + sqrt(log(x))'; },
+                displayFormula: function() { return hasUpgrade(4, 13) ? (hasUpgrade(3, 21) ? '1 + ln(x)' : '1 + sqrt(ln(x))') : (hasUpgrade(3, 21) ? '1 + log(x)' : '1 + sqrt(log(x))') },
                 effect: function() {
                     if (hasUpgrade(3, 21)) {
                         var e = hasUpgrade(4, 13) ? new Decimal(Decimal.max(player.bricks, 1).ln()) : new Decimal(Decimal.max(player.bricks, 1).log10());
@@ -509,7 +509,7 @@ const BUILDS_DATA = {
                 displayEffect: true,
                 displaySuffix: 'x',
                 displayTooltip: true,
-                displayFormula: function() { return hasUpgrade(3, 21) ? '1 + log(x)' : '1 + sqrt(log(x))'; },
+                displayFormula: function() { return hasUpgrade(4, 13) ? (hasUpgrade(3, 21) ? '1 + ln(x)' : '1 + sqrt(ln(x))') : (hasUpgrade(3, 21) ? '1 + log(x)' : '1 + sqrt(log(x))') },
                 effect: function() {
                     if (hasUpgrade(3, 21)) {
                         var e = hasUpgrade(4, 13) ? new Decimal(Decimal.max(player.bricks, 1).ln()) : new Decimal(Decimal.max(player.bricks, 1).log10());
@@ -529,7 +529,7 @@ const BUILDS_DATA = {
                 displayEffect: true,
                 displaySuffix: 'x',
                 displayTooltip: true,
-                displayFormula: function() { return hasUpgrade(3, 21) ? '1 + log(x)^4' : '1 + log(x)^2'; },
+                displayFormula: function() { return hasUpgrade(4, 13) ? (hasUpgrade(3, 21) ? '1 + ln(x)^4' : '1 + ln(x)^2') : (hasUpgrade(3, 21) ? '1 + log(x)^4' : '1 + log(x)^2') },
                 effect: function() {
                     if (hasUpgrade(3, 21)) {
                         var b = Decimal.max(player.bricks, 1);
@@ -550,7 +550,7 @@ const BUILDS_DATA = {
                 displayEffect: true,
                 displaySuffix: 'x',
                 displayTooltip: true,
-                displayFormula: function() { return hasUpgrade(3, 21) ? '1 + log(x)^4' : '1 + log(x)^2'; },
+                displayFormula: function() { return hasUpgrade(4, 13) ? (hasUpgrade(3, 21) ? '1 + ln(x)^4' : '1 + ln(x)^2') : (hasUpgrade(3, 21) ? '1 + log(x)^4' : '1 + log(x)^2') },
                 effect: function() {
                     if (hasUpgrade(3, 21)) {
                         var b = Decimal.max(player.bricks, 1);
@@ -571,7 +571,7 @@ const BUILDS_DATA = {
                 displayEffect: true,
                 displaySuffix: 'x',
                 displayTooltip: true,
-                displayFormula: function() { return hasUpgrade(3, 21) ? '1 + (log(x)^2)/4' : '1 + log(x)/4'; },
+                displayFormula: function() { return hasUpgrade(4, 13) ? (hasUpgrade(3, 21) ? '1 + (log(x)^2)/4' : '1 + log(x)/4') : (hasUpgrade(3, 21) ? '1 + (log(x)^2)/4' : '1 + log(x)/4') },
                 effect: function() {
                     if (hasUpgrade(3, 21)) {
                         var e = hasUpgrade(4, 13) ? Decimal.div(Decimal.pow(Decimal.max(player.bricks, 1).ln(), 2), 4) : Decimal.div(Decimal.pow(Decimal.max(player.bricks, 1).log10(), 2), 4)

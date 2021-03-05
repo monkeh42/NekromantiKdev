@@ -281,7 +281,7 @@ function loadStyles() {
     if (hasAchievement(15)) { document.getElementById('keptBricks').style.display = 'block'; }
     
     for (var t in TIME_DATA.upgrades) {
-        if (TIME_DATA.upgrades[t].displayTooltip) { document.getElementById(TIME_DATA.upgrades[t].buttonID).setAttribute('data-title', TIME_DATA.upgrades[t].displayFormula) }
+        if (TIME_DATA.upgrades[t].displayTooltip) { document.getElementById(TIME_DATA.upgrades[t].buttonID).setAttribute('data-title', TIME_DATA.upgrades[t].displayFormula()) }
         if (player.timeUpgs[t]) {
             document.getElementById(TIME_DATA.upgrades[t].buttonID).classList.add('boughtTimeUpg');
             document.getElementById(TIME_DATA.upgrades[t].buttonID).classList.remove('timeUpg');
@@ -320,7 +320,7 @@ function loadStyles() {
 
     for (var g in GALAXIES_DATA) {
         for (var u in GALAXIES_DATA[g].upgrades) {
-            if (GALAXIES_DATA[g].upgrades[u].displayTooltip) { document.getElementById(GALAXIES_DATA[g].upgrades[u].buttonID).setAttribute('data-title', GALAXIES_DATA[g].upgrades[u].displayFormula) }
+            if (GALAXIES_DATA[g].upgrades[u].displayTooltip) { document.getElementById(GALAXIES_DATA[g].upgrades[u].buttonID).setAttribute('data-title', GALAXIES_DATA[g].upgrades[u].displayFormula()) }
             if (player.galaxyUpgs[g][u].locked) {
                 document.getElementById(GALAXIES_DATA[g].upgrades[u].buttonID).classList.add('lockedGalaxyUpg'); 
                 document.getElementById(GALAXIES_DATA[g].upgrades[u].buttonID).classList.remove('galaxyUpg');

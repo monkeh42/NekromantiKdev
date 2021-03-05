@@ -238,6 +238,7 @@ function timePrestigeKey() {
 
 function timePrestige() {
     if (canTimePrestige()) {
+        if (player.bricks.gt(player.corpses) && !hasAchievement(54)) { unlockAchievement(54) }
         if (!confirm('Are you sure? This will reset ALL of your progress before unlocking Time Warp, and all of your time essense.<br>(These confirmations can be disabled in options)')) return
         player.crystals = player.crystals.plus(calculateCrystalGain());
         player.thisAscStats.totalCrystals = player.thisAscStats.totalCrystals.plus(calculateCrystalGain());
@@ -259,6 +260,7 @@ function timePrestige() {
 
 function timePrestigeNoConfirm() {
     if (canTimePrestige()) {
+        if (player.bricks.gt(player.corpses) && !hasAchievement(54)) { unlockAchievement(54) }
         player.crystals = player.crystals.plus(calculateCrystalGain());
         player.thisAscStats.totalCrystals = player.thisAscStats.totalCrystals.plus(calculateCrystalGain());
         player.allTimeStats.totalCrystals = player.allTimeStats.totalCrystals.plus(calculateCrystalGain());
@@ -500,7 +502,7 @@ const TIME_DATA = {
             buttonID: 'timeUpg11',
             displayEffect: false,
             displayTooltip: false,
-            displayFormula: '',
+            displayFormula: function() { return '' },
             effect: function() {
                 return new Decimal(1);
             }
@@ -513,7 +515,7 @@ const TIME_DATA = {
             buttonID: 'timeUpg12',
             displayEffect: false,
             displayTooltip: false,
-            displayFormula: '',
+            displayFormula: function() { return '' },
             effect: function() {
                 return new Decimal(1);
             }
@@ -526,7 +528,7 @@ const TIME_DATA = {
             buttonID: 'timeUpg13',
             displayEffect: false,
             displayTooltip: false,
-            displayFormula: '',
+            displayFormula: function() { return '' },
             effect: function() {
                 return new Decimal(1);
             }
@@ -539,7 +541,7 @@ const TIME_DATA = {
             buttonID: 'timeUpg14',
             displayEffect: false,
             displayTooltip: false,
-            displayFormula: '',
+            displayFormula: function() { return '' },
             effect: function() {
                 return new Decimal(1);
             }
@@ -552,7 +554,7 @@ const TIME_DATA = {
             buttonID: 'timeUpg21',
             displayEffect: false,
             displayTooltip: false,
-            displayFormula: '',
+            displayFormula: function() { return '' },
             effect: function() {
                 return new Decimal(1);
             }
@@ -565,7 +567,7 @@ const TIME_DATA = {
             buttonID: 'timeUpg22',
             displayEffect: true,
             displayTooltip: true,
-            displayFormula: '1 + 7.5*log(x)',
+            displayFormula: function() { return hasUpgrade(4, 13) ? '1 + 7.5*ln(x)' : '1 + 7.5*log(x)' },
             effect: function() {
                 var e = player.crystals;
                 e = hasUpgrade(4, 13) ? e.ln()*7.5 : e.log10()*7.5;
@@ -580,7 +582,7 @@ const TIME_DATA = {
             buttonID: 'timeUpg23',
             displayEffect: true,
             displayTooltip: true,
-            displayFormula: '1 + log(x)',
+            displayFormula: function() { return hasUpgrade(4, 13) ? '1 + ln(x)' : '1 + log(x)' },
             effect: function() {
                 var e = player.crystals;
                 e = hasUpgrade(4, 13) ? e.ln() : e.log10();
@@ -595,7 +597,7 @@ const TIME_DATA = {
             buttonID: 'timeUpg24',
             displayEffect: false,
             displayTooltip: false,
-            displayFormula: '',
+            displayFormula: function() { return '' },
             effect: function() {
                 return new Decimal(1);
             }
@@ -608,7 +610,7 @@ const TIME_DATA = {
             buttonID: 'timeUpg31',
             displayEffect: true,
             displayTooltip: true,
-            displayFormula: '1 + 10*log(x)',
+            displayFormula: function() { return hasUpgrade(4, 13) ? '1 + 10*ln(x)' : '1 + 10*log(x)' },
             effect: function() {
                 var e = player.crystals;
                 e = hasUpgrade(4, 13) ? e.ln()*10 : e.log10()*10
@@ -623,7 +625,7 @@ const TIME_DATA = {
             buttonID: 'timeUpg32',
             displayEffect: false,
             displayTooltip: false,
-            displayFormula: '',
+            displayFormula: function() { return '' },
             effect: function() {
                 return new Decimal(1.5);
             }
@@ -636,7 +638,7 @@ const TIME_DATA = {
             buttonID: 'timeUpg33',
             displayEffect: true,
             displayTooltip: true,
-            displayFormula: '1 + 2*(x^0.2)',
+            displayFormula: function() { return '1 + 2*(x^0.2)' },
             effect: function() {
                 let e = new Decimal(player.buildings[3].amount);
                 e = Decimal.pow(e, 0.2).times(2);
@@ -651,7 +653,7 @@ const TIME_DATA = {
             buttonID: 'timeUpg34',
             displayEffect: false,
             displayTooltip: false,
-            displayFormula: '',
+            displayFormula: function() { return '' },
             effect: function() {
                 return new Decimal(1);
             }
@@ -664,7 +666,7 @@ const TIME_DATA = {
             buttonID: 'timeUpg41',
             displayEffect: true,
             displayTooltip: false,
-            displayFormula: '',
+            displayFormula: function() { return '' },
             effect: function() {
                 return player.astralFlag ? new Decimal(1) : getTrueTimeBuff()
             }
@@ -677,7 +679,7 @@ const TIME_DATA = {
             buttonID: 'timeUpg42',
             displayEffect: true,
             displayTooltip: true,
-            displayFormula: '1 + x',
+            displayFormula: function() { return '1 + x' },
             effect: function() {
                 let e = player.galaxies;
                 return 1 + e;
@@ -691,7 +693,7 @@ const TIME_DATA = {
             buttonID: 'timeUpg43',
             displayEffect: true,
             displayTooltip: true,
-            displayFormula: '1 + x',
+            displayFormula: function() { return '1 + x' },
             effect: function() {
                 var e = player.galaxies;
                 return 1 + e;
@@ -705,7 +707,7 @@ const TIME_DATA = {
             buttonID: 'timeUpg44',
             displayEffect: false,
             displayTooltip: false,
-            displayFormula: '',
+            displayFormula: function() { return '' },
             effect: function() {
                 return new Decimal(1);
             }
@@ -718,7 +720,7 @@ const TIME_DATA = {
             buttonID: 'timeUpg51',
             displayEffect: false,
             displayTooltip: false,
-            displayFormula: '',
+            displayFormula: function() { return '' },
             effect: function() {
                 return new Decimal(1);
             }
@@ -731,7 +733,7 @@ const TIME_DATA = {
             buttonID: 'timeUpg52',
             displayEffect: true,
             displayTooltip: true,
-            displayFormula: '1 + x',
+            displayFormula: function() { return '1 + x' },
             effect: function() {
                 var e = player.galaxies;
                 return 1 + e;
@@ -745,7 +747,7 @@ const TIME_DATA = {
             buttonID: 'timeUpg53',
             displayEffect: true,
             displayTooltip: true,
-            displayFormula: '1 + x',
+            displayFormula: function() { return '1 + x' },
             effect: function() {
                 var e = player.galaxies;
                 return 1 + e;
@@ -759,7 +761,7 @@ const TIME_DATA = {
             buttonID: 'timeUpg54',
             displayEffect: false,
             displayTooltip: false,
-            displayFormula: '',
+            displayFormula: function() { return '' },
             effect: function() {
                 return new Decimal(1);
             }
