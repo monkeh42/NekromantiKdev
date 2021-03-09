@@ -463,58 +463,58 @@ const START_PLAYER = {
         lastRun: {
             crystalGain: new Decimal(0),
             timeSpent: 0,
-            timeSacrificed: new Date(0),
+            timeSacrificed: new Date(),
         },
         lastTen: [
             {
                 crystalGain: new Decimal(0),
                 timeSpent: 0,
-                timeSacrificed: new Date(0),
+                timeSacrificed: new Date(),
             },
             {
                 crystalGain: new Decimal(0),
                 timeSpent: 0,
-                timeSacrificed: new Date(0),
+                timeSacrificed: new Date(),
             },
             {
                 crystalGain: new Decimal(0),
                 timeSpent: 0,
-                timeSacrificed: new Date(0),
+                timeSacrificed: new Date(),
             },
             {
                 crystalGain: new Decimal(0),
                 timeSpent: 0,
-                timeSacrificed: new Date(0),
+                timeSacrificed: new Date(),
             },
             {
                 crystalGain: new Decimal(0),
                 timeSpent: 0,
-                timeSacrificed: new Date(0),
+                timeSacrificed: new Date(),
             },
             {
                 crystalGain: new Decimal(0),
                 timeSpent: 0,
-                timeSacrificed: new Date(0),
+                timeSacrificed: new Date(),
             },
             {
                 crystalGain: new Decimal(0),
                 timeSpent: 0,
-                timeSacrificed: new Date(0),
+                timeSacrificed: new Date(),
             },
             {
                 crystalGain: new Decimal(0),
                 timeSpent: 0,
-                timeSacrificed: new Date(0),
+                timeSacrificed: new Date(),
             },
             {
                 crystalGain: new Decimal(0),
                 timeSpent: 0,
-                timeSacrificed: new Date(0),
+                timeSacrificed: new Date(),
             },
             {
                 crystalGain: new Decimal(0),
                 timeSpent: 0,
-                timeSacrificed: new Date(0),
+                timeSacrificed: new Date(),
             },
         ],
     },
@@ -523,58 +523,58 @@ const START_PLAYER = {
         lastRun: {
             galaxyGain: new Decimal(0),
             timeSpent: 0,
-            timeAscended: new Date(0),
+            timeAscended: new Date(),
         },
         lastTen: [
             {
                 galaxyGain: new Decimal(0),
                 timeSpent: 0,
-                timeAscended: new Date(0),
+                timeAscended: new Date(),
             },
             {
                 galaxyGain: new Decimal(0),
                 timeSpent: 0,
-                timeAscended: new Date(0),
+                timeAscended: new Date(),
             },
             {
                 galaxyGain: new Decimal(0),
                 timeSpent: 0,
-                timeAscended: new Date(0),
+                timeAscended: new Date(),
             },
             {
                 galaxyGain: new Decimal(0),
                 timeSpent: 0,
-                timeAscended: new Date(0),
+                timeAscended: new Date(),
             },
             {
                 galaxyGain: new Decimal(0),
                 timeSpent: 0,
-                timeAscended: new Date(0),
+                timeAscended: new Date(),
             },
             {
                 galaxyGain: new Decimal(0),
                 timeSpent: 0,
-                timeAscended: new Date(0),
+                timeAscended: new Date(),
             },
             {
                 galaxyGain: new Decimal(0),
                 timeSpent: 0,
-                timeAscended: new Date(0),
+                timeAscended: new Date(),
             },
             {
                 galaxyGain: new Decimal(0),
                 timeSpent: 0,
-                timeAscended: new Date(0),
+                timeAscended: new Date(),
             },
             {
                 galaxyGain: new Decimal(0),
                 timeSpent: 0,
-                timeAscended: new Date(0),
+                timeAscended: new Date(),
             },
             {
                 galaxyGain: new Decimal(0),
                 timeSpent: 0,
-                timeAscended: new Date(0),
+                timeAscended: new Date(),
             },
         ],
     },
@@ -788,13 +788,7 @@ const MILES_DATA = {
             return new Decimal(1);
         },
         onUnlock: function() {
-            for (let g in GALAXIES_DATA) {
-                for (let u in GALAXIES_DATA[g].upgrades) {
-                    player.galaxyUpgs[g][u].locked = false;
-                    document.getElementById(GALAXIES_DATA[g].upgrades[u].buttonID).classList.remove('lockedGalaxyUpg');
-                    document.getElementById(GALAXIES_DATA[g].upgrades[u].buttonID).classList.add(canAffordGUpg(g, u) ? 'galaxyUpg' : 'unclickGalaxyUpg');
-                }
-            }
+            return;
         },
         isImplemented: true,
     },
@@ -1977,58 +1971,58 @@ function fixResetBug() {
         lastRun: {
             crystalGain: new Decimal(0),
             timeSpent: 0,
-            timeSacrificed: new Date(0),
+            timeSacrificed: new Date(),
         },
         lastTen: [
             {
                 crystalGain: new Decimal(0),
                 timeSpent: 0,
-                timeSacrificed: new Date(0),
+                timeSacrificed: new Date(),
             },
             {
                 crystalGain: new Decimal(0),
                 timeSpent: 0,
-                timeSacrificed: new Date(0),
+                timeSacrificed: new Date(),
             },
             {
                 crystalGain: new Decimal(0),
                 timeSpent: 0,
-                timeSacrificed: new Date(0),
+                timeSacrificed: new Date(),
             },
             {
                 crystalGain: new Decimal(0),
                 timeSpent: 0,
-                timeSacrificed: new Date(0),
+                timeSacrificed: new Date(),
             },
             {
                 crystalGain: new Decimal(0),
                 timeSpent: 0,
-                timeSacrificed: new Date(0),
+                timeSacrificed: new Date(),
             },
             {
                 crystalGain: new Decimal(0),
                 timeSpent: 0,
-                timeSacrificed: new Date(0),
+                timeSacrificed: new Date(),
             },
             {
                 crystalGain: new Decimal(0),
                 timeSpent: 0,
-                timeSacrificed: new Date(0),
+                timeSacrificed: new Date(),
             },
             {
                 crystalGain: new Decimal(0),
                 timeSpent: 0,
-                timeSacrificed: new Date(0),
+                timeSacrificed: new Date(),
             },
             {
                 crystalGain: new Decimal(0),
                 timeSpent: 0,
-                timeSacrificed: new Date(0),
+                timeSacrificed: new Date(),
             },
             {
                 crystalGain: new Decimal(0),
                 timeSpent: 0,
-                timeSacrificed: new Date(0),
+                timeSacrificed: new Date(),
             },
         ],
     });
@@ -2037,58 +2031,58 @@ function fixResetBug() {
         lastRun: {
             galaxyGain: new Decimal(0),
             timeSpent: 0,
-            timeAscended: new Date(0),
+            timeAscended: new Date(),
         },
         lastTen: [
             {
                 galaxyGain: new Decimal(0),
                 timeSpent: 0,
-                timeAscended: new Date(0),
+                timeAscended: new Date(),
             },
             {
                 galaxyGain: new Decimal(0),
                 timeSpent: 0,
-                timeAscended: new Date(0),
+                timeAscended: new Date(),
             },
             {
                 galaxyGain: new Decimal(0),
                 timeSpent: 0,
-                timeAscended: new Date(0),
+                timeAscended: new Date(),
             },
             {
                 galaxyGain: new Decimal(0),
                 timeSpent: 0,
-                timeAscended: new Date(0),
+                timeAscended: new Date(),
             },
             {
                 galaxyGain: new Decimal(0),
                 timeSpent: 0,
-                timeAscended: new Date(0),
+                timeAscended: new Date(),
             },
             {
                 galaxyGain: new Decimal(0),
                 timeSpent: 0,
-                timeAscended: new Date(0),
+                timeAscended: new Date(),
             },
             {
                 galaxyGain: new Decimal(0),
                 timeSpent: 0,
-                timeAscended: new Date(0),
+                timeAscended: new Date(),
             },
             {
                 galaxyGain: new Decimal(0),
                 timeSpent: 0,
-                timeAscended: new Date(0),
+                timeAscended: new Date(),
             },
             {
                 galaxyGain: new Decimal(0),
                 timeSpent: 0,
-                timeAscended: new Date(0),
+                timeAscended: new Date(),
             },
             {
                 galaxyGain: new Decimal(0),
                 timeSpent: 0,
-                timeAscended: new Date(0),
+                timeAscended: new Date(),
             },
         ],
     });
