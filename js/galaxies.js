@@ -576,7 +576,7 @@ function completeResearch(id) {
     document.getElementById('researchSubTabBut').classList.remove('tabButNotify');
     document.getElementById('galaxyTabBut').classList.remove('tabButIndirectNotify');
     document.getElementById(document.getElementById(RESEARCH_DATA[id].buttonID).id).classList.remove('projectNotify');
-    RESEARCH_DATA[i].onComplete(id);
+    RESEARCH_DATA[id].onComplete(id);
 
     respecGalaxies();
 }

@@ -164,7 +164,7 @@ function updateCorpseDisplays() {
     displayData.push(['html', 'corpseAmount', formatDefault(player.corpses)]);
     displayData.push(['html', 'pluralCorpse', corpseSingulizer(false)]);
     displayData.push(['html', 'pluralCorpseG', corpseSingulizer(true)]);
-    displayData.push(['html', 'corpseGain', player.astralFlag ? (hasGUpgrade(1, 22) ? formatDefault(getCorpsesPerSecond().times(.01)) : formatWhole(0)) : formatDefault(player.displayRealTime ? getCorpsesPerSecond().times(getRealTimeMultiplier()) : getCorpsesPerSecond())]);
+    displayData.push(['html', 'corpseGain', player.astralFlag ? (hasGUpgrade(1, 22) ? formatDefault(player.displayRealTime ? getCorpsesPerSecond().times(.01).times(getRealTimeMultiplier()) : getCorpsesPerSecond().times(.01)) : formatWhole(0)) : formatDefault(player.displayRealTime ? getCorpsesPerSecond().times(getRealTimeMultiplier()) : getCorpsesPerSecond())]);
     displayData.push(['html', 'achNum', `${formatWhole(getNumAchievements())}`]);
     displayData.push(['html', 'achRowsNum', `${formatWhole(getNumAchRows())}`]);
     displayData.push(['html', 'achMult', `${formatDefault2(getAchievementBoost())}x`]);
