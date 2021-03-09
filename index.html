@@ -891,7 +891,7 @@
                                                     <label id="prestigeBuyerAmountLabel" for="ascensionBuyerAmount" style="font-size: 10pt;">at x galaxies</label>
                                                 </div>
                                             </div>
-                                            <span id="sacrificeErr" style="display: none;">invalid input. value set to last valid input: <span id="sacrificeErrValue"></span></span>
+                                            <span id="ascensionErr" style="display: none;">invalid input. value set to last valid input: <span id="sacrificeErrValue"></span></span>
                                         </div>
                                     </div>
                                 </td>
@@ -1317,7 +1317,7 @@
                         <button id="timePrestige" class="timePrestigeBut" data-title="floor(10^(corpses_exponent/20 - 0.65))" onclick="timePrestigeClick()">
                             <span style="font-size: 15pt;">sacrifice your empire</span><br>
                             <span id="timePresDesc">Perform a dark ritual to transmute all you have achieved into time crystals. This will reset all your corpses, units, worlds, bricks, buildings, upgrades, earned time dimensions, and time essence, but you will gain time crystals based on your corpses.</span><br>
-                            <span id="timePrestigeReq" style="font-size: 13pt;">Requires at least <span style="font-size: 17pt; white-space: pre;"> 1e20 </span> corpses</span>
+                            <span id="timePrestigeReq" style="font-size: 13pt;">Requires at least <span id="staticSacReq" style="font-size: 17pt; white-space: pre;"> 1e20 </span> corpses</span>
                             <span id="timePrestigeGainDesc" style="font-size: 13pt; display: none;">Gain <span id="timePrestigeGain" style="font-size: 17pt; white-space: pre; font-variant-numeric: tabular-nums;"> 1 </span> <span id="crystalsTextGain" class="timeResourceTexts">time crystals</span></span>
                             <span id="crystalRateDesc" style="display: none; font-variant-numeric: tabular-nums;"></span>
                         </button><br>
@@ -2072,7 +2072,7 @@
                 </div>
                 <div style="text-align: center; width: 920px; margin: auto; font-size: 15pt; font-weight: 900; color: #e32d05;">DEV NOTE: completed project rewards are not implemented yet.</div>
                 <div id="researchDescription" style="text-align: center; width: 920px; margin: auto; font-size: 11pt;">
-                    <div style="margin: 5px;">When you begin a research project, you do a galaxy respec, but <span style="font-size: 12pt;">ALL</span> of your corpses, astral bricks, buildings, building resources, construction, time upgrades, and time crystals are reset, regardless of your milestones or achievements; however, all tabs stay unlocked.<br>(Galactic Vortex and the 4th/5th Time Upgrade columns don't reset, but they have no effect during research.)</div>
+                    <div style="margin: 5px;">When you begin a research project, you do a galaxy respec, but <span style="font-size: 12pt;">ALL</span> of your corpses, astral bricks, buildings, building resources, construction, time upgrades, and time crystals are reset, regardless of your milestones, achievements, and project rewards; however, all tabs stay unlocked.<br>(Galactic Vortex and the 4th/5th Time Upgrade columns don't reset, but they have no effect during research.)</div>
                     <div style="margin: 5px;">During astral enslavement, your vassal souls tirelessly study the eldritch sciences of <span style="font-size: 14pt; color: #661503; font-weight: bold; -webkit-text-stroke-width: .3px; -webkit-text-stroke-color: white;">the beyond</span>. As a result, your base astral brick production is square rooted, but you produce Void Research at the same base rate.</div>
                     <div style="margin: 5px;">Additionally, galaxy upgrade costs are tripled (after the cost increase from higher rows), and <span style="font-size: 12pt;">ALL</span> production other than bricks/research is raised to the ^0.9.</div>
                     <div style="margin: 5px;">To complete a research project, you must reach the required amount of Void Research under these conditions in addition to the specific conditions below.</div>
@@ -2119,7 +2119,7 @@
                                 </div>
                                 <hr width="95%" style="border-color: #661503;">
                                 <div id="resReward1" style="margin: 5px; height: 95px; min-height: 95px;">
-                                    <span style="font-size: 15pt; font-weight: 900;">REWARD:</span><br>Exponential cost scaling for all construction upgrades starts 10 levels later.
+                                    <span style="font-size: 15pt; font-weight: 900;">REWARD:</span><br>Exp. cost scaling for all construction upgrades starts 10 levels later (after 3.22).
                                 </div>
                                 <div id="resGoalText3" class="resGoalText">Goal: <span id="resGoal3">1e12</span> Void Research</div>
                                 <button id="startResearch3" class="researchButton" onclick="researchButtonClick(3)">BEGIN</button>
@@ -2183,12 +2183,18 @@
                 <img id="torpedos" class="arkImg" src="../images/torpedos.png">
                 <img id="railguns" class="arkImg" src="../images/railguns.png">
                 <img id="support" class="arkImg" src="../images/support.png">
-                <button id="thrustersBut" class="arkUpg" onclick="buyArkUpgrade('thrusters')" res-num="1"><span id="thrustersText" style="display: none;">build thrusters (not yet implemented)</span></button>
-                <button id="enginesBut" class="arkUpg" onclick="buyArkUpgrade('engines')" res-num="2"><span id="enginesText" style="display: none;">build engines (not yet implemented)</span></button>
-                <button id="navigationBut" class="arkUpg" onclick="buyArkUpgrade('navigation')" res-num="3"><span id="navigationText" style="display: none;">build navigation (not yet implemented)</span></button>
-                <button id="torpedosBut" class="arkUpg" onclick="buyArkUpgrade('torpedos')" res-num="4"><span id="torpedosText" style="display: none;">build torpedos (not yet implemented)</span></button>
-                <button id="railgunsBut" class="arkUpg" onclick="buyArkUpgrade('railguns')" res-num="5"><span id="railgunsText" style="display: none;">build railguns (not yet implemented)</span></button>
-                <button id="supportBut" class="arkUpg" onclick="buyArkUpgrade('support')" res-num="6"><span id="supportText" style="display: none;">build death support (not yet implemented)</span></button>
+                <img id="thrustersBuilt" class="arkImgBuilt" src="../images/thrusterscolor.png">
+                <img id="enginesBuilt" class="arkImgBuilt" src="../images/enginescolor.png">
+                <img id="navigationBuilt" class="arkImgBuilt" src="../images/navigationcolor.png">
+                <img id="torpedosBuilt" class="arkImgBuilt" src="../images/torpedoscolor.png">
+                <img id="railgunsBuilt" class="arkImgBuilt" src="../images/railgunscolor.png">
+                <img id="supportBuilt" class="arkImgBuilt" src="../images/supportcolor.png">
+                <button id="thrustersBut" class="arkUpg" onclick="buyArkUpgrade('thrusters')" res-num="1"><span id="thrustersText" style="display: none;">build thrusters (not yet implemented)</span><span id="thrustersBoughtText" style="display: none;">THRUSTERS ONLINE.</span></button>
+                <button id="enginesBut" class="arkUpg" onclick="buyArkUpgrade('engines')" res-num="2"><span id="enginesText" style="display: none;">build engines (not yet implemented)</span><span id="enginesBoughtText" style="display: none;">ENGINES ONLINE.</span></button>
+                <button id="navigationBut" class="arkUpg" onclick="buyArkUpgrade('navigation')" res-num="3"><span id="navigationText" style="display: none;">build navigation (not yet implemented)</span><span id="navigationBoughtText" style="display: none;">NAVIGATION ONLINE.</span></button>
+                <button id="torpedosBut" class="arkUpg" onclick="buyArkUpgrade('torpedos')" res-num="4"><span id="torpedosText" style="display: none;">build torpedos (not yet implemented)</span><span id="torpedosBoughtText" style="display: none;">TORPEDOS ONLINE.</span></button>
+                <button id="railgunsBut" class="arkUpg" onclick="buyArkUpgrade('railguns')" res-num="5"><span id="railgunsText" style="display: none;">build railguns (not yet implemented)</span><span id="railgunsBoughtText" style="display: none;">RAILGUNS ONLINE.</span></button>
+                <button id="supportBut" class="arkUpg" onclick="buyArkUpgrade('support')" res-num="6"><span id="supportText" style="display: none;">build death support (not yet implemented)</span><span id="supportBoughtText" style="display: none;">DEATH SUPPORT ONLINE.</span></button>
             </div>
         </div>
         <div id="statsTab" class="pageTab">

@@ -228,6 +228,7 @@ const UNITS_DATA = {
             if (hasAchievement(31)) { m = m.times(getAchievementEffect(31)); }
             m = m.times(getAchievementBoost());
             if (isResearchActive(1)) { m = m.pow(0.9); }
+            else if (isResearchCompleted(1)) { m = m.pow(1.1); }
             return m;
         },
         prodMult: function() {
@@ -275,6 +276,7 @@ const UNITS_DATA = {
             if (hasAchievement(31)) { m = m.times(getAchievementEffect(31)); }
             m = m.times(getAchievementBoost());
             if (isResearchActive(1)) { m = m.pow(0.9); }
+            else if (isResearchCompleted(1)) { m = m.pow(1.1); }
             return m;
         },
         prodMult: function() {
@@ -323,6 +325,7 @@ const UNITS_DATA = {
             if (hasAchievement(31)) { m = m.times(getAchievementEffect(31)); }
             m = m.times(getAchievementBoost());
             if (isResearchActive(1)) { m = m.pow(0.9); }
+            else if (isResearchCompleted(1)) { m = m.pow(1.1); }
             return m;
         },
         prodMult: function() {
@@ -370,6 +373,7 @@ const UNITS_DATA = {
             if (hasAchievement(31)) { m = m.times(getAchievementEffect(31)); }
             m = m.times(getAchievementBoost());
             if (isResearchActive(1)) { m = m.pow(0.9); }
+            else if (isResearchCompleted(1)) { m = m.pow(1.1); }
             return m;
         },
         prodMult: function() {
@@ -417,6 +421,7 @@ const UNITS_DATA = {
             if (hasAchievement(31)) { m = m.times(getAchievementEffect(31)); }
             m = m.times(getAchievementBoost());
             if (isResearchActive(1)) { m = m.pow(0.9); }
+            else if (isResearchCompleted(1)) { m = m.pow(1.1); }
             return m;
         },
         prodMult: function() {
@@ -464,6 +469,7 @@ const UNITS_DATA = {
             if (hasAchievement(31)) { m = m.times(getAchievementEffect(31)); }
             m = m.times(getAchievementBoost());
             if (isResearchActive(1)) { m = m.pow(0.9); }
+            else if (isResearchCompleted(1)) { m = m.pow(1.1); }
             return m;
         },
         prodMult: function() {
@@ -511,6 +517,7 @@ const UNITS_DATA = {
             if (hasAchievement(31)) { m = m.times(getAchievementEffect(31)); }
             m = m.times(getAchievementBoost());
             if (isResearchActive(1)) { m = m.pow(0.9); }
+            else if (isResearchCompleted(1)) { m = m.pow(1.1); }
             return m;
         },
         prodMult: function() {
@@ -560,6 +567,7 @@ const UNITS_DATA = {
             if (hasAchievement(31)) { m = m.times(getAchievementEffect(31)); }
             m = m.times(getAchievementBoost());
             if (isResearchActive(1)) { m = m.pow(0.9); }
+            else if (isResearchCompleted(1)) { m = m.pow(1.1); }
             return m;
         },
         prodMult: function() {

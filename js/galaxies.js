@@ -6,8 +6,12 @@ function arkIsUnlocked(a) {
     return player.ark[a].unlocked;
 }
 
-function getAUpgCost(a) {
-    return ARK_DATA[a].cost;
+function getAUpgBrickCost(a) {
+    return ARK_DATA[a].brickCost;
+}
+
+function getAUpgTimeCost(a) {
+    return ARK_DATA[a].timeCost;
 }
 
 function getAUpgDesc(a) {
@@ -27,7 +31,7 @@ function hasAUpgrade(a) {
 }
 
 function canAffordAUpg(a) {
-    return (player.bricks.gte(ARK_DATA[a].cost) && player.ark[a].unlocked);
+    return (player.crystals.gte(ARK_DATA[a].timeCost) && player.bricks.gte(ARK_DATA[a].brickCost) && player.ark[a].unlocked);
 }
 
 function isDisplayEffectA(a) {
@@ -230,11 +234,15 @@ function unlockRow(r) {
 function buyArkUpgrade(a) {
     return;
     /*if (!player.ark[a].bought && canAffordAUpg(a)) {
-        player.bricks = player.bricks.minus(getAUpgCost(a));
+        player.bricks = player.bricks.minus(getAUpgBrickCost(a));
+        player.crystals = player.crystals.minus(getAUpgTimeCost(a));
         player.ark[a].bought = true;
-        player.push(['togDisplay', a]);
-        addAUpgClass(a, 'boughtArkUpg');
-        remAUpgClass(a, 'arkUpg');
+        document.getElementById(a).style.display = 'none';
+        document.getElementById(a + 'Built').style.display = 'block';
+        document.getElementById(a + 'But').classList.add('boughtArkUpg');
+        document.getElementById(a + 'But').classList.remove('arkUpg');
+        document.getElementById(a + 'Text').style.display = 'none';
+        document.getElementById(a + 'BoughtText').style.display = 'inline';
     }*/
 }
 
@@ -535,6 +543,10 @@ function getActiveResearch() {
     return 0;
 }
 
+function isResearchCompleted(i) {
+    return player.researchProjects[i].completed;
+}
+
 function canCompleteResearch() {
     let proj = getActiveResearch();
     if (proj==0) { return false; }
@@ -564,6 +576,7 @@ function completeResearch(id) {
     document.getElementById('researchSubTabBut').classList.remove('tabButNotify');
     document.getElementById('galaxyTabBut').classList.remove('tabButIndirectNotify');
     document.getElementById(document.getElementById(RESEARCH_DATA[id].buttonID).id).classList.remove('projectNotify');
+    RESEARCH_DATA[i].onComplete(id);
 
     respecGalaxies();
 }
@@ -596,36 +609,55 @@ const RESEARCH_DATA = {
         goal: new Decimal(1e6),
         buttonID: 'startResearch1',
         unlocks: 'thrusters',
+        onComplete: function() {
+            return;
+        }
     },
     2: {
         galaxyLock: 1,
         goal: new Decimal(1e9),
         buttonID: 'startResearch2',
         unlocks: 'engines',
+        onComplete: function() {
+            return;
+        }
     },
     3: {
         galaxyLock: 2,
         goal: new Decimal(1e12),
         buttonID: 'startResearch3',
         unlocks: 'navigation',
+        onComplete: function() {
+            return;
+        }
     },
     4: {
         galaxyLock: 3,
         goal: new Decimal(1e14),
         buttonID: 'startResearch4',
         unlocks: 'torpedos',
+        onComplete: function() {
+            return;
+        }
     },
     5: {
         galaxyLock: 0,
         goal: new Decimal(1e9),
         buttonID: 'startResearch5',
         unlocks: 'railguns',
+        onComplete: function() {
+            document.getElementById('staticSacReq').innerHTML = ' 1e15 ';
+            document.getElementById('timePrestige').setAttribute('data-title', 'floor(10^(corpses_exponent/15 - 0.65))');
+        }
     },
     6: {
         galaxyLocks: 0,
         goal: new Decimal(1e12),
         buttonID: 'startResearch6',
         unlocks: 'support',
+        onComplete: function() {
+            return;
+        }
     },
 }
 
@@ -633,7 +665,8 @@ const ARK_DATA = {
     'thrusters': {
         name: 'thrusters',
         desc: '',
-        cost: new Decimal(0),
+        brickCost: new Decimal(0),
+        timeCost: new Decimal(0),
         buttonID: 'thrustersBut',
         textID: 'thrustersText',
         displayEffect: false,
@@ -647,7 +680,8 @@ const ARK_DATA = {
     'engines': {
         name: 'engines',
         desc: '',
-        cost: new Decimal(0),
+        brickCost: new Decimal(0),
+        timeCost: new Decimal(0),
         buttonID: 'enginesBut',
         textID: 'enginesText',
         displayEffect: false,
@@ -661,7 +695,8 @@ const ARK_DATA = {
     'navigation': {
         name: 'navigation',
         desc: '',
-        cost: new Decimal(0),
+        brickCost: new Decimal(0),
+        timeCost: new Decimal(0),
         buttonID: 'navigationBut',
         textID: 'navigationText',
         displayEffect: false,
@@ -675,7 +710,8 @@ const ARK_DATA = {
     'torpedos': {
         name: 'torpedos',
         desc: '',
-        cost: new Decimal(0),
+        brickCost: new Decimal(0),
+        timeCost: new Decimal(0),
         buttonID: 'torpedosBut',
         textID: 'torpedosText',
         displayEffect: false,
@@ -689,7 +725,8 @@ const ARK_DATA = {
     'railguns': {
         name: 'railguns',
         desc: '',
-        cost: new Decimal(0),
+        brickCost: new Decimal(0),
+        timeCost: new Decimal(0),
         buttonID: 'railgunsBut',
         textID: 'railgunsText',
         displayEffect: false,
@@ -703,7 +740,8 @@ const ARK_DATA = {
     'support': {
         name: 'support',
         desc: '',
-        cost: new Decimal(0),
+        brickCost: new Decimal(0),
+        timeCost: new Decimal(0),
         buttonID: 'supportBut',
         textID: 'supportText',
         displayEffect: false,

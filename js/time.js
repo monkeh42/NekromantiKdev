@@ -45,7 +45,7 @@ function canAffordTime(tier) {
 
 function calculateCrystalGain() {
     if (canTimePrestige()) {
-        var div = 20;
+        var div = isResearchCompleted(5) ? 15 : 20
         var ret = Decimal.floor(Decimal.pow(10, (player.thisSacStats.bestCorpses.e/div) - 0.65));
         if (hasTUpgrade(21)) { ret = ret.times(2); }
         if (hasTUpgrade(33)) { ret = ret.times(getTUpgEffect(33)); }
@@ -110,6 +110,7 @@ function getAntiTimeBuff() {
     if (hasGUpgrade(4, 31)) { b = b.pow(getGUpgEffect(4, 31)); }
     b = b.div(getTrueTimeNerf()).times(2);
     b = Decimal.add(b, 1);
+    if (isResearchCompleted(4) && b.eq(1)) { b = getTrueTimeBuff(); }
     return b;
 }
 
@@ -193,7 +194,7 @@ function buyTUpg(t) {
 //prestige related
 
 function canTimePrestige() {
-    return player.corpses.gte(new Decimal(1e20));
+    return isResearchCompleted(5) ? player.corpses.gte(new Decimal(1e15)) : player.corpses.gte(new Decimal(1e20))
 }
 
 function respecTimeClick() {

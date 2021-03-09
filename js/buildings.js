@@ -207,14 +207,20 @@ function resetBuildings(ascension=false) {
 
     let tempSun = {};
     let tempVortex = {};
+    let tempFactory = {};
+    let factory = player.unlocks['buildingsTab']['factory'];
     let sun = player.unlocks['buildingsTab']['sun'];
     let sunRow2 = player.unlocks['buildingsTab']['sunRow2'];
     let vortex = player.unlocks['buildingsTab']['vortex'];
     let vortexT = player.unlocks['buildingsTab']['vortexTable'];
     copyData(tempVortex, player.buildings[4]);
     copyData(tempSun, player.buildings[3]);
+    copyData(tempFactory, player.buildings[1]);
+    tempFactory.upgrades[21] = false;
+    tempFactory.upgrades[22] = false;
+    tempFactory.upgrades[23] = false;
+    tempFactory.amount = new Decimal(0);
     copyData(player.buildings, START_PLAYER.buildings);
-    copyData(player.buildings[4], tempVortex);
     if (!hasMilestone(1)) { copyData(player.construction, START_PLAYER.construction); }
     copyData(player.unlocks['buildingsTab'], START_PLAYER.unlocks['buildingsTab']);
     if (player.isInResearch) {
@@ -231,6 +237,10 @@ function resetBuildings(ascension=false) {
         copyData(player.buildings[4], tempVortex);
         player.unlocks['buildingsTab']['vortex'] = vortex;
         player.unlocks['buildingsTab']['vortexTable'] = vortexT;
+    }
+    if (isResearchCompleted(2)) {
+        copyData(player.buildings[1], tempFactory);
+        player.unlocks['buildingsTab']['factory'] = factory;
     }
 
     if (hasTUpgrade(14)) {
@@ -857,16 +867,11 @@ const CONSTR_DATA = {
         isTimes: true,
         cost: function() {
             var c = this.baseCost;
+            var s = isResearchActive(3) ? 1 : 25
+            if (hasGUpgrade(3, 22)) { s = 2*s; }
+            if (isResearchCompleted(3)) { s += 10; }
             c = c.times(Decimal.pow(this.baseCostMult, player.construction[this.tier]));
-            if (isResearchActive(3)) {
-                let e = hasGUpgrade(3, 22) ? new Decimal(2) : new Decimal(1)
-                if (player.construction[this.tier].gte(e)) { c = c.times(Decimal.pow(this.expCostMult, addFactorial(player.construction[this.tier].minus(e.minus(1))))); }
-            }
-            else if (hasGUpgrade(3, 22)) {
-                if (player.construction[this.tier].gte(50)) { c = c.times(Decimal.pow(this.expCostMult, addFactorial(player.construction[this.tier].minus(49)))); }
-            } else {
-                if (player.construction[this.tier].gte(25)) { c = c.times(Decimal.pow(this.expCostMult, addFactorial(player.construction[this.tier].minus(24)))); }
-            }
+            if (player.construction[this.tier].gte(s)) { c = c.times(Decimal.pow(this.expCostMult, addFactorial(player.construction[this.tier].minus(s-1)))); }
             return c;
         },
         baseCostMult: 5,
@@ -893,16 +898,11 @@ const CONSTR_DATA = {
         isTimes: false,
         cost: function() {
             var c = this.baseCost;
+            var s = isResearchActive(3) ? 1 : 25
+            if (hasGUpgrade(3, 22)) { s = 2*s; }
+            if (isResearchCompleted(3)) { s += 10; }
             c = c.times(Decimal.pow(this.baseCostMult, player.construction[this.tier]));
-            if (isResearchActive(3)) {
-                let e = hasGUpgrade(3, 22) ? new Decimal(2) : new Decimal(1)
-                if (player.construction[this.tier].gte(e)) { c = c.times(Decimal.pow(this.expCostMult, addFactorial(player.construction[this.tier].minus(e.minus(1))))); }
-            }
-            else if (hasGUpgrade(3, 22)) {
-                if (player.construction[this.tier].gte(50)) { c = c.times(Decimal.pow(this.expCostMult, addFactorial(player.construction[this.tier].minus(49)))); }
-            } else {
-                if (player.construction[this.tier].gte(25)) { c = c.times(Decimal.pow(this.expCostMult, addFactorial(player.construction[this.tier].minus(24)))); }
-            }
+            if (player.construction[this.tier].gte(s)) { c = c.times(Decimal.pow(this.expCostMult, addFactorial(player.construction[this.tier].minus(s-1)))); }
             return c;
         },
         baseCostMult: 5,
@@ -929,16 +929,11 @@ const CONSTR_DATA = {
         isTimes: true,
         cost: function() {
             var c = this.baseCost;
+            var s = isResearchActive(3) ? 1 : 25
+            if (hasGUpgrade(3, 22)) { s = 2*s; }
+            if (isResearchCompleted(3)) { s += 10; }
             c = c.times(Decimal.pow(this.baseCostMult, player.construction[this.tier]));
-            if (isResearchActive(3)) {
-                let e = hasGUpgrade(3, 22) ? new Decimal(2) : new Decimal(1)
-                if (player.construction[this.tier].gte(e)) { c = c.times(Decimal.pow(this.expCostMult, addFactorial(player.construction[this.tier].minus(e.minus(1))))); }
-            }
-            else if (hasGUpgrade(3, 22)) {
-                if (player.construction[this.tier].gte(50)) { c = c.times(Decimal.pow(this.expCostMult, addFactorial(player.construction[this.tier].minus(49)))); }
-            } else {
-                if (player.construction[this.tier].gte(25)) { c = c.times(Decimal.pow(this.expCostMult, addFactorial(player.construction[this.tier].minus(24)))); }
-            }
+            if (player.construction[this.tier].gte(s)) { c = c.times(Decimal.pow(this.expCostMult, addFactorial(player.construction[this.tier].minus(s-1)))); }
             return c;
         },
         baseCostMult: 5,
@@ -965,16 +960,11 @@ const CONSTR_DATA = {
         isTimes: false,
         cost: function() {
             var c = this.baseCost;
+            var s = isResearchActive(3) ? 1 : 25
+            if (hasGUpgrade(3, 22)) { s = 2*s; }
+            if (isResearchCompleted(3)) { s += 10; }
             c = c.times(Decimal.pow(this.baseCostMult, player.construction[this.tier]));
-            if (isResearchActive(3)) {
-                let e = hasGUpgrade(3, 22) ? new Decimal(2) : new Decimal(1)
-                if (player.construction[this.tier].gte(e)) { c = c.times(Decimal.pow(this.expCostMult, addFactorial(player.construction[this.tier].minus(e.minus(1))))); }
-            }
-            else if (hasGUpgrade(3, 22)) {
-                if (player.construction[this.tier].gte(50)) { c = c.times(Decimal.pow(this.expCostMult, addFactorial(player.construction[this.tier].minus(49)))); }
-            } else {
-                if (player.construction[this.tier].gte(25)) { c = c.times(Decimal.pow(this.expCostMult, addFactorial(player.construction[this.tier].minus(24)))); }
-            }
+            if (player.construction[this.tier].gte(s)) { c = c.times(Decimal.pow(this.expCostMult, addFactorial(player.construction[this.tier].minus(s-1)))); }
             return c;
         },
         baseCostMult: 10,
@@ -1000,9 +990,10 @@ const CONSTR_DATA = {
         isTimes: true,
         cost: function() {
             var c = this.baseCost;
+            var s = isResearchActive(3) ? 1 : 25
+            if (isResearchCompleted(3)) { s += 10; }
             c = c.times(Decimal.pow(this.baseCostMult, player.construction[this.tier]));
-            if (isResearchActive(3)) { c = c.times(Decimal.pow(this.expCostMult, addFactorial(player.construction[this.tier]))); }
-            else if (player.construction[this.tier].gte(25)) { c = c.times(Decimal.pow(this.expCostMult, addFactorial(player.construction[this.tier].minus(24)))); }
+            if (player.construction[this.tier].gte(s)) { c = c.times(Decimal.pow(this.expCostMult, addFactorial(player.construction[this.tier].minus(s-1)))); }
             return c;
         },
         baseCostMult: 1000,
@@ -1027,9 +1018,10 @@ const CONSTR_DATA = {
         isTimes: false,
         cost: function() {
             var c = this.baseCost;
+            var s = isResearchActive(3) ? 1 : 25
+            if (isResearchCompleted(3)) { s += 10; }
             c = c.times(Decimal.pow(this.baseCostMult, player.construction[this.tier]));
-            if (isResearchActive(3)) { c = c.times(Decimal.pow(this.expCostMult, addFactorial(player.construction[this.tier]))); }
-            else if (player.construction[this.tier].gte(25)) { c = c.times(Decimal.pow(this.expCostMult, addFactorial(player.construction[this.tier].minus(24)))); }
+            if (player.construction[this.tier].gte(s)) { c = c.times(Decimal.pow(this.expCostMult, addFactorial(player.construction[this.tier].minus(s-1)))); }
             return c;
         },
         baseCostMult: new Decimal(1e6),
