@@ -617,6 +617,7 @@ const START_PLAYER = {
             'mainTab': false,
             'customizeDisplay': false,
             'arkTab': false,
+            'researchTab': false,
         },
     },
 
@@ -1607,7 +1608,7 @@ const UNLOCKS_DATA = {
             unlocked: false,
             notifyID: 'arkSubTabBut',
             parentNotify: 'galaxyTabBut',
-            idsToShow: ['galaxiesSubMenu', 'researchSubTabBut', 'arkSubTabBut', 'researchToggleRow', 'researchGainToggleRow'],
+            idsToShow: ['galaxiesSubMenu', 'researchToggleRow', 'researchGainToggleRow'],
             idsToHide: [],
             shouldNotify: function() {
                 return true;
@@ -1616,7 +1617,7 @@ const UNLOCKS_DATA = {
                 return hasMilestone(7);
             }
         },
-        'arkTab': {
+        'researchTab': {
             unlocked: false,
             notifyID: 'researchSubTabBut',
             parentNotify: 'galaxyTabBut',
@@ -2363,6 +2364,7 @@ function fixResetBug() {
             'mainTab': false,
             'customizeDisplay': false,
             'arkTab': false,
+            'researchTab': false,
         },
     });
 

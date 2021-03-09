@@ -912,7 +912,7 @@ function showGalaxySubTab(subTabName, buttonName, parentButton) {
         }
     }
     player.activeTabs[4] = subTabName;
-    if (buttonName !== undefined && subTabName != 'researchSubTab') {
+    if (buttonName !== undefined) {
         document.getElementById(buttonName).classList.remove('tabButNotify');
         document.getElementById(parentButton).classList.remove('tabButIndirectNotify');
     }
@@ -1157,7 +1157,7 @@ function updateMilestones() {
     for (let id in MILES_DATA) {
         if (!player.milestones[id] && MILES_DATA[id].canUnlock()) {
             unlockMilestone(id)
-        } else if (!MILES_DATA[id].isImplemented) { document.getElementById('milestoneRew' + id.toString()).innerHTML = '?????'; }
+        } 
     }
 }
 
@@ -1166,7 +1166,6 @@ function unlockMilestone(m) {
     displayData.push(['addClass', 'milestone' + m.toString(), 'milestoneTDUnlocked']);
     displayData.push(['remClass', 'milestone' + m.toString(), 'milestoneTD']);
     displayData.push(['addClass', 'milestonesBut', 'milestonesNotify']);
-    displayData.push(['addClass', 'galaxiesSubTabBut', 'tabButNotify']);
     displayData.push(['addClass', 'galaxyTabBut', 'tabButIndirectNotify']);
     displayData.push(['setProp', 'milesUnlockPopup', 'opacity', '1']);
     displayData.push(['setProp', 'milestoneReq' + m.toString(), 'text-decoration', 'line-through']);
