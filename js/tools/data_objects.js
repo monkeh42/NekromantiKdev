@@ -1605,13 +1605,28 @@ const UNLOCKS_DATA = {
         },
         'arkTab': {
             unlocked: false,
+            notifyID: 'arkSubTabBut',
+            parentNotify: 'galaxyTabBut',
             idsToShow: ['galaxiesSubMenu', 'researchSubTabBut', 'arkSubTabBut', 'researchToggleRow', 'researchGainToggleRow'],
             idsToHide: [],
             shouldNotify: function() {
-                return false;
+                return true;
             },
             condition: function() {
-                return false;
+                return hasMilestone(7);
+            }
+        },
+        'arkTab': {
+            unlocked: false,
+            notifyID: 'researchSubTabBut',
+            parentNotify: 'galaxyTabBut',
+            idsToShow: [],
+            idsToHide: [],
+            shouldNotify: function() {
+                return true;
+            },
+            condition: function() {
+                return hasMilestone(7);
             }
         },
     },
