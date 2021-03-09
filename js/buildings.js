@@ -339,7 +339,7 @@ const BUILDS_DATA = {
                         b = Decimal.pow(b, e).times(2);
                     }
                     if (hasGUpgrade(3, 11)) { b = b.pow(getGUpgEffect(3, 11)); }
-                    if (hasTUpgrade(43)) { b = b.times(getGUpgEffect(43)); }
+                    if (hasTUpgrade(43)) { b = b.times(getTUpgEffect(43)); }
                     return b.plus(1);
                 }
             },
@@ -727,7 +727,7 @@ const BUILDS_DATA = {
             return Decimal.max(p, 0); 
         },
         resourceEff: function() {
-            return player.buildings[this.tier].amount.sqrt().div(50);
+            return player.buildings[this.tier].amount.gt(0) ? Decimal.max(player.buildings[this.tier].amount.log10()/10, .02) : new Decimal(0);
         },
         canAffordUpg: function(upg) {
             return player.buildings[4].amount.gte(this.upgrades[upg].cost);

@@ -2,7 +2,7 @@
 
 const GAME_DATA = {
     author: 'monkeh42',
-    version: 'v0.3.1',
+    version: 'v0.3.2',
 }
 
 const NUM_UNITS = 8;
@@ -290,7 +290,7 @@ function loadStyles() {
     }
 
     for (let id in ACH_DATA) {
-        document.getElementById(ACH_DATA[id].divID).setAttribute('data-title', ACH_DATA[id].desc + (ACH_DATA[id].hasReward ? ' Reward: ' + ACH_DATA[id].reward : '' ) + (ACH_DATA[id].showEffect ? ' Currently: ' + formatDefault2(ACH_DATA[id].effect()) + 'x' : '' ));
+        document.getElementById(ACH_DATA[id].divID).setAttribute('data-title', ((ACH_DATA[id].secret && !player.achievements[id]) ? ACH_DATA[id].hint : ACH_DATA[id].desc) + (ACH_DATA[id].hasReward ? ' Reward: ' + ACH_DATA[id].reward : '' ) + (ACH_DATA[id].showEffect ? ' Currently: ' + formatDefault2(ACH_DATA[id].effect()) + 'x' : '' ));
         if (player.achievements[id]) {
             document.getElementById(ACH_DATA[id].divID).classList.add('achievementUnlocked');
             document.getElementById(ACH_DATA[id].divID).classList.remove('achievement');
@@ -592,8 +592,8 @@ function importSave() {
         }
     }
     
-    if (player.version == GAME_DATA.version) { fixData(player, START_PLAYER); }
-    else { updateVersion(); }
+    fixData(player, START_PLAYER); 
+    if (player.version != GAME_DATA.version) { updateVersion(); }
     save();
     window.location.reload();
 }
@@ -686,6 +686,16 @@ function updateVersion() {
     fixResetBug();
     copyData(player, START_PLAYER);
     updateVersionData(player, tempPlayer);
+    player.version = GAME_DATA.version;
+    if (player.version == 'v0.3.2') {
+        if ((!!tempPlayer.achievements[11]) && (typeof tempPlayer.achievements[11] === "object") && player.unlocks['galaxyTab']['mainTab']) {
+            for (let i=1; i<=3; i++) {
+                for (let j=1; j<=5; j++) {
+                    player.achievements[i.toString() + j.toString()] = true;
+                }
+            }
+        }
+    }
     tempPlayer = {};
 }
 
@@ -712,7 +722,7 @@ function updateVersionData(newP, oldP) {
             }
         } else {
             if (oldP[item] !== undefined && item != 'version') {
-                newP[item] = oldP[item];
+                if (typeof newP[item] === typeof oldP[item]) { newP[item] = oldP[item]; }
             }
         }
     }

@@ -18,6 +18,16 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-CFKRG117J3"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-CFKRG117J3');
+    </script>
 </head>
 
 <body onload="init()">
@@ -71,22 +81,22 @@
         <table style="width: auto; margin: auto;" class="shownOnFull">
             <tr>
                 <td id="unitsTabCell">
-                    <button id="unitsTabBut" class="tabBut" onclick="showTab('unitsTab', 'unitsTabBut')">UNITS</button>
+                    <button id="unitsTabBut" class="tabBut" onclick="showTab('unitsTab', false, 'unitsTabBut')">UNITS</button>
                 </td>
                 <td id="buildingsTabCell" style="display: none;">
-                    <button id="buildingsTabBut" class="tabBut" onclick="showTab('buildingsTab', 'buildingsTabBut')">BUILDINGS</button>
+                    <button id="buildingsTabBut" class="tabBut" onclick="showTab('buildingsTab', false, 'buildingsTabBut')">BUILDINGS</button>
                 </td>
                 <td id="timeTabCell" style="display: none;">
-                    <button id="timeTabBut" class="tabBut" onclick="showTab('timeTab', 'timeTabBut')">TIME WARP</button>
+                    <button id="timeTabBut" class="tabBut" onclick="showTab('timeTab', false, 'timeTabBut')">TIME WARP</button>
                 </td>
                 <td id="galaxyTabCell" style="display: none;">
-                    <button id="galaxyTabBut" class="tabBut" onclick="showTab('galaxyTab', 'galaxyTabBut')">GALAXIES</button>
+                    <button id="galaxyTabBut" class="tabBut" onclick="showTab('galaxyTab', false, 'galaxyTabBut')">GALAXIES</button>
                 </td>
                 <td id="statsTabCell" class="shownOnFull">
                     <button id="statsTabBut" class="tabBut" onclick="statsTabClick()">STATS &<br>ACHIEVEMENTS</button>
                 </td>
                 <td id="optionsTabCell" class="shownOnFull">
-                    <button id="optionsTabBut" class="tabBut" onclick="showTab('optionsTab', 'optionsTabBut')">OPTIONS</button>
+                    <button id="optionsTabBut" class="tabBut" onclick="showTab('optionsTab', false, 'optionsTabBut')">OPTIONS</button>
                 </td>
                 <td id="helpTabCell" class="shownOnFull">
                     <button id="helpTabBut" class="tabBut" onclick="showHelp()" style="cursor: pointer !important;">HELP (THIS TAB)</button>
@@ -96,16 +106,16 @@
         <table style="width: auto; margin: auto;" class="shownOnMid">
             <tr>
                 <td id="unitsTabCellMid">
-                    <button id="unitsTabButMid" class="tabBut" onclick="showTab('unitsTab', 'unitsTabButMid')">UNITS</button>
+                    <button id="unitsTabButMid" class="tabBut" onclick="showTab('unitsTab', false, 'unitsTabButMid')">UNITS</button>
                 </td>
                 <td id="buildingsTabCellMid" style="display: none;">
-                    <button id="buildingsTabButMid" class="tabBut" onclick="showTab('buildingsTab', 'buildingsTabButMid')">BUILDINGS</button>
+                    <button id="buildingsTabButMid" class="tabBut" onclick="showTab('buildingsTab', false, 'buildingsTabButMid')">BUILDINGS</button>
                 </td>
                 <td id="timeTabCellMid" style="display: none;">
-                    <button id="timeTabButMid" class="tabBut" onclick="showTab('timeTab', 'timeTabButMid')">TIME WARP</button>
+                    <button id="timeTabButMid" class="tabBut" onclick="showTab('timeTab', false, 'timeTabButMid')">TIME WARP</button>
                 </td>
                 <td id="galaxyTabCellMid" style="display: none;">
-                    <button id="galaxyTabButMid" class="tabBut" onclick="showTab('galaxyTab', 'galaxyTabButMid')">GALAXIES</button>
+                    <button id="galaxyTabButMid" class="tabBut" onclick="showTab('galaxyTab', false, 'galaxyTabButMid')">GALAXIES</button>
                 </td>
             </tr>
         </table>
@@ -115,7 +125,7 @@
                     <button id="statsTabButMid" class="tabBut" onclick="statsTabClick()">STATS &<br>ACHIEVEMENTS</button>
                 </td>
                 <td id="optionsTabCellMid">
-                    <button id="optionsTabButMid" class="tabBut" onclick="showTab('optionsTab', 'optionsTabButMid')">OPTIONS</button>
+                    <button id="optionsTabButMid" class="tabBut" onclick="showTab('optionsTab', false, 'optionsTabButMid')">OPTIONS</button>
                 </td>
                 <td id="helpTabCellMid">
                     <button id="helpTabButMid" class="tabBut" onclick="showHelp()" style="cursor: pointer !important;">HELP (THIS TAB)</button>
@@ -1981,7 +1991,7 @@
                         <td>
                             <button id="last10SubTabBut" class="subTabBut" onclick="statsSubTabClick('last10SubTab', 'last10SubTabBut')">LAST 10 SAC.</button>
                         </td>
-                        <td>
+                        <td id="last10AscCell" style="display: none;">
                             <button id="last10AscSubTabBut" class="subTabBut" onclick="statsSubTabClick('last10AscSubTab', 'last10AscSubTabBut')">LAST 10 ASC.</button>
                         </td>
                         <td>
@@ -2055,6 +2065,8 @@
                     <tr style="height: 25px;">
                         <div style="height: 100%;"></div>
                     </tr>
+                </table>
+                <table id="ascensionStats" style="width: 50%; margin: auto; text-align: center; border-collapse: collapse; display: none;">
                     <tr>
                         <td colspan="3">
                             <h3>This Ascension</h3>
@@ -2131,6 +2143,8 @@
                     <tr style="height: 25px;">
                         <div style="height: 100%;"></div>
                     </tr>
+                </table>
+                <table style="width: 50%; margin: auto; text-align: center; border-collapse: collapse;">
                     <tr>
                         <td colspan="3">
                             <h3>All Time</h3>
@@ -2191,7 +2205,7 @@
                             <span id="bestWorlds"></span>
                         </td>
                     </tr>
-                    <tr>
+                    <tr id="allTimeGalaxies" style="display: none;">
                         <td style="border-right: 1px solid white; font-weight: bold;">
                             depleted galaxies
                         </td>
@@ -2207,7 +2221,7 @@
                     </tr>
                     <tr>
                         <td colspan="3">
-                            you have world prestiged <span id="totPrestige"></span> times, sacrificed <span id="totSacrifice"></span> times, and ascended <span id="totAscensions"></span> times.
+                            you have world prestiged <span id="totPrestige"></span> times, <span id="statsAnd">and </span>sacrificed <span id="totSacrifice"></span> times<span id="totalAscensionsStats" style="display:none;">, and ascended <span id="totAscensions"></span> times</span>.
                         </td>
                     </tr>
                     <tr>
@@ -2215,7 +2229,7 @@
                             your best crystal gain was <span id="bestGain"></span> and your best crystal gain rate was <span id="bestRate"></span>/min.
                         </td>
                     </tr>
-                    <tr>
+                    <tr id="spentGalaxiesStats">
                         <td colspan="3">
                             you have spent a total of <span id="totalSpent"></span> galaxies.
                         </td>
@@ -2292,7 +2306,7 @@
                     </tr>
                 </table>
             </div>
-            <div id="last10AscSubTab" class="statSubTab">
+            <div id="last10AscSubTab" class="statSubTab" style="display: none;">
                 <table style="width: 75%; margin: auto; text-align: center;">
                     <tr style="height: 25px;">
                         <div style="height: 100%;"></div>

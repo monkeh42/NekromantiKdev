@@ -308,7 +308,7 @@ function timePrestigeReset() {
     resetUnits();
     resetBuildingResources(true);
     resetBuildings();
-    showBuildingSubTab('buildingsSubTab');
+    if (!hasTUpgrade(12)) { showBuildingSubTab('buildingsSubTab'); }
     for (var i=1; i<=NUM_TIMEDIMS; i++) { player.timeDims[i].amount = player.timeDims[i].bought; }
     if (timeUpgUnlocked) { player.buildings[3].upgrades[13] = true; }
     save();
@@ -644,7 +644,7 @@ const TIME_DATA = {
             displayFormula: function() { return '1 + x' },
             effect: function() {
                 let e = player.galaxies;
-                return 1 + e;
+                return e.plus(1);
             }
         },
         43: {
@@ -658,7 +658,7 @@ const TIME_DATA = {
             displayFormula: function() { return '1 + x' },
             effect: function() {
                 var e = player.galaxies;
-                return 1 + e;
+                return e.plus(1);
             }
         },
         44: {
@@ -698,7 +698,7 @@ const TIME_DATA = {
             displayFormula: function() { return '1 + x' },
             effect: function() {
                 var e = player.galaxies;
-                return 1 + e;
+                return e.plus(1);
             }
         },
         53: {
@@ -712,7 +712,7 @@ const TIME_DATA = {
             displayFormula: function() { return '1 + x' },
             effect: function() {
                 var e = player.galaxies;
-                return 1 + e;
+                return e.plus(1);
             }
         },
         54: {
