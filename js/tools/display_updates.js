@@ -5,9 +5,11 @@ function updateDisplay(timestamp) {
     updateResourceDisplays();
     updateTierDisplays();
     updatePrestigeDisplays();
+    if (player.isInResearch) { checkProjectProgress(); }
     
     for (let z=0; z<displayData.length; z++) {
         updateElement(displayData[z]);
+        //console.log(z.toString() + ': ' + displayData[z].toString());
     }
 
     displayData = new Array(0);
@@ -96,7 +98,7 @@ function updateBuildingUpgs() {
                     remBUpgClass(b, u, BUILDS_DATA[b].upgradeBtnClass);
                 }
             }
-            if (b==4 && u==12) { displayData.push(['html', 'bUpgEffect4.12', `[+${Decimal.floor(player.construction[1].sqrt())}/+${Decimal.floor(player.construction[2].sqrt())}/+${Decimal.floor(player.construction[3].sqrt())}]`]); }
+            if (b==4 && u==12) { displayData.push(['html', 'bUpgEffect4.12', (player.isInResearch ? '[+0/+0/+0]' : `[+${Decimal.floor(player.construction[1].sqrt())}/+${Decimal.floor(player.construction[2].sqrt())}/+${Decimal.floor(player.construction[3].sqrt())}]`)]); }
             else { displayData.push(['html', 'bUpgEffect' + b.toString() + '.' + u.toString(), `${isDisplayEffect(b, u) ? formatDefault2(getUpgEffect(b, u)) + BUILDS_DATA[b].upgrades[u].displaySuffix : ""}`]); }
         }
     }
@@ -172,7 +174,9 @@ function updateCorpseDisplays() {
     displayData.push(['html', 'pluralWorld', worldSingulizer()]);
     displayData.push(['html', 'galaxiesMult', `${formatDefault2(getGalaxiesBonus())}x`]);
     displayData.push(['html', 'galaxiesNum', `${formatWhole(player.allTimeStats.totalGalaxies)}`]);
+    displayData.push(['html', 'unspentGalaxiesNum', `${formatWhole(player.galaxies)}`]);
     displayData.push(['html', 'pluralGalaxy', galaxyTextSingulizer(player.allTimeStats.totalGalaxies)]);
+    displayData.push(['html', 'pluralGalaxyUnspent', galaxyTextSingulizer(player.galaxies)]);
     displayData.push(['html', 'totalMultAll', `${formatDefault2(getTotalCorpseMult())}x`]);
     displayData.push(['html', 'normalAstral', player.astralFlag ? 'ASTRAL' : 'NORMAL']);
     //displayData.push(['setProp', 'normalAstral', 'color', player.astralFlag ? '#42d35a' : 'white']);
@@ -240,6 +244,8 @@ function updateGalaxyDisplays() {
     displayData.push(['html', 'galaxyAmount', formatWhole(player.galaxies)]);
     displayData.push(['html', 'totalGalaxyAmount', formatWhole(player.allTimeStats.totalGalaxies)]);
     displayData.push(['html', 'ascensionAmount', formatWhole(player.ascensions)]);
+    displayData.push(['html', 'researchAmountHeader', formatUnitRow(player.research)]);
+    displayData.push(['html', 'researchGainHeader', ` ${(formatUnitRow(player.astralFlag ? (player.displayRealTime ? getResearchPerSecond().times(getRealTimeMultiplier()) : getResearchPerSecond()) : formatWhole(0)))} `]);
 }
 
 function updatePrestigeDisplays() {
@@ -356,6 +362,22 @@ function updateTDimTiers() {
         displayData.push(['html', TIME_DATA[i].multID, `<div>${formatUnitRow(TIME_DATA[i].mult())}x</div>`]);
         displayData.push(['html', TIME_DATA[i].maxAmtID, canAffordTime(i) ? formatWhole(calculateMaxTime(i)) : '0']);
     }
+}
+
+function checkProjectProgress() {
+    let proj = getActiveResearch();
+    if (canCompleteResearch()) {
+        if (!document.getElementById(RESEARCH_DATA[proj].buttonID).classList.contains('researchButton')) { 
+            document.getElementById(RESEARCH_DATA[proj].buttonID).classList.remove('progressResearchButton');
+            document.getElementById(RESEARCH_DATA[proj].buttonID).classList.add('researchButton');
+            document.getElementById(RESEARCH_DATA[proj].buttonID).innerHTML = `COMPLETE<br>PROJECT`;
+            displayData.push(['addClass', 'researchSubTabBut', 'tabButNotify']);
+            displayData.push(['addClass', 'galaxyTabBut', 'tabButIndirectNotify']);
+            displayData.push(['addClass', document.getElementById(RESEARCH_DATA[proj].buttonID).id, 'projectNotify']);
+        }
+    }
+    displayData.push(['html', 'researchDisplay', ` ${formatUnitRow(player.research)} `]);
+    displayData.push(['html', 'researchGainDisplay', ` ${(formatUnitRow(player.astralFlag ? (player.displayRealTime ? getResearchPerSecond().times(getRealTimeMultiplier()) : getResearchPerSecond()) : formatWhole(0)))} `]);
 }
 
 //style/display updaters for unlocks
@@ -1327,7 +1349,7 @@ function generateHelpForFullPage(tabName, button, section) {
 
 function statsTabClick() {
     generateLastSacs();
-    generateLastAscs(); 
+    generateLastAscs();
     updateStatsTab();
     showStatsSubTab(player.activeTabs[5], player.activeTabs[5] + 'But');
     showTab('statsTab', false, 'statsTabBut');
@@ -1335,7 +1357,7 @@ function statsTabClick() {
 
 function statsSubTabClick(tabName='statSubTab', butName='statSubTabBut') {
     generateLastSacs();
-    generateLastAscs(); 
+    generateLastAscs();
     updateStatsTab();
     showStatsSubTab(tabName, butName);
     showTab('statsTab', false, 'statsTabBut');

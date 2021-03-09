@@ -113,6 +113,23 @@ body {
     font-family: 'Cinzel', serif;
     font-size: 13pt;
     margin-bottom: 200px;
+    overflow: overlay;
+}
+
+body::-webkit-scrollbar {
+    width: 10px;
+    opacity: 0;
+}
+
+body::-webkit-scrollbar-track {
+    opacity: 0;
+}
+
+body::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0);
+    border: 1px double rgb(255, 255, 255, 0.4);
+    border-radius: 9px;
+    opacity: 0.5;
 }
 
 #game {
@@ -702,11 +719,12 @@ option:active, option.active {
 } 
 
 .lockedArkUpg {
-    color: #661503;
+    color: #e32d05;
     background: #4b4b4b url("../images/questionmark.png") no-repeat center;
     font-family: 'Cinzel', serif;
-    font-weight: bold;
-    font-size: 18pt;
+    font-weight: 900;
+    font-size: 20pt;
+    line-height: 95%;
     width: 200px;
     height: 120px;
     border: 3px solid #661503;
@@ -714,7 +732,7 @@ option:active, option.active {
 }
 
 .lockedArkUpg:after {
-    content: "Complete Challenge " attr(chal-num) " to unlock."
+    content: "Complete Research Project " attr(res-num) " to unlock."
 }
 
 .arkUpg {
@@ -1538,6 +1556,23 @@ option:active, option.active {
     box-shadow: 0px 0px 10px 5px #e32d05;
 }
 
+.projectNotify {
+    box-shadow: 0px 0px 20px 10px #e32d05;
+}
+
+#astralButResearch {
+    color: white;
+    background-color: #661503;
+    font-style: bold;
+    width: 150px;
+    height: 35px;
+    border: 1px solid #e32d05;
+    margin: 5px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-family: 'Cinzel', serif;
+}
+
 .galaxyBut {
     color: white;
     background-color: #661503;
@@ -1576,7 +1611,7 @@ option:active, option.active {
     font-family: 'Cinzel', serif;
 }
 
-.galaxyBut:hover, .galaxyNameBut4:hover, .galaxyNameBut2:hover {
+#astralButResearch:hover, .galaxyBut:hover, .galaxyNameBut4:hover, .galaxyNameBut2:hover {
     background-color: #e32d05;
 }
 
@@ -1675,9 +1710,111 @@ option:active, option.active {
     position: relative;
 }
 
+.researchDiv {
+    width: 300px;
+    min-width: 300px;
+    height: 400px;
+    min-height: 400px;
+    border: 1px solid #e32d05;
+    border-radius: 4px;
+    position: relative;
+}
+
+.researchButton {
+    color: white;
+    background-color: #661503;
+    font-weight: 900;
+    width: 180px;
+    height: 60px;
+    border: 1px solid #e32d05;
+    margin: 5px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-family: 'Cinzel', serif;
+    font-size: 16pt;
+    position: absolute;
+    top: 320px;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+}
+
+.progressResearchButton {
+    color: white;
+    background-color: #4b4b4b;
+    font-weight: 900;
+    width: 180px;
+    height: 60px;
+    border: 3px solid #661503;
+    margin: 5px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-family: 'Cinzel', serif;
+    font-size: 16pt;
+    position: absolute;
+    top: 320px;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+}
+
+.researchButton:hover {
+    background-color: #e32d05;
+}
+
+.completedResearchBut {
+    color: #661503;
+    background-color: black;
+    font-weight: 900;
+    width: 180px;
+    height: 60px;
+    border: 3px solid #661503;
+    margin: 5px;
+    border-radius: 4px;
+    font-family: 'Cinzel', serif;
+    font-size: 16pt;
+    -webkit-text-stroke-width: .3px;
+    -webkit-text-stroke-color: white;
+    position: absolute;
+    top: 320px;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+}
+
+.unclickResearchBut {
+    color: white;
+    background-color: #4b4b4b;
+    font-weight: 900;
+    width: 180px;
+    height: 60px;
+    border: 1px solid #4b4b4b;
+    margin: 5px;
+    border-radius: 4px;
+    font-family: 'Cinzel', serif;
+    font-size: 16pt;
+    position: absolute;
+    top: 320px;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+}
+
+.resGoalText {
+    font-size: 15pt;
+    font-weight: 900;
+    margin: 5px;
+    width: 100%;
+    position: absolute;
+    top: 280px;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+}
+
 .arkImg {
     position: absolute;
-    top: 150px;
+    top: 300px;
     left: 50%;
     -webkit-transform: translateX(-50%);
     transform: translateX(-50%);
@@ -1688,8 +1825,16 @@ option:active, option.active {
     display: none;
     position: relative;
     width: 50%;
-    width: 1600px;
-    height: 1024px;
+    width: 1280px;
+    height: 1174px;
+    top: 0;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+}
+
+#arkDescription {
+    position: absolute;
     top: 0;
     left: 50%;
     -webkit-transform: translateX(-50%);
@@ -1698,23 +1843,23 @@ option:active, option.active {
 
 #thrustersBut {
     position: absolute;
-    bottom: 45px;
+    bottom: 260px;
     left: 50%;
-    -webkit-transform: translateX(25%);
-    transform: translateX(25%);
+    -webkit-transform: translateX(200%);
+    transform: translateX(200%);
 }
 
 #enginesBut {
     position: absolute;
-    bottom: 45px;
+    bottom: 150px;
     left: 50%;
-    -webkit-transform: translateX(-125%);
-    transform: translateX(-125%);
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
 }
 
 #navigationBut {
     position: absolute;
-    top: 50px;
+    top: 175px;
     left: 50%;
     -webkit-transform: translateX(-50%);
     transform: translateX(-50%);
@@ -1722,26 +1867,26 @@ option:active, option.active {
 
 #torpedosBut {
     position: absolute;
-    top: 300px;
+    top: 450px;
     left: 50%;
-    -webkit-transform: translateX(-150%);
-    transform: translateX(-150%);
+    -webkit-transform: translateX(-175%);
+    transform: translateX(-175%);
 }
 
 #railgunsBut {
     position: absolute;
-    top: 300px;
+    top: 450px;
     left: 50%;
-    -webkit-transform: translateX(50%);
-    transform: translateX(50%);
+    -webkit-transform: translateX(75%);
+    transform: translateX(75%);
 }
 
 #supportBut {
     position: absolute;
-    bottom: 175px;
+    bottom: 260px;
     left: 50%;
-    -webkit-transform: translateX(-50%);
-    transform: translateX(-50%);
+    -webkit-transform: translateX(-300%);
+    transform: translateX(-300%);
 }
 
 .leftRowCost {

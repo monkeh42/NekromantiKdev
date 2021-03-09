@@ -1,6 +1,6 @@
 <!doctype html>
 
-<html id="docElement">
+<html id="docElement" style="min-height: 1080px;">
 
 <head>
     <title>NekromantiK</title>
@@ -18,16 +18,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-    
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-CFKRG117J3"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-
-        gtag('config', 'G-CFKRG117J3');
-    </script>
 </head>
 
 <body onload="init()">
@@ -39,18 +29,106 @@
             </div>
         </div>
     </div>
-    <div id="header" style="width: 1280px; margin: auto;">
+    <div id="header" style="width: 1280px; text-align: center; height: 100%; margin: 20px auto 0;">
         <div id="helpDiv" style="display: none;">
             <div id="helpText">
             </div>
             <br>
         </div>
         <div id="versionNumber" style="float: right; margin-left: -75px;">vERR</div>
-        <div id="resourceDisplay" style="width: 100%; margin: auto; display: block; text-align: center;">
-            <span style="font-size: 16pt; font-weight: bold;">You have <span id="corpseAmount" style="font-size: 20pt; white-space: pre; color: #6c00b4; font-variant-numeric: tabular-nums;"> 10 </span> <span id='pluralCorpse'> corpses</span>.</span><br>
-            <span>You are harvesting <span id="corpseGain" style="font-size: 17pt; font-weight: bold; white-space: pre; color: #6c00b4; font-variant-numeric: tabular-nums;"> 0 </span> <span id='pluralCorpseG'> corpses </span>/<span class="secDisplay">sec</span>.<span id="devSpeedContainer" style="white-space: pre; display: none;"> (@ <span id="devSpeedDisplay">3</span>x time speed)</span></span><br>
-            <div id="astralNoticeDisplay" style="color: #1c8a2e; display: none;"><h2>Corpse production disabled due to Astral Enslavement.</h2></div>
-            <table cellpadding="0px" cellspacing="0px" style="width: 100%; text-align: center;">
+        <div id="resourceDisplay" style="width: 100%; margin: auto; text-align: center; height: 100%; min-height: 66px;">
+            <table cellpadding="0px" cellspacing="0px" style="text-align: center; border-collapse: collapse; margin: auto;">
+                <tr>
+                    <td colspan="3">
+                        <div style="font-size: 16pt; font-weight: bold;">You have <span id="corpseAmount" style="font-size: 20pt; white-space: pre; color: #6c00b4; font-variant-numeric: tabular-nums;"> 10 </span> <span id='pluralCorpse'> corpses</span>.</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <div>You are harvesting <span id="corpseGain" style="font-size: 17pt; font-weight: bold; white-space: pre; color: #6c00b4; font-variant-numeric: tabular-nums;"> 0 </span> <span id='pluralCorpseG'> corpses </span>/<span class="secDisplay">sec</span>.<span id="devSpeedContainer" style="white-space: pre; display: none;"> (@ <span id="devSpeedDisplay">3</span>x time speed)</span></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <div id="astralNoticeDisplay" style="color: #1c8a2e; display: none;"><h2>Corpse production disabled due to Astral Enslavement.</h2></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <div id="unitsBoostDisplay" style="font-size: 10pt; white-space: pre;">Total corpse gain multiplier from units:  <span id="totalMult" style="font-size: 12pt; font-variant-numeric: tabular-nums;">0.0x</span></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <div id="worldsBonusDisplay" style="display: none; font-size: 10pt; white-space: pre;">You have exterminated <span id="worldsNum" style="font-size: 12pt; font-variant-numeric: tabular-nums;"> 1 </span> <span id="pluralWorld">world</span>, giving a <span id="worldsMult" style="font-size: 12pt"> 0.0x </span> bonus to corpse gain.</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="25%" style="padding-bottom: 0px !important;">
+                        <table cellpadding="0px" cellspacing="0px" style="width: 100%; text-align: center; border-collapse: collapse;">
+                            <tr>
+                                <td>
+                                    <div id="crystalsDisplayHeader" style="display: none; font-size: 10pt; white-space: pre;">You have <span id="crystalAmountHeader" style="font-size: 12pt; white-space: pre; color: #006ba0; font-variant-numeric: tabular-nums;"> 0 </span> time crystals.</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div id="bricksDisplayHeader" style="display: none; font-size: 10pt; white-space: pre;">You have <span id="brickAmountHeader" style="font-size: 12pt; white-space: pre; color: #1c8a2e; font-variant-numeric: tabular-nums;"> 0 </span> astral bricks.</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div id="bricksGainDisplayHeader" style="display: none; font-size: 10pt; white-space: pre;">You are gaining <span id="brickGainHeader" style="font-size: 12pt; white-space: pre; color: #1c8a2e; font-variant-numeric: tabular-nums;"> 0 </span> astral bricks/<span class="secDisplay">sec</span>.</div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td width="50%">
+                        <table cellpadding="0px" cellspacing="0px" style="width: 100%; text-align: center; border-collapse: collapse;">
+                            <tr>
+                                <td>
+                                    <div id="galaxiesBonusDisplay" style="display: none;font-size: 10pt; white-space: pre;">You have formed <span id="galaxiesNum" style="font-size: 12pt; white-space: pre; font-variant-numeric: tabular-nums;"> 1 </span> depleted <span id="pluralGalaxy">galaxy</span>, giving a <span id="galaxiesMult" style="font-size: 12pt"> 0.0x </span> bonus to corpse gain.</div>
+                                </td>
+                            </tr><tr>
+                                <td>
+                                    <div id="totalBonusDisplay" style="font-size: 10pt; white-space: pre;">Total corpse gain multiplier from all sources:  <span id="totalMultAll" style="font-size: 12pt; font-variant-numeric: tabular-nums;">0.0x</span></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div id="timeBoostDisplay" style="display: none; font-size: 10pt; white-space: pre;">Your <span id="normalAstral" style="font-size: 12pt; color: white;"> NORMAL </span> time is going <span id="timeMult" style="font-size: 12pt; font-variant-numeric: tabular-nums;"> 1.0x </span> as fast.</div></td>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td width="25%">
+                        <table cellpadding="0px" cellspacing="0px" style="width: 100%; text-align: center; border-collapse: collapse;">
+                            <tr>
+                                <td>
+                                    <div id="unspentGalaxiesHeaderDisplay" style="display: none; font-size: 10pt; white-space: pre;">You have <span id="unspentGalaxiesNum" style="font-size: 12pt; white-space: pre; color: #e32d05; font-variant-numeric: tabular-nums;"> 1 </span> unspent <span id="pluralGalaxyUnspent">galaxy</span>.</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div id="researchDisplayHeader" style="display: none; font-size: 10pt; white-space: pre;">You have <span id="researchAmountHeader" style="font-size: 12pt; white-space: pre; color: #661503; -webkit-text-stroke-width: 0.2px; -webkit-text-stroke-color: white; font-variant-numeric: tabular-nums;"> 0 </span> void research.</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div id="researchGainDisplayHeader" style="display: none; font-size: 10pt; white-space: pre;">You are gaining <span id="researchGainHeader" style="font-size: 12pt; white-space: pre; color: #661503; -webkit-text-stroke-width: 0.2px; -webkit-text-stroke-color: white; font-variant-numeric: tabular-nums;"> 0 </span> void research/<span class="secDisplay">sec</span>.</div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <div id="achBoostDisplay" style="display: none; font-size: 10pt; white-space: pre;">You have <span id="achNum" style="font-size: 12pt; font-variant-numeric: tabular-nums;"> 1 </span> achievements and <span id="achRowsNum" style="font-size: 12pt; font-variant-numeric: tabular-nums;"> 1 </span> completed achievement rows, giving a <span id="achMult" style="font-size: 12pt"> 0.0x </span> bonus to corpse gain.</div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+            <!--<table cellpadding="0px" cellspacing="0px" style="width: 100%; text-align: center;">
                 <tr>
                     <td width="25%"></td>
                     <td width="50%"><div id="unitsBoostDisplay" style="font-size: 10pt; white-space: pre;">Total corpse gain multiplier from units:  <span id="totalMult" style="font-size: 12pt; font-variant-numeric: tabular-nums;">0.0x</span></div></td>
@@ -58,24 +136,40 @@
                 </tr>
                 <tr>
                     <td></td>
-                    <td><div id="worldsBonusDisplay" style="font-size: 10pt; white-space: pre; display: none;">You have exterminated <span id="worldsNum" style="font-size: 12pt; font-variant-numeric: tabular-nums;"> 1 </span> <span id="pluralWorld">world</span>, giving a <span id="worldsMult" style="font-size: 12pt"> 0.0x </span> bonus to corpse gain.</div></td>
+                    <td><div id="worldsBonusDisplay" style="display: none;font-size: 10pt; white-space: pre;">You have exterminated <span id="worldsNum" style="font-size: 12pt; font-variant-numeric: tabular-nums;"> 1 </span> <span id="pluralWorld">world</span>, giving a <span id="worldsMult" style="font-size: 12pt"> 0.0x </span> bonus to corpse gain.</div></td>
                     <td></td>
                 </tr>
                 <tr>
-                    <td><div id="bricksDisplayHeader" style="font-size: 10pt; white-space: pre;">You have <span id="brickAmountHeader" style="font-size: 12pt; white-space: pre; color: #1c8a2e; font-variant-numeric: tabular-nums;"> 0 </span> astral bricks.</div></td>
-                    <td><div id="galaxiesBonusDisplay" style="font-size: 10pt; white-space: pre; display: none;">You have formed <span id="galaxiesNum" style="font-size: 12pt; font-variant-numeric: tabular-nums;"> 1 </span> depleted <span id="pluralGalaxy">galaxy</span>, giving a <span id="galaxiesMult" style="font-size: 12pt"> 0.0x </span> bonus to corpse gain.</div></td>
-                    <td><div id="crystalsDisplayHeader" style=" font-size: 10pt; white-space: pre; display: none;">You have <span id="crystalAmountHeader" style="font-size: 12pt; white-space: pre; color: #006ba0; font-variant-numeric: tabular-nums;"> 0 </span> time crystals.</div></td>
+                    <td><div id="crystalsDisplayHeader" style="display: none; font-size: 10pt; white-space: pre;">You have <span id="crystalAmountHeader" style="font-size: 12pt; white-space: pre; color: #006ba0; font-variant-numeric: tabular-nums;"> 0 </span> time crystals.</div></td>
+                    <td><div id="galaxiesBonusDisplay" style="display: none;font-size: 10pt; white-space: pre;">You have formed <span id="galaxiesNum" style="font-size: 12pt; white-space: pre; font-variant-numeric: tabular-nums;"> 1 </span> depleted <span id="pluralGalaxy">galaxy</span>, giving a <span id="galaxiesMult" style="font-size: 12pt"> 0.0x </span> bonus to corpse gain.</div></td>
+                    <td><div id="unspentGalaxiesHeaderDisplay" style="display: none;font-size: 10pt; white-space: pre;">You have <span id="unspentGalaxiesNum" style="font-size: 12pt; white-space: pre; color: #e32d05; font-variant-numeric: tabular-nums;"> 1 </span> unspent <span id="pluralGalaxyUnspent">galaxy</span>.</div></td>
                 </tr>
                 <tr>
-                    <td><div id="bricksGainDisplayHeader" style="font-size: 10pt; white-space: pre;">You are gaining <span id="brickGainHeader" style="font-size: 12pt; white-space: pre; color: #1c8a2e; font-variant-numeric: tabular-nums;"> 0 </span> astral bricks/<span class="secDisplay">sec</span>.</div></td>
+                    <td><div id="bricksDisplayHeader" style="display: none;font-size: 10pt; white-space: pre;">You have <span id="brickAmountHeader" style="font-size: 12pt; white-space: pre; color: #1c8a2e; font-variant-numeric: tabular-nums;"> 0 </span> astral bricks.</div></td>
                     <td><div id="totalBonusDisplay" style="font-size: 10pt; white-space: pre;">Total corpse gain multiplier from all sources:  <span id="totalMultAll" style="font-size: 12pt; font-variant-numeric: tabular-nums;">0.0x</span></div></td>
-                    <td><div id="timeBoostDisplay" style=" font-size: 10pt; white-space: pre; display: none;">Your <span id="normalAstral" style="font-size: 12pt; color: white;"> NORMAL </span> time is going <span id="timeMult" style="font-size: 12pt; font-variant-numeric: tabular-nums;"> 1.0x </span> as fast.</div></td>
+                    <td><div id="researchDisplayHeader" style="display: none;font-size: 10pt; white-space: pre;">You have <span id="researchAmountHeader" style="font-size: 12pt; white-space: pre; color: #661503; -webkit-text-stroke-width: 0.2px; -webkit-text-stroke-color: white; font-variant-numeric: tabular-nums;"> 0 </span> void research.</div></td>
                 </tr>
                 <tr>
-                    <td colspan="3"><div id="achBoostDisplay" style="font-size: 10pt; white-space: pre; display: none;">You have <span id="achNum" style="font-size: 12pt; font-variant-numeric: tabular-nums;"> 1 </span> achievements and <span id="achRowsNum" style="font-size: 12pt; font-variant-numeric: tabular-nums;"> 1 </span> completed achievement rows, giving a <span id="achMult" style="font-size: 12pt"> 0.0x </span> bonus to corpse gain.</div></td>
+                    <td><div id="bricksGainDisplayHeader" style="display: none;font-size: 10pt; white-space: pre;">You are gaining <span id="brickGainHeader" style="font-size: 12pt; white-space: pre; color: #1c8a2e; font-variant-numeric: tabular-nums;"> 0 </span> astral bricks/<span class="secDisplay">sec</span>.</div></td>
+                    <td><div id="timeBoostDisplay" style="display: none; font-size: 10pt; white-space: pre;">Your <span id="normalAstral" style="font-size: 12pt; color: white;"> NORMAL </span> time is going <span id="timeMult" style="font-size: 12pt; font-variant-numeric: tabular-nums;"> 1.0x </span> as fast.</div></td>
+                    <td><div id="researchGainDisplayHeader" style="display: none;font-size: 10pt; white-space: pre;">You are gaining <span id="researchGainHeader" style="font-size: 12pt; white-space: pre; color: #661503; -webkit-text-stroke-width: 0.2px; -webkit-text-stroke-color: white; font-variant-numeric: tabular-nums;"> 0 </span> void research/<span class="secDisplay">sec</span>.</div></td>
                 </tr>
-            </table>
-        </div>
+                <tr>
+                    <td colspan="3"><div id="achBoostDisplay" style="display: none; font-size: 10pt; white-space: pre;">You have <span id="achNum" style="font-size: 12pt; font-variant-numeric: tabular-nums;"> 1 </span> achievements and <span id="achRowsNum" style="font-size: 12pt; font-variant-numeric: tabular-nums;"> 1 </span> completed achievement rows, giving a <span id="achMult" style="font-size: 12pt"> 0.0x </span> bonus to corpse gain.</div></td>
+                </tr>
+            </table>-->
+            <!--</div>-->
+            <!--<div id="unitsBoostDisplay" style="font-size: 10pt; white-space: pre;">Total corpse gain multiplier from units:  <span id="totalMult" style="font-size: 12pt; font-variant-numeric: tabular-nums;">0.0x</span></div>
+            <div id="achBoostDisplay" style="font-size: 10pt; white-space: pre; display: none;">You have <span id="achNum" style="font-size: 12pt; font-variant-numeric: tabular-nums;"> 1 </span> achievements and <span id="achRowsNum" style="font-size: 12pt; font-variant-numeric: tabular-nums;"> 1 </span> completed achievement rows, giving a <span id="achMult" style="font-size: 12pt"> 0.0x </span> bonus to corpse gain.</div>
+            <div id="worldsBonusDisplay" style="font-size: 10pt; white-space: pre; display: none;">You have exterminated <span id="worldsNum" style="font-size: 12pt; font-variant-numeric: tabular-nums;"> 1 </span> <span id="pluralWorld">world</span>, giving a <span id="worldsMult" style="font-size: 12pt"> 0.0x </span> bonus to corpse gain.</div>
+            <div id="galaxiesBonusDisplay" style="font-size: 10pt; white-space: pre; display: none;">You have formed <span id="galaxiesNum" style="font-size: 12pt; font-variant-numeric: tabular-nums;"> 1 </span> depleted <span id="pluralGalaxy">galaxy</span>, giving a <span id="galaxiesMult" style="font-size: 12pt"> 0.0x </span> bonus to corpse gain.</div>
+            <div id="totalBonusDisplay" style="font-size: 10pt; white-space: pre;">Total corpse gain multiplier from all sources:  <span id="totalMultAll" style="font-size: 12pt; font-variant-numeric: tabular-nums;">0.0x</span></div>
+            <div id="bricksDisplayHeader" style="font-size: 10pt; white-space: pre; display: none;">You have <span id="brickAmountHeader" style="font-size: 12pt; white-space: pre; color: #1c8a2e; font-variant-numeric: tabular-nums;"> 0 </span> astral bricks.</div>
+            <div id="bricksGainDisplayHeader" style="font-size: 10pt; white-space: pre; display: none;">You are gaining <span id="brickGainHeader" style="font-size: 12pt; white-space: pre; color: #1c8a2e; font-variant-numeric: tabular-nums;"> 0 </span> astral bricks/sec.</div>
+            <div id="crystalsDisplayHeader" style="font-size: 10pt; white-space: pre; display: none;">You have <span id="crystalAmountHeader" style="font-size: 12pt; white-space: pre; color: #006ba0; font-variant-numeric: tabular-nums;"> 0 </span> time crystals.</div>
+            <div id="timeBoostDisplay" style="font-size: 10pt; white-space: pre; display: none;">Your <span id="normalAstral" style="font-size: 12pt; color: white;"> NORMAL </span> time is going <span id="timeMult" style="font-size: 12pt; font-variant-numeric: tabular-nums;"> 1.0x </span> as fast.</div>-->
+            
+        
     </div>
     <div id="tabButtons" id="tabButtons" style="width: 1280px; margin: 10px auto 0; display: block;">
         <table style="width: auto; margin: auto;" class="shownOnFull">
@@ -869,7 +963,7 @@
                 <table style="width: 65%; margin: auto; margin-top: 20px; text-align: center; border-collapse: collapse;" class="buildingsTable">
                     <tr id="factoryBuildRow">
                         <td colspan="3">
-                            <button id="factoryBuild" class="buildBut" onclick="buyBuilding(1)">Build the<h2><span id="factoryBuildLabel" style="font-size: 18pt;">Death Factory.</span></h2>Cost: <span id="factoryCostLabel">1,000</span> astral bricks</button>
+                            <button id="factoryBuild" class="buildBut" onclick="buyBuilding(1)">Build the<h6>Death Factory.</h6>Cost: <span id="factoryCostLabel">1,000</span> astral bricks</button>
                         </td>
                     </tr>
                     <tr id="factoryHeaderRow" style="display: none;">
@@ -936,7 +1030,7 @@
                 <table style="width: 65%; margin: auto; margin-top: 20px; text-align: center; border-collapse: collapse;" class="buildingsTable">
                     <tr id="necropolisBuildRow">
                         <td colspan="3">
-                            <button id="necropolisBuild" class="buildBut" onclick="buyBuilding(2)">Build the<h2><span id="necropolisBuildLabel" style="font-size: 18pt;">Necropolis.</span></h2>Cost: <span id="necropolisCostLabel">100,000</span> astral bricks</button>
+                            <button id="necropolisBuild" class="buildBut" onclick="buyBuilding(2)">Build the<h6>Necropolis.</h6>Cost: <span id="necropolisCostLabel">100,000</span> astral bricks</button>
                         </td>
                     </tr>
                     <tr id="necropolisHeaderRow" style="display: none;">
@@ -1004,7 +1098,7 @@
                 <table style="width: 65%; margin: auto; margin-top: 20px; text-align: center; border-collapse: collapse;" class="buildingsTable">
                     <tr id="sunBuildRow">
                         <td colspan="3">
-                            <button id="sunBuild" class="buildBut" onclick="buyBuilding(3)">Build the<h2><span id="sunBuildLabel" style="font-size: 18pt;">Dead Sun.</span></h2>Cost: <span id="sunCostLabel">1e8</span> astral bricks</button>
+                            <button id="sunBuild" class="buildBut" onclick="buyBuilding(3)">Build the<h6>Dead Sun.</h6>Cost: <span id="sunCostLabel">1e8</span> astral bricks</button>
                         </td>
                     </tr>
                     <tr id="sunHeaderRow" style="display: none;">
@@ -1072,14 +1166,14 @@
                 <table id="vortexTable" style="width: 65%; margin: auto; margin-top: 20px; text-align: center; border-collapse: collapse; display: none; empty-cells: hide;" class="buildingsTable">
                     <tr id="vortexBuildRow" style="display: none;">
                         <td colspan="3">
-                            <button id="vortexBuild" class="buildBut" onclick="buyBuilding(4)">Build the<h2><span id="vortexBuildLabel" style="font-size: 18pt;">Galactic Vortex.</span></h2>Cost: <span id="vortexCostLabel">1e60</span> astral bricks</button>
+                            <button id="vortexBuild" class="buildBut" onclick="buyBuilding(4)">Build the<h6>Galactic Vortex.</h6>Cost: <span id="vortexCostLabel">1e60</span> astral bricks</button>
                         </td>
                     </tr>
                     <tr id="vortexHeaderRow" style="display: none;">
                         <td colspan="3">
                             <h2 style="font-size: 18pt;">GALACTIC VORTEX</h2>
                             <div id="vortexTooltip" data-title="2/sec">you have <span id="vortexAmt" style="font-size: 17pt; white-space: pre; font-variant-numeric: tabular-nums;"> 0 </span> <span id="photonsTextAmt" class="buildingResourceTexts">black holes</span>.<br>
-                            <span id="vortexGainSpan">your next black hole is <span id="vortexProd" style="font-size: 17pt; white-space: pre; font-variant-numeric: tabular-nums;"> 0</span>% complete. Progress is based on your total depleted galaxies minus your black holes.</span><br>
+                            <span id="vortexGainSpan">your next black hole is <span id="vortexProd" style="font-size: 17pt; white-space: pre; font-variant-numeric: tabular-nums;"> 0</span>% complete. <span id="vortexProgess">Progress is based on your total depleted galaxies minus your black holes.</span><span id="vortexProgessResearch" style="display: none;">Progress is halted during research.</span></span><br>
                             Your black holes add to the depleted galaxy gain exponent. Currently: +<span id="blackholeEff" style="font-size: 17pt; white-space: pre; font-variant-numeric: tabular-nums;">0</span><br>
                             <span id="vortexGainNotice">The galactic vortex, black holes, and black hole production progress are never reset.</span></div>
                         </td>
@@ -1590,13 +1684,16 @@
                 </tr>
             </table>
             <div id="galaxiesSubMenu" style="width: 100%; margin-top: 20px; display: none;">
-                <table style="width: auto; margin: auto;">
+                <table style="width: auto; margin: 0 auto 20px;">
                     <tr>
                         <td>
-                            <button id="galaxiesSubTabBut" class="subTabBut" onclick="showGalaxySubTab('galaxiesSubTab', 'galaxiesSubTabBut')">GALAXIES</button>
+                            <button id="galaxiesSubTabBut" class="subTabBut" onclick="showGalaxySubTab('galaxiesSubTab', 'galaxiesSubTabBut', 'galaxyTabBut')">GALAXIES</button>
                         </td>
                         <td>
-                            <button id="arkSubTabBut" class="subTabBut" onclick="showGalaxySubTab('arkSubTab', 'arkSubTabBut')" style="display: none;">THE ARK</button>
+                            <button id="researchSubTabBut" class="subTabBut" onclick="showGalaxySubTab('researchSubTab', 'researchSubTabBut', 'galaxyTabBut')" style="display: none;">VOID RESEARCH</button>
+                        </td>
+                        <td>
+                            <button id="arkSubTabBut" class="subTabBut" onclick="showGalaxySubTab('arkSubTab', 'arkSubTabBut', 'galaxyTabBut')" style="display: none;">THE ARK</button>
                         </td>
                     </tr>
                 </table>
@@ -1966,19 +2063,132 @@
                     </tr>
                 </table>
             </div>
-            <div id="arkSubTab" class="galaxySubTab" style="display: none;">
-                <!--<img id="thrusters" class="arkImg" src="../images/thrusters.png">
+            <div id="researchSubTab" class="galaxySubTab">
+                <div id="researchDisplayDiv" style="margin: 10px auto; text-align: center; display: none;">
+                    You have <span id="researchDisplay" style="font-size: 19pt; font-weight: bold; color: #661503; -webkit-text-stroke-width: .5px; -webkit-text-stroke-color: white; font-variant-numeric: tabular-nums;"> 0 </span> <span id="researchTextAmt">void research</span>.<br>
+                    You are producing <span id="researchGainDisplay" style="font-size: 18pt; font-weight: bold; color: #661503; -webkit-text-stroke-width: .5px; -webkit-text-stroke-color: white; font-variant-numeric: tabular-nums;"> 0 </span> <span id="researchTextGain">void research</span>/<span class="secDisplay">sec</span>. (@ <span id="astralNerfResearch">10</span>x slower time speed)<br>
+                    Goal: <span id="researchGoalDisplay" style="font-size: 18pt; font-weight: bold; color: #661503; -webkit-text-stroke-width: .5px; -webkit-text-stroke-color: white;"> 0 </span> void research.<br>
+                    <button id="astralButResearch" onclick="toggleAstralResearch()">Toggle Astral: OFF</button>
+                </div>
+                <div style="text-align: center; width: 920px; margin: auto; font-size: 15pt; font-weight: 900; color: #e32d05;">DEV NOTE: completed project rewards are not implemented yet.</div>
+                <div id="researchDescription" style="text-align: center; width: 920px; margin: auto; font-size: 11pt;">
+                    <div style="margin: 5px;">When you begin a research project, you do a galaxy respec, but <span style="font-size: 12pt;">ALL</span> of your corpses, astral bricks, buildings, building resources, construction, time upgrades, and time crystals are reset, regardless of your milestones or achievements; however, all tabs stay unlocked.<br>(Galactic Vortex and the 4th/5th Time Upgrade columns don't reset, but they have no effect during research.)</div>
+                    <div style="margin: 5px;">During astral enslavement, your vassal souls tirelessly study the eldritch sciences of <span style="font-size: 14pt; color: #661503; font-weight: bold; -webkit-text-stroke-width: .3px; -webkit-text-stroke-color: white;">the beyond</span>. As a result, your base astral brick production is square rooted, but you produce Void Research at the same base rate.</div>
+                    <div style="margin: 5px;">Additionally, galaxy upgrade costs are tripled (after the cost increase from higher rows), and <span style="font-size: 12pt;">ALL</span> production other than bricks/research is raised to the ^0.9.</div>
+                    <div style="margin: 5px;">To complete a research project, you must reach the required amount of Void Research under these conditions in addition to the specific conditions below.</div>
+                    <div style="margin: 5px;"><span style="font-size: 14pt;">NOTE:</span> performing an ascension or galaxy respec will exit the current project and set your void research to 0.</div>
+                </div>
+                <table style="width: auto; text-align: center; margin: 20px auto;">
+                    <tr>
+                        <td>
+                            <div id="research1" class="researchDiv">
+                                <h6>Project 1</h6>
+                                <div id="resConds1" style="margin: 5px; height: 110px; min-height: 110px;">
+                                    The <strong>Triangulum</strong> galaxy tree is locked.<br>
+                                    All unit tier corpse multipliers are raised to the ^0.9.
+                                </div>
+                                <hr width="95%" style="border-color: #661503;">
+                                <div id="resReward1" style="margin: 5px; height: 95px; min-height: 95px;">
+                                    <span style="font-size: 15pt; font-weight: 900;">REWARD:</span><br>All unit tier corpse multipliers are raised to the ^1.1.
+                                </div>
+                                <div id="resGoalText1" class="resGoalText">Goal: <span id="resGoal1">1e6</span> Void Research</div>
+                                <button id="startResearch1" class="researchButton" onclick="researchButtonClick(1)">BEGIN</button>
+                            </div>
+                        </td>
+                        <td>
+                            <div id="research2" class="researchDiv">
+                                <h6>Project 2</h6>
+                                <div id="resConds2" style="margin: 5px; height: 110px; min-height: 110px;">
+                                    The <strong>Andromeda</strong> galaxy tree is locked.<br>
+                                    The Death Factory is disabled.
+                                </div>
+                                <hr width="95%" style="border-color: #661503;">
+                                <div id="resReward1" style="margin: 5px; height: 95px; min-height: 95px;">
+                                    <span style="font-size: 15pt; font-weight: 900;">REWARD:</span><br>The Death Factory's first upgrade row is never reset.
+                                </div>
+                                <div id="resGoalText2" class="resGoalText">Goal: <span id="resGoal2">1e9</span> Void Research</div>
+                                <button id="startResearch2" class="researchButton" onclick="researchButtonClick(2)">BEGIN</button>
+                            </div>
+                        </td>
+                        <td>
+                            <div id="research3" class="researchDiv">
+                                <h6>Project 3</h6>
+                                <div id="resConds3" style="margin: 5px; height: 110px; min-height: 110px;">
+                                    The <strong>Circinus</strong> galaxy tree is locked.<br>
+                                    Exponential cost scaling for all construction upgrades starts at level 1.
+                                </div>
+                                <hr width="95%" style="border-color: #661503;">
+                                <div id="resReward1" style="margin: 5px; height: 95px; min-height: 95px;">
+                                    <span style="font-size: 15pt; font-weight: 900;">REWARD:</span><br>Exponential cost scaling for all construction upgrades starts 10 levels later.
+                                </div>
+                                <div id="resGoalText3" class="resGoalText">Goal: <span id="resGoal3">1e12</span> Void Research</div>
+                                <button id="startResearch3" class="researchButton" onclick="researchButtonClick(3)">BEGIN</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div id="research4" class="researchDiv">
+                                <h6>Project 4</h6>
+                                <div id="resConds4" style="margin: 5px; height: 110px; min-height: 110px;">
+                                    The <strong>Sculptor Dwarf</strong> galaxy tree is locked.<br>
+                                    The anti time essence effect is disabled.
+                                </div>
+                                <hr width="95%" style="border-color: #661503;">
+                                <div id="resReward1" style="margin: 5px; height: 95px; min-height: 95px;">
+                                    <span style="font-size: 15pt; font-weight: 900;">REWARD:</span><br>The anti time effect is equal to the true time effect whenever it would be 1x.
+                                </div>
+                                <div id="resGoalText4" class="resGoalText">Goal: <span id="resGoal4">1e14</span> Void Research</div>
+                                <button id="startResearch4" class="researchButton" onclick="researchButtonClick(4)">BEGIN</button>
+                            </div>
+                        </td>
+                        <td>
+                            <div id="research5" class="researchDiv">
+                                <h6>Project 5</h6>
+                                <div id="resConds5" style="margin: 5px; height: 110px; min-height: 110px;">
+                                    <span style="font-size: 14pt;">You can only use one galaxy tree.
+                                </div>
+                                <hr width="95%" style="border-color: #661503;">
+                                <div id="resReward1" style="margin: 5px; height: 95px; min-height: 95px;">
+                                    <span style="font-size: 15pt; font-weight: 900;">REWARD:</span><br>The sacrifice threshold and crystal gain formula are based on 1e20 -> 1e15 corpses.
+                                </div>
+                                <div id="resGoalText5" class="resGoalText">Goal: <span id="resGoal5">1e9</span> Void Research</div>
+                                <button id="startResearch5" class="researchButton" onclick="researchButtonClick(5)">BEGIN</button>
+                            </div>
+                        </td>
+                        <td>
+                            <div id="research6" class="researchDiv">
+                                <h6>Project 6</h6>
+                                <div id="resConds6" style="margin: 5px; height: 110px; min-height: 110px;">
+                                    You can only buy one galaxy upgrade from each tree and from each row (the normal upgrade requirements are suspended).
+                                </div>
+                                <div id="resGoalText6" class="resGoalText">Goal: <span id="resGoal6">1e12</span> Void Research</div>
+                                <button id="startResearch6" class="researchButton" onclick="researchButtonClick(6)">BEGIN</button>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div id="arkSubTab" class="galaxySubTab">
+                <div id="arkDescription" style="text-align: center; width: 100%;">
+                    <span style="font-size: 17pt; font-weight: bold; color: #e32d05;">You receive a message from beyond.</span><br>
+                    <span style="font-size: 16pt; color: #661503; font-weight: bold; -webkit-text-stroke-width: .3px; -webkit-text-stroke-color: white;">"We have found you worthy of our ranks, small one."<br>
+                    "Make yourself an ark of astral matter; make rooms in the ark, and cover it inside and outside with time."</span><br>
+                    Even in your godlike state this is beyond you. This will require study.<br>
+                    Of course, you have undead souls to do your studying for you.
+                </div>
+                <img id="thrusters" class="arkImg" src="../images/thrusters.png">
                 <img id="engines" class="arkImg" src="../images/engines.png">
                 <img id="navigation" class="arkImg" src="../images/navigation.png">
                 <img id="torpedos" class="arkImg" src="../images/torpedos.png">
                 <img id="railguns" class="arkImg" src="../images/railguns.png">
                 <img id="support" class="arkImg" src="../images/support.png">
-                <button id="thrustersBut" class="arkUpg" onclick="buyArkUpgrade('thrusters')" chal-num="1"><span id="thrustersText" style="display: none;">thrusters</span></button>
-                <button id="enginesBut" class="arkUpg" onclick="buyArkUpgrade('engines')" chal-num="2"><span id="enginesText" style="display: none;">engines</span></button>
-                <button id="navigationBut" class="arkUpg" onclick="buyArkUpgrade('navigation')" chal-num="3"><span id="navigationText" style="display: none;">navigation</span></button>
-                <button id="torpedosBut" class="arkUpg" onclick="buyArkUpgrade('torpedos')" chal-num="4"><span id="torpedosText" style="display: none;">torpedos</span></button>
-                <button id="railgunsBut" class="arkUpg" onclick="buyArkUpgrade('railguns')" chal-num="5"><span id="railgunsText" style="display: none;">railguns</span></button>
-                <button id="supportBut" class="arkUpg" onclick="buyArkUpgrade('support')" chal-num="6"><span id="supportText" style="display: none;">death support</span></button>-->
+                <button id="thrustersBut" class="arkUpg" onclick="buyArkUpgrade('thrusters')" res-num="1"><span id="thrustersText" style="display: none;">build thrusters (not yet implemented)</span></button>
+                <button id="enginesBut" class="arkUpg" onclick="buyArkUpgrade('engines')" res-num="2"><span id="enginesText" style="display: none;">build engines (not yet implemented)</span></button>
+                <button id="navigationBut" class="arkUpg" onclick="buyArkUpgrade('navigation')" res-num="3"><span id="navigationText" style="display: none;">build navigation (not yet implemented)</span></button>
+                <button id="torpedosBut" class="arkUpg" onclick="buyArkUpgrade('torpedos')" res-num="4"><span id="torpedosText" style="display: none;">build torpedos (not yet implemented)</span></button>
+                <button id="railgunsBut" class="arkUpg" onclick="buyArkUpgrade('railguns')" res-num="5"><span id="railgunsText" style="display: none;">build railguns (not yet implemented)</span></button>
+                <button id="supportBut" class="arkUpg" onclick="buyArkUpgrade('support')" res-num="6"><span id="supportText" style="display: none;">build death support (not yet implemented)</span></button>
             </div>
         </div>
         <div id="statsTab" class="pageTab">
@@ -2762,6 +2972,30 @@
                         </td>
                         <td width="10%">
                             <button id="timeBoostDisplayBut" class="confBut" onclick="toggleDisplay('timeBoostDisplay', 'timeBoostDisplayBut')">ON</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Unspent galaxies
+                        </td>
+                        <td width="10%">
+                            <button id="unspentGalaxiesHeaderDisplayBut" class="confBut" onclick="toggleDisplay('unspentGalaxiesHeaderDisplay', 'unspentGalaxiesHeaderDisplayBut')">OFF</button>
+                        </td>
+                    </tr>
+                    <tr id="researchToggleRow">
+                        <td>
+                            Void research amount
+                        </td>
+                        <td width="10%">
+                            <button id="researchDisplayHeaderBut" class="confBut" onclick="toggleDisplay('researchDisplayHeader', 'researchDisplayHeaderBut')">OFF</button>
+                        </td>
+                    </tr>
+                    <tr id="researchGainToggleRow">
+                        <td>
+                            Void research gain
+                        </td>
+                        <td width="10%">
+                            <button id="researchGainDisplayHeaderBut" class="confBut" onclick="toggleDisplay('researchGainDisplayHeader', 'researchGainDisplayHeaderBut')">OFF</button>
                         </td>
                     </tr>
                 </table>

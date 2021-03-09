@@ -92,7 +92,13 @@ function getGUpgsByRow(row) {
 
 function canAffordGUpg(g, u) {
     if (player.galaxies.gte(GALAXIES_DATA[g].upgrades[u].cost())) {
-        return hasPrereqGUpg(g, u) && !hasGUpgrade(g, u);
+        if (isResearchActive(6)) {
+            for (let i=1; i<GALAXIES_DATA[g].upgrades[u].row; i++) {
+                if (getBoughtGUpgsByRow(i)==0) { return false; }
+            }
+            return !hasGUpgrade(g, u);
+        }
+        else { return hasPrereqGUpg(g, u) && !hasGUpgrade(g, u); }
     } else { return false; }
 }
 
@@ -138,6 +144,41 @@ function buyGUpg(g, u) {
             }
         }
 
+        if ((isResearchActive(5)) && (getBoughtGUpgs()==1)) {
+            for (let gg in GALAXIES_DATA) {
+                if (gg!=g) {
+                    for (let uu in GALAXIES_DATA[gg].upgrades) {
+                        player.galaxyUpgs[gg][uu].locked = true;
+                    }
+                }
+            }
+        }
+
+        if (isResearchActive(6)) {
+            for (let gg in GALAXIES_DATA) {
+                if (gg==g) {
+                    for (let uu in GALAXIES_DATA[gg].upgrades) {
+                        if (uu != u) {
+                            player.galaxyUpgs[gg][uu].locked = true;
+                            document.getElementById(GALAXIES_DATA[gg].upgrades[uu].buttonID).classList.add('lockedGalaxyUpg');
+                            document.getElementById(GALAXIES_DATA[gg].upgrades[uu].buttonID).classList.remove('galaxyUpg');
+                            document.getElementById(GALAXIES_DATA[gg].upgrades[uu].buttonID).classList.remove('unclickGalaxyUpg');
+                            document.getElementById(GALAXIES_DATA[gg].upgrades[uu].textID).style.display = 'none';
+                        }
+                    }
+                } else {
+                    for (let vv in GALAXIES_DATA[gg].upgrades) {
+                        if (GALAXIES_DATA[gg].upgrades[vv].row==thisRow) {
+                            player.galaxyUpgs[gg][vv].locked = true;
+                            document.getElementById(GALAXIES_DATA[gg].upgrades[vv].buttonID).classList.add('lockedGalaxyUpg');
+                            document.getElementById(GALAXIES_DATA[gg].upgrades[vv].buttonID).classList.remove('galaxyUpg');
+                            document.getElementById(GALAXIES_DATA[gg].upgrades[vv].buttonID).classList.remove('unclickGalaxyUpg');
+                            document.getElementById(GALAXIES_DATA[gg].upgrades[vv].textID).style.display = 'none';
+                        }
+                    }
+                }
+            }
+        }
         /*if (thisRow>1) {
             if (!player.galaxyRowsLocked[thisRow-1]) { rowLock(thisRow-1); }
         }
@@ -187,13 +228,14 @@ function unlockRow(r) {
 }*/
 
 function buyArkUpgrade(a) {
-    if (!player.ark[a].bought && canAffordAUpg(a)) {
+    return;
+    /*if (!player.ark[a].bought && canAffordAUpg(a)) {
         player.bricks = player.bricks.minus(getAUpgCost(a));
         player.ark[a].bought = true;
         player.push(['togDisplay', a]);
         addAUpgClass(a, 'boughtArkUpg');
         remAUpgClass(a, 'arkUpg');
-    }
+    }*/
 }
 
 function respecGalaxiesClick() {
@@ -223,6 +265,7 @@ function respecGalaxies() {
     //unlockRows();
     copyData(player.galaxyUpgs, START_PLAYER.galaxyUpgs);
     displayData.push(['html', 'astralNerf', formatWhole(getAstralNerf())]);
+    displayData.push(['html', 'astralNerfResearch', formatWhole(getAstralNerf())]);
     //copyData(player.galaxyRowsLocked, START_PLAYER.galaxyRowsLocked);
     loadStyles();
 }
@@ -311,6 +354,20 @@ function galaxyPrestigeReset(respec=false) {
         document.getElementById('timeSlider').disabled = false;
     }
     clearInterval(mainLoop);
+    if (player.isInResearch) {
+        let id = getActiveResearch();
+        player.isInResearch = false;
+        player.researchProjects[getActiveResearch()].active = false;
+        player.research = new Decimal(0);
+        document.getElementById('startResearch' + id.toString()).classList.remove('progressResearchButton');
+        document.getElementById('startResearch' + id.toString()).classList.add('researchButton');
+        if (id==6) {
+            let reqs = document.getElementsByClassName('gUpgRequires');
+            for (let i=0; i<reqs.length; i++) {
+                reqs[i].style.textDecoration = '';
+            }
+        }
+    }
     
     if (!hasAchievement(42)) {
         copyData(player.autobuyers, START_PLAYER.autobuyers);
@@ -363,6 +420,75 @@ function resetTimeCounts() {
     player.thisAscStats.totalCrystals = player.crystals;
 }
 
+function toggleAstralResearch() {
+    toggleAstral();
+    document.getElementById('astralButResearch').innerHTML = player.astralFlag ? 'Toggle Astral: ON' : 'Toggle Astral: OFF'
+}
+
+function researchReset(proj) {
+    if (player.astralFlag) { toggleAstral(); }
+    if (player.timeLocked) {
+        player.timeLocked = false;
+        toggleTimeLockDisplay();
+        document.getElementById('timeSlider').disabled = false;
+    }
+    clearInterval(mainLoop);
+
+    let tempVortex = {};
+    let time4 = [];
+    let time5 = [];
+    copyData(tempVortex, player.buildings[4]);
+    for (let i=1; i<=4; i++) {
+        time4[i-1] = player.timeUpgs['4' + i.toString()];
+        time5[i-1] = player.timeUpgs['5' + i.toString()];
+    }
+
+    copyData(player.units, START_PLAYER.units);
+    copyData(player.buildings, START_PLAYER.buildings);
+    copyData(player.construction, START_PLAYER.construction);
+    copyData(player.timeDims, START_PLAYER.timeDims);
+    copyData(player.timeUpgs, START_PLAYER.timeUpgs);
+    player.corpses = new Decimal(START_PLAYER.corpses);
+    player.bricks = new Decimal(START_PLAYER.bricks);
+    player.crystals = new Decimal(START_PLAYER.crystals);
+    player.worlds = new Decimal(START_PLAYER.worlds);
+    player.spaceResets = new Decimal(START_PLAYER.spaceResets);
+    player.timeResets = new Decimal(START_PLAYER.timeResets);
+    player.trueEssence = new Decimal(START_PLAYER.trueEssence);
+    player.antiEssence = new Decimal(START_PLAYER.antiEssence);
+    player.nextSpaceReset = new Array(1, 5);
+    copyData(player.thisSacStats, START_PLAYER.thisSacStats);
+    copyData(player.thisAscStats, START_PLAYER.thisAscStats);
+    lockElements('buildingsTab', 'factory');
+    lockElements('buildingsTab', 'factoryRow2');
+    lockElements('buildingsTab', 'necropolis');
+    lockElements('buildingsTab', 'necropolisRow2');
+    lockElements('buildingsTab', 'sun');
+    lockElements('buildingsTab', 'sunRow2');
+
+    copyData(player.buildings[4], tempVortex);
+    for (let i=1; i<=4; i++) {
+        player.timeUpgs['4' + i.toString()] = time4[i-1];
+        player.timeUpgs['5' + i.toString()] = time5[i-1];
+    }
+
+    respecGalaxies();
+    
+    let g = RESEARCH_DATA[proj].galaxyLock;
+    if (g>0) {
+        for (let u in GALAXIES_DATA[g].upgrades) {
+            player.galaxyUpgs[g][u].locked = true;
+        }
+    } 
+    
+    showUnitSubTab('unitsSubTab');
+    showBuildingSubTab('buildingsSubTab');
+    showTimeSubTab('timeDimSubTab');
+    save();
+    loadStyles();
+    startInterval();
+}
+
 function getGalaxiesBonus() {
     var b = new Decimal(player.allTimeStats.totalGalaxies)
     var e = 1.5;
@@ -391,39 +517,129 @@ function getBoughtGUpgsByRow(row) {
     return count;
 }
 
+function getResearchPerSecond() {
+    if (!player.isInResearch) { return new Decimal(0); }
+    var e = 0.2
+    var r = getCorpsesPerSecond().pow(e).sqrt();
+    return r; 
+}
+
+function isResearchActive(proj) {
+    return player.researchProjects[proj].active;
+}
+
+function getActiveResearch() {
+    for (let i=1; i<=6; i++) {
+        if (player.researchProjects[i].active) { return i; }
+    }
+    return 0;
+}
+
+function canCompleteResearch() {
+    let proj = getActiveResearch();
+    if (proj==0) { return false; }
+    return player.research.gte(RESEARCH_DATA[proj].goal);
+}
+
+function researchButtonClick(id) {
+    if (!player.isInResearch) { startResearch(id) }
+    else if (canCompleteResearch()) { completeResearch(id) }
+}
+
+function completeResearch(id) {
+    player.researchProjects[id].completed = true;
+    player.researchProjects[id].active = false;
+    player.isInResearch = false;
+    player.research = new Decimal(0);
+
+    unlockArkPart(RESEARCH_DATA[id].unlocks);
+
+    if (id==6) {
+        let reqs = document.getElementsByClassName('gUpgRequires');
+        for (let i=0; i<reqs.length; i++) {
+            reqs[i].style.textDecoration = '';
+        }
+    }
+
+    document.getElementById('researchSubTabBut').classList.remove('tabButNotify');
+    document.getElementById('galaxyTabBut').classList.remove('tabButIndirectNotify');
+    document.getElementById(document.getElementById(RESEARCH_DATA[id].buttonID).id).classList.remove('projectNotify');
+
+    respecGalaxies();
+}
+
+function startResearch(id) {
+    if (player.isInResearch || player.researchProjects[id].completed) { return; }
+    player.researchProjects[id].active = true;
+    player.isInResearch = true;
+    document.getElementById('researchGoalDisplay').innerHTML = formatWholeUnitRow(RESEARCH_DATA[id].goal);
+    if (id==6) {
+        let reqs = document.getElementsByClassName('gUpgRequires');
+        for (let i=0; i<reqs.length; i++) {
+            reqs[i].style.textDecoration = 'line-through';
+        }
+    }
+    researchReset(id);
+}
+
+function unlockArkPart(name) {
+    if (!player.researchProjects[ARK_DATA[name].project].completed) { return; }
+    document.getElementById(ARK_DATA[name].buttonID).classList.remove('lockedArkUpg');
+    document.getElementById(ARK_DATA[name].buttonID).classList.add('arkUpg');
+    document.getElementById(name).style.display = 'block';
+    document.getElementById(ARK_DATA[name].textID).style.display = '';
+}
+
+const RESEARCH_DATA = {
+    1: {
+        galaxyLock: 4,
+        goal: new Decimal(1e6),
+        buttonID: 'startResearch1',
+        unlocks: 'thrusters',
+    },
+    2: {
+        galaxyLock: 1,
+        goal: new Decimal(1e9),
+        buttonID: 'startResearch2',
+        unlocks: 'engines',
+    },
+    3: {
+        galaxyLock: 2,
+        goal: new Decimal(1e12),
+        buttonID: 'startResearch3',
+        unlocks: 'navigation',
+    },
+    4: {
+        galaxyLock: 3,
+        goal: new Decimal(1e14),
+        buttonID: 'startResearch4',
+        unlocks: 'torpedos',
+    },
+    5: {
+        galaxyLock: 0,
+        goal: new Decimal(1e9),
+        buttonID: 'startResearch5',
+        unlocks: 'railguns',
+    },
+    6: {
+        galaxyLocks: 0,
+        goal: new Decimal(1e12),
+        buttonID: 'startResearch6',
+        unlocks: 'support',
+    },
+}
+
 const ARK_DATA = {
-    'navigation': {
-        name: 'navigation',
+    'thrusters': {
+        name: 'thrusters',
         desc: '',
         cost: new Decimal(0),
-        buttonID: 'navigationBut',
+        buttonID: 'thrustersBut',
+        textID: 'thrustersText',
         displayEffect: false,
         displayTooltip: false,
         displayFormula: '',
-        effect: function() {
-            return;
-        }
-    },
-    'torpedos': {
-        name: 'torpedos',
-        desc: '',
-        cost: new Decimal(0),
-        buttonID: 'torpedosBut',
-        displayEffect: false,
-        displayTooltip: false,
-        displayFormula: '',
-        effect: function() {
-            return;
-        }
-    },
-    'railguns': {
-        name: 'railguns',
-        desc: '',
-        cost: new Decimal(0),
-        buttonID: 'railgunsBut',
-        displayEffect: false,
-        displayTooltip: false,
-        displayFormula: '',
+        project: 1,
         effect: function() {
             return;
         }
@@ -433,21 +649,53 @@ const ARK_DATA = {
         desc: '',
         cost: new Decimal(0),
         buttonID: 'enginesBut',
+        textID: 'enginesText',
         displayEffect: false,
         displayTooltip: false,
         displayFormula: '',
+        project: 2,
         effect: function() {
             return;
         }
     },
-    'thrusters': {
-        name: 'thrusters',
+    'navigation': {
+        name: 'navigation',
         desc: '',
         cost: new Decimal(0),
-        buttonID: 'thrustersBut',
+        buttonID: 'navigationBut',
+        textID: 'navigationText',
         displayEffect: false,
         displayTooltip: false,
         displayFormula: '',
+        project: 3,
+        effect: function() {
+            return;
+        }
+    },
+    'torpedos': {
+        name: 'torpedos',
+        desc: '',
+        cost: new Decimal(0),
+        buttonID: 'torpedosBut',
+        textID: 'torpedosText',
+        displayEffect: false,
+        displayTooltip: false,
+        displayFormula: '',
+        project: 4,
+        effect: function() {
+            return;
+        }
+    },
+    'railguns': {
+        name: 'railguns',
+        desc: '',
+        cost: new Decimal(0),
+        buttonID: 'railgunsBut',
+        textID: 'railgunsText',
+        displayEffect: false,
+        displayTooltip: false,
+        displayFormula: '',
+        project: 5,
         effect: function() {
             return;
         }
@@ -457,9 +705,11 @@ const ARK_DATA = {
         desc: '',
         cost: new Decimal(0),
         buttonID: 'supportBut',
+        textID: 'supportText',
         displayEffect: false,
         displayTooltip: false,
         displayFormula: '',
+        project: 6,
         effect: function() {
             return;
         }
@@ -481,20 +731,21 @@ const GALAXIES_DATA = {
                 displayEffect: false,
                 displaySuffix: '',
                 displayTooltip: false,
-                displayFormula: function() { return '' },
+                displayFormula: function() {return ''},
                 buttonID: 'galaxyUpg1.11',
                 lockImageID: '',
                 textID: 'text1.11',
                 cost: function() {
                     let c = 1;
                     c += getBoughtGUpgsByRow(4);
-                    return c;
+                    return (player.isInResearch ? 3*c : c);
                 },
                 effect: function() {
                     return new Decimal(1);
                 },
                 onBuy: function() {
                     displayData.push(['html', 'astralNerf', formatWhole(getAstralNerf())]);
+                    displayData.push(['html', 'astralNerfResearch', formatWhole(getAstralNerf())]);
                 },
             },
             21: {
@@ -507,7 +758,7 @@ const GALAXIES_DATA = {
                 displayEffect: false,
                 displaySuffix: '',
                 displayTooltip: false,
-                displayFormula: function() { return '' },
+                displayFormula: function() {return ''},
                 buttonID: 'galaxyUpg1.21',
                 lockImageID: 'skull1.21',
                 textID: 'text1.21',
@@ -516,7 +767,7 @@ const GALAXIES_DATA = {
                     for (let i=1; i<this.row; i++) {
                         c += getBoughtGUpgsByRow(i);
                     }
-                    return c;
+                    return (player.isInResearch ? 3*c : c);
                 },
                 effect: function() {
                     return new Decimal(1);
@@ -535,7 +786,7 @@ const GALAXIES_DATA = {
                 displayEffect: true,
                 displaySuffix: '/sec',
                 displayTooltip: false,
-                displayFormula: function() { return '' },
+                displayFormula: function() {return ''},
                 buttonID: 'galaxyUpg1.22',
                 lockImageID: 'skull1.22',
                 textID: 'text1.22',
@@ -544,7 +795,7 @@ const GALAXIES_DATA = {
                     for (let i=1; i<this.row; i++) {
                         c += getBoughtGUpgsByRow(i);
                     }
-                    return c;
+                    return (player.isInResearch ? 3*c : c);
                 },
                 effect: function() {
                     return player.astralFlag ? getCorpsesPerSecond().times(.01) : new Decimal(1);
@@ -563,7 +814,7 @@ const GALAXIES_DATA = {
                 displayEffect: false,
                 displaySuffix: '',
                 displayTooltip: false,
-                displayFormula: function() { return '' },
+                displayFormula: function() {return ''},
                 buttonID: 'galaxyUpg1.31',
                 lockImageID: 'skull1.31',
                 textID: 'text1.31',
@@ -572,7 +823,7 @@ const GALAXIES_DATA = {
                     for (let i=1; i<this.row; i++) {
                         c += getBoughtGUpgsByRow(i);
                     }
-                    return c;
+                    return (player.isInResearch ? 3*c : c);
                 },
                 effect: function() {
                     return new Decimal(1);
@@ -591,7 +842,7 @@ const GALAXIES_DATA = {
                 displayEffect: true,
                 displaySuffix: 'x',
                 displayTooltip: false,
-                displayFormula: function() { return '' },
+                displayFormula: function() {return ''},
                 buttonID: 'galaxyUpg1.32',
                 lockImageID: 'skull1.32',
                 textID: 'text1.32',
@@ -600,7 +851,7 @@ const GALAXIES_DATA = {
                     for (let i=1; i<this.row; i++) {
                         c += getBoughtGUpgsByRow(i);
                     }
-                    return c;
+                    return (player.isInResearch ? 3*c : c);
                 },
                 effect: function() {
                     return player.astralFlag ? getAntiTimeBuff().sqrt() : new Decimal(1);
@@ -619,7 +870,7 @@ const GALAXIES_DATA = {
                 displayEffect: false,
                 displaySuffix: '',
                 displayTooltip: false,
-                displayFormula: function() { return '' },
+                displayFormula: function() {return ''},
                 buttonID: 'galaxyUpg1.41',
                 lockImageID: '',
                 textID: 'text1.41',
@@ -628,13 +879,14 @@ const GALAXIES_DATA = {
                     for (let i=1; i<this.row; i++) {
                         c += getBoughtGUpgsByRow(i);
                     }
-                    return c;
+                    return (player.isInResearch ? 3*c : c);
                 },
                 effect: function() {
                     return new Decimal(1);
                 },
                 onBuy: function() {
                     displayData.push(['html', 'astralNerf', formatWhole(getAstralNerf())]);
+                    displayData.push(['html', 'astralNerfResearch', formatWhole(getAstralNerf())]);
                 },
             },
         },
@@ -653,14 +905,14 @@ const GALAXIES_DATA = {
                 displayEffect: false,
                 displaySuffix: '',
                 displayTooltip: false,
-                displayFormula: function() { return '' },
+                displayFormula: function() {return ''},
                 buttonID: 'galaxyUpg2.11',
                 lockImageID: '',
                 textID: 'text2.11',
                 cost: function() {
                     let c = 1;
                     c += getBoughtGUpgsByRow(4);
-                    return c;
+                    return (player.isInResearch ? 3*c : c);
                 },
                 effect: function() {
                     return new Decimal(1);
@@ -679,7 +931,7 @@ const GALAXIES_DATA = {
                 displayEffect: false,
                 displaySuffix: '',
                 displayTooltip: false,
-                displayFormula: function() { return '' },
+                displayFormula: function() {return ''},
                 buttonID: 'galaxyUpg2.21',
                 lockImageID: 'skull2.21',
                 textID: 'text2.21',
@@ -688,7 +940,7 @@ const GALAXIES_DATA = {
                     for (let i=1; i<this.row; i++) {
                         c += getBoughtGUpgsByRow(i);
                     }
-                    return c;
+                    return (player.isInResearch ? 3*c : c);
                 },
                 effect: function() {
                     return new Decimal(1);
@@ -707,7 +959,7 @@ const GALAXIES_DATA = {
                 displayEffect: false,
                 displaySuffix: '',
                 displayTooltip: false,
-                displayFormula: function() { return '' },
+                displayFormula: function() {return ''},
                 buttonID: 'galaxyUpg2.22',
                 lockImageID: 'skull2.22',
                 textID: 'text2.22',
@@ -716,7 +968,7 @@ const GALAXIES_DATA = {
                     for (let i=1; i<this.row; i++) {
                         c += getBoughtGUpgsByRow(i);
                     }
-                    return c;
+                    return (player.isInResearch ? 3*c : c);
                 },
                 effect: function() {
                     return new Decimal(1);
@@ -735,7 +987,7 @@ const GALAXIES_DATA = {
                 displayEffect: true,
                 displaySuffix: 'x',
                 displayTooltip: true,
-                displayFormula: function() { return '1 + x' },
+                displayFormula: function() { return `1 + x` },
                 buttonID: 'galaxyUpg2.31',
                 lockImageID: 'skull2.31',
                 textID: 'text2.31',
@@ -744,7 +996,7 @@ const GALAXIES_DATA = {
                     for (let i=1; i<this.row; i++) {
                         c += getBoughtGUpgsByRow(i);
                     }
-                    return c;
+                    return (player.isInResearch ? 3*c : c);
                 },
                 effect: function() {
                     let e = new Decimal(player.galaxies.plus(player.spentGalaxies));
@@ -764,7 +1016,7 @@ const GALAXIES_DATA = {
                 displayEffect: false,
                 displaySuffix: '',
                 displayTooltip: false,
-                displayFormula: function() { return '' },
+                displayFormula: function() {return ''},
                 buttonID: 'galaxyUpg2.32',
                 lockImageID: 'skull2.32',
                 textID: 'text2.32',
@@ -773,7 +1025,7 @@ const GALAXIES_DATA = {
                     for (let i=1; i<this.row; i++) {
                         c += getBoughtGUpgsByRow(i);
                     }
-                    return c;
+                    return (player.isInResearch ? 3*c : c);
                 },
                 effect: function() {
                     return new Decimal(1);
@@ -801,10 +1053,10 @@ const GALAXIES_DATA = {
                     for (let i=1; i<this.row; i++) {
                         c += getBoughtGUpgsByRow(i);
                     }
-                    return c;
+                    return (player.isInResearch ? 3*c : c);
                 },
                 effect: function() {
-                    return hasUpgrade(4, 13) ? getEssenceProdPerSecond().ln() : getEssenceProdPerSecond().log10();
+                    return (hasUpgrade(4, 13) && !player.isInResearch) ? getEssenceProdPerSecond().ln() : getEssenceProdPerSecond().log10();
                 },
                 onBuy: function() {
                     return;
@@ -826,14 +1078,14 @@ const GALAXIES_DATA = {
                 displayEffect: false,
                 displaySuffix: '',
                 displayTooltip: false,
-                displayFormula: function() { return '' },
+                displayFormula: function() {return ''},
                 buttonID: 'galaxyUpg3.11',
                 lockImageID: '',
                 textID: 'text3.11',
                 cost: function() {
                     let c = 1;
                     c += getBoughtGUpgsByRow(4);
-                    return c;
+                    return (player.isInResearch ? 3*c : c);
                 },
                 effect: function() {
                     return new Decimal(3);
@@ -852,7 +1104,7 @@ const GALAXIES_DATA = {
                 displayEffect: false,
                 displaySuffix: '',
                 displayTooltip: false,
-                displayFormula: function() { return '' },
+                displayFormula: function() {return ''},
                 buttonID: 'galaxyUpg3.21',
                 lockImageID: 'skull3.21',
                 textID: 'text3.21',
@@ -861,7 +1113,7 @@ const GALAXIES_DATA = {
                     for (let i=1; i<this.row; i++) {
                         c += getBoughtGUpgsByRow(i);
                     }
-                    return c;
+                    return (player.isInResearch ? 3*c : c);
                 },
                 effect: function() {
                     return new Decimal(1);
@@ -880,7 +1132,7 @@ const GALAXIES_DATA = {
                 displayEffect: false,
                 displaySuffix: '',
                 displayTooltip: false,
-                displayFormula: function() { return '' },
+                displayFormula: function() {return ''},
                 buttonID: 'galaxyUpg3.22',
                 lockImageID: 'skull3.22',
                 textID: 'text3.22',
@@ -889,7 +1141,7 @@ const GALAXIES_DATA = {
                     for (let i=1; i<this.row; i++) {
                         c += getBoughtGUpgsByRow(i);
                     }
-                    return c;
+                    return (player.isInResearch ? 3*c : c);
                 },
                 effect: function() {
                     return new Decimal(1);
@@ -908,7 +1160,7 @@ const GALAXIES_DATA = {
                 displayEffect: false,
                 displaySuffix: '',
                 displayTooltip: false,
-                displayFormula: function() { return '' },
+                displayFormula: function() {return ''},
                 buttonID: 'galaxyUpg3.31',
                 lockImageID: 'skull3.31',
                 textID: 'text3.31',
@@ -917,7 +1169,7 @@ const GALAXIES_DATA = {
                     for (let i=1; i<this.row; i++) {
                         c += getBoughtGUpgsByRow(i);
                     }
-                    return c;
+                    return (player.isInResearch ? 3*c : c);
                 },
                 effect: function() {
                     return new Decimal(1);
@@ -936,7 +1188,7 @@ const GALAXIES_DATA = {
                 displayEffect: false,
                 displaySuffix: '',
                 displayTooltip: false,
-                displayFormula: function() { return '' },
+                displayFormula: function() {return ''},
                 buttonID: 'galaxyUpg3.32',
                 lockImageID: 'skull3.32',
                 textID: 'text3.32',
@@ -945,7 +1197,7 @@ const GALAXIES_DATA = {
                     for (let i=1; i<this.row; i++) {
                         c += getBoughtGUpgsByRow(i);
                     }
-                    return c;
+                    return (player.isInResearch ? 3*c : c);
                 },
                 effect: function() {
                     return new Decimal(1.2);
@@ -964,7 +1216,7 @@ const GALAXIES_DATA = {
                 displayEffect: true,
                 displaySuffix: 'x',
                 displayTooltip: false,
-                displayFormula: function() { return '' },
+                displayFormula: function() {return ''},
                 buttonID: 'galaxyUpg3.41',
                 lockImageID: '',
                 textID: 'text3.41',
@@ -973,7 +1225,7 @@ const GALAXIES_DATA = {
                     for (let i=1; i<this.row; i++) {
                         c += getBoughtGUpgsByRow(i);
                     }
-                    return c;
+                    return (player.isInResearch ? 3*c : c);
                 },
                 effect: function() {
                     return hasTUpgrade(23) ? getTUpgEffect(33).pow(2) : new Decimal(1)
@@ -998,14 +1250,14 @@ const GALAXIES_DATA = {
                 displayEffect: true,
                 displaySuffix: 'x',
                 displayTooltip: true,
-                displayFormula: function() { return '1 + x' },
+                displayFormula: function() { return `1 + x` },
                 buttonID: 'galaxyUpg4.11',
                 lockImageID: '',
                 textID: 'text4.11',
                 cost: function() {
                     let c = 1;
                     c += getBoughtGUpgsByRow(4);
-                    return c;
+                    return (player.isInResearch ? 3*c : c);
                 },
                 effect: function() {
                     let e = new Decimal(player.galaxies.plus(player.spentGalaxies));
@@ -1025,7 +1277,7 @@ const GALAXIES_DATA = {
                 displayEffect: false,
                 displaySuffix: '',
                 displayTooltip: false,
-                displayFormula: function() { return '' },
+                displayFormula: function() {return ''},
                 buttonID: 'galaxyUpg4.21',
                 lockImageID: 'skull4.21',
                 textID: 'text4.21',
@@ -1034,7 +1286,7 @@ const GALAXIES_DATA = {
                     for (let i=1; i<this.row; i++) {
                         c += getBoughtGUpgsByRow(i);
                     }
-                    return c;
+                    return (player.isInResearch ? 3*c : c);
                 },
                 effect: function() {
                     return new Decimal(4);
@@ -1053,7 +1305,7 @@ const GALAXIES_DATA = {
                 displayEffect: true,
                 displaySuffix: 'x',
                 displayTooltip: false,
-                displayFormula: function() { return '' },
+                displayFormula: function() {return ''},
                 buttonID: 'galaxyUpg4.22',
                 lockImageID: 'skull4.22',
                 textID: 'text4.22',
@@ -1062,7 +1314,7 @@ const GALAXIES_DATA = {
                     for (let i=1; i<this.row; i++) {
                         c += getBoughtGUpgsByRow(i);
                     }
-                    return c;
+                    return (player.isInResearch ? 3*c : c);
                 },
                 effect: function() {
                     return player.astralFlag ? new Decimal(1) : getTrueTimeBuff().sqrt()
@@ -1081,7 +1333,7 @@ const GALAXIES_DATA = {
                 displayEffect: false,
                 displaySuffix: '',
                 displayTooltip: false,
-                displayFormula: function() { return '' },
+                displayFormula: function() {return ''},
                 buttonID: 'galaxyUpg4.31',
                 lockImageID: 'skull4.31',
                 textID: 'text4.31',
@@ -1090,7 +1342,7 @@ const GALAXIES_DATA = {
                     for (let i=1; i<this.row; i++) {
                         c += getBoughtGUpgsByRow(i);
                     }
-                    return c;
+                    return (player.isInResearch ? 3*c : c);
                 },
                 effect: function() {
                     return new Decimal(2);
@@ -1109,7 +1361,7 @@ const GALAXIES_DATA = {
                 displayEffect: true,
                 displaySuffix: '/sec (real time)',
                 displayTooltip: false,
-                displayFormula: function() { return '' },
+                displayFormula: function() {return ''},
                 buttonID: 'galaxyUpg4.32',
                 lockImageID: 'skull4.32',
                 textID: 'text4.32',
@@ -1118,7 +1370,7 @@ const GALAXIES_DATA = {
                     for (let i=1; i<this.row; i++) {
                         c += getBoughtGUpgsByRow(i);
                     }
-                    return c;
+                    return (player.isInResearch ? 3*c : c);
                 },
                 effect: function() {
                     return player.astralFlag ? new Decimal(0) : getBricksPerSecond().pow(0.9).div(getAstralNerf())
@@ -1137,7 +1389,7 @@ const GALAXIES_DATA = {
                 displayEffect: false,
                 displaySuffix: '',
                 displayTooltip: false,
-                displayFormula: function() { return '' },
+                displayFormula: function() {return ''},
                 buttonID: 'galaxyUpg4.41',
                 lockImageID: '',
                 textID: 'text4.41',
@@ -1146,13 +1398,14 @@ const GALAXIES_DATA = {
                     for (let i=1; i<this.row; i++) {
                         c += getBoughtGUpgsByRow(i);
                     }
-                    return c;
+                    return (player.isInResearch ? 3*c : c);
                 },
                 effect: function() {
                     return new Decimal(1);
                 },
                 onBuy: function() {
                     displayData.push(['html', 'astralNerf', formatWhole(getAstralNerf())]);
+                    displayData.push(['html', 'astralNerfResearch', formatWhole(getAstralNerf())]);
                 },
             },
         },

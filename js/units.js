@@ -13,8 +13,8 @@ function canUnlock(tier) {
 function getCorpsesPerSecond() {
     let c = player.units[1].amount.gt(0) ? player.units[1].amount.times(getTotalCorpseMult()) : new Decimal(0);
     if (hasTUpgrade(41)) { c = c.times(getTUpgEffect(41)); }
-    
     if (hasTUpgrade(42)) { c = c.times(getTUpgEffect(42)); }
+    if (player.isInResearch) { c = c.pow(0.9); }
     return c;
 }
 
@@ -22,7 +22,9 @@ function getUnitProdPerSecond(tier) {
     if (tier == NUM_UNITS) { return (hasGUpgrade(2, 41)) ? new Decimal(Decimal.max(getEssenceProdPerSecond(), 1).log10()) : new Decimal(0); }
     let p = player.units[tier+1].amount;
     if (!hasGUpgrade(2, 21)) { p = p.div(tier+1); }
-    return p.times(UNITS_DATA[tier+1].prodMult());
+    p = p.times(UNITS_DATA[tier+1].prodMult());
+    if (player.isInResearch) { p = p.pow(0.9); }
+    return p;
 }
 
 function getCorpseMultFromUnits() {
@@ -176,7 +178,7 @@ function spacePrestigeReset() {
     resetUnits();
     resetBuildingResources();
     //unitSetup(START_PLAYER);
-    if (!hasTUpgrade(44)) { player.corpses = hasAchievement(41) ? new Decimal(START_PLAYER.corpsesAch41) : new Decimal(START_PLAYER.corpses) }
+    if (!hasTUpgrade(44) || player.isInResearch) { player.corpses = hasAchievement(41) ? new Decimal(START_PLAYER.corpsesAch41) : new Decimal(START_PLAYER.corpses) }
     //allDisplay();
     
     save();
@@ -224,7 +226,9 @@ const UNITS_DATA = {
             if (hasUpgrade(1, 11)) m = m.times(getUpgEffect(1, 11));
             if (hasTUpgrade(22)) { m = m.times(getTUpgEffect(22)); }
             if (hasAchievement(31)) { m = m.times(getAchievementEffect(31)); }
-            return m.times(getAchievementBoost());
+            m = m.times(getAchievementBoost());
+            if (isResearchActive(1)) { m = m.pow(0.9); }
+            return m;
         },
         prodMult: function() {
             var m = this.corpseMult();
@@ -269,7 +273,9 @@ const UNITS_DATA = {
             m = m.pow(player.units[this.tier].bought-1);
             if (hasTUpgrade(22)) { m = m.times(getTUpgEffect(22)); }
             if (hasAchievement(31)) { m = m.times(getAchievementEffect(31)); }
-            return m.times(getAchievementBoost());
+            m = m.times(getAchievementBoost());
+            if (isResearchActive(1)) { m = m.pow(0.9); }
+            return m;
         },
         prodMult: function() {
             var m = this.corpseMult();
@@ -315,7 +321,9 @@ const UNITS_DATA = {
             m = m.pow(player.units[this.tier].bought-1);
             if (hasTUpgrade(22)) { m = m.times(getTUpgEffect(22)); }
             if (hasAchievement(31)) { m = m.times(getAchievementEffect(31)); }
-            return m.times(getAchievementBoost());
+            m = m.times(getAchievementBoost());
+            if (isResearchActive(1)) { m = m.pow(0.9); }
+            return m;
         },
         prodMult: function() {
             var m = this.corpseMult();
@@ -360,7 +368,9 @@ const UNITS_DATA = {
             m = m.pow(player.units[this.tier].bought-1);
             if (hasTUpgrade(22)) { m = m.times(getTUpgEffect(22)); }
             if (hasAchievement(31)) { m = m.times(getAchievementEffect(31)); }
-            return m.times(getAchievementBoost());
+            m = m.times(getAchievementBoost());
+            if (isResearchActive(1)) { m = m.pow(0.9); }
+            return m;
         },
         prodMult: function() {
             var m = this.corpseMult();
@@ -405,7 +415,9 @@ const UNITS_DATA = {
             m = m.pow(player.units[this.tier].bought-1);
             if (hasTUpgrade(22)) { m = m.times(getTUpgEffect(22)); }
             if (hasAchievement(31)) { m = m.times(getAchievementEffect(31)); }
-            return m.times(getAchievementBoost());
+            m = m.times(getAchievementBoost());
+            if (isResearchActive(1)) { m = m.pow(0.9); }
+            return m;
         },
         prodMult: function() {
             var m = this.corpseMult();
@@ -450,7 +462,9 @@ const UNITS_DATA = {
             m = m.pow(player.units[this.tier].bought-1);
             if (hasTUpgrade(22)) { m = m.times(getTUpgEffect(22)); }
             if (hasAchievement(31)) { m = m.times(getAchievementEffect(31)); }
-            return m.times(getAchievementBoost());
+            m = m.times(getAchievementBoost());
+            if (isResearchActive(1)) { m = m.pow(0.9); }
+            return m;
         },
         prodMult: function() {
             var m = this.corpseMult();
@@ -495,7 +509,9 @@ const UNITS_DATA = {
             m = m.pow(player.units[this.tier].bought-1);
             if (hasTUpgrade(22)) { m = m.times(getTUpgEffect(22)); }
             if (hasAchievement(31)) { m = m.times(getAchievementEffect(31)); }
-            return m.times(getAchievementBoost());
+            m = m.times(getAchievementBoost());
+            if (isResearchActive(1)) { m = m.pow(0.9); }
+            return m;
         },
         prodMult: function() {
             var m = this.corpseMult();
@@ -542,7 +558,9 @@ const UNITS_DATA = {
             m = m.pow(player.units[this.tier].bought-1);
             if (hasTUpgrade(22)) { m = m.times(getTUpgEffect(22)); }
             if (hasAchievement(31)) { m = m.times(getAchievementEffect(31)); }
-            return m.times(getAchievementBoost());
+            m = m.times(getAchievementBoost());
+            if (isResearchActive(1)) { m = m.pow(0.9); }
+            return m;
         },
         prodMult: function() {
             var m = this.corpseMult();

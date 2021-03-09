@@ -83,6 +83,7 @@ function isAutoSacTriggered() {
 function getTimeDimProdPerSecond(tier) {
     if (tier > NUM_TIMEDIMS) { return new Decimal(0); }
     var p = player.timeDims[tier].amount.times(TIME_DATA[tier].mult());
+    if (player.isInResearch) { p = p.pow(0.9); }
     return p;
 }
 
@@ -90,6 +91,7 @@ function getEssenceProdPerSecond() {
     var p = player.timeDims[1].amount.times(TIME_DATA[1].mult());
     if (hasUpgrade(2, 22)) { p = p.times(getUpgEffect(2, 22)); }
     if (hasGUpgrade(4, 11)) { p = p.times(getGUpgEffect(4, 11)); }
+    if (player.isInResearch) { p = p.pow(0.9); }
     return p;
 }
 
@@ -103,7 +105,7 @@ function getTrueTimeBuff() {
 }
 
 function getAntiTimeBuff() {
-    if (!player.timeLocked) { return new Decimal(1); }
+    if (!player.timeLocked || isResearchActive(4)) { return new Decimal(1); }
     var b = new Decimal(Decimal.max(player.antiEssence, 1).log10());
     if (hasGUpgrade(4, 31)) { b = b.pow(getGUpgEffect(4, 31)); }
     b = b.div(getTrueTimeNerf()).times(2);
@@ -300,7 +302,7 @@ function timePrestigeReset() {
     if (player.thisAscStats.bestCrystalRate.gt(player.allTimeStats.bestCrystalRate)) { player.allTimeStats.bestCrystalRate = new Decimal(player.thisAscStats.bestCrystalRate) }
     for (var i=9; i>0; i--) { copyData(player.pastRuns.lastTen[i], player.pastRuns.lastTen[i-1]); }
     copyData(player.pastRuns.lastTen[0], player.pastRuns.lastRun);
-    if (!hasTUpgrade(54)) {
+    if (!hasTUpgrade(54) || player.isInResearch) {
         player.trueEssence = new Decimal(START_PLAYER.trueEssence);
         player.antiEssence = new Decimal(START_PLAYER.antiEssence);
     }
@@ -359,7 +361,7 @@ const TIME_DATA = {
             return c;
         },
         mult: function() {
-            var m = hasTUpgrade(51) ? new Decimal(2.5) : new Decimal(2)
+            var m = (hasTUpgrade(51) && !player.isInResearch) ? new Decimal(2.5) : new Decimal(2)
             if (player.timeDims[this.tier].bought.eq(0)) { return new Decimal(1); }
             m = m.pow(player.timeDims[this.tier].bought-1);
             if (hasTUpgrade(31)) { m = m.times(getTUpgEffect(31)); }
@@ -386,7 +388,7 @@ const TIME_DATA = {
             return c;
         },
         mult: function() {
-            var m = new Decimal(2);
+            var m = (hasTUpgrade(51) && !player.isInResearch) ? new Decimal(2.5) : new Decimal(2)
             if (player.timeDims[this.tier].bought.eq(0)) { return new Decimal(1); }
             m = m.pow(player.timeDims[this.tier].bought-1);
             if (hasTUpgrade(31)) { m = m.times(getTUpgEffect(31)); }
@@ -413,7 +415,7 @@ const TIME_DATA = {
             return c;
         },
         mult: function() {
-            var m = new Decimal(2);
+            var m = (hasTUpgrade(51) && !player.isInResearch) ? new Decimal(2.5) : new Decimal(2)
             if (player.timeDims[this.tier].bought.eq(0)) { return new Decimal(1); }
             m = m.pow(player.timeDims[this.tier].bought-1);
             if (hasTUpgrade(31)) { m = m.times(getTUpgEffect(31)); }
@@ -440,7 +442,7 @@ const TIME_DATA = {
             return c;
         },
         mult: function() {
-            var m = new Decimal(2);
+            var m = (hasTUpgrade(51) && !player.isInResearch) ? new Decimal(2.5) : new Decimal(2)
             if (player.timeDims[this.tier].bought.eq(0)) { return new Decimal(1); }
             m = m.pow(player.timeDims[this.tier].bought-1);
             if (hasTUpgrade(31)) { m = m.times(getTUpgEffect(31)); }
@@ -532,7 +534,7 @@ const TIME_DATA = {
             displayFormula: function() { return hasUpgrade(4, 13) ? '1 + 7.5*ln(x)' : '1 + 7.5*log(x)' },
             effect: function() {
                 var e = player.crystals;
-                e = hasUpgrade(4, 13) ? e.ln()*7.5 : e.log10()*7.5;
+                e = (hasUpgrade(4, 13) && !player.isInResearch) ? e.ln()*7.5 : e.log10()*7.5;
                 return 1 + e;
             }
         },
@@ -547,7 +549,7 @@ const TIME_DATA = {
             displayFormula: function() { return hasUpgrade(4, 13) ? '1 + ln(x)' : '1 + log(x)' },
             effect: function() {
                 var e = player.crystals;
-                e = hasUpgrade(4, 13) ? e.ln() : e.log10();
+                e = (hasUpgrade(4, 13) && !player.isInResearch) ? e.ln() : e.log10();
                 return 1 + e;
             }
         },
@@ -575,7 +577,7 @@ const TIME_DATA = {
             displayFormula: function() { return hasUpgrade(4, 13) ? '1 + 10*ln(x)' : '1 + 10*log(x)' },
             effect: function() {
                 var e = player.crystals;
-                e = hasUpgrade(4, 13) ? e.ln()*10 : e.log10()*10
+                e = (hasUpgrade(4, 13) && !player.isInResearch) ? e.ln()*10 : e.log10()*10
                 return 1 + e;
             }
         },
@@ -630,7 +632,8 @@ const TIME_DATA = {
             displayTooltip: false,
             displayFormula: function() { return '' },
             effect: function() {
-                return player.astralFlag ? new Decimal(1) : getTrueTimeBuff()
+                if (player.isInResearch) { return new Decimal(1); }
+                else { return player.astralFlag ? new Decimal(1) : getTrueTimeBuff() }
             }
         },
         42: {
@@ -643,8 +646,11 @@ const TIME_DATA = {
             displayTooltip: true,
             displayFormula: function() { return '1 + x' },
             effect: function() {
-                let e = player.galaxies;
-                return e.plus(1);
+                if (player.isInResearch) { return new Decimal(1); }
+                else { 
+                    let e = player.galaxies;
+                    return e.plus(1);
+                }
             }
         },
         43: {
@@ -657,8 +663,11 @@ const TIME_DATA = {
             displayTooltip: true,
             displayFormula: function() { return '1 + x' },
             effect: function() {
-                var e = player.galaxies;
-                return e.plus(1);
+                if (player.isInResearch) { return new Decimal(1); }
+                else { 
+                    let e = player.galaxies;
+                    return e.plus(1);
+                }
             }
         },
         44: {
@@ -697,8 +706,11 @@ const TIME_DATA = {
             displayTooltip: true,
             displayFormula: function() { return '1 + x' },
             effect: function() {
-                var e = player.galaxies;
-                return e.plus(1);
+                if (player.isInResearch) { return new Decimal(1); }
+                else { 
+                    let e = player.galaxies;
+                    return e.plus(1);
+                }
             }
         },
         53: {
@@ -711,8 +723,11 @@ const TIME_DATA = {
             displayTooltip: true,
             displayFormula: function() { return '1 + x' },
             effect: function() {
-                var e = player.galaxies;
-                return e.plus(1);
+                if (player.isInResearch) { return new Decimal(1); }
+                else { 
+                    let e = player.galaxies;
+                    return e.plus(1);
+                }
             }
         },
         54: {

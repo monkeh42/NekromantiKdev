@@ -2,7 +2,7 @@
 
 const GAME_DATA = {
     author: 'monkeh42',
-    version: 'v0.3.2',
+    version: 'v0.4.1_d.1',
 }
 
 const NUM_UNITS = 8;
@@ -116,6 +116,8 @@ function loadStyles() {
     showBuildingSubTab(player.activeTabs[2]);
     if (player.unlocks['timeTab']['timeUpgrades']) { showTimeSubTab(player.activeTabs[3]); }
     else { showTimeSubTab('timeDimSubTab'); }
+    if (player.unlocks['galaxyTab']['arkTab']) { showGalaxySubTab(player.activeTabs[4]); }
+    else { showGalaxySubTab('galaxiesSubTab'); }
     if (player.activeTabs[0] == 'statsTab' && player.activeTabs[5] != 'achSubTab') { statsSubTabClick(player.activeTabs[5], player.activeTabs[5] + 'But'); }
     else { showStatsSubTab(player.activeTabs[5]); }
     if (screen.width < 1280 && screen.width > 600 && player.activeGalaxies[0] == 4) {
@@ -179,6 +181,7 @@ function loadStyles() {
     } 
 
     for (var b in BUILDS_DATA) {
+        if (isResearchActive(2)) { document.getElementById('factoryBuild').style.textDecoration = 'line-through'; }
         for (var u in BUILDS_DATA[b].upgrades) {
             if (BUILDS_DATA[b].upgrades[u].displayTooltip) { document.getElementById(BUILDS_DATA[b].upgrades[u].buttonID).setAttribute('data-title', BUILDS_DATA[b].upgrades[u].displayFormula()) }
             if (hasUpgrade(b, u)) {
@@ -271,6 +274,25 @@ function loadStyles() {
     document.getElementById('dontResetSliderBox').checked = player.dontResetSlider;
 
     document.getElementById('astralNerf').innerHTML = formatWhole(getAstralNerf());
+    document.getElementById('astralNerfResearch').innerHTML = formatWhole(getAstralNerf());
+
+    for (var a in ARK_DATA) {
+        if (!arkIsUnlocked(a)) {
+            document.getElementById(a + 'But').className = 'lockedArkUpg'
+            document.getElementById(a + 'Text').style.display = 'none';
+        } else {
+            document.getElementById(a + 'Text').style.display = 'block';
+            if (hasAUpgrade(a)) {
+                document.getElementById(a + 'But').className = 'boughtArkUpg' + ((player.tooltipsEnabled && isDisplayTooltipA(a)) ? ' tooltip' : '');
+                document.getElementById(a).style.display = 'block';
+            } else {
+                if (canAffordAUpg(a)) { document.getElementById(a + 'But').className = 'arkUpg' + ((player.tooltipsEnabled && isDisplayTooltipA(a)) ? ' tooltip' : '') }
+                else { document.getElementById(a + 'But').className = 'unclickableArkUpg' + ((player.tooltipsEnabled && isDisplayTooltipA(a)) ? ' tooltip' : '') }
+                document.getElementById(a + 'Text').innerHTML = "<span style=\"font-weight: 900;\">" + getAUpgName(a) + "</span><br>" + getAUpgDesc(a) + "<br>Cost: " + formatWhole(getAUpgCost(a)) + " astral bricks" + (isDisplayEffectA(a) ? ("<br>Currently: " + formatDefault2(getAUpgEffect(a)) + "x") : "");
+                document.getElementById(a).style.display = 'none';
+            }
+        }
+    }
 
     document.getElementById('timeSlider').value = player.antiPercent;
     if (player.timeLocked) {
@@ -305,8 +327,58 @@ function loadStyles() {
         }
     }
 
+    if (player.isInResearch) {
+        let id = getActiveResearch();
+        document.getElementById(RESEARCH_DATA[id].buttonID).innerHTML = 'IN PROGRESS';
+        for (let i=1; i<=6; i++) {
+            if (!player.researchProjects[i].completed) {
+                document.getElementById(RESEARCH_DATA[i].buttonID).classList.remove('researchButton');
+                if (i==id) {
+                    document.getElementById(RESEARCH_DATA[i].buttonID).classList.add('progressResearchButton');
+                } else {
+                    document.getElementById(RESEARCH_DATA[i].buttonID).style.textDecoration = 'line-through';
+                    document.getElementById(RESEARCH_DATA[i].buttonID).classList.add('unclickResearchBut');
+                }
+            }
+        }
+        if (id==6) {
+            let reqs = document.getElementsByClassName('gUpgRequires');
+            for (let i=0; i<reqs.length; i++) {
+                reqs[i].style.textDecoration = 'line-through';
+            }
+        }
+        document.documentElement.style.boxShadow = 'inset 0px 0px 20px 10px #e32d05';
+        document.getElementById('researchDisplayDiv').style.display = 'block';
+        document.getElementById('researchGoalDisplay').innerHTML = formatWholeUnitRow(RESEARCH_DATA[id].goal);
+        document.getElementById('vortexProgess').style.display = 'none';
+        document.getElementById('vortexProgessResearch').style.display = '';
+    } else {
+        for (let i=1; i<=6; i++) {
+            if (!player.researchProjects[i].completed) {
+                document.getElementById(RESEARCH_DATA[i].buttonID).style.textDecoration = '';
+                document.getElementById(RESEARCH_DATA[i].buttonID).classList.remove('unclickResearchBut');
+                document.getElementById(RESEARCH_DATA[i].buttonID).classList.add('researchButton');
+                document.getElementById(RESEARCH_DATA[i].buttonID).innerHTML = 'BEGIN';
+            }
+        }
+        document.documentElement.style.boxShadow = '';
+        document.getElementById('researchDisplayDiv').style.display = 'none';
+        document.getElementById('vortexProgess').style.display = '';
+        document.getElementById('vortexProgessResearch').style.display = 'none';
+    }
+
+    for (let i=1; i<=6; i++) {
+        if (player.researchProjects[i].completed) {
+            document.getElementById(RESEARCH_DATA[i].buttonID).classList.add('completedResearchBut');
+            document.getElementById(RESEARCH_DATA[i].buttonID).classList.remove('researchButton');
+            document.getElementById(RESEARCH_DATA[i].buttonID).innerHTML = 'COMPLETED';
+            unlockArkPart(RESEARCH_DATA[i].unlocks);
+        }
+    }
+
     if (player.astralFlag) {
         toggleAstralDisplay();
+        document.getElementById('astralButResearch').innerHTML = 'Toggle Astral: ON';
     }
 }
 
@@ -365,6 +437,7 @@ function gameLoop(diff=new Decimal(0), offline=false) {
             player.thisAscStats.totalCorpses = player.thisAscStats.totalCorpses.plus(getGUpgEffect(1, 22).times(diff.div(1000)));
             player.allTimeStats.totalCorpses = player.allTimeStats.totalCorpses.plus(getGUpgEffect(1, 22).times(diff.div(1000)));
         }
+        if (player.isInResearch) { player.research = player.research.plus(getResearchPerSecond().times(diff.div(1000))); }
     } else {
         player.corpses = player.corpses.plus(getCorpsesPerSecond().times(diff.div(1000)));
         player.thisSacStats.totalCorpses = player.thisSacStats.totalCorpses.plus(getCorpsesPerSecond().times(diff.div(1000)));

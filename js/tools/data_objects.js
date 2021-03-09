@@ -333,6 +333,33 @@ const START_PLAYER = {
         },
     },
 
+    researchProjects: {
+        1: {
+            active: false,
+            completed: false,
+        },
+        2: {
+            active: false,
+            completed: false,
+        },
+        3: {
+            active: false,
+            completed: false,
+        },
+        4: {
+            active: false,
+            completed: false,
+        },
+        5: {
+            active: false,
+            completed: false,
+        },
+        6: {
+            active: false,
+            completed: false,
+        },
+    },
+
     ark: {
         'engines': {
             unlocked: false,
@@ -377,6 +404,8 @@ const START_PLAYER = {
     spentGalaxies: new Decimal(0),
     ascensions: new Decimal(0),
     
+    research: new Decimal(0),
+    isInResearch: false,
 
     allTimeStats: {
         totalCorpses: new Decimal(0),
@@ -662,7 +691,10 @@ const START_PLAYER = {
         'bricksDisplayHeader': false,
         'bricksGainDisplayHeader': false,
         'crystalsDisplayHeader': false,
-        'timeBoostDisplay': false,
+        'timeBoostDisplay': true,
+        'unspentGalaxiesHeaderDisplay': false,
+        'researchDisplayHeader': false,
+        'researchGainDisplayHeader': false,
     },
 
     tooltipsEnabled: false,
@@ -1573,7 +1605,7 @@ const UNLOCKS_DATA = {
         },
         'arkTab': {
             unlocked: false,
-            idsToShow: ['galaxiesSubMenu', 'arkSubTabBut'],
+            idsToShow: ['galaxiesSubMenu', 'researchSubTabBut', 'arkSubTabBut', 'researchToggleRow', 'researchGainToggleRow'],
             idsToHide: [],
             shouldNotify: function() {
                 return false;
@@ -2179,6 +2211,36 @@ function fixResetBug() {
         },
     });
 
+    copyData(START_PLAYER.researchProjects, {
+        1: {
+            active: false,
+            completed: false,
+        },
+        2: {
+            active: false,
+            completed: false,
+        },
+        3: {
+            active: false,
+            completed: false,
+        },
+        4: {
+            active: false,
+            completed: false,
+        },
+        5: {
+            active: false,
+            completed: false,
+        },
+        6: {
+            active: false,
+            completed: false,
+        },
+    });
+
+    START_PLAYER.isInResearch = false;
+    START_PLAYER.research = new Decimal(0),
+
     START_PLAYER.bricks = new Decimal(0);
     START_PLAYER.brickGainExp = 0.2;
     START_PLAYER.astralFlag = false;
@@ -2360,7 +2422,10 @@ function fixResetBug() {
         'bricksDisplayHeader': false,
         'bricksGainDisplayHeader': false,
         'crystalsDisplayHeader': false,
-        'timeBoostDisplay': false,
+        'timeBoostDisplay': true,
+        'unspentGalaxiesHeaderDisplay': false,
+        'researchDisplayHeader': false,
+        'researchGainDisplayHeader': false,
     });
 
     START_PLAYER.tooltipsEnabled = false;
