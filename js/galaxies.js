@@ -1,4 +1,7 @@
-
+var rumble;
+var rumbleCount = 0;
+var takeOffInt;
+var vert = 0;
 
 
 
@@ -19,7 +22,7 @@ function getAUpgDesc(a) {
 }
 
 function getAUpgName(a) {
-    return ARK_DATA[a].title;
+    return ARK_DATA[a].name;
 }
 
 function getAUpgEffect(a) {
@@ -96,7 +99,7 @@ function getGUpgsByRow(row) {
 
 function canAffordGUpg(g, u) {
     if (player.galaxies.gte(GALAXIES_DATA[g].upgrades[u].cost())) {
-        if (isResearchActive(6)) {
+        if (isResearchActive(6) || isResearchActive(7)) {
             for (let i=1; i<GALAXIES_DATA[g].upgrades[u].row; i++) {
                 if (getBoughtGUpgsByRow(i)==0) { return false; }
             }
@@ -153,12 +156,16 @@ function buyGUpg(g, u) {
                 if (gg!=g) {
                     for (let uu in GALAXIES_DATA[gg].upgrades) {
                         player.galaxyUpgs[gg][uu].locked = true;
+                        document.getElementById(GALAXIES_DATA[gg].upgrades[uu].buttonID).classList.add('lockedGalaxyUpg');
+                        document.getElementById(GALAXIES_DATA[gg].upgrades[uu].buttonID).classList.remove('galaxyUpg');
+                        document.getElementById(GALAXIES_DATA[gg].upgrades[uu].buttonID).classList.remove('unclickGalaxyUpg');
+                        document.getElementById(GALAXIES_DATA[gg].upgrades[uu].textID).style.display = 'none';
                     }
                 }
             }
         }
 
-        if (isResearchActive(6)) {
+        if (isResearchActive(6) || isResearchActive(7)) {
             for (let gg in GALAXIES_DATA) {
                 if (gg==g) {
                     for (let uu in GALAXIES_DATA[gg].upgrades) {
@@ -232,8 +239,7 @@ function unlockRow(r) {
 }*/
 
 function buyArkUpgrade(a) {
-    return;
-    /*if (!player.ark[a].bought && canAffordAUpg(a)) {
+    if (!player.ark[a].bought && canAffordAUpg(a)) {
         player.bricks = player.bricks.minus(getAUpgBrickCost(a));
         player.crystals = player.crystals.minus(getAUpgTimeCost(a));
         player.ark[a].bought = true;
@@ -243,7 +249,88 @@ function buyArkUpgrade(a) {
         document.getElementById(a + 'But').classList.remove('arkUpg');
         document.getElementById(a + 'Text').style.display = 'none';
         document.getElementById(a + 'BoughtText').style.display = 'inline';
-    }*/
+
+        if (checkForWin()) {
+            winGame();
+        }
+    }
+}
+
+function checkForWin() {
+    for (let a in ARK_DATA) {
+        if (!hasAUpgrade(a)) { return false; }
+    }
+    return true;
+}
+
+function winGame() {
+    player.win = true;
+    document.getElementById('navigationBut').scrollIntoView();
+    document.getElementById('fullyBuilt').style.display = 'block';
+    for (let a in ARK_DATA) {
+        document.getElementById(a + 'Built').style.display = 'none';
+        displayData.push(['setProp', a + 'But', 'opacity', '0']);
+    }
+    document.getElementById('htmlBody').classList.add('hidden-scrollbar');
+    rumble = setInterval(rumbleAnim, 100);
+    setTimeout(takeOff, 3000);
+}
+
+function rumbleAnim() {
+    if (rumbleCount >= 30) { clearInterval(rumble) }
+    switch (rumbleCount % 4) {
+        case 0:
+            document.getElementById('fullyBuilt').style.left = "48%";
+            break;
+        case 1:
+            document.getElementById('fullyBuilt').style.left = "50%";
+            break;
+        case 2:
+            document.getElementById('fullyBuilt').style.left = "52%";
+            break;
+        case 3:
+            document.getElementById('fullyBuilt').style.left = "50%";
+            break;
+    }
+    rumbleCount++;
+}
+
+function takeOff() {
+    takeOffInt = setInterval(takeOffAnim, 5);
+    setTimeout(congrats, 5000);
+}
+
+function takeOffAnim() {
+    vert++;
+    if (vert>=1000) { clearInterval(takeOffInt); }
+    document.getElementById('fullyBuilt').style.top = (300 - vert).toString() + 'px';
+}
+
+function congrats() {
+    document.getElementById('fullyBuilt').style.display = 'none';
+    document.getElementById('winScreen').style.display = 'block';
+    document.getElementById('winScreen').scrollIntoView();
+    document.getElementById('winMessage').style.opacity = '1';
+}
+
+function continueGame() {
+    document.getElementById('arkDescription').style.display = 'none';
+    document.getElementById('winDescription').style.display = 'block';
+    document.getElementById('fullyBuilt').style.display = 'none';
+    document.getElementById('arkSubTab').style.height = '100px';
+    for (var a in ARK_DATA) {
+        document.getElementById(a).style.display = 'none';
+        document.getElementById(a + 'But').style.display = 'none';
+        document.getElementById(a + 'Built').style.display = 'none';
+    }
+    showTab('unitsTab', false, 'unitsTabBut');
+    showUnitSubTab('unitsSubTab', 'unitsSubTabBut', 'unitsTabBut');
+    document.getElementById('htmlBody').classList.remove('hidden-scrollbar');
+    document.getElementById('winScreen').style.opacity = '0';
+    setTimeout(function() {
+        document.getElementById('winScreen').style.display = 'none';
+        player.continue = true;
+    }, 2000);
 }
 
 function respecGalaxiesClick() {
@@ -369,7 +456,7 @@ function galaxyPrestigeReset(respec=false) {
         player.research = new Decimal(0);
         document.getElementById('startResearch' + id.toString()).classList.remove('progressResearchButton');
         document.getElementById('startResearch' + id.toString()).classList.add('researchButton');
-        if (id==6) {
+        if (id==6 || id==7) {
             let reqs = document.getElementsByClassName('gUpgRequires');
             for (let i=0; i<reqs.length; i++) {
                 reqs[i].style.textDecoration = '';
@@ -537,7 +624,7 @@ function isResearchActive(proj) {
 }
 
 function getActiveResearch() {
-    for (let i=1; i<=6; i++) {
+    for (let i=1; i<=7; i++) {
         if (player.researchProjects[i].active) { return i; }
     }
     return 0;
@@ -550,7 +637,8 @@ function isResearchCompleted(i) {
 function canCompleteResearch() {
     let proj = getActiveResearch();
     if (proj==0) { return false; }
-    return player.research.gte(RESEARCH_DATA[proj].goal);
+    if (proj==7) { return player.research.gte(RESEARCH_DATA[proj].calcGoal()); }
+    else { return player.research.gte(RESEARCH_DATA[proj].goal); }
 }
 
 function researchButtonClick(id) {
@@ -559,14 +647,20 @@ function researchButtonClick(id) {
 }
 
 function completeResearch(id) {
-    player.researchProjects[id].completed = true;
+    if (id!=7) { player.researchProjects[id].completed = true; }
     player.researchProjects[id].active = false;
     player.isInResearch = false;
     player.research = new Decimal(0);
 
-    unlockArkPart(RESEARCH_DATA[id].unlocks);
+    if (id==7) {
+        player.theorems = player.theorems.plus(1);
+        document.getElementById('numTheorems').innerHTML = ` ${formatWhole(player.theorems)} `;
+        document.getElementById('theoremEffect').innerHTML = ` ${formatDefault(getTheoremBoost())}`;
+        document.getElementById('resGoal7').innerHTML = formatWhole(RESEARCH_DATA[7].calcGoal());
+    }
+    else { unlockArkPart(RESEARCH_DATA[id].unlocks); }
 
-    if (id==6) {
+    if (id==6 || id==7) {
         let reqs = document.getElementsByClassName('gUpgRequires');
         for (let i=0; i<reqs.length; i++) {
             reqs[i].style.textDecoration = '';
@@ -585,8 +679,9 @@ function startResearch(id) {
     if (player.isInResearch || player.researchProjects[id].completed) { return; }
     player.researchProjects[id].active = true;
     player.isInResearch = true;
-    document.getElementById('researchGoalDisplay').innerHTML = formatWholeUnitRow(RESEARCH_DATA[id].goal);
-    if (id==6) {
+    if (id==7) { document.getElementById('researchGoalDisplay').innerHTML = ` ${formatWholeUnitRow(RESEARCH_DATA[id].calcGoal())} `; } 
+    else { document.getElementById('researchGoalDisplay').innerHTML = ` ${formatWholeUnitRow(RESEARCH_DATA[id].goal)} `; }
+    if (id==6 || id==7) {
         let reqs = document.getElementsByClassName('gUpgRequires');
         for (let i=0; i<reqs.length; i++) {
             reqs[i].style.textDecoration = 'line-through';
@@ -596,11 +691,16 @@ function startResearch(id) {
 }
 
 function unlockArkPart(name) {
-    if (!player.researchProjects[ARK_DATA[name].project].completed) { return; }
+    if (!player.researchProjects[ARK_DATA[name].project].completed || hasAUpgrade(name)) { return; }
     document.getElementById(ARK_DATA[name].buttonID).classList.remove('lockedArkUpg');
-    document.getElementById(ARK_DATA[name].buttonID).classList.add('arkUpg');
+    document.getElementById(ARK_DATA[name].buttonID).classList.add(canAffordAUpg(name) ? 'arkUpg' : 'unclickableArkUpg');
     document.getElementById(name).style.display = 'block';
     document.getElementById(ARK_DATA[name].textID).style.display = '';
+    player.ark[name].unlocked = true;
+}
+
+function getTheoremBoost() {
+    return Decimal.pow(1.5, player.theorems);
 }
 
 const RESEARCH_DATA = {
@@ -642,7 +742,7 @@ const RESEARCH_DATA = {
     },
     5: {
         galaxyLock: 0,
-        goal: new Decimal(1e9),
+        goal: new Decimal(1e10),
         buttonID: 'startResearch5',
         unlocks: 'railguns',
         onComplete: function() {
@@ -652,9 +752,21 @@ const RESEARCH_DATA = {
     },
     6: {
         galaxyLocks: 0,
-        goal: new Decimal(1e12),
+        goal: new Decimal(1e15),
         buttonID: 'startResearch6',
         unlocks: 'support',
+        onComplete: function() {
+            return;
+        }
+    },
+    7: {
+        galaxyLocks: 0,
+        goal: new Decimal(1e17),
+        buttonID: 'startResearch7',
+        unlocks: '',
+        calcGoal: function() {
+            return this.goal.times(Decimal.pow(100, player.theorems));
+        },
         onComplete: function() {
             return;
         }
@@ -665,8 +777,8 @@ const ARK_DATA = {
     'thrusters': {
         name: 'thrusters',
         desc: '',
-        brickCost: new Decimal(0),
-        timeCost: new Decimal(0),
+        brickCost: new Decimal(1e100),
+        timeCost: new Decimal(1e20),
         buttonID: 'thrustersBut',
         textID: 'thrustersText',
         displayEffect: false,
@@ -680,8 +792,8 @@ const ARK_DATA = {
     'engines': {
         name: 'engines',
         desc: '',
-        brickCost: new Decimal(0),
-        timeCost: new Decimal(0),
+        brickCost: new Decimal(1e125),
+        timeCost: new Decimal(1e24),
         buttonID: 'enginesBut',
         textID: 'enginesText',
         displayEffect: false,
@@ -695,8 +807,8 @@ const ARK_DATA = {
     'navigation': {
         name: 'navigation',
         desc: '',
-        brickCost: new Decimal(0),
-        timeCost: new Decimal(0),
+        brickCost: new Decimal(1e150),
+        timeCost: new Decimal(1e28),
         buttonID: 'navigationBut',
         textID: 'navigationText',
         displayEffect: false,
@@ -710,8 +822,8 @@ const ARK_DATA = {
     'torpedos': {
         name: 'torpedos',
         desc: '',
-        brickCost: new Decimal(0),
-        timeCost: new Decimal(0),
+        brickCost: new Decimal(1e250),
+        timeCost: new Decimal(1e35),
         buttonID: 'torpedosBut',
         textID: 'torpedosText',
         displayEffect: false,
@@ -725,8 +837,8 @@ const ARK_DATA = {
     'railguns': {
         name: 'railguns',
         desc: '',
-        brickCost: new Decimal(0),
-        timeCost: new Decimal(0),
+        brickCost: new Decimal("1e350"),
+        timeCost: new Decimal(1e40),
         buttonID: 'railgunsBut',
         textID: 'railgunsText',
         displayEffect: false,
@@ -740,8 +852,8 @@ const ARK_DATA = {
     'support': {
         name: 'support',
         desc: '',
-        brickCost: new Decimal(0),
-        timeCost: new Decimal(0),
+        brickCost: new Decimal("1e500"),
+        timeCost: new Decimal(1e50),
         buttonID: 'supportBut',
         textID: 'supportText',
         displayEffect: false,
@@ -1442,9 +1554,13 @@ const GALAXIES_DATA = {
                     return new Decimal(1);
                 },
                 onBuy: function() {
-                    displayData.push(['html', 'astralNerf', formatWhole(getAstralNerf())]);
-                    displayData.push(['html', 'astralNerfResearch', formatWhole(getAstralNerf())]);
-                },
+                    if (hasUpgrade(4, 22)) {
+                        document.getElementById('antiNerfDivText').style.display = 'none';
+                        document.getElementById('trueNerfDivText').style.display = 'none';
+                        document.getElementById('antiNerfTimesText').style.display = 'inline';
+                        document.getElementById('trueNerfTimesText').style.display = 'inline';
+                    }
+                }
             },
         },
     },

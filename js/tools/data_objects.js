@@ -131,6 +131,26 @@ const START_PLAYER = {
             amount: new Decimal(0),
             bought: new Decimal(0)
         },
+        5: {
+            unlocked: true,
+            amount: new Decimal(0),
+            bought: new Decimal(0)
+        },
+        6: {
+            unlocked: false,
+            amount: new Decimal(0),
+            bought: new Decimal(0)
+        },
+        7: {
+            unlocked: false,
+            amount: new Decimal(0),
+            bought: new Decimal(0)
+        },
+        8: {
+            unlocked: false,
+            amount: new Decimal(0),
+            bought: new Decimal(0)
+        },
     },
 
     timeUpgs: {
@@ -218,6 +238,10 @@ const START_PLAYER = {
             2: false,
             3: false,
             4: false,
+            5: false,
+            6: false,
+            7: false,
+            8: false,
         },
         'time': {
             'on': false,
@@ -358,6 +382,10 @@ const START_PLAYER = {
             active: false,
             completed: false,
         },
+        7: {
+            active: false,
+            completed: false,
+        },
     },
 
     ark: {
@@ -406,6 +434,10 @@ const START_PLAYER = {
     
     research: new Decimal(0),
     isInResearch: false,
+    theorems: new Decimal(0),
+
+    win: false,
+    continue: false,
 
     allTimeStats: {
         totalCorpses: new Decimal(0),
@@ -683,6 +715,7 @@ const START_PLAYER = {
     },
 
     headerDisplay: {
+        'autosavePopup': true,
         'astralNoticeDisplay': true,
         'unitsBoostDisplay': true,
         'achBoostDisplay': false,
@@ -693,6 +726,23 @@ const START_PLAYER = {
         'bricksGainDisplayHeader': false,
         'crystalsDisplayHeader': false,
         'timeBoostDisplay': true,
+        'unspentGalaxiesHeaderDisplay': false,
+        'researchDisplayHeader': false,
+        'researchGainDisplayHeader': false,
+    },
+
+    headerDisplayUnlocked: {
+        'autosavePopup': true,
+        'astralNoticeDisplay': false,
+        'unitsBoostDisplay': true,
+        'achBoostDisplay': true,
+        'worldsBonusDisplay': false,
+        'galaxiesBonusDisplay': false,
+        'totalBonusDisplay': true,
+        'bricksDisplayHeader': false,
+        'bricksGainDisplayHeader': false,
+        'crystalsDisplayHeader': false,
+        'timeBoostDisplay': false,
         'unspentGalaxiesHeaderDisplay': false,
         'researchDisplayHeader': false,
         'researchGainDisplayHeader': false,
@@ -1294,18 +1344,24 @@ const UNLOCKS_DATA = {
             },
             condition: function() {
                 return true;
-            }
+            },
+            onUnlock: function() {
+                return;
+            },
         }, 
         'spacePrestige': {
             unlocked: false,
-            idsToShow: ['spacePresContainer', 'worldsBonusDisplay'],
+            idsToShow: ['spacePresContainer', 'worldsBonusDisplay', 'worldsToggleRow'],
             idsToHide: [],
             shouldNotify: function() {
                 return false;
             },
             condition: function() {
                 return player.units[4].bought.gte(1) || player.ascensions.gt(0);
-            }
+            },
+            onUnlock: function() {
+                player.headerDisplayUnlocked['worldsBonusDisplay'] = true;
+            },
         },  
         'autobuyers': {
             unlocked: false,
@@ -1318,7 +1374,10 @@ const UNLOCKS_DATA = {
             },
             condition: function() {
                 return hasTUpgrade(13);
-            }
+            },
+            onUnlock: function() {
+                return;
+            },
         },
         'fastBuyers': {
             unlocked: false,
@@ -1331,7 +1390,10 @@ const UNLOCKS_DATA = {
             },
             condition: function() {
                 return hasTUpgrade(24);
-            }
+            },
+            onUnlock: function() {
+                return;
+            },
         },
         'bulkBuyers': {
             unlocked: false,
@@ -1344,7 +1406,10 @@ const UNLOCKS_DATA = {
             },
             condition: function() {
                 return hasTUpgrade(33);
-            }
+            },
+            onUnlock: function() {
+                return;
+            },
         },
         'prestigeBuyer': {
             unlocked: false,
@@ -1358,7 +1423,10 @@ const UNLOCKS_DATA = {
             },
             condition: function() {
                 return hasTUpgrade(34);
-            }
+            },
+            onUnlock: function() {
+                return;
+            },
         },
         'advancedBuyer': {
             unlocked: false,
@@ -1370,7 +1438,10 @@ const UNLOCKS_DATA = {
             },
             condition: function() {
                 return hasUpgrade(3, 22);
-            }
+            },
+            onUnlock: function() {
+                return;
+            },
         },
         'ascensionBuyer': {
             unlocked: false,
@@ -1384,7 +1455,10 @@ const UNLOCKS_DATA = {
             },
             condition: function() {
                 return hasMilestone(2);
-            }
+            },
+            onUnlock: function() {
+                return;
+            },
         },
         'timeDimBuyer': {
             unlocked: false,
@@ -1398,21 +1472,29 @@ const UNLOCKS_DATA = {
             },
             condition: function() {
                 return hasMilestone(5);
-            }
+            },
+            onUnlock: function() {
+                return;
+            },
         },
     },
     'buildingsTab': {
         'mainTab': {
             unlocked: false,
             notifyID: 'buildingsTabBut',
-            idsToShow: ['buildingsTabCell', 'buildingsTabCellMid'],
+            idsToShow: ['buildingsTabCell', 'buildingsTabCellMid', 'brickToggleRow', 'brickGainToggleRow', 'astralNoticeToggleRow'],
             idsToHide: [],
             shouldNotify: function() {
                 return !hasTUpgrade(11);
             },
             condition: function() {
                 return player.spaceResets.gte(1);
-            }
+            },
+            onUnlock: function() {
+                player.headerDisplayUnlocked['bricksDisplayHeader'] = true;
+                player.headerDisplayUnlocked['bricksGainDisplayHeader'] = true;
+                player.headerDisplayUnlocked['astralNoticeDisplay'] = true;
+            },
         },
         'factory': {
             unlocked: false,
@@ -1423,7 +1505,10 @@ const UNLOCKS_DATA = {
             },
             condition: function() {
                 return isBuilt(1);
-            }
+            },
+            onUnlock: function() {
+                return;
+            },
         },
         'factoryRow2': {
             unlocked: false,
@@ -1434,7 +1519,10 @@ const UNLOCKS_DATA = {
             },
             condition: function() {
                 return hasUpgrade(3, 11) && isBuilt(1);
-            }
+            },
+            onUnlock: function() {
+                return;
+            },
         },
         'necropolis': {
             unlocked: false,
@@ -1445,7 +1533,10 @@ const UNLOCKS_DATA = {
             },
             condition: function() {
                 return isBuilt(2);
-            }
+            },
+            onUnlock: function() {
+                return;
+            },
         },
         'necropolisRow2': {
             unlocked: false,
@@ -1456,7 +1547,10 @@ const UNLOCKS_DATA = {
             },
             condition: function() {
                 return hasUpgrade(3, 12) && isBuilt(2);
-            }
+            },
+            onUnlock: function() {
+                return;
+            },
         },
         'sun': {
             unlocked: false,
@@ -1467,7 +1561,10 @@ const UNLOCKS_DATA = {
             },
             condition: function() {
                 return isBuilt(3);
-            }
+            },
+            onUnlock: function() {
+                return;
+            },
         },
         'sunRow2': {
             unlocked: false,
@@ -1478,7 +1575,10 @@ const UNLOCKS_DATA = {
             },
             condition: function() {
                 return hasTUpgrade(34) && isBuilt(3);
-            }
+            },
+            onUnlock: function() {
+                return;
+            },
         },
         'construction': {
             unlocked: false,
@@ -1491,7 +1591,10 @@ const UNLOCKS_DATA = {
             },
             condition: function() {
                 return player.spaceResets.gte(2);
-            }
+            },
+            onUnlock: function() {
+                return;
+            },
         },
         'constructionRow2': {
             unlocked: false,
@@ -1504,7 +1607,10 @@ const UNLOCKS_DATA = {
             },
             condition: function() {
                 return hasMilestone(1);
-            }
+            },
+            onUnlock: function() {
+                return;
+            },
         },
         'vortexTable': {
             unlocked: false,
@@ -1517,7 +1623,10 @@ const UNLOCKS_DATA = {
             },
             condition: function() {
                 return hasMilestone(5);
-            }
+            },
+            onUnlock: function() {
+                return;
+            },
         },
         'vortex': {
             unlocked: false,
@@ -1528,21 +1637,42 @@ const UNLOCKS_DATA = {
             },
             condition: function() {
                 return isBuilt(4);
-            }
+            },
+            onUnlock: function() {
+                return;
+            },
+        },
+        'vortexRow2': {
+            unlocked: false,
+            idsToShow: ['vortexUpgradesRow2'],
+            idsToHide: [],
+            shouldNotify: function() {
+                return false;
+            },
+            condition: function() {
+                return isResearchCompleted(6);
+            },
+            onUnlock: function() {
+                return;
+            },
         },
     },
     'timeTab': {
         'mainTab': {
             unlocked: false,
             notifyID: 'timeTabBut',
-            idsToShow: ['timeTabCell', 'timeTabCellMid', 'timeBoostDisplay'],
+            idsToShow: ['timeTabCell', 'timeTabCellMid', 'timeBoostDisplay', 'crystalsToggleRow', 'timeBoostToggleRow'],
             idsToHide: [],
             shouldNotify: function() {
                 return !hasAchievement(13);
             },
             condition: function() {
                 return player.spaceResets.gte(3);
-            }
+            },
+            onUnlock: function() {
+                player.headerDisplayUnlocked['crystalsDisplayHeader'] = true;
+                player.headerDisplayUnlocked['timeBoostDisplay'] = true;
+            },
         },
         'timeUpgrades': {
             unlocked: false,
@@ -1555,7 +1685,10 @@ const UNLOCKS_DATA = {
             },
             condition: function() {
                 return hasUpgrade(3, 13);
-            }
+            },
+            onUnlock: function() {
+                return;
+            },
         },
         'timeUpgrades2': {
             unlocked: false,
@@ -1569,34 +1702,42 @@ const UNLOCKS_DATA = {
             },
             condition: function() {
                 return hasMilestone(6);
-            }
+            },
+            onUnlock: function() {
+                return;
+            },
+        },
+        'timeDims2': {
+            unlocked: false,
+            idsToShow: ['timeRow5', 'timeRow6', 'timeRow7', 'timeRow8', 'dimBuyer5Cell', 'dimBuyer6Cell', 'dimBuyer7Cell', 'dimBuyer8Cell'],
+            idsToHide: [],
+            shouldNotify: function() {
+                return false;
+            },
+            condition: function() {
+                return hasUpgrade(4, 23);
+            },
+            onUnlock: function() {
+                return;
+            },
         },
     },
     'galaxyTab': {
         'mainTab': {
             unlocked: false,
             notifyID: 'galaxyTabBut',
-            idsToShow: ['galaxyTabCell', 'galaxyTabCellMid', 'galaxiesBonusDisplay', 'last10AscCell', 'ascensionStats', 'totalAscensionsStats', 'spentGalaxiesStats', 'allTimeGalaxies'],
+            idsToShow: ['galaxyTabCell', 'galaxyTabCellMid', 'galaxiesBonusDisplay', 'last10AscCell', 'ascensionStats', 'totalAscensionsStats', 'spentGalaxiesStats', 'allTimeGalaxies', 'galaxiesToggleRow', 'unspentToggleRow'],
             idsToHide: ['statsAnd'],
             shouldNotify: function() {
                 return true;
             },
             condition: function() {
                 return hasUpgrade(3, 23);
-            }
-        },
-        'customizeDisplay': {
-            unlocked: false,
-            notifyID: 'customizeDisplayBut',
-            parentNotify: 'optionsTabBut',
-            idsToShow: ['customizeDisplayButDiv'],
-            idsToHide: [],
-            shouldNotify: function() {
-                return true;
             },
-            condition: function() {
-                return player.ascensions.gt(0);
-            }
+            onUnlock: function() {
+                player.headerDisplayUnlocked['galaxiesBonusDisplay'] = true;
+                player.headerDisplayUnlocked['unspentGalaxiesHeaderDisplay'] = true;
+            },
         },
         'arkTab': {
             unlocked: false,
@@ -1609,7 +1750,11 @@ const UNLOCKS_DATA = {
             },
             condition: function() {
                 return hasMilestone(7);
-            }
+            },
+            onUnlock: function() {
+                player.headerDisplayUnlocked['researchDisplayHeader'] = true;
+                player.headerDisplayUnlocked['researchGainDisplayHeader'] = true;
+            },
         },
         'researchTab': {
             unlocked: false,
@@ -1622,7 +1767,24 @@ const UNLOCKS_DATA = {
             },
             condition: function() {
                 return hasMilestone(7);
-            }
+            },
+            onUnlock: function() {
+                return;
+            },
+        },
+        'infiniteResearch': {
+            unlocked: false,
+            idsToShow: ['infiniteResearchCell'],
+            idsToHide: [],
+            shouldNotify: function() {
+                return false;
+            },
+            condition: function() {
+                return isResearchCompleted(6);
+            },
+            onUnlock: function() {
+                return;
+            },
         },
     },
 }
@@ -1873,6 +2035,26 @@ function fixResetBug() {
             amount: new Decimal(0),
             bought: new Decimal(0)
         },
+        5: {
+            unlocked: true,
+            amount: new Decimal(0),
+            bought: new Decimal(0)
+        },
+        6: {
+            unlocked: false,
+            amount: new Decimal(0),
+            bought: new Decimal(0)
+        },
+        7: {
+            unlocked: false,
+            amount: new Decimal(0),
+            bought: new Decimal(0)
+        },
+        8: {
+            unlocked: false,
+            amount: new Decimal(0),
+            bought: new Decimal(0)
+        },
     });
 
     copyData(START_PLAYER.timeUpgs, {
@@ -1960,6 +2142,10 @@ function fixResetBug() {
             2: false,
             3: false,
             4: false,
+            5: false,
+            6: false,
+            7: false,
+            8: false,
         },
         'time': {
             'on': false,
@@ -2246,6 +2432,10 @@ function fixResetBug() {
             active: false,
             completed: false,
         },
+        7: {
+            active: false,
+            completed: false,
+        },
     });
 
     START_PLAYER.isInResearch = false;
@@ -2267,6 +2457,13 @@ function fixResetBug() {
     START_PLAYER.galaxies = new Decimal(0);
     START_PLAYER.spentGalaxies = new Decimal(0);
     START_PLAYER.ascensions = new Decimal(0);
+
+    START_PLAYER.research = new Decimal(0);
+    START_PLAYER.isInResearch = false;
+    START_PLAYER.theorems = new Decimal(0);
+
+    START_PLAYER.win = false;
+    START_PLAYER.continue = false;
     
     copyData(START_PLAYER.allTimeStats, {
         totalCorpses: new Decimal(0),
@@ -2424,6 +2621,7 @@ function fixResetBug() {
     });
 
     copyData(START_PLAYER.headerDisplay, {
+        'autosavePopup': true,
         'astralNoticeDisplay': true,
         'unitsBoostDisplay': true,
         'achBoostDisplay': false,
@@ -2434,6 +2632,23 @@ function fixResetBug() {
         'bricksGainDisplayHeader': false,
         'crystalsDisplayHeader': false,
         'timeBoostDisplay': true,
+        'unspentGalaxiesHeaderDisplay': false,
+        'researchDisplayHeader': false,
+        'researchGainDisplayHeader': false,
+    });
+
+    copyData(START_PLAYER.headerDisplayUnlocked, {
+        'autosavePopup': true,
+        'astralNoticeDisplay': false,
+        'unitsBoostDisplay': true,
+        'achBoostDisplay': true,
+        'worldsBonusDisplay': false,
+        'galaxiesBonusDisplay': false,
+        'totalBonusDisplay': true,
+        'bricksDisplayHeader': false,
+        'bricksGainDisplayHeader': false,
+        'crystalsDisplayHeader': false,
+        'timeBoostDisplay': false,
         'unspentGalaxiesHeaderDisplay': false,
         'researchDisplayHeader': false,
         'researchGainDisplayHeader': false,

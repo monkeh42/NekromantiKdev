@@ -51,6 +51,7 @@ function calculateCrystalGain() {
         if (hasTUpgrade(33)) { ret = ret.times(getTUpgEffect(33)); }
         if (hasGUpgrade(4, 21)) { ret = ret.times(getGUpgEffect(4, 21)); }
         if (hasTUpgrade(53)) { ret = ret.times(getTUpgEffect(53)); }
+        if (hasUpgrade(4, 23) && player.corpses.gt("2.4e309") && !player.isInResearch) { ret = ret.pow(getUpgEffect(4, 23)); }
         return ret;
     } else {
         return new Decimal(0);
@@ -99,7 +100,9 @@ function getTrueTimeBuff() {
     if (!player.timeLocked) { return new Decimal(1); }
     var b = new Decimal(Decimal.max(player.trueEssence, 1).log10());
     if (hasGUpgrade(4, 31)) { b = b.pow(getGUpgEffect(4, 31)); }
-    b = b.div(getAntiTimeNerf());
+    if (isResearchCompleted(6)) { b = b.times(getTheoremBoost()); }
+    if (hasGUpgrade(4, 41) && hasUpgrade(4, 22) && !player.isInResearch) { b = b.times(getAntiTimeNerf()); }
+    else { b = b.div(getAntiTimeNerf()); }
     b = Decimal.add(b, 1);
     return b;
 }
@@ -108,21 +111,23 @@ function getAntiTimeBuff() {
     if (!player.timeLocked || isResearchActive(4)) { return new Decimal(1); }
     var b = new Decimal(Decimal.max(player.antiEssence, 1).log10());
     if (hasGUpgrade(4, 31)) { b = b.pow(getGUpgEffect(4, 31)); }
-    b = b.div(getTrueTimeNerf()).times(2);
+    if (isResearchCompleted(6)) { b = b.times(getTheoremBoost()); }
+    if (hasGUpgrade(4, 41) && hasUpgrade(4, 22) && !player.isInResearch) { b = b.times(getTrueTimeNerf()).times(2); }
+    else { b = b.div(getTrueTimeNerf()).times(2); }
     b = Decimal.add(b, 1);
     if (isResearchCompleted(4) && b.eq(1)) { b = getTrueTimeBuff(); }
     return b;
 }
 
 function getTrueTimeNerf() {
-    if (!player.timeLocked || hasGUpgrade(4, 41)) { return new Decimal(1); }
+    if (!player.timeLocked || (hasGUpgrade(4, 41) && (!hasUpgrade(4, 22) || player.isInResearch))) { return new Decimal(1); }
     var b = new Decimal(Decimal.max(player.trueEssence, 1).log10());
     b = Decimal.pow(b, 0.2);
     return b.max(1);
 }
 
 function getAntiTimeNerf() {
-    if (!player.timeLocked || hasGUpgrade(4, 41)) { return new Decimal(1); }
+    if (!player.timeLocked || (hasGUpgrade(4, 41) && (!hasUpgrade(4, 22) || player.isInResearch))) { return new Decimal(1); }
     var b = new Decimal(Decimal.max(player.antiEssence, 1).log10());
     b = Decimal.pow(b, 0.2);
     return b.max(1);
@@ -177,8 +182,14 @@ function calculateMaxTimeCost(tier) {
 }
 
 function buyMaxAllTime() {
-    for (var i=NUM_TIMEDIMS; i>0; i--) {
-        buyMaxTime(i);
+    if (hasUpgrade(4, 23)) {
+        for (var i=NUM_TIMEDIMS; i>0; i--) {
+            buyMaxTime(i);
+        }
+    } else {
+        for (var i=4; i>0; i--) {
+            buyMaxTime(i);
+        }
     }
 }
 
@@ -457,6 +468,114 @@ const TIME_DATA = {
         amountID: "timeAmount4",
         multID: "timeMult4",
         rowID: "timeRow4",
+    },
+    5: {
+        single: "fifth time dimension",
+        plural: "fifth time dimensions",
+        baseCost: new Decimal(1e20),
+        baseCostMult: new Decimal(1000),
+        baseMult: new Decimal(0),
+        cost: function() {
+            var c = this.baseCost;
+            c = c.times(this.baseCostMult.pow(player.timeDims[this.tier].bought));
+            return c;
+        },
+        mult: function() {
+            var m = (hasTUpgrade(51) && !player.isInResearch) ? new Decimal(2.5) : new Decimal(2)
+            if (player.timeDims[this.tier].bought.eq(0)) { return new Decimal(1); }
+            m = m.pow(player.timeDims[this.tier].bought-1);
+            if (hasTUpgrade(31)) { m = m.times(getTUpgEffect(31)); }
+            return m;
+        },
+        tier: 5,
+        buttonID: "timeBut5",
+        maxID: "timeMax5",
+        maxAmtID: 'dim5Max',
+        costID: 'dim5Cost',
+        amountID: "timeAmount5",
+        multID: "timeMult5",
+        rowID: "timeRow5",
+    },
+    6: {
+        single: "sixth time dimension",
+        plural: "sixth time dimensions",
+        baseCost: new Decimal(1e25),
+        baseCostMult: new Decimal(10000),
+        baseMult: new Decimal(0),
+        cost: function() {
+            var c = this.baseCost;
+            c = c.times(this.baseCostMult.pow(player.timeDims[this.tier].bought));
+            return c;
+        },
+        mult: function() {
+            var m = (hasTUpgrade(51) && !player.isInResearch) ? new Decimal(2.5) : new Decimal(2)
+            if (player.timeDims[this.tier].bought.eq(0)) { return new Decimal(1); }
+            m = m.pow(player.timeDims[this.tier].bought-1);
+            if (hasTUpgrade(31)) { m = m.times(getTUpgEffect(31)); }
+            return m;
+        },
+        tier: 6,
+        buttonID: "timeBut6",
+        maxID: "timeMax6",
+        maxAmtID: 'dim6Max',
+        costID: 'dim6Cost',
+        amountID: "timeAmount6",
+        multID: "timeMult6",
+        rowID: "timeRow6",
+    },
+    7: {
+        single: "seventh time dimension",
+        plural: "seventh time dimensions",
+        baseCost: new Decimal(1e30),
+        baseCostMult: new Decimal(100000),
+        baseMult: new Decimal(0),
+        cost: function() {
+            var c = this.baseCost;
+            c = c.times(this.baseCostMult.pow(player.timeDims[this.tier].bought));
+            return c;
+        },
+        mult: function() {
+            var m = (hasTUpgrade(51) && !player.isInResearch) ? new Decimal(2.5) : new Decimal(2)
+            if (player.timeDims[this.tier].bought.eq(0)) { return new Decimal(1); }
+            m = m.pow(player.timeDims[this.tier].bought-1);
+            if (hasTUpgrade(31)) { m = m.times(getTUpgEffect(31)); }
+            return m;
+        },
+        tier: 7,
+        buttonID: "timeBut7",
+        maxID: "timeMax7",
+        maxAmtID: 'dim7Max',
+        costID: 'dim7Cost',
+        amountID: "timeAmount7",
+        multID: "timeMult7",
+        rowID: "timeRow7",
+    },
+    8: {
+        single: "eighth time dimension",
+        plural: "eighth time dimensions",
+        baseCost: new Decimal(1e40),
+        baseCostMult: new Decimal(100000),
+        baseMult: new Decimal(0),
+        cost: function() {
+            var c = this.baseCost;
+            c = c.times(this.baseCostMult.pow(player.timeDims[this.tier].bought));
+            return c;
+        },
+        mult: function() {
+            var m = (hasTUpgrade(51) && !player.isInResearch) ? new Decimal(2.5) : new Decimal(2)
+            if (player.timeDims[this.tier].bought.eq(0)) { return new Decimal(1); }
+            m = m.pow(player.timeDims[this.tier].bought-1);
+            if (hasTUpgrade(31)) { m = m.times(getTUpgEffect(31)); }
+            return m;
+        },
+        tier: 8,
+        buttonID: "timeBut8",
+        maxID: "timeMax8",
+        maxAmtID: 'dim8Max',
+        costID: 'dim8Cost',
+        amountID: "timeAmount8",
+        multID: "timeMult8",
+        rowID: "timeRow8",
     },
     upgrades: {
         11: {

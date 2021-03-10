@@ -93,6 +93,7 @@ function getBuildingProdPerSec(b) {
 
 function getBricksPerSecond() {
     var e = hasGUpgrade(1, 21) ? 0.3 : 0.2
+    if (hasUpgrade(4, 21)) { e = new Decimal(getResourceEff(4).plus(e)) }
     var b = getCorpsesPerSecond().pow(e);
     if (player.isInResearch) { b = b.sqrt(); }
     if (isBuilt(2)) { b = b.times(getResourceEff(2)) }
@@ -358,7 +359,7 @@ const BUILDS_DATA = {
                         b = Decimal.pow(b, e).times(2);
                     }
                     if (hasGUpgrade(3, 11)) { b = b.pow(getGUpgEffect(3, 11)); }
-                    if (hasTUpgrade(43)) { b = b.times(getGUpgEffect(43)); }
+                    if (hasTUpgrade(43)) { b = b.times(getTUpgEffect(43)); }
                     return b.plus(1);
                 }
             },
@@ -752,7 +753,7 @@ const BUILDS_DATA = {
         },
         resourceEff: function() {
             if (player.isInResearch) { return new Decimal(0) }
-            else { return player.buildings[this.tier].amount.sqrt().div(50); }
+            else { return player.buildings[this.tier].amount.gt(0) ? Decimal.max(player.buildings[this.tier].amount.log10()/10, .02) : new Decimal(0); }
         },
         canAffordUpg: function(upg) {
             return player.buildings[4].amount.gte(this.upgrades[upg].cost);
@@ -809,29 +810,22 @@ const BUILDS_DATA = {
                 }
             },
             21: {
-                title: '2.1',
-                desc: function() { return 'description'; },
-                cost: new Decimal("Infinity"),
+                title: 'Astral Wormhole',
+                desc: function() { return 'The black hole effect also adds to the astral brick gain exponent.'; },
+                cost: new Decimal(500),
                 buttonID: 'vortexUpg21',
                 displayEffect: false,
                 displaySuffix: '',
                 displayTooltip: false,
                 displayFormula: function() { return ''; },
-                onBuy: function() {
-                    if (player.astralFlag) {
-                        toggleAstral();
-                        loadStyles();
-                        toggleAstral();
-                    } else { loadStyles(); }
-                },
                 effect: function() {
                     return new Decimal(1);
                 }
             },
             22: {
-                title: '2.2',
-                desc: function() { return 'description'; },
-                cost: new Decimal("Infinity"),
+                title: 'Evil Particle Collider',
+                desc: function() { return 'If you have galaxy upgrade 4.41, true and anti time essence boost each other\'s effects instead of nerfing them.'; },
+                cost: new Decimal(1000),
                 buttonID: 'vortexUpg22',
                 displayEffect: false,
                 displaySuffix: '',
@@ -839,19 +833,27 @@ const BUILDS_DATA = {
                 displayFormula: function() { return '' },
                 effect: function() {
                     return new Decimal(1);
+                },
+                onBuy: function() {
+                    if (hasGUpgrade(4, 41)) {
+                        document.getElementById('antiNerfDivText').style.display = 'none';
+                        document.getElementById('trueNerfDivText').style.display = 'none';
+                        document.getElementById('antiNerfTimesText').style.display = 'inline';
+                        document.getElementById('trueNerfTimesText').style.display = 'inline';
+                    }
                 }
             },
             23: {
-                title: '2.3',
-                desc: function() { return 'description'; },
-                cost: new Decimal("Infinity"),
+                title: 'Break Arbitrary',
+                desc: function() { return 'Unlock the next four time dimensions, and your time crystal gain is raised to the ^1.2 while you have more than 2.5e309 corpses.'; },
+                cost: new Decimal(5000),
                 buttonID: 'vortexUpg23',
                 displayEffect: false,
                 displaySuffix: '',
                 displayTooltip: false,
                 displayFormula: function() { return ''; },
                 effect: function() {
-                    return new Decimal(1);
+                    return new Decimal(1.2);
                 }
             },
         }
@@ -872,6 +874,15 @@ const CONSTR_DATA = {
             if (isResearchCompleted(3)) { s += 10; }
             c = c.times(Decimal.pow(this.baseCostMult, player.construction[this.tier]));
             if (player.construction[this.tier].gte(s)) { c = c.times(Decimal.pow(this.expCostMult, addFactorial(player.construction[this.tier].minus(s-1)))); }
+            return c;
+        },
+        costFuture: function(numBought) {
+            var c = this.baseCost;
+            var s = isResearchActive(3) ? 1 : 25
+            if (hasGUpgrade(3, 22)) { s = 2*s; }
+            if (isResearchCompleted(3)) { s += 10; }
+            c = c.times(Decimal.pow(this.baseCostMult, numBought));
+            if (numBought.gte(s)) { c = c.times(Decimal.pow(this.expCostMult, addFactorial(numBought.minus(s-1)))); }
             return c;
         },
         baseCostMult: 5,
@@ -905,6 +916,15 @@ const CONSTR_DATA = {
             if (player.construction[this.tier].gte(s)) { c = c.times(Decimal.pow(this.expCostMult, addFactorial(player.construction[this.tier].minus(s-1)))); }
             return c;
         },
+        costFuture: function(numBought) {
+            var c = this.baseCost;
+            var s = isResearchActive(3) ? 1 : 25
+            if (hasGUpgrade(3, 22)) { s = 2*s; }
+            if (isResearchCompleted(3)) { s += 10; }
+            c = c.times(Decimal.pow(this.baseCostMult, numBought));
+            if (numBought.gte(s)) { c = c.times(Decimal.pow(this.expCostMult, addFactorial(numBought.minus(s-1)))); }
+            return c;
+        },
         baseCostMult: 5,
         expCostMult: 10,
         buttonID: 'constrUpg2',
@@ -934,6 +954,15 @@ const CONSTR_DATA = {
             if (isResearchCompleted(3)) { s += 10; }
             c = c.times(Decimal.pow(this.baseCostMult, player.construction[this.tier]));
             if (player.construction[this.tier].gte(s)) { c = c.times(Decimal.pow(this.expCostMult, addFactorial(player.construction[this.tier].minus(s-1)))); }
+            return c;
+        },
+        costFuture: function(numBought) {
+            var c = this.baseCost;
+            var s = isResearchActive(3) ? 1 : 25
+            if (hasGUpgrade(3, 22)) { s = 2*s; }
+            if (isResearchCompleted(3)) { s += 10; }
+            c = c.times(Decimal.pow(this.baseCostMult, numBought));
+            if (numBought.gte(s)) { c = c.times(Decimal.pow(this.expCostMult, addFactorial(numBought.minus(s-1)))); }
             return c;
         },
         baseCostMult: 5,
@@ -967,6 +996,15 @@ const CONSTR_DATA = {
             if (player.construction[this.tier].gte(s)) { c = c.times(Decimal.pow(this.expCostMult, addFactorial(player.construction[this.tier].minus(s-1)))); }
             return c;
         },
+        costFuture: function(numBought) {
+            var c = this.baseCost;
+            var s = isResearchActive(3) ? 1 : 25
+            if (hasGUpgrade(3, 22)) { s = 2*s; }
+            if (isResearchCompleted(3)) { s += 10; }
+            c = c.times(Decimal.pow(this.baseCostMult, numBought));
+            if (numBought.gte(s)) { c = c.times(Decimal.pow(this.expCostMult, addFactorial(numBought.minus(s-1)))); }
+            return c;
+        },
         baseCostMult: 10,
         expCostMult: 10,
         buttonID: 'constrUpg4',
@@ -996,6 +1034,15 @@ const CONSTR_DATA = {
             if (player.construction[this.tier].gte(s)) { c = c.times(Decimal.pow(this.expCostMult, addFactorial(player.construction[this.tier].minus(s-1)))); }
             return c;
         },
+        costFuture: function(numBought) {
+            var c = this.baseCost;
+            var s = isResearchActive(3) ? 1 : 25
+            if (hasGUpgrade(3, 22)) { s = 2*s; }
+            if (isResearchCompleted(3)) { s += 10; }
+            c = c.times(Decimal.pow(this.baseCostMult, numBought));
+            if (numBought.gte(s)) { c = c.times(Decimal.pow(this.expCostMult, addFactorial(numBought.minus(s-1)))); }
+            return c;
+        },
         baseCostMult: 1000,
         expCostMult: 10,
         buttonID: 'constrUpg5',
@@ -1022,6 +1069,15 @@ const CONSTR_DATA = {
             if (isResearchCompleted(3)) { s += 10; }
             c = c.times(Decimal.pow(this.baseCostMult, player.construction[this.tier]));
             if (player.construction[this.tier].gte(s)) { c = c.times(Decimal.pow(this.expCostMult, addFactorial(player.construction[this.tier].minus(s-1)))); }
+            return c;
+        },
+        costFuture: function(numBought) {
+            var c = this.baseCost;
+            var s = isResearchActive(3) ? 1 : 25
+            if (hasGUpgrade(3, 22)) { s = 2*s; }
+            if (isResearchCompleted(3)) { s += 10; }
+            c = c.times(Decimal.pow(this.baseCostMult, numBought));
+            if (numBought.gte(s)) { c = c.times(Decimal.pow(this.expCostMult, addFactorial(numBought.minus(s-1)))); }
             return c;
         },
         baseCostMult: new Decimal(1e6),

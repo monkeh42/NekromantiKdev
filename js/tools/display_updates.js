@@ -75,6 +75,7 @@ function updateBuyables() {
     updateConstrUpgs();
     updateTimeUpgs();
     updateGalaxyUpgs();
+    updateArkUpgs();
 }
 
 function updateBuildingUpgs() {
@@ -146,6 +147,23 @@ function updateGalaxyUpgs() {
                 } 
                 if (isDisplayEffectG(g, u)) { document.getElementById('gUpgEffect' + g.toString() + '.' + u.toString()).innerHTML = formatDefault2(getGUpgEffect(g, u)) + GALAXIES_DATA[g].upgrades[u].displaySuffix; }
             }
+        }
+    }
+}
+
+function updateArkUpgs() {
+    for (let a in ARK_DATA) {
+        if (player.ark[a].unlocked) {
+            if (!hasAUpgrade(a)) {
+                if (canAffordAUpg(a) && !document.getElementById(ARK_DATA[a].buttonID).classList.contains('arkUpg')) {
+                    addAUpgClass(a, 'arkUpg');
+                    remAUpgClass(a, 'unclickableArkUpg');
+                } else if (!canAffordAUpg(a) && document.getElementById(ARK_DATA[a].buttonID).classList.contains('arkUpg')) {
+                    remAUpgClass(a, 'arkUpg');
+                    addAUpgClass(a, 'unclickableArkUpg');
+                }
+            }
+            //if (isDisplayEffectT(a)) { displayData.push(['html', 'tUpgEffect' + t.toString(), formatDefault2(getTUpgEffect(t))]); }
         }
     }
 }
@@ -340,7 +358,7 @@ function updateUnitTiers() {
                 else if (document.getElementById(UNITS_DATA[i].gainID).innerHTML != '(<0.1%/s)') { displayData.push(['html', UNITS_DATA[i].gainID, '(<0.1%/s)']); }
             }
         } else if (document.getElementById(UNITS_DATA[i].gainID).innerHTML != '') { displayData.push(['html', UNITS_DATA[i].gainID, '']) }
-        if (canAffordUnit(i)) { displayData.push(['html', UNITS_DATA[i].maxNumID, calculateMaxUnits(i)]); }
+        if (canAffordUnit(i)) { displayData.push(['html', UNITS_DATA[i].maxNumID, calculateMaxUnits(i)[0]]); }
         else { displayData.push(['html', UNITS_DATA[i].maxNumID, '0']); }
     }
 }
@@ -424,6 +442,8 @@ function unlockElements(mainTab, subTab) {
         if (data.notifyID !== undefined) { displayData.push(['addClass', data.notifyID, 'tabButNotify']); }
         if (data.parentNotify !== undefined) { displayData.push(['addClass', data.parentNotify, 'tabButIndirectNotify']); }
     } 
+
+    data.onUnlock();
 }
 
 function unlockElementsOnLoad(mainTab, subTab) {
@@ -463,6 +483,8 @@ function unlockElementsOnLoad(mainTab, subTab) {
         let els = document.getElementsByClassName(data.classToEnable);
         for (let i=0; i<els.length; i++) { els[i].disabled = false; }
     }
+
+    data.onUnlock();
 }
 
 function lockElements(mainTab, subTab) {
@@ -517,6 +539,7 @@ function toggleAstralDisplay() {
     displayData.push(['togClass', 'astralToggle', 'astralOn']);
     displayData.push(['html', 'astralText', player.astralFlag ? 'disable' : 'enable']);
     if (player.headerDisplay['astralNoticeDisplay']) { displayData.push(['togDisplay', 'astralNoticeDisplay']); }
+    displayData.push(['togDisplay', 'researchAstralNotice']);
     displayData.push(['html', 'normalAstral', player.astralFlag ? 'ASTRAL' : 'NORMAL']);
     displayData.push(['setProp', 'normalAstral', 'color', player.astralFlag ? '#42d35a' : 'white']);
     displayData.push(['setProp', 'normalAstral', 'color', player.astralFlag ? '#42d35a' : 'white']);
@@ -597,7 +620,6 @@ function updateAscBuyer() {
             document.getElementById('ascensionErrValue').innerHTML = formatWholeNoComma(player.autobuyers[11]['amount']);
         }
     }
-    player.autobuyers[11]['amount'] = new Decimal(document.getElementById('ascensionBuyerAmount').value);
 }
 
 function updateMaxPrestige() {
@@ -635,10 +657,10 @@ function updateAutobuyersDisplay() {
 
     document.getElementById('ascensionEnabledBut').innerHTML = player.autobuyers[11]['on'] ? 'ON' : 'OFF'
     document.getElementById('ascensionSpeedBut').innerHTML = player.autobuyers[11]['fast'] ? 'FAST' : 'SLOW'
-    document.getElementById('ascensionBuyerAmount').value = formatWholeNoComma(player.autobuyers[11]['max']);
+    document.getElementById('ascensionBuyerAmount').value = formatWholeNoComma(player.autobuyers[11]['amount']);
 
     for (let j=1; j<=NUM_TIMEDIMS; j++) {
-        document.getElementById('timeDim' + j.toString() + 'But').innerHTML = player.autobuyers[12][j] ? 'ON' : 'OFF'
+        if (j<=4 || hasUpgrade(4, 23)) { document.getElementById('timeDim' + j.toString() + 'But').innerHTML = player.autobuyers[12][j] ? 'ON' : 'OFF' }
     }
 }
 
@@ -669,7 +691,7 @@ function toggleRealTimeDisplays() {
 
 function toggleTooltips() {
     player.tooltipsEnabled = !player.tooltipsEnabled;
-    if (player.tooltipsEnabled) { document.getElementById('toggleTooltips').innerHTML = player.tooltipsEnabled ? 'TOGGLE FORMULA TOOLTIPS: ON' : 'TOGGLE FORMULA TOOLTIPS: OFF' }
+    document.getElementById('toggleTooltips').innerHTML = player.tooltipsEnabled ? 'TOGGLE FORMULA TOOLTIPS: ON' : 'TOGGLE FORMULA TOOLTIPS: OFF' 
 
     document.getElementById('brickTooltip').classList.toggle('tooltip');
     document.getElementById('trueTooltip').classList.toggle('tooltip');
@@ -720,13 +742,9 @@ function toggleConfirmations(action, method, id) {
 
 function toggleDisplay(id, button) {
     player.headerDisplay[id] = !player.headerDisplay[id];
-    if (player.headerDisplay[id]) {
-        document.getElementById(button).innerHTML = "ON";
-    } else {
-        document.getElementById(button).innerHTML = "OFF";
-    }
-    if (id == 'astralNoticeDisplay') { document.getElementById(id).style.display = (document.getElementById(id).style.display == 'none') && player.astralFlag ? '' : 'none' }
-    else { document.getElementById(id).style.display = (document.getElementById(id).style.display == 'none') ? '' : 'none' }
+    document.getElementById(button).innerHTML = player.headerDisplay[id] ? "ON" : "OFF"
+    if (id == 'astralNoticeDisplay' && player.headerDisplayUnlocked['astralNoticeDisplay']) { document.getElementById(id).style.display = (player.headerDisplay[id] && player.astralFlag) ? '' : 'none' }
+    else if (id != 'autosavePopup') { document.getElementById(id).style.display = (player.headerDisplay[id] && player.headerDisplayUnlocked[id]) ? '' : 'none' }
 }
 
 function openConfirmationsPopup() {
@@ -737,10 +755,9 @@ function closeConfirmationsPopup() {
     document.getElementById('confirmationsPopup').style.display = 'none';
 }
 
-function openDisplayPopup() {
-    document.getElementById('customizeDisplayBut').classList.remove('tabButNotify');
-    document.getElementById('optionsTabBut').classList.remove('tabButIndirectNotify');    
+function openDisplayPopup() {   
     document.getElementById('displayPopup').style.display = 'block';
+    dragElement(document.getElementById('displayPopup'));
 }
 
 function closeDisplayPopup() {
@@ -775,21 +792,33 @@ function setConfDefaults() {
     updatePopupsEtc();
 }
 
+function showSavePopup() {
+    displayData.push(['setProp', 'savePopup', 'opacity', '1']);
+    sPopupShownTime = new Date();
+}
+
+function showAutosavePopup() {
+    displayData.push(['setProp', 'autosavePopup', 'opacity', '.2']);
+    asPopupShownTime = new Date();
+}
+
 function updateHeaderDisplay() {
+
     for (let dKey in player.headerDisplay) {
-        if (dKey == 'astralNoticeDisplay') { document.getElementById(dKey).style.display = (player.headerDisplay[dKey] && player.astralFlag) ? '' : 'none' }
+        if (dKey != 'autosavePopup') {
+            if (player.headerDisplayUnlocked[dKey] && player.headerDisplay[dKey]) { document.getElementById(dKey).style.display = player.headerDisplay[dKey] ? '' : 'none' }
+        }
+        /*if (dKey == 'astralNoticeDisplay') { document.getElementById(dKey).style.display = (player.headerDisplay[dKey] && player.astralFlag) ? '' : 'none' }
         //else if (dKey == 'bricksGainDisplayHeader') { document.getElementById(dKey).style.display = (player.headerDisplay[dKey] && player.astralFlag) ? '' : 'none' }
         else if (dKey == 'worldsBonusDisplay') { document.getElementById(dKey).style.display = (player.headerDisplay[dKey] && player.unlocks['unitsTab']['spacePrestige']) ? '' : 'none' }
         else if (dKey == 'galaxiesBonusDisplay') { document.getElementById(dKey).style.display = (player.headerDisplay[dKey] && player.unlocks['galaxyTab']['mainTab']) ? '' : 'none' }
         //else if (dKey == 'achBoostDisplay' || dKey == 'achNum' || dKey == 'achNumRows' || dKey == 'achMult'){}
-        else { document.getElementById(dKey).style.display = player.headerDisplay[dKey] ? '' : 'none' }
+        else { document.getElementById(dKey).style.display = player.headerDisplay[dKey] ? '' : 'none' }*/
     }
 }
 
 function updatePopupsEtc() {
     updateSliderDisplay();
-
-    updateAutobuyersDisplay();
 
     updateConfirmationPopupDisplay();
 
@@ -1117,7 +1146,8 @@ function updateUnlocks() {
         } 
     }
     for (var i=1; i<NUM_TIMEDIMS; i++) {
-        if (player.timeDims[i].bought.gte(1) && !player.timeDims[i+1].unlocked) {
+        if (i>3) { player.timeDims[i+1].unlocked = hasUpgrade(4, 23); }
+        else if (player.timeDims[i].bought.gte(1) && !player.timeDims[i+1].unlocked) {
             player.timeDims[i+1].unlocked = true;
             displayData.push(['setProp', TIME_DATA[i+1].rowID, 'display', 'table-row']);
         } 
@@ -1139,10 +1169,14 @@ function unlockAchievement(a) {
     displayData.push(['remClass', ACH_DATA[a].divID, 'achievement']);
     displayData.push(['addClass', 'achSubTabBut', 'tabButNotify']);
     displayData.push(['addClass', 'statsTabBut', 'tabButIndirectNotify']);
-    displayData.push(['setProp', 'achUnlockPopup', 'opacity', '1']);
     if (ACH_DATA[a].secret) { displayData.push(['setAttr', ACH_DATA[a].divID, 'data-title', ACH_DATA[a].desc + (ACH_DATA[a].hasReward ? ' Reward: ' + ACH_DATA[a].reward : '' ) + (ACH_DATA[a].showEffect ? ' Currently: ' + formatDefault2(ACH_DATA[a].effect()) + 'x' : '' )]); }
-    popupShownTime = new Date();
+    showAchievementPopup();
     ACH_DATA[a].onUnlock();
+}
+
+function showAchievementPopup() {
+    displayData.push(['setProp', 'achUnlockPopup', 'opacity', '1']);
+    popupShownTime = new Date();
 }
 
 function mouseoverAchievement(ach) {
@@ -1168,10 +1202,14 @@ function unlockMilestone(m) {
     displayData.push(['remClass', 'milestone' + m.toString(), 'milestoneTD']);
     displayData.push(['addClass', 'milestonesBut', 'milestonesNotify']);
     displayData.push(['addClass', 'galaxyTabBut', 'tabButIndirectNotify']);
-    displayData.push(['setProp', 'milesUnlockPopup', 'opacity', '1']);
     displayData.push(['setProp', 'milestoneReq' + m.toString(), 'text-decoration', 'line-through']);
-    mPopupShownTime = new Date();
+    showMilestoneUnlockedPopup();
     MILES_DATA[m].onUnlock();
+}
+
+function showMilestoneUnlockedPopup() {
+    displayData.push(['setProp', 'milesUnlockPopup', 'opacity', '1']);
+    mPopupShownTime = new Date();
 }
 
 function closeOfflinePopup() {

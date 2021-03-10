@@ -116,21 +116,25 @@ body {
     overflow: overlay;
 }
 
-body::-webkit-scrollbar {
-    width: 10px;
+.scrollbar::-webkit-scrollbar {
+    width: 12px;
     opacity: 0;
 }
 
-body::-webkit-scrollbar-track {
+.scrollbar::-webkit-scrollbar-track {
     opacity: 0;
 }
 
-body::-webkit-scrollbar-thumb {
+.scrollbar::-webkit-scrollbar-thumb {
     background-color: rgba(0, 0, 0, 0);
     border: 1px double rgb(255, 255, 255, 0.4);
     border-radius: 9px;
     opacity: 0.5;
 }
+
+.hidden-scrollbar::-webkit-scrollbar-thumb {
+    visibility: hidden !important;
+ }
 
 #game {
     width: 1280px;
@@ -192,6 +196,51 @@ body::-webkit-scrollbar-thumb {
     display: none;
 }
 
+.offPopup {
+    position: absolute;
+    text-align: center;
+    background-color: black;
+    border: 3px solid white;
+    width: 300px;
+    border-radius: 4px;
+    z-index: 2;
+    display: none;
+}
+
+.dPopup {
+    position: fixed;
+    top: 150px;
+    right: 50px;
+    text-align: center;
+    background-color: black;
+    border: 3px solid white;
+    box-shadow: 3px 3px #424242;
+    width: 350px;
+    border-radius: 4px;
+    z-index: 8;
+    display: none;
+    height: 600px;
+    max-height: 600px;
+    overflow: overlay;
+}
+
+.dPopup::-webkit-scrollbar {
+    width: 10px;
+    opacity: 0;
+}
+
+.dPopup::-webkit-scrollbar-track {
+    margin-top: 46px;
+    opacity: 0;
+}
+
+.dPopup::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0);
+    border: 1px double rgb(255, 255, 255, 0.4);
+    border-radius: 9px;
+    opacity: 0.5;
+}
+
 .bpopup {
     position: absolute;
     left: 50%;
@@ -204,21 +253,6 @@ body::-webkit-scrollbar-thumb {
     width: 300px;
     border-radius: 4px;
     z-index: 2;
-}
-
-.dPopup {
-    position: absolute;
-    left: 67%;
-	top: 50%;
-    transform: translateX(50%) translateY(-50%);
-    text-align: center;
-    background-color: black;
-    border: 3px solid white;
-    box-shadow: 3px 3px #424242;
-    width: 300px;
-    border-radius: 4px;
-    z-index: 2;
-    display: none;
 }
 
 .milestonePopup {
@@ -447,6 +481,20 @@ option:active, option.active {
     border-radius: 4px;
     font-family: 'Cinzel', serif;
     font-size: 12pt;
+}
+
+.endBut {
+    color: white;
+    background-color: #1f1f1f;
+    font-style: bold;
+    width: 175px;
+    height: 50px;
+    border: 1px solid #525252;
+    cursor: pointer;
+    border-radius: 4px;
+    font-family: 'Cinzel', serif;
+    font-size: 12pt;
+    margin-top: 15px;
 }
 
 .optBut:hover {
@@ -1169,6 +1217,22 @@ option:active, option.active {
     cursor: pointer;
 }
 
+.dimBuyerEnabledBut {
+    position: relative;
+    color: white;
+    background-color: #1f1f1f;
+    font-style: bold;
+    margin: 0 auto 20px;
+    width: 115px;
+    height: 40px;
+    border: 1px solid #525252;
+    border-radius: 4px;
+    font-family: 'Cinzel', serif;
+    font-weight: bold;
+    font-size: 20pt;
+    cursor: pointer;
+}
+
 .buyerSpeedLock {
     position: relative;
     text-align: center;
@@ -1531,9 +1595,9 @@ option:active, option.active {
 #achUnlockPopup {
     position: fixed !important;
     display: block !important;
-    top: 15px !important;
-    left: 15px !important;
-    transform: none !important;
+    top: 55px !important;
+    right: 50% !important;
+    transform: translateX(-100%) !important;
     box-shadow: 0px 0px 10px 5px goldenrod;
     opacity: 0;
     -webkit-transition: 2s;
@@ -1543,10 +1607,34 @@ option:active, option.active {
 #milesUnlockPopup {
     position: fixed !important;
     display: block !important;
-    top: 15px !important;
-    left: 15px !important;
-    transform: none !important;
+    top: 55px !important;
+    right: 50% !important;
+    transform: translateX(-100%) !important;
     box-shadow: 0px 0px 10px 5px #e32d05;
+    opacity: 0;
+    -webkit-transition: 2s;
+    transition: opacity 2s;
+}
+
+#savePopup {
+    position: fixed !important;
+    display: block !important;
+    top: 55px !important;
+    right: 50% !important;
+    transform: translateX(200%) !important;
+    box-shadow: 0px 0px 5px 2px white;
+    opacity: 0;
+    -webkit-transition: 2s;
+    transition: opacity 2s;
+}
+
+#autosavePopup {
+    position: fixed !important;
+    display: block !important;
+    top: 55px !important;
+    right: 50% !important;
+    transform: translateX(200%) !important;
+    box-shadow: 0px 0px 5px 2px white;
     opacity: 0;
     -webkit-transition: 2s;
     transition: opacity 2s;
@@ -1720,6 +1808,16 @@ option:active, option.active {
     position: relative;
 }
 
+.infResearchDiv {
+    width: 912px;
+    min-width: 912px;
+    height: 320px;
+    min-height: 320px;
+    border: 1px solid #e32d05;
+    border-radius: 4px;
+    position: relative;
+}
+
 .researchButton {
     color: white;
     background-color: #661503;
@@ -1782,6 +1880,86 @@ option:active, option.active {
     transform: translateX(-50%);
 }
 
+.infResearchButton {
+    color: white;
+    background-color: #661503;
+    font-weight: 900;
+    width: 180px;
+    height: 60px;
+    border: 1px solid #e32d05;
+    margin: 5px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-family: 'Cinzel', serif;
+    font-size: 16pt;
+    position: absolute;
+    top: 240px;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+}
+
+.progressInfResearchButton {
+    color: white;
+    background-color: #4b4b4b;
+    font-weight: 900;
+    width: 180px;
+    height: 60px;
+    border: 3px solid #661503;
+    margin: 5px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-family: 'Cinzel', serif;
+    font-size: 16pt;
+    position: absolute;
+    top: 240px;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+}
+
+.infResearchButton:hover {
+    background-color: #e32d05;
+}
+
+.completedInfResearchBut {
+    color: #661503;
+    background-color: black;
+    font-weight: 900;
+    width: 180px;
+    height: 60px;
+    border: 3px solid #661503;
+    margin: 5px;
+    border-radius: 4px;
+    font-family: 'Cinzel', serif;
+    font-size: 16pt;
+    -webkit-text-stroke-width: .3px;
+    -webkit-text-stroke-color: white;
+    position: absolute;
+    top: 240px;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+}
+
+.unclickInfResearchBut {
+    color: white;
+    background-color: #4b4b4b;
+    font-weight: 900;
+    width: 180px;
+    height: 60px;
+    border: 1px solid #4b4b4b;
+    margin: 5px;
+    border-radius: 4px;
+    font-family: 'Cinzel', serif;
+    font-size: 16pt;
+    position: absolute;
+    top: 240px;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+}
+
 .unclickResearchBut {
     color: white;
     background-color: #4b4b4b;
@@ -1807,6 +1985,18 @@ option:active, option.active {
     width: 100%;
     position: absolute;
     top: 280px;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+}
+
+.infResGoalText {
+    font-size: 15pt;
+    font-weight: 900;
+    margin: 5px;
+    width: 100%;
+    position: absolute;
+    top: 210px;
     left: 50%;
     -webkit-transform: translateX(-50%);
     transform: translateX(-50%);
@@ -1856,6 +2046,7 @@ option:active, option.active {
     left: 50%;
     -webkit-transform: translateX(200%);
     transform: translateX(200%);
+    transition: opacity 2s;
 }
 
 #enginesBut {
@@ -1864,6 +2055,7 @@ option:active, option.active {
     left: 50%;
     -webkit-transform: translateX(-50%);
     transform: translateX(-50%);
+    transition: opacity 2s;
 }
 
 #navigationBut {
@@ -1872,6 +2064,7 @@ option:active, option.active {
     left: 50%;
     -webkit-transform: translateX(-50%);
     transform: translateX(-50%);
+    transition: opacity 2s;
 }
 
 #torpedosBut {
@@ -1880,6 +2073,7 @@ option:active, option.active {
     left: 50%;
     -webkit-transform: translateX(-175%);
     transform: translateX(-175%);
+    transition: opacity 2s;
 }
 
 #railgunsBut {
@@ -1888,6 +2082,7 @@ option:active, option.active {
     left: 50%;
     -webkit-transform: translateX(75%);
     transform: translateX(75%);
+    transition: opacity 2s;
 }
 
 #supportBut {
@@ -1896,6 +2091,7 @@ option:active, option.active {
     left: 50%;
     -webkit-transform: translateX(-300%);
     transform: translateX(-300%);
+    transition: opacity 2s;
 }
 
 .leftRowCost {
@@ -1934,6 +2130,15 @@ option:active, option.active {
     width: 388px;
     height: 771px;
     cursor: move;
+}
+
+.cursorContainer2 {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    background-color: transparent;
+    width: 338px;
+    height: 652px;
 }
 
 .milestoneHeaderContainer {
@@ -1980,6 +2185,50 @@ option:active, option.active {
     text-decoration: none;
 }
 
+.headerHeaderContainer {
+    position: fixed;
+    background-color: black;
+    width: 350px;
+    height: 51px;
+    border-radius: 1px;
+}
+
+.headerPopupHeader {
+    color: white;
+    background-color: black;
+    font-size: 20pt;
+    font-weight: 800;
+    position: fixed;
+    width: 294px;
+    height: 40px;
+    padding-right: 50px;
+    text-align: center;
+    border: 1px solid white;
+    border-radius: 1px;
+    margin: 2px;
+}
+
+.headerPopupHeaderX {
+    color: white;
+    background-color: transparent;
+    font-size: 24pt;
+    font-weight: 800;
+    position: fixed;
+    width: 330px;
+    height: 40px;
+    text-align: right;
+    padding-right: 10px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 800;
+    margin: 2px;
+    z-index: 9;
+}
+
+.headerPopupHeaderX a {
+    color: white;
+    text-decoration: none;
+}
+
 .milestonePopupHR {
     background-color: black;
     position: fixed;
@@ -1988,6 +2237,16 @@ option:active, option.active {
     margin-top: 46px;
     margin-left: 2px;
     border: 1px solid #661503;
+    border-radius: 1px;
+}
+
+.displayButtonsTable{
+    width: 100%;
+    height: 549px;
+    width: 340px;
+    margin-top: 49px;
+    margin-right: 10px;
+    border-radius: 4px;
     border-radius: 1px;
 }
 
@@ -2040,16 +2299,44 @@ option:active, option.active {
 
 .milestonePopup::-webkit-scrollbar {
     width: 10px;
-}
-
-.milestonePopup::-webkit-scrollbar-track {
-    margin-top: 51px;
     opacity: 0;
 }
 
+.milestonePopup::-webkit-scrollbar-track {
+    opacity: 0;
+    margin-top: 52px;
+}
+
 .milestonePopup::-webkit-scrollbar-thumb {
-    background-color: rgba(0, 0, 0, 0.5);
-    border: 1px double rgb(248, 248, 255, 0.3);
+    background-color: rgba(0, 0, 0, 0);
+    border: 1px double rgb(255, 255, 255, 0.4);
     border-radius: 9px;
     opacity: 0.5;
+}
+
+#winScreen {
+    width: 100%;
+    height: 1024px;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    background-color: black;
+    z-index: 9;
+    transition: opacity 2s;
+    display: none;
+}
+
+#winMessage {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    opacity: 0;
+    transition: opacity 2s;
+    font-size: 16pt;
+    color: #661503;
+    font-weight: bold;
+    -webkit-text-stroke-width: .3px;
+    -webkit-text-stroke-color: white;
 }
