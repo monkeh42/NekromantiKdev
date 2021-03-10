@@ -415,6 +415,13 @@ const START_PLAYER = {
         },
     },
 
+    ethUpgs: {
+        11: false,
+        12: false,
+        13: false,
+        14: false,
+    },
+
     bricks: new Decimal(0),
     brickGainExp: 0.2,
     astralFlag: false,
@@ -435,6 +442,7 @@ const START_PLAYER = {
     research: new Decimal(0),
     isInResearch: false,
     theorems: new Decimal(0),
+    infCompletions: new Decimal(0),
 
     win: false,
     continue: false,
@@ -1774,7 +1782,7 @@ const UNLOCKS_DATA = {
         },
         'infiniteResearch': {
             unlocked: false,
-            idsToShow: ['infiniteResearchCell'],
+            idsToShow: ['infResearchTabCell'],
             idsToHide: [],
             shouldNotify: function() {
                 return false;
@@ -2407,6 +2415,13 @@ function fixResetBug() {
         },
     });
 
+    copyData(START_PLAYER.ethUpgs, {
+        11: false,
+        12: false,
+        13: false,
+        14: false,
+    });
+
     copyData(START_PLAYER.researchProjects, {
         1: {
             active: false,
@@ -2461,6 +2476,7 @@ function fixResetBug() {
     START_PLAYER.research = new Decimal(0);
     START_PLAYER.isInResearch = false;
     START_PLAYER.theorems = new Decimal(0);
+    START_PLAYER.infCompletions = new Decimal(0);
 
     START_PLAYER.win = false;
     START_PLAYER.continue = false;

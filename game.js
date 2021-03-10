@@ -137,7 +137,7 @@ function loadStyles() {
         document.getElementById(player.activeGalaxies[0].toString() + 'gal').selected = true;
     }
 
-    document.documentElement.style.boxShadow = (player.isInResearch ? 'inset 0px 0px 20px 10px #e32d05' : '') + (player.isInResearch && player.astralFlag ? ', ' : '') + (player.astralFlag ? 'inset 0px 0px 30px 20px #1c8a2e' : '');
+    document.documentElement.style.boxShadow = (player.isInResearch ? (getActiveResearch()==7 ? 'inset 0px 0px 20px 10px #613227' : 'inset 0px 0px 20px 10px #e34805') : '') + (player.isInResearch && player.astralFlag ? ', ' : '') + (player.astralFlag ? 'inset 0px 0px 30px 20px #1c8a2e' : '');
 
     document.getElementById('realTimeDisplayBut').innerHTML = player.displayRealTime ? 'toggle time displays: REAL TIME' : 'toggle time displays: GAME TIME'
     let elements = document.getElementsByClassName('secDisplay');
@@ -190,6 +190,7 @@ function loadStyles() {
 
     for (var b in BUILDS_DATA) {
         if (isResearchActive(2)) { document.getElementById('factoryBuild').style.textDecoration = 'line-through'; }
+        else { document.getElementById('factoryBuild').style.textDecoration = ''; }
         for (var u in BUILDS_DATA[b].upgrades) {
             if (BUILDS_DATA[b].upgrades[u].displayTooltip) { document.getElementById(BUILDS_DATA[b].upgrades[u].buttonID).setAttribute('data-title', BUILDS_DATA[b].upgrades[u].displayFormula()) }
             if (hasUpgrade(b, u)) {
@@ -281,6 +282,24 @@ function loadStyles() {
         }
     }
 
+    for (var e in ETH_DATA) {
+        if (ETH_DATA[e].displayTooltip) { document.getElementById(ETH_DATA[e].buttonID).setAttribute('data-title', ETH_DATA[e].displayFormula()) }
+        if (player.ethUpgs[e]) {
+            document.getElementById(ETH_DATA[e].buttonID).classList.add('boughtEthUpg');
+            document.getElementById(ETH_DATA[e].buttonID).classList.remove('ethUpg');
+        } else {
+            document.getElementById(ETH_DATA[e].buttonID).classList.remove('boughtEthUpg');
+            if (!canAffordEUpg(e)) {
+                document.getElementById(ETH_DATA[e].buttonID).classList.add('unclickableEthUpg');
+                document.getElementById(ETH_DATA[e].buttonID).classList.remove('ethUpg');
+            }
+        }
+        document.getElementById('eUpgName' + e.toString()).innerHTML = getEUpgName(e);
+        document.getElementById('eUpgDesc' + e.toString()).innerHTML = getEUpgDesc(e);
+        document.getElementById('eUpgCost' + e.toString()).innerHTML = formatWhole(getEUpgCost(e));
+        if (isDisplayEffectE(e)) { document.getElementById('e' + e.toString() + 'Effect').style.display = '' }
+    }
+
     if (hasGUpgrade(4, 41) && hasUpgrade(4, 22)) {
         document.getElementById('antiNerfDivText').style.display = 'none';
         document.getElementById('trueNerfDivText').style.display = 'none';
@@ -367,8 +386,9 @@ function loadStyles() {
     }
 
     if (isResearchCompleted(6)) {
-        document.getElementById('numTheorems').innerHTML = ` ${formatWhole(player.theorems)} `;
-        document.getElementById('theoremEffect').innerHTML = ` ${formatDefault(getTheoremBoost())}`;
+        document.getElementById('theoremDisplay').innerHTML = ` ${formatWhole(player.theorems)} `;
+        document.getElementById('completionsDisplay').innerHTML = ` ${formatWhole(player.infCompletions)} `;
+        document.getElementById('theoremEffect').innerHTML = ` ^${formatDefault(getTheoremBoost())}`;
         document.getElementById('resGoal7').innerHTML = formatWhole(RESEARCH_DATA[7].calcGoal());
     }
 
@@ -402,8 +422,9 @@ function loadStyles() {
                 reqs[i].style.textDecoration = 'line-through';
             }
         }
-        document.getElementById('researchDisplayDiv').style.display = 'block';
-        if (id==7) { document.getElementById('researchGoalDisplay').innerHTML = ` ${formatWholeUnitRow(RESEARCH_DATA[id].calcGoal())} `; }
+        if (id==7) { document.getElementById('infResearchDisplayDiv').style.display = 'block'; }
+        else { document.getElementById('researchDisplayDiv').style.display = 'block'; }
+        if (id==7) { document.getElementById('infResearchGoalDisplay').innerHTML = ` ${formatWholeUnitRow(RESEARCH_DATA[id].calcGoal())} `; }
         else { document.getElementById('researchGoalDisplay').innerHTML = ` ${formatWholeUnitRow(RESEARCH_DATA[id].goal)} `; }
         document.getElementById('vortexProgess').style.display = 'none';
         document.getElementById('vortexProgessResearch').style.display = '';
@@ -424,6 +445,7 @@ function loadStyles() {
             }
         }
         document.getElementById('researchDisplayDiv').style.display = 'none';
+        document.getElementById('infResearchDisplayDiv').style.display = 'none';
         document.getElementById('vortexProgess').style.display = '';
         document.getElementById('vortexProgessResearch').style.display = 'none';
     }
@@ -441,6 +463,7 @@ function loadStyles() {
     if (player.astralFlag) {
         toggleAstralDisplay();
         document.getElementById('astralButResearch').innerHTML = 'Toggle Astral: ON';
+        document.getElementById('astralButInfResearch').innerHTML = 'Toggle Astral: ON';
     }
 }
 

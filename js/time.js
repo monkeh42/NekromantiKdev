@@ -51,7 +51,6 @@ function calculateCrystalGain() {
         if (hasTUpgrade(33)) { ret = ret.times(getTUpgEffect(33)); }
         if (hasGUpgrade(4, 21)) { ret = ret.times(getGUpgEffect(4, 21)); }
         if (hasTUpgrade(53)) { ret = ret.times(getTUpgEffect(53)); }
-        if (hasUpgrade(4, 23) && player.corpses.gt("2.4e309") && !player.isInResearch) { ret = ret.pow(getUpgEffect(4, 23)); }
         return ret;
     } else {
         return new Decimal(0);
@@ -100,7 +99,6 @@ function getTrueTimeBuff() {
     if (!player.timeLocked) { return new Decimal(1); }
     var b = new Decimal(Decimal.max(player.trueEssence, 1).log10());
     if (hasGUpgrade(4, 31)) { b = b.pow(getGUpgEffect(4, 31)); }
-    if (isResearchCompleted(6)) { b = b.times(getTheoremBoost()); }
     if (hasGUpgrade(4, 41) && hasUpgrade(4, 22) && !player.isInResearch) { b = b.times(getAntiTimeNerf()); }
     else { b = b.div(getAntiTimeNerf()); }
     b = Decimal.add(b, 1);
@@ -111,7 +109,6 @@ function getAntiTimeBuff() {
     if (!player.timeLocked || isResearchActive(4)) { return new Decimal(1); }
     var b = new Decimal(Decimal.max(player.antiEssence, 1).log10());
     if (hasGUpgrade(4, 31)) { b = b.pow(getGUpgEffect(4, 31)); }
-    if (isResearchCompleted(6)) { b = b.times(getTheoremBoost()); }
     if (hasGUpgrade(4, 41) && hasUpgrade(4, 22) && !player.isInResearch) { b = b.times(getTrueTimeNerf()).times(2); }
     else { b = b.div(getTrueTimeNerf()).times(2); }
     b = Decimal.add(b, 1);
@@ -373,7 +370,7 @@ const TIME_DATA = {
             return c;
         },
         mult: function() {
-            var m = (hasTUpgrade(51) && !player.isInResearch) ? new Decimal(2.5) : new Decimal(2)
+            var m = (hasTUpgrade(51) && (!player.isInResearch || hasEUpgrade(11))) ? new Decimal(2.5) : new Decimal(2)
             if (player.timeDims[this.tier].bought.eq(0)) { return new Decimal(1); }
             m = m.pow(player.timeDims[this.tier].bought-1);
             if (hasTUpgrade(31)) { m = m.times(getTUpgEffect(31)); }
@@ -400,7 +397,7 @@ const TIME_DATA = {
             return c;
         },
         mult: function() {
-            var m = (hasTUpgrade(51) && !player.isInResearch) ? new Decimal(2.5) : new Decimal(2)
+            var m = (hasTUpgrade(51) && (!player.isInResearch || hasEUpgrade(11))) ? new Decimal(2.5) : new Decimal(2)
             if (player.timeDims[this.tier].bought.eq(0)) { return new Decimal(1); }
             m = m.pow(player.timeDims[this.tier].bought-1);
             if (hasTUpgrade(31)) { m = m.times(getTUpgEffect(31)); }
@@ -427,7 +424,7 @@ const TIME_DATA = {
             return c;
         },
         mult: function() {
-            var m = (hasTUpgrade(51) && !player.isInResearch) ? new Decimal(2.5) : new Decimal(2)
+            var m = (hasTUpgrade(51) && (!player.isInResearch || hasEUpgrade(11))) ? new Decimal(2.5) : new Decimal(2)
             if (player.timeDims[this.tier].bought.eq(0)) { return new Decimal(1); }
             m = m.pow(player.timeDims[this.tier].bought-1);
             if (hasTUpgrade(31)) { m = m.times(getTUpgEffect(31)); }
@@ -454,7 +451,7 @@ const TIME_DATA = {
             return c;
         },
         mult: function() {
-            var m = (hasTUpgrade(51) && !player.isInResearch) ? new Decimal(2.5) : new Decimal(2)
+            var m = (hasTUpgrade(51) && (!player.isInResearch || hasEUpgrade(11))) ? new Decimal(2.5) : new Decimal(2)
             if (player.timeDims[this.tier].bought.eq(0)) { return new Decimal(1); }
             m = m.pow(player.timeDims[this.tier].bought-1);
             if (hasTUpgrade(31)) { m = m.times(getTUpgEffect(31)); }
@@ -481,7 +478,7 @@ const TIME_DATA = {
             return c;
         },
         mult: function() {
-            var m = (hasTUpgrade(51) && !player.isInResearch) ? new Decimal(2.5) : new Decimal(2)
+            var m = (hasTUpgrade(51) && (!player.isInResearch || hasEUpgrade(11))) ? new Decimal(2.5) : new Decimal(2)
             if (player.timeDims[this.tier].bought.eq(0)) { return new Decimal(1); }
             m = m.pow(player.timeDims[this.tier].bought-1);
             if (hasTUpgrade(31)) { m = m.times(getTUpgEffect(31)); }
@@ -508,7 +505,7 @@ const TIME_DATA = {
             return c;
         },
         mult: function() {
-            var m = (hasTUpgrade(51) && !player.isInResearch) ? new Decimal(2.5) : new Decimal(2)
+            var m = (hasTUpgrade(51) && (!player.isInResearch || hasEUpgrade(11))) ? new Decimal(2.5) : new Decimal(2)
             if (player.timeDims[this.tier].bought.eq(0)) { return new Decimal(1); }
             m = m.pow(player.timeDims[this.tier].bought-1);
             if (hasTUpgrade(31)) { m = m.times(getTUpgEffect(31)); }
@@ -535,7 +532,7 @@ const TIME_DATA = {
             return c;
         },
         mult: function() {
-            var m = (hasTUpgrade(51) && !player.isInResearch) ? new Decimal(2.5) : new Decimal(2)
+            var m = (hasTUpgrade(51) && (!player.isInResearch || hasEUpgrade(11))) ? new Decimal(2.5) : new Decimal(2)
             if (player.timeDims[this.tier].bought.eq(0)) { return new Decimal(1); }
             m = m.pow(player.timeDims[this.tier].bought-1);
             if (hasTUpgrade(31)) { m = m.times(getTUpgEffect(31)); }
@@ -562,7 +559,7 @@ const TIME_DATA = {
             return c;
         },
         mult: function() {
-            var m = (hasTUpgrade(51) && !player.isInResearch) ? new Decimal(2.5) : new Decimal(2)
+            var m = (hasTUpgrade(51) && (!player.isInResearch || hasEUpgrade(11))) ? new Decimal(2.5) : new Decimal(2)
             if (player.timeDims[this.tier].bought.eq(0)) { return new Decimal(1); }
             m = m.pow(player.timeDims[this.tier].bought-1);
             if (hasTUpgrade(31)) { m = m.times(getTUpgEffect(31)); }
@@ -654,7 +651,7 @@ const TIME_DATA = {
             displayFormula: function() { return hasUpgrade(4, 13) ? '1 + 7.5*ln(x)' : '1 + 7.5*log(x)' },
             effect: function() {
                 var e = player.crystals;
-                e = (hasUpgrade(4, 13) && !player.isInResearch) ? e.ln()*7.5 : e.log10()*7.5;
+                e = (hasUpgrade(4, 13) && (!player.isInResearch || hasEUpgrade(13))) ? e.ln()*7.5 : e.log10()*7.5;
                 return 1 + e;
             }
         },
@@ -669,7 +666,7 @@ const TIME_DATA = {
             displayFormula: function() { return hasUpgrade(4, 13) ? '1 + ln(x)' : '1 + log(x)' },
             effect: function() {
                 var e = player.crystals;
-                e = (hasUpgrade(4, 13) && !player.isInResearch) ? e.ln() : e.log10();
+                e = (hasUpgrade(4, 13) && (!player.isInResearch || hasEUpgrade(13))) ? e.ln() : e.log10();
                 return 1 + e;
             }
         },
@@ -697,7 +694,7 @@ const TIME_DATA = {
             displayFormula: function() { return hasUpgrade(4, 13) ? '1 + 10*ln(x)' : '1 + 10*log(x)' },
             effect: function() {
                 var e = player.crystals;
-                e = (hasUpgrade(4, 13) && !player.isInResearch) ? e.ln()*10 : e.log10()*10
+                e = (hasUpgrade(4, 13) && (!player.isInResearch || hasEUpgrade(13))) ? e.ln()*10 : e.log10()*10
                 return 1 + e;
             }
         },
@@ -752,7 +749,7 @@ const TIME_DATA = {
             displayTooltip: false,
             displayFormula: function() { return '' },
             effect: function() {
-                if (player.isInResearch) { return new Decimal(1); }
+                if (player.isInResearch && !hasEUpgrade(11)) { return new Decimal(1); }
                 else { return player.astralFlag ? new Decimal(1) : getTrueTimeBuff() }
             }
         },

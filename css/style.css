@@ -470,6 +470,26 @@ option:active, option.active {
     background-color: #525252;
 }
 
+.respecButSkinny {
+    color: white;
+    background-color: #3b1a12;
+    font-style: bold;
+    width: 225px;
+    height: 25px;
+    border: 3px double white;
+    cursor: pointer;
+    border-radius: 4px;
+    margin-top: 5px;
+    font-family: 'Cinzel', serif;
+    font-size: 10pt;
+}
+
+.respecButSkinny:hover {
+    background-color: white;
+    color: #3b1a12;
+    border: 3px double #3b1a12;
+}
+
 .optBut {
     color: white;
     background-color: #1f1f1f;
@@ -505,7 +525,7 @@ option:active, option.active {
     color: white;
     background-color: #1f1f1f;
     font-style: bold;
-    width: 180px;
+    width: 190px;
     height: 35px;
     border: 1px solid #525252;
     cursor: pointer;
@@ -714,6 +734,46 @@ option:active, option.active {
     background-color: #4b4b4b;
     width: 175px;
     height: 175px;
+    border: 1px solid #4b4b4b;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+.ethUpg {
+    color: white;
+    background-color: #3b1a12;
+    width: 220px;
+    height: 120px;
+    border: 6px double white;
+    cursor: pointer;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+.ethUpg:hover {
+    background-color: white;
+    color: #3b1a12;
+    border: 6px double #3b1a12;
+}
+
+.boughtEthUpg {
+    color: white;
+    background-color:black;
+    width: 220px;
+    height: 120px;
+    border: 6px double #3b1a12;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+.unclickableEthUpg {
+    color: white;
+    background-color: #4b4b4b;
+    width: 220px;
+    height: 120px;
     border: 1px solid #4b4b4b;
     border-radius: 4px;
     margin-bottom: 10px;
@@ -1661,6 +1721,19 @@ option:active, option.active {
     font-family: 'Cinzel', serif;
 }
 
+#astralButInfResearch {
+    color: white;
+    background-color: #3b1a12;
+    font-style: bold;
+    width: 175px;
+    height: 35px;
+    border: 6px double white;
+    margin: 5px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-family: 'Cinzel', serif;
+}
+
 .galaxyBut {
     color: white;
     background-color: #661503;
@@ -1809,11 +1882,12 @@ option:active, option.active {
 }
 
 .infResearchDiv {
-    width: 912px;
-    min-width: 912px;
-    height: 320px;
-    min-height: 320px;
-    border: 1px solid #e32d05;
+    width: 750px;
+    min-width: 750px;
+    margin: auto;
+    height: 290px;
+    min-height: 290px;
+    border: 6px double #3b1a12;
     border-radius: 4px;
     position: relative;
 }
@@ -1882,18 +1956,18 @@ option:active, option.active {
 
 .infResearchButton {
     color: white;
-    background-color: #661503;
+    background-color: #3b1a12;
     font-weight: 900;
-    width: 180px;
-    height: 60px;
-    border: 1px solid #e32d05;
+    width: 185px;
+    height: 80px;
+    border: 6px double white;
     margin: 5px;
     cursor: pointer;
     border-radius: 4px;
     font-family: 'Cinzel', serif;
     font-size: 16pt;
     position: absolute;
-    top: 240px;
+    top: 190px;
     left: 50%;
     -webkit-transform: translateX(-50%);
     transform: translateX(-50%);
@@ -1903,32 +1977,34 @@ option:active, option.active {
     color: white;
     background-color: #4b4b4b;
     font-weight: 900;
-    width: 180px;
-    height: 60px;
-    border: 3px solid #661503;
+    width: 185px;
+    height: 80px;
+    border: 6px double #3b1a12;
     margin: 5px;
     cursor: pointer;
     border-radius: 4px;
     font-family: 'Cinzel', serif;
     font-size: 16pt;
     position: absolute;
-    top: 240px;
+    top: 190px;
     left: 50%;
     -webkit-transform: translateX(-50%);
     transform: translateX(-50%);
 }
 
-.infResearchButton:hover {
-    background-color: #e32d05;
+#astralButInfResearch:hover, .infResearchButton:hover {
+    background-color: white;
+    color: #3b1a12;
+    border: 6px double #3b1a12;
 }
 
 .completedInfResearchBut {
-    color: #661503;
+    color: #3b1a12;
     background-color: black;
     font-weight: 900;
-    width: 180px;
-    height: 60px;
-    border: 3px solid #661503;
+    width: 185px;
+    height: 80px;
+    border: 6px double white;
     margin: 5px;
     border-radius: 4px;
     font-family: 'Cinzel', serif;
@@ -1936,7 +2012,7 @@ option:active, option.active {
     -webkit-text-stroke-width: .3px;
     -webkit-text-stroke-color: white;
     position: absolute;
-    top: 240px;
+    top: 190px;
     left: 50%;
     -webkit-transform: translateX(-50%);
     transform: translateX(-50%);
@@ -1946,15 +2022,15 @@ option:active, option.active {
     color: white;
     background-color: #4b4b4b;
     font-weight: 900;
-    width: 180px;
-    height: 60px;
+    width: 185px;
+    height: 80px;
     border: 1px solid #4b4b4b;
     margin: 5px;
     border-radius: 4px;
     font-family: 'Cinzel', serif;
     font-size: 16pt;
     position: absolute;
-    top: 240px;
+    top: 190px;
     left: 50%;
     -webkit-transform: translateX(-50%);
     transform: translateX(-50%);
@@ -1996,7 +2072,7 @@ option:active, option.active {
     margin: 5px;
     width: 100%;
     position: absolute;
-    top: 210px;
+    top: 150px;
     left: 50%;
     -webkit-transform: translateX(-50%);
     transform: translateX(-50%);

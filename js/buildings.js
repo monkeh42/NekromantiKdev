@@ -101,6 +101,7 @@ function getBricksPerSecond() {
     if (hasUpgrade(2, 21)) { b = b.times(getUpgEffect(2, 21)); }
     if (hasGUpgrade(3, 41)) { b = b.times(getGUpgEffect(3, 41)); }
     if (hasTUpgrade(52)) { b = b.times(getTUpgEffect(52)); }
+    if (hasUpgrade(4, 23) && !player.isInResearch && player.corpses.gt("2.5e309")) { b = b.pow(1.2); }
     return b;
 }
 
@@ -320,6 +321,7 @@ const BUILDS_DATA = {
             if (hasUpgrade(1, 21)) { p = p.times(getUpgEffect(1, 21)); }
             if (hasTUpgrade(23)) { p = p.times(getTUpgEffect(23)) }
             if (player.isInResearch) { p = p.pow(0.9); }
+            else if (hasUpgrade(4, 23) && player.corpses.gt("2.5e309")) { p = p.pow(1.2); }
             return p;
         },
         resourceEff: function() {
@@ -351,10 +353,10 @@ const BUILDS_DATA = {
                 displayFormula: function() { return hasUpgrade(4, 13) ? (hasUpgrade(3, 21) ? '1 + 2*ln(x)' : '1 + 2*sqrt(ln(x))') : (hasUpgrade(3, 21) ? '1 + 2*log(x)' : '1 + 2*sqrt(log(x))') },
                 effect: function() {
                     if (hasUpgrade(3, 21)) {
-                        var b = (hasUpgrade(4, 13) && !player.isInResearch) ? new Decimal(Decimal.max(player.buildings[1].amount, 1).ln()) : new Decimal(Decimal.max(player.buildings[1].amount, 1).log10());
+                        var b = (hasUpgrade(4, 13) && (!player.isInResearch || hasEUpgrade(13))) ? new Decimal(Decimal.max(player.buildings[1].amount, 1).ln()) : new Decimal(Decimal.max(player.buildings[1].amount, 1).log10());
                         b = b.times(2);
                     } else {
-                        var b = (hasUpgrade(4, 13) && !player.isInResearch) ? Decimal.max(player.buildings[1].amount, 1).ln() : Decimal.max(player.buildings[1].amount, 1).log10();
+                        var b = (hasUpgrade(4, 13) && (!player.isInResearch || hasEUpgrade(13))) ? Decimal.max(player.buildings[1].amount, 1).ln() : Decimal.max(player.buildings[1].amount, 1).log10();
                         var e = new Decimal(0.5);
                         b = Decimal.pow(b, e).times(2);
                     }
@@ -401,7 +403,7 @@ const BUILDS_DATA = {
                 displayFormula: function() { return hasUpgrade(4, 13) ? (hasUpgrade(3, 21) ? '1 + ln(x)' : '1 + sqrt(ln(x))') : (hasUpgrade(3, 21) ? '1 + log(x)' : '1 + sqrt(log(x))') },
                 effect: function() {
                     if (hasUpgrade(3, 21)) {
-                        var b = (hasUpgrade(4, 13) && !player.isInResearch) ? new Decimal(Decimal.max(player.units[2].amount, 1).ln()) : new Decimal(Decimal.max(player.units[2].amount, 1).log10());
+                        var b = (hasUpgrade(4, 13) && (!player.isInResearch || hasEUpgrade(13))) ? new Decimal(Decimal.max(player.units[2].amount, 1).ln()) : new Decimal(Decimal.max(player.units[2].amount, 1).log10());
                         return b.plus(1);
                     } else {
                         var b = Decimal.max(player.units[2].amount, 1).log10();
@@ -435,11 +437,11 @@ const BUILDS_DATA = {
                 effect: function() {
                     if (hasUpgrade(3, 21)) {
                         var b = Decimal.max(player.corpses, 1);
-                        b = (hasUpgrade(4, 13) && !player.isInResearch) ? Decimal.pow(b.ln(), 4) : Decimal.pow(b.log10(), 4);
+                        b = (hasUpgrade(4, 13) && (!player.isInResearch || hasEUpgrade(13))) ? Decimal.pow(b.ln(), 4) : Decimal.pow(b.log10(), 4);
                         return b.plus(1);
                     } else {
                         var b = Decimal.max(player.corpses, 1);
-                        b = (hasUpgrade(4, 13) && !player.isInResearch) ? Decimal.pow(b.ln(), 2) : Decimal.pow(b.log10(), 2);
+                        b = (hasUpgrade(4, 13) && (!player.isInResearch || hasEUpgrade(13))) ? Decimal.pow(b.ln(), 2) : Decimal.pow(b.log10(), 2);
                         return b.plus(1);
                     }
                 }
@@ -465,6 +467,7 @@ const BUILDS_DATA = {
             if (hasTUpgrade(23)) { p = p.times(getTUpgEffect(23)) }
             if (hasGUpgrade(3, 31)) { p = p.pow(2); }
             if (player.isInResearch) { p = p.pow(0.9); }
+            else if (hasUpgrade(4, 23) && player.corpses.gt("2.5e309")) { p = p.pow(1.2); }
             return p;
         },
         resourceEff: function() {
@@ -513,9 +516,9 @@ const BUILDS_DATA = {
                 displayFormula: function() { return hasUpgrade(4, 13) ? (hasUpgrade(3, 21) ? '1 + ln(x)' : '1 + sqrt(ln(x))') : (hasUpgrade(3, 21) ? '1 + log(x)' : '1 + sqrt(log(x))') },
                 effect: function() {
                     if (hasUpgrade(3, 21)) {
-                        var e = (hasUpgrade(4, 13) && !player.isInResearch) ? new Decimal(Decimal.max(player.bricks, 1).ln()) : new Decimal(Decimal.max(player.bricks, 1).log10());
+                        var e = (hasUpgrade(4, 13) && (!player.isInResearch || hasEUpgrade(13))) ? new Decimal(Decimal.max(player.bricks, 1).ln()) : new Decimal(Decimal.max(player.bricks, 1).log10());
                     } else {
-                        var e = (hasUpgrade(4, 13) && !player.isInResearch) ? Decimal.sqrt(Decimal.max(player.bricks, 1).ln()) : Decimal.sqrt(Decimal.max(player.bricks, 1).log10());
+                        var e = (hasUpgrade(4, 13) && (!player.isInResearch || hasEUpgrade(13))) ? Decimal.sqrt(Decimal.max(player.bricks, 1).ln()) : Decimal.sqrt(Decimal.max(player.bricks, 1).log10());
                     }
                     if (hasGUpgrade(3, 21) && hasUpgrade(2, 22)) { e = e.times(getUpgEffect(2, 22)); }
 
@@ -533,9 +536,9 @@ const BUILDS_DATA = {
                 displayFormula: function() { return hasUpgrade(4, 13) ? (hasUpgrade(3, 21) ? '1 + ln(x)' : '1 + sqrt(ln(x))') : (hasUpgrade(3, 21) ? '1 + log(x)' : '1 + sqrt(log(x))') },
                 effect: function() {
                     if (hasUpgrade(3, 21)) {
-                        var e = (hasUpgrade(4, 13) && !player.isInResearch) ? new Decimal(Decimal.max(player.bricks, 1).ln()) : new Decimal(Decimal.max(player.bricks, 1).log10());
+                        var e = (hasUpgrade(4, 13) && (!player.isInResearch || hasEUpgrade(13))) ? new Decimal(Decimal.max(player.bricks, 1).ln()) : new Decimal(Decimal.max(player.bricks, 1).log10());
                     } else {
-                        var e = (hasUpgrade(4, 13) && !player.isInResearch) ? Decimal.sqrt(Decimal.max(player.bricks, 1).ln()) : Decimal.sqrt(Decimal.max(player.bricks, 1).log10());
+                        var e = (hasUpgrade(4, 13) && (!player.isInResearch || hasEUpgrade(13))) ? Decimal.sqrt(Decimal.max(player.bricks, 1).ln()) : Decimal.sqrt(Decimal.max(player.bricks, 1).log10());
                     }
                     if (hasGUpgrade(3, 21) && hasUpgrade(2, 23)) { e = e.times(getUpgEffect(2, 23)); }
 
@@ -554,7 +557,7 @@ const BUILDS_DATA = {
                 effect: function() {
                     if (hasUpgrade(3, 21)) {
                         var b = Decimal.max(player.bricks, 1);
-                        b = (hasUpgrade(4, 13) && !player.isInResearch) ? Decimal.pow(b.ln(), 4) : Decimal.pow(b.log10(), 4);
+                        b = (hasUpgrade(4, 13) && (!player.isInResearch || hasEUpgrade(13))) ? Decimal.pow(b.ln(), 4) : Decimal.pow(b.log10(), 4);
                     } else {
                         var b = Decimal.max(player.bricks, 1);
                         b = hasUpgrade ? Decimal.pow(b.ln(), 2) : Decimal.pow(b.log10(), 2);
@@ -575,10 +578,10 @@ const BUILDS_DATA = {
                 effect: function() {
                     if (hasUpgrade(3, 21)) {
                         var b = Decimal.max(player.bricks, 1);
-                        b = (hasUpgrade(4, 13) && !player.isInResearch) ? Decimal.pow(b.ln(), 4) : Decimal.pow(b.log10(), 4);
+                        b = (hasUpgrade(4, 13) && (!player.isInResearch || hasEUpgrade(13))) ? Decimal.pow(b.ln(), 4) : Decimal.pow(b.log10(), 4);
                     } else {
                         var b = Decimal.max(player.bricks, 1);
-                        b = (hasUpgrade(4, 13) && !player.isInResearch) ? Decimal.pow(b.ln(), 2) : Decimal.pow(b.log10(), 2);
+                        b = (hasUpgrade(4, 13) && (!player.isInResearch || hasEUpgrade(13))) ? Decimal.pow(b.ln(), 2) : Decimal.pow(b.log10(), 2);
                     }
 
                     return b.plus(1);
@@ -595,9 +598,9 @@ const BUILDS_DATA = {
                 displayFormula: function() { return hasUpgrade(4, 13) ? (hasUpgrade(3, 21) ? '1 + (log(x)^2)/4' : '1 + log(x)/4') : (hasUpgrade(3, 21) ? '1 + (log(x)^2)/4' : '1 + log(x)/4') },
                 effect: function() {
                     if (hasUpgrade(3, 21)) {
-                        var e = (hasUpgrade(4, 13) && !player.isInResearch) ? Decimal.div(Decimal.pow(Decimal.max(player.bricks, 1).ln(), 2), 4) : Decimal.div(Decimal.pow(Decimal.max(player.bricks, 1).log10(), 2), 4)
+                        var e = (hasUpgrade(4, 13) && (!player.isInResearch || hasEUpgrade(13))) ? Decimal.div(Decimal.pow(Decimal.max(player.bricks, 1).ln(), 2), 4) : Decimal.div(Decimal.pow(Decimal.max(player.bricks, 1).log10(), 2), 4)
                     } else {
-                        var e = (hasUpgrade(4, 13) && !player.isInResearch) ? Decimal.div(Decimal.max(player.bricks, 1).ln(), 4) : Decimal.div(Decimal.max(player.bricks, 1).log10(), 4)
+                        var e = (hasUpgrade(4, 13) && (!player.isInResearch || hasEUpgrade(13))) ? Decimal.div(Decimal.max(player.bricks, 1).ln(), 4) : Decimal.div(Decimal.max(player.bricks, 1).log10(), 4)
                     }
 
                     return e.plus(1);
@@ -625,6 +628,7 @@ const BUILDS_DATA = {
             if (hasUpgrade(2, 23)) { p = p.times(getUpgEffect(2, 23)); }
             if (hasTUpgrade(23)) { p = p.times(getTUpgEffect(23)) }
             if (player.isInResearch) { p = p.pow(0.9); }
+            else if (hasUpgrade(4, 23) && player.corpses.gt("2.5e309")) { p = p.pow(1.2); }
             if (player.astralFlag) { return p; }
             else { return new Decimal(0); }
         },
@@ -845,7 +849,7 @@ const BUILDS_DATA = {
             },
             23: {
                 title: 'Break Arbitrary',
-                desc: function() { return 'Unlock the next four time dimensions, and your time crystal gain is raised to the ^1.2 while you have more than 2.5e309 corpses.'; },
+                desc: function() { return 'Unlock the next four time dimensions, and production of bricks, armaments, acolytes, and photons is raised ^1.2 while you have more than 2.5e309 corpses.'; },
                 cost: new Decimal(5000),
                 buttonID: 'vortexUpg23',
                 displayEffect: false,
@@ -853,7 +857,7 @@ const BUILDS_DATA = {
                 displayTooltip: false,
                 displayFormula: function() { return ''; },
                 effect: function() {
-                    return new Decimal(1.2);
+                    return new Decimal(1.1);
                 }
             },
         }

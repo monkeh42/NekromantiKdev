@@ -3,7 +3,13 @@ var rumbleCount = 0;
 var takeOffInt;
 var vert = 0;
 
-
+function getNumArkUpgs() {
+    let count = 0;
+    for (let a in ARK_DATA) {
+        if (player.ark[a].bought) { count++; }
+    }
+    return count;
+}
 
 function arkIsUnlocked(a) {
     return player.ark[a].unlocked;
@@ -43,6 +49,38 @@ function isDisplayEffectA(a) {
 
 function isDisplayTooltipA(a) {
     return ARK_DATA[a].displayTooltip;
+}
+
+function getEUpgCost(e) {
+    return ETH_DATA[e].cost;
+}
+
+function getEUpgDesc(e) {
+    return ETH_DATA[e].desc;
+}
+
+function getEUpgName(e) {
+    return ETH_DATA[e].title;
+}
+
+function getEUpgEffect(e) {
+    return ETH_DATA[e].effect();
+}
+
+function hasEUpgrade(e) {
+    return player.ethUpgs[e];
+}
+
+function canAffordEUpg(e) {
+    return player.theorems.gte(ETH_DATA[e].cost);
+}
+
+function isDisplayEffectE(e) {
+    return ETH_DATA[e].displayEffect;
+}
+
+function isDisplayTooltipE(e) {
+    return ETH_DATA[e].displayTooltip;
 }
 
 function getGUpgCost(g, u) {
@@ -197,6 +235,31 @@ function buyGUpg(g, u) {
             unlockRows();
         }*/
     }
+}
+
+function buyEUpg(e) {
+    if (canAffordEUpg(e) && !hasEUpgrade(e)) {
+        player.ethUpgs[e] = true;
+        player.theorems = player.theorems.minus(getEUpgCost(e));
+        remEUpgClass(e, 'ethUpg');
+        addEUpgClass(e, 'boughtEthUpg');
+        document.getElementById('theoremDisplay').innerHTML = ` ${formatWhole(player.theorems)} `;
+        document.getElementById('theoremEffect').innerHTML = ` ^${formatDefault(getTheoremBoost())}`;
+    }
+}
+
+function respecEthereal() {
+    for (let e in ETH_DATA) {
+        if (player.ethUpgs[e]) {
+            player.theorems = player.theorems.plus(1);
+            player.ethUpgs[e] = false;
+        }
+        addEUpgClass(e, 'ethUpg');
+        remEUpgClass(e, 'boughtEthUpg');
+        remEUpgClass(e, 'unclickableEthUpg');
+    }
+    document.getElementById('theoremDisplay').innerHTML = ` ${formatWhole(player.theorems)} `;
+    document.getElementById('theoremEffect').innerHTML = ` ^${formatDefault(getTheoremBoost())}`;
 }
 
 /*function rowLock(row) {
@@ -524,6 +587,7 @@ function resetTimeCounts() {
 function toggleAstralResearch() {
     toggleAstral();
     document.getElementById('astralButResearch').innerHTML = player.astralFlag ? 'Toggle Astral: ON' : 'Toggle Astral: OFF'
+    document.getElementById('astralButInfResearch').innerHTML = player.astralFlag ? 'Toggle Astral: ON' : 'Toggle Astral: OFF'
 }
 
 function researchReset(proj) {
@@ -622,6 +686,7 @@ function getResearchPerSecond() {
     if (!player.isInResearch) { return new Decimal(0); }
     var e = 0.2
     var r = getCorpsesPerSecond().pow(e).sqrt();
+    if (hasEUpgrade(14)) { r = r.times(getEUpgEffect(14)); }
     return r; 
 }
 
@@ -660,8 +725,10 @@ function completeResearch(id) {
 
     if (id==7) {
         player.theorems = player.theorems.plus(1);
-        document.getElementById('numTheorems').innerHTML = ` ${formatWhole(player.theorems)} `;
-        document.getElementById('theoremEffect').innerHTML = ` ${formatDefault(getTheoremBoost())}`;
+        player.infCompletions = player.infCompletions.plus(1);
+        document.getElementById('theoremDisplay').innerHTML = ` ${formatWhole(player.theorems)} `;
+        document.getElementById('completionsDisplay').innerHTML = ` ${formatWhole(player.infCompletions)} `;
+        document.getElementById('theoremEffect').innerHTML = ` ^${formatDefault(getTheoremBoost())}`;
         document.getElementById('resGoal7').innerHTML = formatWhole(RESEARCH_DATA[7].calcGoal());
     }
     else { unlockArkPart(RESEARCH_DATA[id].unlocks); }
@@ -686,8 +753,8 @@ function startResearch(id) {
     if (player.isInResearch || player.researchProjects[id].completed) { return; }
     player.researchProjects[id].active = true;
     player.isInResearch = true;
-    document.documentElement.style.boxShadow = 'inset 0px 0px 20px 10px #e32d05' + (player.astralFlag ? ', inset 0px 0px 30px 20px #1c8a2e' : '');
-    if (id==7) { document.getElementById('researchGoalDisplay').innerHTML = ` ${formatWholeUnitRow(RESEARCH_DATA[id].calcGoal())} `; } 
+    document.documentElement.style.boxShadow = (id==7 ? 'inset 0px 0px 20px 10px #613227' : 'inset 0px 0px 20px 10px #e34805') + (player.astralFlag ? ', inset 0px 0px 30px 20px #1c8a2e' : '');
+    if (id==7) { document.getElementById('infResearchGoalDisplay').innerHTML = ` ${formatWholeUnitRow(RESEARCH_DATA[id].calcGoal())} `; } 
     else { document.getElementById('researchGoalDisplay').innerHTML = ` ${formatWholeUnitRow(RESEARCH_DATA[id].goal)} `; }
     if (id==6 || id==7) {
         let reqs = document.getElementsByClassName('gUpgRequires');
@@ -708,7 +775,7 @@ function unlockArkPart(name) {
 }
 
 function getTheoremBoost() {
-    return Decimal.pow(1.5, player.theorems);
+    return Decimal.pow(1.2, player.theorems);
 }
 
 const RESEARCH_DATA = {
@@ -769,11 +836,11 @@ const RESEARCH_DATA = {
     },
     7: {
         galaxyLocks: 0,
-        goal: new Decimal(1e17),
+        goal: new Decimal(1e16),
         buttonID: 'startResearch7',
         unlocks: '',
         calcGoal: function() {
-            return this.goal.times(Decimal.pow(100, player.theorems));
+            return this.goal.times(Decimal.pow(10, player.infCompletions));
         },
         onComplete: function() {
             return;
@@ -786,7 +853,7 @@ const ARK_DATA = {
         name: 'thrusters',
         desc: '',
         brickCost: new Decimal(1e100),
-        timeCost: new Decimal(1e20),
+        timeCost: new Decimal(1e25),
         buttonID: 'thrustersBut',
         textID: 'thrustersText',
         displayEffect: false,
@@ -801,7 +868,7 @@ const ARK_DATA = {
         name: 'engines',
         desc: '',
         brickCost: new Decimal(1e125),
-        timeCost: new Decimal(1e24),
+        timeCost: new Decimal(5e27),
         buttonID: 'enginesBut',
         textID: 'enginesText',
         displayEffect: false,
@@ -816,7 +883,7 @@ const ARK_DATA = {
         name: 'navigation',
         desc: '',
         brickCost: new Decimal(1e150),
-        timeCost: new Decimal(1e28),
+        timeCost: new Decimal(1e30),
         buttonID: 'navigationBut',
         textID: 'navigationText',
         displayEffect: false,
@@ -861,7 +928,7 @@ const ARK_DATA = {
         name: 'support',
         desc: '',
         brickCost: new Decimal("1e500"),
-        timeCost: new Decimal(1e50),
+        timeCost: new Decimal(1e45),
         buttonID: 'supportBut',
         textID: 'supportText',
         displayEffect: false,
@@ -871,6 +938,73 @@ const ARK_DATA = {
         effect: function() {
             return;
         }
+    },
+}
+
+const ETH_DATA = {
+    11: {
+        title: '11',
+        desc: 'The first time upgrade in the fourth and fifth columns stay active during research.',
+        cost: new Decimal(1),
+        displayEffect: false,
+        displaySuffix: '',
+        displayTooltip: false,
+        displayFormula: function() {return ''},
+        buttonID: 'ethUpg11',
+        effect: function() {
+            return new Decimal(1);
+        },
+        onBuy: function() {
+            return;
+        },
+    },
+    12: {
+        title: '12',
+        desc: 'Each Ark component built multiplies corpse production by 10.',
+        cost: new Decimal(1),
+        displayEffect: true,
+        displaySuffix: 'x',
+        displayTooltip: false,
+        displayFormula: function() {return ''},
+        buttonID: 'ethUpg12',
+        effect: function() {
+            return Decimal.pow(new Decimal(10), getNumArkUpgs());
+        },
+        onBuy: function() {
+            return;
+        },
+    },
+    13: {
+        title: '13',
+        desc: '<span style="font-weight: bold;">Ultra-Solar</span> stays active during research.',
+        cost: new Decimal(1),
+        displayEffect: false,
+        displaySuffix: '',
+        displayTooltip: false,
+        displayFormula: function() {return ''},
+        buttonID: 'ethUpg13',
+        effect: function() {
+            return new Decimal(1);
+        },
+        onBuy: function() {
+            return;
+        },
+    },
+    14: {
+        title: '14',
+        desc: 'Void Research production is multiplied by the log of your current bricks/sec.',
+        cost: new Decimal(1),
+        displayEffect: true,
+        displaySuffix: '',
+        displayTooltip: false,
+        displayFormula: function() {return ''},
+        buttonID: 'ethUpg14',
+        effect: function() {
+            return getBricksPerSecond().log10();
+        },
+        onBuy: function() {
+            return;
+        },
     },
 }
 
@@ -1214,7 +1348,7 @@ const GALAXIES_DATA = {
                     return (player.isInResearch ? 3*c : c);
                 },
                 effect: function() {
-                    return (hasUpgrade(4, 13) && !player.isInResearch) ? getEssenceProdPerSecond().ln() : getEssenceProdPerSecond().log10();
+                    return (hasUpgrade(4, 13) && (!player.isInResearch || hasEUpgrade(13))) ? getEssenceProdPerSecond().ln() : getEssenceProdPerSecond().log10();
                 },
                 onBuy: function() {
                     return;

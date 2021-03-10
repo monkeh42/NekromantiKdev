@@ -76,6 +76,7 @@ function updateBuyables() {
     updateTimeUpgs();
     updateGalaxyUpgs();
     updateArkUpgs();
+    updateEthUpgs();
 }
 
 function updateBuildingUpgs() {
@@ -163,8 +164,22 @@ function updateArkUpgs() {
                     addAUpgClass(a, 'unclickableArkUpg');
                 }
             }
-            //if (isDisplayEffectT(a)) { displayData.push(['html', 'tUpgEffect' + t.toString(), formatDefault2(getTUpgEffect(t))]); }
         }
+    }
+}
+
+function updateEthUpgs() {
+    for (let e in ETH_DATA) {
+        if (!hasEUpgrade(e)) {
+            if (canAffordEUpg(e) && !document.getElementById(ETH_DATA[e].buttonID).classList.contains('ethUpg')) {
+                addEUpgClass(e, 'ethUpg');
+                remEUpgClass(e, 'unclickableEthUpg');
+            } else if (!canAffordEUpg(e) && document.getElementById(ETH_DATA[e].buttonID).classList.contains('ethUpg')) {
+                remEUpgClass(e, 'ethUpg');
+                addEUpgClass(e, 'unclickableEthUpg');
+            }
+        }
+        if (isDisplayEffectE(e)) { document.getElementById('eUpgEffect' + e.toString()).innerHTML = formatDefault2(getEUpgEffect(e)) + ETH_DATA[e].displaySuffix; }
     }
 }
 
@@ -385,17 +400,33 @@ function updateTDimTiers() {
 function checkProjectProgress() {
     let proj = getActiveResearch();
     if (canCompleteResearch()) {
-        if (!document.getElementById(RESEARCH_DATA[proj].buttonID).classList.contains('researchButton')) { 
-            document.getElementById(RESEARCH_DATA[proj].buttonID).classList.remove('progressResearchButton');
-            document.getElementById(RESEARCH_DATA[proj].buttonID).classList.add('researchButton');
-            document.getElementById(RESEARCH_DATA[proj].buttonID).innerHTML = `COMPLETE<br>PROJECT`;
-            displayData.push(['addClass', 'researchSubTabBut', 'tabButNotify']);
-            displayData.push(['addClass', 'galaxyTabBut', 'tabButIndirectNotify']);
-            displayData.push(['addClass', document.getElementById(RESEARCH_DATA[proj].buttonID).id, 'projectNotify']);
+        if (proj==7) {
+            if (!document.getElementById(RESEARCH_DATA[proj].buttonID).classList.contains('infResearchButton')) { 
+                document.getElementById(RESEARCH_DATA[proj].buttonID).classList.remove('progressInfResearchButton');
+                document.getElementById(RESEARCH_DATA[proj].buttonID).classList.add('infResearchButton');
+                document.getElementById(RESEARCH_DATA[proj].buttonID).innerHTML = `COMPLETE<br>PROJECT`;
+                displayData.push(['addClass', 'infResearchSubTabBut', 'tabButNotify']);
+                displayData.push(['addClass', 'galaxyTabBut', 'tabButIndirectNotify']);
+                displayData.push(['addClass', document.getElementById(RESEARCH_DATA[proj].buttonID).id, 'projectNotify']);
+            }
+        } else {
+            if (!document.getElementById(RESEARCH_DATA[proj].buttonID).classList.contains('researchButton')) { 
+                document.getElementById(RESEARCH_DATA[proj].buttonID).classList.remove('progressResearchButton');
+                document.getElementById(RESEARCH_DATA[proj].buttonID).classList.add('researchButton');
+                document.getElementById(RESEARCH_DATA[proj].buttonID).innerHTML = `COMPLETE<br>PROJECT`;
+                displayData.push(['addClass', 'researchSubTabBut', 'tabButNotify']);
+                displayData.push(['addClass', 'galaxyTabBut', 'tabButIndirectNotify']);
+                displayData.push(['addClass', document.getElementById(RESEARCH_DATA[proj].buttonID).id, 'projectNotify']);
+            }
         }
     }
-    displayData.push(['html', 'researchDisplay', ` ${formatUnitRow(player.research)} `]);
-    displayData.push(['html', 'researchGainDisplay', ` ${(formatUnitRow(player.astralFlag ? (player.displayRealTime ? getResearchPerSecond().times(getRealTimeMultiplier()) : getResearchPerSecond()) : formatWhole(0)))} `]);
+    if (proj==7) {
+        displayData.push(['html', 'infResearchDisplay', ` ${formatUnitRow(player.research)} `]);
+        displayData.push(['html', 'infResearchGainDisplay', ` ${(formatUnitRow(player.astralFlag ? (player.displayRealTime ? getResearchPerSecond().times(getRealTimeMultiplier()) : getResearchPerSecond()) : formatWhole(0)))} `]);
+    } else {
+        displayData.push(['html', 'researchDisplay', ` ${formatUnitRow(player.research)} `]);
+        displayData.push(['html', 'researchGainDisplay', ` ${(formatUnitRow(player.astralFlag ? (player.displayRealTime ? getResearchPerSecond().times(getRealTimeMultiplier()) : getResearchPerSecond()) : formatWhole(0)))} `]);
+    }
 }
 
 //style/display updaters for unlocks
@@ -540,12 +571,13 @@ function toggleAstralDisplay() {
     displayData.push(['html', 'astralText', player.astralFlag ? 'disable' : 'enable']);
     if (player.headerDisplay['astralNoticeDisplay']) { displayData.push(['togDisplay', 'astralNoticeDisplay']); }
     displayData.push(['togDisplay', 'researchAstralNotice']);
+    displayData.push(['togDisplay', 'infResearchAstralNotice']);
     displayData.push(['html', 'normalAstral', player.astralFlag ? 'ASTRAL' : 'NORMAL']);
     displayData.push(['setProp', 'normalAstral', 'color', player.astralFlag ? '#42d35a' : 'white']);
     displayData.push(['setProp', 'normalAstral', 'color', player.astralFlag ? '#42d35a' : 'white']);
     displayData.push(['togDisplay', 'sunGainSpan']);
     displayData.push(['togDisplay', 'sunGainNotice']);
-    document.documentElement.style.boxShadow = (player.isInResearch ? 'inset 0px 0px 20px 10px #e32d05' : '') + (player.isInResearch && player.astralFlag ? ', ' : '') + (player.astralFlag ? 'inset 0px 0px 30px 20px #1c8a2e' : '');
+    document.documentElement.style.boxShadow = (player.isInResearch ? (getActiveResearch()==7 ? 'inset 0px 0px 20px 10px #613227' : 'inset 0px 0px 20px 10px #e34805') : '') + (player.isInResearch && player.astralFlag ? ', ' : '') + (player.astralFlag ? 'inset 0px 0px 30px 20px #1c8a2e' : '');
 }
 
 function toggleTimeLockDisplay() {
@@ -1678,6 +1710,34 @@ function togDisplayAUpg(t) {
 
 function writeHTMLAUpg(a, text) {
     displayData.push(['html', ARK_DATA[a].buttonID, text]);
+}
+
+function addEUpgClass(e, className) {
+    displayData.push(['addClass', ETH_DATA[e].buttonID, className]);
+}
+
+function remEUpgClass(e, className) {
+    displayData.push(['remClass', ETH_DATA[e].buttonID, className]);
+}
+
+function togEUpgClass(e, className) {
+    displayData.push(['remClass', ETH_DATA[e].buttonID, className]);
+}
+
+function setAttrEUpg(e, attr, val) {
+    displayData.push(['setAttr', ETH_DATA[e].buttonID, attr, val]);
+}
+
+function setPropEUpg(e, prop, val) {
+    displayData.push(['setProp', ETH_DATA[e].buttonID, prop, val]);
+}
+
+function togDisplayEUpg(t) {
+    displayData.push(['togDisplay', ETH_DATA[e].buttonID]);
+}
+
+function writeHTMLEUpg(e, text) {
+    displayData.push(['html', ETH_DATA[e].buttonID, text]);
 }
 
 function addUnitClass(tier, className) {

@@ -1775,6 +1775,9 @@
                         <td>
                             <button id="researchSubTabBut" class="subTabBut" onclick="showGalaxySubTab('researchSubTab', 'researchSubTabBut', 'galaxyTabBut')">VOID RESEARCH</button>
                         </td>
+                        <td id="infResearchTabCell" style="display: none;">
+                            <button id="infResearchSubTabBut" class="subTabBut" onclick="showGalaxySubTab('infResearchSubTab', 'infResearchSubTabBut', 'galaxyTabBut')">INFINITE RESEARCH</button>
+                        </td>
                         <td>
                             <button id="arkSubTabBut" class="subTabBut" onclick="showGalaxySubTab('arkSubTab', 'arkSubTabBut', 'galaxyTabBut')">THE ARK</button>
                         </td>
@@ -2149,19 +2152,19 @@
             <div id="researchSubTab" class="galaxySubTab">
                 <div id="researchDisplayDiv" style="margin: 10px auto; text-align: center; display: none;">
                     You have <span id="researchDisplay" style="white-space: pre; font-size: 19pt; font-weight: bold; color: #661503; -webkit-text-stroke-width: .5px; -webkit-text-stroke-color: white; font-variant-numeric: tabular-nums;"> 0 </span> <span id="researchTextAmt">void research</span>.<br>
-                    You are producing <span id="researchGainDisplay" style="white-space: pre; font-size: 18pt; font-weight: bold; color: #661503; -webkit-text-stroke-width: .5px; -webkit-text-stroke-color: white; font-variant-numeric: tabular-nums;"> 0 </span> <span id="researchTextGain">void research</span>/<span class="secDisplay">sec</span>. <span id="researchAstralNotice" style="display: none;">(@ <span id="astralNerfResearch">10</span>x slower time speed)</span><br>
+                    You are producing <span id="researchGainDisplay" style="white-space: pre; font-size: 18pt; font-weight: bold; color: #661503; -webkit-text-stroke-width: .5px; -webkit-text-stroke-color: white; font-variant-numeric: tabular-nums;"> 0 </span> <span id="infResearchTextGain">void research</span>/<span class="secDisplay">sec</span>. <span id="infResearchAstralNotice" style="display: none;">(@ <span id="astralNerfInfResearch">10</span>x slower time speed)</span><br>
                     Goal: <span id="researchGoalDisplay" style="white-space: pre; font-size: 18pt; font-weight: bold; color: #661503; -webkit-text-stroke-width: .5px; -webkit-text-stroke-color: white;"> 0 </span> void research.<br>
                     <button id="astralButResearch" onclick="toggleAstralResearch()">Toggle Astral: OFF</button>
                 </div>
                 <div id="researchDescription" style="text-align: center; width: 920px; margin: auto; font-size: 11pt;">
-                    <div style="margin: 5px;">When you begin a research project, you do a galaxy respec, but <span style="font-size: 12pt;">ALL</span> of your corpses, astral bricks, buildings, building resources, construction, time upgrades, and time crystals are reset, regardless of your milestones, achievements, and project rewards; however, all tabs stay unlocked.<br>(Galactic Vortex and the 4th/5th Time Upgrade columns don't reset, but they have no effect during research.)</div>
+                    <div style="margin: 5px;"><span style=" font-size: 16pt; font-weight: bold;">When you begin a research project, you do a galaxy respec and time respec,</span> but <span style="font-size: 12pt;">ALL</span> of your corpses, astral bricks, buildings, construction, time upgrades, and time crystals are reset, regardless of your milestones, achievements, and project rewards; however, all tabs stay unlocked.<br>(Galactic Vortex and the 4th/5th Time Upgrade columns don't reset, but they have no effect during research.)</div>
                     <div style="margin: 5px;">During astral enslavement, your vassal souls tirelessly study the eldritch sciences of <span style="font-size: 14pt; color: #661503; font-weight: bold; -webkit-text-stroke-width: .3px; -webkit-text-stroke-color: white;">the beyond</span>. As a result, your base astral brick production is square rooted, but you produce Void Research at the same base rate.</div>
                     <div style="margin: 5px;">Additionally, galaxy upgrade costs are tripled (after the cost increase from higher rows), and <span style="font-size: 12pt;">ALL</span> production other than bricks/research is raised to the ^0.9.</div>
-                    <div style="margin: 5px;">To complete a research project, you must reach the required amount of Void Research under these conditions in addition to the specific conditions below.</div>
+                    <div style="margin: 5px;">To complete a research project, you must reach the required amount of Void Research under these conditions in addition to the specific conditions below.<br><span style=" font-size: 16pt; font-weight: bold;">Completing a project also performs a normal galaxy respec.</div>
                     <div style="margin: 5px;"><span style="font-size: 14pt;">NOTE:</span> performing an ascension or galaxy respec will exit the current project and set your void research to 0.</div>
                 </div>
                 <table style="width: auto; text-align: center; margin: 20px auto;">
-                    <tr>
+                    <!--<tr>
                         <td colspan="3" id="infiniteResearchCell" style="display: none;">
                             <div id="research7" class="infResearchDiv">
                                 <h6>Infinite Research</h6>
@@ -2179,7 +2182,7 @@
                                 <button id="startResearch7" class="infResearchButton" onclick="researchButtonClick(7)">BEGIN</button>
                             </div>
                         </td>
-                    </tr>
+                    </tr>-->
                     <tr>
                         <td>
                             <div id="research1" class="researchDiv">
@@ -2270,6 +2273,86 @@
                                 <div id="resGoalText6" class="resGoalText">Goal: <span id="resGoal6">1e15</span> Void Research</div>
                                 <button id="startResearch6" class="researchButton" onclick="researchButtonClick(6)">BEGIN</button>
                             </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div id="infResearchSubTab" class="galaxySubTab">
+                <div id="infResearchDisplayDiv" style="margin: 10px auto; text-align: center; display: none;">
+                    You have <span id="infResearchDisplay" style="white-space: pre; font-size: 19pt; font-weight: bold; color: #661503; -webkit-text-stroke-width: .5px; -webkit-text-stroke-color: white; font-variant-numeric: tabular-nums;"> 0 </span> <span id="researchTextAmt">void research</span>.<br>
+                    You are producing <span id="infResearchGainDisplay" style="white-space: pre; font-size: 18pt; font-weight: bold; color: #661503; -webkit-text-stroke-width: .5px; -webkit-text-stroke-color: white; font-variant-numeric: tabular-nums;"> 0 </span> <span id="researchTextGain">void research</span>/<span class="secDisplay">sec</span>. <span id="researchAstralNotice" style="display: none;">(@ <span id="astralNerfResearch">10</span>x slower time speed)</span><br>
+                    Goal: <span id="infResearchGoalDisplay" style="white-space: pre; font-size: 18pt; font-weight: bold; color: #661503; -webkit-text-stroke-width: .5px; -webkit-text-stroke-color: white;"> 0 </span> void research.<br>
+                    <button id="astralButInfResearch" onclick="toggleAstralResearch()">Toggle Astral: OFF</button>
+                </div>
+                <div id="infResearchDescription" style="text-align: center; width: 920px; margin: auto; font-size: 11pt;">
+                    <div style="margin: 5px;"><span style="font-size: 18pt; color: #661503; font-weight: bold; -webkit-text-stroke-width: .5px; -webkit-text-stroke-color: white;">The Beyond holds infinite, untold knowledge.</div>
+                    <div style="margin: 5px;">You have the knowledge needed to craft The Ark, but your thirst has not been quenched.</div>
+                    <div style="margin: 5px;">Infinite research is the same as research project 6, with corpse production raised ^0.9 a second time. Infinite research can be completed unlimited times, but the goal amount is multiplied by 10 for each completion.</div>
+                    <div style="margin: 5px;">Every completion rewards 1 Impossible Theorem. Each theorem multiplies both time essence effects by 1.5x, and they are used to buy Ethereal Upgrades.</div>
+                </div>
+                <div id="infResearchDisplayDiv" style="margin: 10px auto; text-align: center;font-size: 15pt;">
+                    You have <span id="theoremDisplay" style="white-space: pre; font-size: 19pt; font-weight: bold; color: #661503; -webkit-text-stroke-width: .8px; -webkit-text-stroke-color: white; font-variant-numeric: tabular-nums;"> 0 </span> <span id="theoremTextAmt">impossible theorems</span>, raising the exterminated worlds effect to <span id="theoremEffect" style="white-space: pre; font-size: 17pt; font-weight: bold;"> 1</span>.<br>
+                    You have completed <span id="completionsDisplay" style="white-space: pre; font-size: 19pt; font-weight: bold; color: #661503; -webkit-text-stroke-width: .8px; -webkit-text-stroke-color: white; font-variant-numeric: tabular-nums;"> 0 </span> infinite research projects.
+                </div>
+                <table style="width: 950px; text-align: center; margin: 20px auto;">
+                    <tr>
+                        <td colspan="4" id="infiniteResearchCell">
+                            <div id="research7" class="infResearchDiv">
+                                <h6>Infinite Research</h6>
+                                <div id="resConds7">
+                                    You can only buy one galaxy upgrade from each tree and from each row.<br>
+                                    Corpse production is raised to the ^0.9 a second time.
+                                </div>
+                                <hr width="95%" style="border-color: #3b1a12;">
+                                <div id="resReward7">
+                                    <span style="font-size: 15pt; font-weight: 900;">REWARD:</span> 1 Impossible Theorem.
+                                </div>
+                                <div id="resGoalText7" class="infResGoalText">Current Goal: <span id="resGoal7">1e17</span> Void Research</div>
+                                <button id="startResearch7" class="infResearchButton" onclick="researchButtonClick(7)">BEGIN</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr style="height: 25px;">
+                        <div style="height: 100%;"></div>
+                    </tr>
+                    <tr>
+                        <td colspan="4">
+                            <span style="font-size: 20pt; color: #661503; font-weight: bold; -webkit-text-stroke-width: .5px; -webkit-text-stroke-color: white;">Ethereal Upgrades</span><hr width="95%" style="border-color: #3b1a12;">
+                            <button id="respecEth" class="respecButSkinny" onclick="respecEthereal()">Respec Ethereal Upgrades</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button id="ethUpg11" class="ethUpg" onclick="buyEUpg(11)">
+                                <span id="eUpgName11" style="font-weight: 900;"></span><br>
+                                <span id="eUpgDesc11"></span><br>
+                                <span>Cost: <span id="eUpgCost11"></span> impossible theorems</span><br>
+                                <span id="e11Effect" style="display: none;">Currently: <span id="eUpgEffect11"></span></span>
+                            </button>
+                        </td>
+                        <td>
+                            <button id="ethUpg12" class="ethUpg" onclick="buyEUpg(12)">
+                                <span id="eUpgName12" style="font-weight: 900;"></span><br>
+                                <span id="eUpgDesc12"></span><br>
+                                <span>Cost: <span id="eUpgCost12"></span> impossible theorems</span><br>
+                                <span id="e12Effect" style="display: none;">Currently: <span id="eUpgEffect12"></span></span>
+                            </button>
+                        </td>
+                        <td>
+                            <button id="ethUpg13" class="ethUpg" onclick="buyEUpg(13)">
+                                <span id="eUpgName13" style="font-weight: 900;"></span><br>
+                                <span id="eUpgDesc13"></span><br>
+                                <span>Cost: <span id="eUpgCost13"></span> impossible theorems</span><br>
+                                <span id="e13Effect" style="display: none;">Currently: <span id="eUpgEffect13"></span></span>
+                            </button>
+                        </td>
+                        <td>
+                            <button id="ethUpg14" class="ethUpg" onclick="buyEUpg(14)">
+                                <span id="eUpgName14" style="font-weight: 900;"></span><br>
+                                <span id="eUpgDesc14"></span><br>
+                                <span>Cost: <span id="eUpgCost14"></span> impossible theorems</span><br>
+                                <span id="e14Effect" style="display: none;">Currently: <span id="eUpgEffect14"></span></span>
+                            </button>
                         </td>
                     </tr>
                 </table>
