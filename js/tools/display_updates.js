@@ -545,6 +545,7 @@ function toggleAstralDisplay() {
     displayData.push(['setProp', 'normalAstral', 'color', player.astralFlag ? '#42d35a' : 'white']);
     displayData.push(['togDisplay', 'sunGainSpan']);
     displayData.push(['togDisplay', 'sunGainNotice']);
+    document.documentElement.style.boxShadow = (player.isInResearch ? 'inset 0px 0px 20px 10px #e32d05' : '') + (player.isInResearch && player.astralFlag ? ', ' : '') + (player.astralFlag ? 'inset 0px 0px 30px 20px #1c8a2e' : '');
 }
 
 function toggleTimeLockDisplay() {

@@ -110,7 +110,7 @@ function canAffordGUpg(g, u) {
 }
 
 function buyGUpg(g, u) {
-    if (canAffordGUpg(g, u)) {
+    if (canAffordGUpg(g, u) && !player.galaxyUpgs[g][u].locked) {
         let thisRow = GALAXIES_DATA[g].upgrades[u].row;
         player.galaxies = player.galaxies.minus(GALAXIES_DATA[g].upgrades[u].cost());
         player.spentGalaxies = player.spentGalaxies.plus(GALAXIES_DATA[g].upgrades[u].cost());
@@ -454,8 +454,14 @@ function galaxyPrestigeReset(respec=false) {
         player.isInResearch = false;
         player.researchProjects[getActiveResearch()].active = false;
         player.research = new Decimal(0);
-        document.getElementById('startResearch' + id.toString()).classList.remove('progressResearchButton');
-        document.getElementById('startResearch' + id.toString()).classList.add('researchButton');
+        if (id==7) {
+            document.getElementById('startResearch' + id.toString()).classList.remove('progressInfResearchButton');
+            document.getElementById('startResearch' + id.toString()).classList.add('infResearchButton');
+        } else {
+            document.getElementById('startResearch' + id.toString()).classList.remove('progressResearchButton');
+            document.getElementById('startResearch' + id.toString()).classList.add('researchButton');
+        }
+        document.documentElement.style.boxShadow = '';
         if (id==6 || id==7) {
             let reqs = document.getElementsByClassName('gUpgRequires');
             for (let i=0; i<reqs.length; i++) {
@@ -670,6 +676,7 @@ function completeResearch(id) {
     document.getElementById('researchSubTabBut').classList.remove('tabButNotify');
     document.getElementById('galaxyTabBut').classList.remove('tabButIndirectNotify');
     document.getElementById(document.getElementById(RESEARCH_DATA[id].buttonID).id).classList.remove('projectNotify');
+    document.documentElement.style.boxShadow = player.astralFlag ? 'inset 0px 0px 30px 20px #1c8a2e' : ''
     RESEARCH_DATA[id].onComplete(id);
 
     respecGalaxies();
@@ -679,6 +686,7 @@ function startResearch(id) {
     if (player.isInResearch || player.researchProjects[id].completed) { return; }
     player.researchProjects[id].active = true;
     player.isInResearch = true;
+    document.documentElement.style.boxShadow = 'inset 0px 0px 20px 10px #e32d05' + (player.astralFlag ? ', inset 0px 0px 30px 20px #1c8a2e' : '');
     if (id==7) { document.getElementById('researchGoalDisplay').innerHTML = ` ${formatWholeUnitRow(RESEARCH_DATA[id].calcGoal())} `; } 
     else { document.getElementById('researchGoalDisplay').innerHTML = ` ${formatWholeUnitRow(RESEARCH_DATA[id].goal)} `; }
     if (id==6 || id==7) {

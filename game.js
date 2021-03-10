@@ -137,6 +137,8 @@ function loadStyles() {
         document.getElementById(player.activeGalaxies[0].toString() + 'gal').selected = true;
     }
 
+    document.documentElement.style.boxShadow = (player.isInResearch ? 'inset 0px 0px 20px 10px #e32d05' : '') + (player.isInResearch && player.astralFlag ? ', ' : '') + (player.astralFlag ? 'inset 0px 0px 30px 20px #1c8a2e' : '');
+
     document.getElementById('realTimeDisplayBut').innerHTML = player.displayRealTime ? 'toggle time displays: REAL TIME' : 'toggle time displays: GAME TIME'
     let elements = document.getElementsByClassName('secDisplay');
     let el;
@@ -400,7 +402,6 @@ function loadStyles() {
                 reqs[i].style.textDecoration = 'line-through';
             }
         }
-        document.documentElement.style.boxShadow = 'inset 0px 0px 20px 10px #e32d05';
         document.getElementById('researchDisplayDiv').style.display = 'block';
         if (id==7) { document.getElementById('researchGoalDisplay').innerHTML = ` ${formatWholeUnitRow(RESEARCH_DATA[id].calcGoal())} `; }
         else { document.getElementById('researchGoalDisplay').innerHTML = ` ${formatWholeUnitRow(RESEARCH_DATA[id].goal)} `; }
@@ -422,7 +423,6 @@ function loadStyles() {
                 }
             }
         }
-        document.documentElement.style.boxShadow = '';
         document.getElementById('researchDisplayDiv').style.display = 'none';
         document.getElementById('vortexProgess').style.display = '';
         document.getElementById('vortexProgessResearch').style.display = 'none';
