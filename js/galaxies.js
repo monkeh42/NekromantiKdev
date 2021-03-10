@@ -775,7 +775,7 @@ function unlockArkPart(name) {
 }
 
 function getTheoremBoost() {
-    return Decimal.pow(1.2, player.theorems);
+    return Decimal.pow(1.1, player.theorems);
 }
 
 const RESEARCH_DATA = {

@@ -1033,25 +1033,29 @@ function allAuto(n) {
 }
 
 function allSpeed() {
-    for (let i=1; i<9; i++) {
-        player.autobuyers[i]['fast'] = !player.autobuyers[i]['fast'];
+    if (player.unlocks['unitsTab']['fastBuyers']) {
+        for (let i=1; i<9; i++) {
+            player.autobuyers[i]['fast'] = !player.autobuyers[i]['fast'];
+        }
+        if (document.getElementById('allBuyers').checked) {
+            player.autobuyers[9]['fast'] = !player.autobuyers[9]['fast'];
+            if (player.unlocks['unitsTab']['prestigeBuyer']) { player.autobuyers[10]['fast'] = !player.autobuyers[10]['fast']; }
+        }
+        updateAutobuyersDisplay();
     }
-    if (document.getElementById('allBuyers').checked) {
-        player.autobuyers[9]['fast'] = !player.autobuyers[9]['fast'];
-        if (player.unlocks['unitsTab']['prestigeBuyer']) { player.autobuyers[10]['fast'] = !player.autobuyers[10]['fast']; }
-    }
-    updateAutobuyersDisplay();
 }
 
 function allAmount() {
-    for (let i=1; i<9; i++) {
-        player.autobuyers[i]['bulk'] = !player.autobuyers[i]['bulk'];
+    if (player.unlocks['unitsTab']['bulkBuyers']) {
+        for (let i=1; i<9; i++) {
+            player.autobuyers[i]['bulk'] = !player.autobuyers[i]['bulk'];
+        }
+        if (document.getElementById('allBuyers').checked) {
+            player.autobuyers[9]['bulk'] = !player.autobuyers[9]['bulk'];
+            if (player.unlocks['unitsTab']['prestigeBuyer']) { player.autobuyers[10]['bulk'] = !player.autobuyers[10]['bulk']; }
+        }
+        updateAutobuyersDisplay();
     }
-    if (document.getElementById('allBuyers').checked) {
-        player.autobuyers[9]['bulk'] = !player.autobuyers[9]['bulk'];
-        if (player.unlocks['unitsTab']['prestigeBuyer']) { player.autobuyers[10]['bulk'] = !player.autobuyers[10]['bulk']; }
-    }
-    updateAutobuyersDisplay();
 }
 
 //dev stuff

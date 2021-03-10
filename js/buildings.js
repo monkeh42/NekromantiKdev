@@ -321,7 +321,6 @@ const BUILDS_DATA = {
             if (hasUpgrade(1, 21)) { p = p.times(getUpgEffect(1, 21)); }
             if (hasTUpgrade(23)) { p = p.times(getTUpgEffect(23)) }
             if (player.isInResearch) { p = p.pow(0.9); }
-            //else if (hasUpgrade(4, 23) && player.corpses.gt("2.5e309")) { p = p.pow(1.2); }
             return p;
         },
         resourceEff: function() {
@@ -467,7 +466,6 @@ const BUILDS_DATA = {
             if (hasTUpgrade(23)) { p = p.times(getTUpgEffect(23)) }
             if (hasGUpgrade(3, 31)) { p = p.pow(2); }
             if (player.isInResearch) { p = p.pow(0.9); }
-            //else if (hasUpgrade(4, 23) && player.corpses.gt("2.5e309")) { p = p.pow(1.2); }
             return p;
         },
         resourceEff: function() {
@@ -628,7 +626,6 @@ const BUILDS_DATA = {
             if (hasUpgrade(2, 23)) { p = p.times(getUpgEffect(2, 23)); }
             if (hasTUpgrade(23)) { p = p.times(getTUpgEffect(23)) }
             if (player.isInResearch) { p = p.pow(0.9); }
-            //else if (hasUpgrade(4, 23) && player.corpses.gt("2.5e309")) { p = p.pow(1.2); }
             if (player.astralFlag) { return p; }
             else { return new Decimal(0); }
         },

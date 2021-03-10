@@ -878,50 +878,69 @@
                                             <h2>Time Dimensions</h2>
                                             <table style="text-align: center; border-collapse: collapse; margin: auto;">
                                                 <tr>
+                                                    <td colspan="3">
+                                                        <div id="timeDimAllEnabledContainer" class="dimBuyerOptionsContainer">
+                                                            <button onclick="toggleAllTimeBuyers()" name="timeDimAllBut" id="timeDimAllBut" class="timeDimBuyerAllEnabledBut" style="margin-bottom: 10px;">TOGGLE ALL</button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
                                                     <td>
                                                         <div id="timeDim1EnabledContainer" class="dimBuyerOptionsContainer">
-                                                            <label for="timeDim1But">first:</label><br><button onclick="updateDimBuyer(1, 'timeDim1But')" name="timeDim1But" id="timeDim1But" class="dimBuyerEnabledBut" style="margin-bottom: 10px;">OFF</button>
+                                                            <label for="timeDim1But">first:</label><br><button onclick="updateDimBuyer(1, 'timeDim1But')" name="timeDim1But" id="timeDim1But" class="timeDimBuyerEnabledBut" style="margin-bottom: 10px;">OFF</button>
                                                         </div>
+                                                    </td>
+                                                    <td style="width: 15px;" class="timeDimSpacer" id="spacer1">
+                                                        <div style="width: 100%;"></div>
                                                     </td>
                                                     <td id="dimBuyer5Cell" style="display: none;">
                                                         <div id="timeDim1EnabledContainer" class="dimBuyerOptionsContainer">
-                                                            <label for="timeDim5But">fifth:</label><br><button onclick="updateDimBuyer(5, 'timeDim5But')" name="timeDim5But" id="timeDim5But" class="dimBuyerEnabledBut" style="margin-bottom: 10px;">OFF</button>
+                                                            <label for="timeDim5But">fifth:</label><br><button onclick="updateDimBuyer(5, 'timeDim5But')" name="timeDim5But" id="timeDim5But" class="timeDimBuyerEnabledBut" style="margin-bottom: 10px;">OFF</button>
                                                         </div>
                                                     </td>
                                                 </tr>
                                                 <tr>
                                                     <td>
                                                         <div id="timeDim2EnabledContainer" class="dimBuyerOptionsContainer">
-                                                            <label for="timeDim2But">second:</label><br><button onclick="updateDimBuyer(2, 'timeDim2But')" name="timeDim2But" id="timeDim2But" class="dimBuyerEnabledBut" style="margin-bottom: 10px;">OFF</button>
+                                                            <label for="timeDim2But">second:</label><br><button onclick="updateDimBuyer(2, 'timeDim2But')" name="timeDim2But" id="timeDim2But" class="timeDimBuyerEnabledBut" style="margin-bottom: 10px;">OFF</button>
                                                         </div>
+                                                    </td>
+                                                    <td style="width: 15px;" class="timeDimSpacer" id="spacer2">
+                                                        <div style="width: 100%;"></div>
                                                     </td>
                                                     <td id="dimBuyer6Cell" style="display: none;">
                                                         <div id="timeDim1EnabledContainer" class="dimBuyerOptionsContainer">
-                                                            <label for="timeDim6But">sixth:</label><br><button onclick="updateDimBuyer(6, 'timeDim6But')" name="timeDim6But" id="timeDim6But" class="dimBuyerEnabledBut" style="margin-bottom: 10px;">OFF</button>
+                                                            <label for="timeDim6But">sixth:</label><br><button onclick="updateDimBuyer(6, 'timeDim6But')" name="timeDim6But" id="timeDim6But" class="timeDimBuyerEnabledBut" style="margin-bottom: 10px;">OFF</button>
                                                         </div>
                                                     </td>
                                                 </tr>
                                                 <tr>
                                                     <td>
                                                         <div id="timeDim3EnabledContainer" class="dimBuyerOptionsContainer">
-                                                            <label for="timeDim3But">third:</label><br><button onclick="updateDimBuyer(3, 'timeDim3But')" name="timeDim3But" id="timeDim3But" class="dimBuyerEnabledBut" style="margin-bottom: 10px;">OFF</button>
+                                                            <label for="timeDim3But">third:</label><br><button onclick="updateDimBuyer(3, 'timeDim3But')" name="timeDim3But" id="timeDim3But" class="timeDimBuyerEnabledBut" style="margin-bottom: 10px;">OFF</button>
                                                         </div>
+                                                    </td>
+                                                    <td style="width: 15px;" class="timeDimSpacer" id="spacer3">
+                                                        <div style="width: 100%;"></div>
                                                     </td>
                                                     <td id="dimBuyer7Cell" style="display: none;">
                                                         <div id="timeDim1EnabledContainer" class="dimBuyerOptionsContainer">
-                                                            <label for="timeDim7But">seventh:</label><br><button onclick="updateDimBuyer(7, 'timeDim7But')" name="timeDim7But" id="timeDim7But" class="dimBuyerEnabledBut" style="margin-bottom: 10px;">OFF</button>
+                                                            <label for="timeDim7But">seventh:</label><br><button onclick="updateDimBuyer(7, 'timeDim7But')" name="timeDim7But" id="timeDim7But" class="timeDimBuyerEnabledBut" style="margin-bottom: 10px;">OFF</button>
                                                         </div>
                                                     </td>
                                                 </tr>
                                                 <tr>
                                                     <td>
                                                         <div id="timeDim4EnabledContainer" class="dimBuyerOptionsContainer">
-                                                            <label for="timeDim4But">fourth:</label><br><button onclick="updateDimBuyer(4, 'timeDim4But')" name="timeDim4But" id="timeDim4But" class="dimBuyerEnabledBut" style="margin-bottom: 10px;">OFF</button>
+                                                            <label for="timeDim4But">fourth:</label><br><button onclick="updateDimBuyer(4, 'timeDim4But')" name="timeDim4But" id="timeDim4But" class="timeDimBuyerEnabledBut" style="margin-bottom: 10px;">OFF</button>
                                                         </div>
+                                                    </td>
+                                                    <td style="width: 15px;" class="timeDimSpacer" id="spacer4">
+                                                        <div style="width: 100%;"></div>
                                                     </td>
                                                     <td id="dimBuyer8Cell" style="display: none;">
                                                         <div id="timeDim1EnabledContainer" class="dimBuyerOptionsContainer">
-                                                            <label for="timeDim8But">eighth:</label><br><button onclick="updateDimBuyer(8, 'timeDim8But')" name="timeDim8But" id="timeDim8But" class="dimBuyerEnabledBut" style="margin-bottom: 10px;">OFF</button>
+                                                            <label for="timeDim8But">eighth:</label><br><button onclick="updateDimBuyer(8, 'timeDim8But')" name="timeDim8But" id="timeDim8But" class="timeDimBuyerEnabledBut" style="margin-bottom: 10px;">OFF</button>
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -2288,7 +2307,7 @@
                     <div style="margin: 5px;"><span style="font-size: 18pt; color: #661503; font-weight: bold; -webkit-text-stroke-width: .5px; -webkit-text-stroke-color: white;">The Beyond holds infinite, untold knowledge.</div>
                     <div style="margin: 5px;">You have the knowledge needed to craft The Ark, but your thirst has not been quenched.</div>
                     <div style="margin: 5px;">Infinite research is the same as research project 6, with corpse production raised ^0.9 a second time. Infinite research can be completed unlimited times, but the goal amount is multiplied by 10 for each completion.</div>
-                    <div style="margin: 5px;">Every completion rewards 1 Impossible Theorem. Each theorem multiplies both time essence effects by 1.5x, and they are used to buy Ethereal Upgrades.</div>
+                    <div style="margin: 5px;">Every completion rewards 1 Impossible Theorem. Each unspent theorem raises the exterminated worlds effect to ^1.1, and they are used to buy Ethereal Upgrades.</div>
                 </div>
                 <div id="infResearchDisplayDiv" style="margin: 10px auto; text-align: center;font-size: 15pt;">
                     You have <span id="theoremDisplay" style="white-space: pre; font-size: 19pt; font-weight: bold; color: #661503; -webkit-text-stroke-width: .8px; -webkit-text-stroke-color: white; font-variant-numeric: tabular-nums;"> 0 </span> <span id="theoremTextAmt">impossible theorems</span>, raising the exterminated worlds effect to <span id="theoremEffect" style="white-space: pre; font-size: 17pt; font-weight: bold;"> 1</span>.<br>

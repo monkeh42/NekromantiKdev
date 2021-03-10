@@ -1293,6 +1293,38 @@ option:active, option.active {
     cursor: pointer;
 }
 
+.timeDimBuyerEnabledBut {
+    position: relative;
+    color: white;
+    background-color: #1f1f1f;
+    font-style: bold;
+    margin: 0 auto 20px;
+    width: 100px;
+    height: 30px;
+    border: 1px solid #525252;
+    border-radius: 4px;
+    font-family: 'Cinzel', serif;
+    font-weight: bold;
+    font-size: 16pt;
+    cursor: pointer;
+}
+
+.timeDimBuyerAllEnabledBut {
+    position: relative;
+    color: white;
+    background-color: #1f1f1f;
+    font-style: bold;
+    margin: 0 auto 20px;
+    width: 150px;
+    height: 30px;
+    border: 1px solid #525252;
+    border-radius: 4px;
+    font-family: 'Cinzel', serif;
+    font-weight: bold;
+    font-size: 14pt;
+    cursor: pointer;
+}
+
 .buyerSpeedLock {
     position: relative;
     text-align: center;

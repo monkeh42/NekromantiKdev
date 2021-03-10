@@ -541,7 +541,7 @@ function lockElements(mainTab, subTab) {
         for (let i=0; i<els.length; i++) { displayData.push(['setProp', els[i].id, 'display', '']); }
     }
     if (data.classToShow !== undefined) {
-        let els = document.getElementsByClassName(data.classToHide);
+        let els = document.getElementsByClassName(data.classToShow);
         for (let i=0; i<els.length; i++) { displayData.push(['setProp', els[i].id, 'display', 'none']); }
     }
     if (data.classToEnable !== undefined) {
@@ -587,11 +587,6 @@ function toggleTimeLockDisplay() {
     displayData.push(['togClass', 'respecTimeBut', 'unclickSliderBut']);
     displayData.push(['togClass', 'timeSlider', 'sliderLocked']);
     displayData.push(['togClass', 'timeSlider', 'slider']);
-}
-
-function updateDimBuyer(tier, button) {
-    player.autobuyers[12][tier] = !player.autobuyers[12][tier];
-    document.getElementById(button).innerHTML = player.autobuyers[12][tier] ? 'ON' : 'OFF'
 }
 
 function updateSingleBuyer(id, option, button) {
@@ -700,6 +695,17 @@ function updateAutobuyersDisplay() {
 function toggleTimeUpgBuyer() {
     player.autobuyers['time']['on'] = !player.autobuyers['time']['on'];
     document.getElementById('timeUpgBuyerBut').innerHTML = player.autobuyers['time']['on'] ? 'Time Upgrade Cols 1-3 Autobuyer: ON' : 'Time Upgrade Cols 1-3 Autobuyer: OFF'
+}
+
+function updateDimBuyer(tier, button) {
+    player.autobuyers[12][tier] = !player.autobuyers[12][tier];
+    document.getElementById(button).innerHTML = player.autobuyers[12][tier] ? 'ON' : 'OFF'
+}
+
+function toggleAllTimeBuyers() {
+    for (let i=1; i<=NUM_TIMEDIMS; i++) {
+        if (i<=4 || player.unlocks['timeTab']['timeDims2']) { updateDimBuyer(i, 'timeDim' + i.toString() + 'But'); }
+    }
 }
 
 function updateSliderDisplay() {

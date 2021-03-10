@@ -1719,6 +1719,7 @@ const UNLOCKS_DATA = {
             unlocked: false,
             idsToShow: ['timeRow5', 'timeRow6', 'timeRow7', 'timeRow8', 'dimBuyer5Cell', 'dimBuyer6Cell', 'dimBuyer7Cell', 'dimBuyer8Cell'],
             idsToHide: [],
+            classToShow: 'timeDimSpacer',
             shouldNotify: function() {
                 return false;
             },
