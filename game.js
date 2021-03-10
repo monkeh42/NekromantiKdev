@@ -388,7 +388,7 @@ function loadStyles() {
     if (isResearchCompleted(6)) {
         document.getElementById('theoremDisplay').innerHTML = ` ${formatWhole(player.theorems)} `;
         document.getElementById('completionsDisplay').innerHTML = ` ${formatWhole(player.infCompletions)} `;
-        document.getElementById('theoremEffect').innerHTML = ` ^${formatDefault(getTheoremBoost())}`;
+        document.getElementById('theoremEffect').innerHTML = ` ^${formatDefault2(getTheoremBoost())}`;
         document.getElementById('resGoal7').innerHTML = formatWhole(RESEARCH_DATA[7].calcGoal());
     }
 

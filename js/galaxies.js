@@ -244,7 +244,7 @@ function buyEUpg(e) {
         remEUpgClass(e, 'ethUpg');
         addEUpgClass(e, 'boughtEthUpg');
         document.getElementById('theoremDisplay').innerHTML = ` ${formatWhole(player.theorems)} `;
-        document.getElementById('theoremEffect').innerHTML = ` ^${formatDefault(getTheoremBoost())}`;
+        document.getElementById('theoremEffect').innerHTML = ` ^${formatDefault2(getTheoremBoost())}`;
     }
 }
 
@@ -259,7 +259,7 @@ function respecEthereal() {
         remEUpgClass(e, 'unclickableEthUpg');
     }
     document.getElementById('theoremDisplay').innerHTML = ` ${formatWhole(player.theorems)} `;
-    document.getElementById('theoremEffect').innerHTML = ` ^${formatDefault(getTheoremBoost())}`;
+    document.getElementById('theoremEffect').innerHTML = ` ^${formatDefault2(getTheoremBoost())}`;
 }
 
 /*function rowLock(row) {
@@ -728,7 +728,7 @@ function completeResearch(id) {
         player.infCompletions = player.infCompletions.plus(1);
         document.getElementById('theoremDisplay').innerHTML = ` ${formatWhole(player.theorems)} `;
         document.getElementById('completionsDisplay').innerHTML = ` ${formatWhole(player.infCompletions)} `;
-        document.getElementById('theoremEffect').innerHTML = ` ^${formatDefault(getTheoremBoost())}`;
+        document.getElementById('theoremEffect').innerHTML = ` ^${formatDefault2(getTheoremBoost())}`;
         document.getElementById('resGoal7').innerHTML = formatWhole(RESEARCH_DATA[7].calcGoal());
     }
     else { unlockArkPart(RESEARCH_DATA[id].unlocks); }

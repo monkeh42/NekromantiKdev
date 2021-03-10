@@ -569,7 +569,7 @@ function toggleAstralDisplay() {
     displayData.push(['togClass', 'astralToggle', 'astralBut']);
     displayData.push(['togClass', 'astralToggle', 'astralOn']);
     displayData.push(['html', 'astralText', player.astralFlag ? 'disable' : 'enable']);
-    if (player.headerDisplay['astralNoticeDisplay']) { displayData.push(['togDisplay', 'astralNoticeDisplay']); }
+    if (player.headerDisplay['astralNoticeDisplay'] && player.headerDisplayUnlocked['astralNoticeDisplay']) { displayData.push(['togDisplay', 'astralNoticeDisplay']); }
     displayData.push(['togDisplay', 'researchAstralNotice']);
     displayData.push(['togDisplay', 'infResearchAstralNotice']);
     displayData.push(['html', 'normalAstral', player.astralFlag ? 'ASTRAL' : 'NORMAL']);
@@ -838,7 +838,8 @@ function showAutosavePopup() {
 function updateHeaderDisplay() {
 
     for (let dKey in player.headerDisplay) {
-        if (dKey != 'autosavePopup') {
+        if (dKey == 'astralNoticeDisplay') { document.getElementById(dKey).style.display = (player.headerDisplayUnlocked[dKey] && player.headerDisplay[dKey] && player.astralFlag) ? '' : 'none' }
+        else if (dKey != 'autosavePopup') {
             if (player.headerDisplayUnlocked[dKey] && player.headerDisplay[dKey]) { document.getElementById(dKey).style.display = player.headerDisplay[dKey] ? '' : 'none' }
         }
         /*if (dKey == 'astralNoticeDisplay') { document.getElementById(dKey).style.display = (player.headerDisplay[dKey] && player.astralFlag) ? '' : 'none' }
