@@ -260,6 +260,9 @@ function respecEthereal() {
     }
     document.getElementById('theoremDisplay').innerHTML = ` ${formatWhole(player.theorems)} `;
     document.getElementById('theoremEffect').innerHTML = ` ^${formatDefault2(getTheoremBoost())}`;
+
+    if (canTimePrestige()) { timePrestigeNoConfirm(); }
+    else { timePrestigeReset(); }
 }
 
 /*function rowLock(row) {
