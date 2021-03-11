@@ -762,6 +762,9 @@ function galaxyPrestigeReset(respec=false) {
         player.timeLocked = false;
         toggleTimeLockDisplay();
         document.getElementById('timeSlider').disabled = false;
+        document.getElementById('timeTabBut').classList.add('timeUnlockedNotify')
+        document.getElementById('timeTabButMid').classList.add('timeUnlockedNotify')
+        document.getElementById('timeDimSubTabBut').classList.add('timeUnlockedNotify')
     }
     clearInterval(mainLoop);
     if (player.isInResearch) {
@@ -848,6 +851,9 @@ function researchReset(proj) {
         player.timeLocked = false;
         toggleTimeLockDisplay();
         document.getElementById('timeSlider').disabled = false;
+        document.getElementById('timeTabBut').classList.add('timeUnlockedNotify')
+        document.getElementById('timeTabButMid').classList.add('timeUnlockedNotify')
+        document.getElementById('timeDimSubTabBut').classList.add('timeUnlockedNotify')
     }
     clearInterval(mainLoop);
 

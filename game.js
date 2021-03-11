@@ -361,6 +361,12 @@ function loadStyles() {
         document.getElementById('timeSlider').classList.add('sliderLocked');
         document.getElementById('timeSlider').classList.remove('slider');
         document.getElementById('timeSlider').disabled = true;
+    } else {
+        if (player.unlocks['timeTab']['mainTab']) {
+            document.getElementById('timeTabBut').classList.add('timeUnlockedNotify')
+            document.getElementById('timeTabButMid').classList.add('timeUnlockedNotify')
+            document.getElementById('timeDimSubTabBut').classList.add('timeUnlockedNotify')
+        }
     }
     
     updatePopupsEtc();

@@ -216,6 +216,9 @@ function respecTimeClick() {
             player.timeLocked = false;
             toggleTimeLockDisplay();
             document.getElementById('timeSlider').removeAttribute('disabled')
+            document.getElementById('timeTabBut').classList.add('timeUnlockedNotify')
+            document.getElementById('timeTabButMid').classList.add('timeUnlockedNotify')
+            document.getElementById('timeDimSubTabBut').classList.add('timeUnlockedNotify')
             if (canTimePrestige()) { timePrestigeNoConfirm(); }
             else { timePrestigeReset(); }
         }
@@ -232,6 +235,9 @@ function respecTimeKey() {
             player.timeLocked = false;
             toggleTimeLockDisplay();
             document.getElementById('timeSlider').removeAttribute('disabled')
+            document.getElementById('timeTabBut').classList.add('timeUnlockedNotify')
+            document.getElementById('timeTabButMid').classList.add('timeUnlockedNotify')
+            document.getElementById('timeDimSubTabBut').classList.add('timeUnlockedNotify')
             if (canTimePrestige()) { timePrestigeNoConfirm(); }
             else { timePrestigeReset(); }
         }
@@ -264,6 +270,9 @@ function timePrestige() {
             player.timeLocked = false;
             toggleTimeLockDisplay();
             document.getElementById('timeSlider').removeAttribute('disabled')
+            document.getElementById('timeTabBut').classList.add('timeUnlockedNotify')
+            document.getElementById('timeTabButMid').classList.add('timeUnlockedNotify')
+            document.getElementById('timeDimSubTabBut').classList.add('timeUnlockedNotify')
             document.getElementById('respecOnSac').checked = false;
         }
         timePrestigeReset();
@@ -285,6 +294,9 @@ function timePrestigeNoConfirm() {
             player.timeLocked = false;
             toggleTimeLockDisplay();
             document.getElementById('timeSlider').removeAttribute('disabled')
+            document.getElementById('timeTabBut').classList.add('timeUnlockedNotify')
+            document.getElementById('timeTabButMid').classList.add('timeUnlockedNotify')
+            document.getElementById('timeDimSubTabBut').classList.add('timeUnlockedNotify')
             document.getElementById('respecOnSac').checked = false;
         }
         timePrestigeReset();
@@ -296,6 +308,9 @@ function lockInTime() {
         player.timeLocked = true;
         toggleTimeLockDisplay();
         document.getElementById('timeSlider').disabled = true;
+        document.getElementById('timeTabBut').classList.remove('timeUnlockedNotify')
+        document.getElementById('timeTabButMid').classList.remove('timeUnlockedNotify')
+        document.getElementById('timeDimSubTabBut').classList.remove('timeUnlockedNotify')
     }
 }
 

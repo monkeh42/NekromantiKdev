@@ -1731,6 +1731,10 @@ option:active, option.active {
     box-shadow: 0px 0px 10px 5px goldenrod;
 }
 
+.timeUnlockedNotify {
+    box-shadow: 0px 0px 5px 5px #006ba0;
+}
+
 .achievement p, .achievementUnlocked p {
     vertical-align: middle;
 }
