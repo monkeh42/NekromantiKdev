@@ -786,6 +786,7 @@ function galaxyPrestigeReset(respec=false) {
                 reqs[i].style.textDecoration = '';
             }
         }
+        respec = true;
     }
     
     if (!hasAchievement(42)) {
