@@ -101,7 +101,7 @@ function loadGame() {
     var count = 0;
     element.innerHTML = 'Number Keys 1-8: Buy Single Unit; shift+(1-8): Buy Max Units;<br>';
     for (var k in HOTKEYS) {
-        if (count == 3) {
+        if ((count == 4 || k=='q') && k!='f') {
             count = 0;
             element.innerHTML += '<br>';
         }
@@ -455,6 +455,7 @@ function loadStyles() {
         document.getElementById('vortexProgess').style.display = '';
         document.getElementById('vortexProgessResearch').style.display = 'none';
     }
+
 
     for (let i=1; i<=6; i++) {
         if (player.researchProjects[i].completed) {

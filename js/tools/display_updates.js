@@ -988,6 +988,43 @@ function showGalaxySubTab(subTabName, buttonName, parentButton) {
     }
 }
 
+function cycleSubtabs() {
+    let tabName = getActiveTab();
+    if (tabName === null) {return}
+    switch (tabName) {
+        case 'unitsTab':
+            if (player.unlocks['unitsTab']['autobuyers']) {
+                if (isActiveTab('autobuyersSubTab')) { showUnitSubTab('unitsSubTab', 'unitsSubTabBut', 'unitsTabBut') }
+                else { showUnitSubTab('autobuyersSubTab', 'autobuyersSubTabBut', 'unitsTabBut') }
+            }
+            break;
+        case 'buildingsTab':
+            if (player.unlocks['buildingsTab']['construction']) {
+                if (isActiveTab('constructionSubTab')) { showBuildingSubTab('buildingsSubTab', 'buildingsSubTabBut', 'buildingsTabBut') }
+                else { showBuildingSubTab('constructionSubTab', 'constructionSubTabBut', 'buildingsTabBut') }
+            }
+            break;
+        case 'timeTab':
+            if (player.unlocks['timeTab']['timeUpgrades']) {
+                if (isActiveTab('timeUpgSubTab')) { showTimeSubTab('timeDimSubTab', 'timeDimSubTabBut', 'timeTabBut') }
+                else { showTimeSubTab('timeUpgSubTab', 'timeUpgSubTabBut', 'timeTabBut') }
+            }
+            break;
+        case 'galaxyTab':
+            if (player.unlocks['galaxyTab']['arkTab']) {
+                if (isActiveTab('galaxiesSubTab')) { showGalaxySubTab('researchSubTab', 'researchSubTabBut', 'galaxyTabBut') }
+                else if (isActiveTab('researchSubTab')) {
+                    if (player.unlocks['galaxyTab']['infiniteResearch']) {
+                        showGalaxySubTab('infResearchSubTab', 'infResearchSubTabBut', 'galaxyTabBut')
+                    } else { showGalaxySubTab('arkSubTab', 'arkSubTabBut', 'galaxyTabBut') }
+                }
+                else if (isActiveTab('infResearchSubTab')) { showGalaxySubTab('arkSubTab', 'arkSubTabBut', 'galaxyTabBut') }
+                else { showGalaxySubTab('galaxiesSubTab', 'galaxiesSubTabBut', 'galaxyTabBut') }
+            }
+            break;
+    }
+}
+
 function isActiveTab(tabName) {
     return (document.getElementById(tabName).style.display == 'block');
 }

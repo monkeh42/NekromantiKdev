@@ -1812,7 +1812,7 @@ const HOTKEYS = {
             toggleAstral();
         }
     },
-    'w': {
+    'p': {
         desc: 'World Prestige',
         onPress: function() {
             spacePrestigeKey();
@@ -1824,7 +1824,7 @@ const HOTKEYS = {
             timePrestigeKey();
         }
     },
-    'r': {
+    't': {
         desc: 'Respec Time Production',
         onPress: function() {
             respecTimeKey();
@@ -1840,6 +1840,36 @@ const HOTKEYS = {
         desc: 'Respec Galaxies',
         onPress: function() {
             respecGalaxiesKey();
+        }
+    },
+    'q': {
+        desc: 'Units Tab',
+        onPress: function() {
+            showTab('unitsTab', false, 'unitsTabBut');
+        }
+    },
+    'w': {
+        desc: 'Buildings Tab',
+        onPress: function() {
+            if (player.unlocks['buildingsTab']['mainTab']) { showTab('buildingsTab', false, 'buildingsTabBut'); }
+        }
+    },
+    'e': {
+        desc: 'Time Tab',
+        onPress: function() {
+            if (player.unlocks['timeTab']['mainTab']) { showTab('timeTab', false, 'timeTabBut'); }
+        }
+    },
+    'r': {
+        desc: 'Galaxies Tab',
+        onPress: function() {
+            if (player.unlocks['galaxyTab']['mainTab']) { showTab('galaxyTab', false, 'galaxyTabBut'); }
+        }
+    },
+    'f': {
+        desc: 'Cycle Subtabs',
+        onPress: function() {
+            cycleSubtabs();
         }
     },
     '1': {

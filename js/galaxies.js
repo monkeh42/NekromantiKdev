@@ -1089,7 +1089,7 @@ const RESEARCH_DATA = {
         buttonID: 'startResearch6',
         unlocks: 'support',
         onComplete: function() {
-            return;
+            document.getElementById('researchSubTabBut').style.textDecoration = 'line-through';
         }
     },
     7: {
