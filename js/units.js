@@ -55,7 +55,7 @@ function getWorldsBonus() {
     var e = 1.5 + getCUpgEffect(4);
     var boost = Decimal.max(b.div(1.5).pow(e).plus(1), 1);
     if (hasTUpgrade(32)) { boost = boost.times(getTUpgEffect(32)); }
-    if (isResearchCompleted(6)) { boost = boost.pow(getTheoremBoost()); }
+    if (isResearchCompleted(6)) { boost = boost.pow(getTheoremBoostW()); }
     return boost;
 }
 

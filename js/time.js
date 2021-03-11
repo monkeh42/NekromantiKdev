@@ -52,6 +52,7 @@ function calculateCrystalGain() {
         if (hasGUpgrade(4, 21)) { ret = ret.times(getGUpgEffect(4, 21)); }
         if (hasTUpgrade(53)) { ret = ret.times(getTUpgEffect(53)); }
         if (hasUpgrade(4, 23) && !player.isInResearch && player.corpses.gt("2.5e309")) { ret = ret.pow(1.2); }
+        if (isResearchCompleted(6)) { ret = ret.pow(getTheoremBoostC()); }
         return ret;
     } else {
         return new Decimal(0);

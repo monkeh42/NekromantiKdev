@@ -493,7 +493,8 @@ function buyEUpg(e) {
         remEUpgClass(e, 'ethUpg');
         addEUpgClass(e, 'boughtEthUpg');
         document.getElementById('theoremDisplay').innerHTML = ` ${formatWhole(player.theorems)} `;
-        document.getElementById('theoremEffect').innerHTML = ` ^${formatDefault2(getTheoremBoost())}`;
+        document.getElementById('theoremEffect').innerHTML = ` ^${formatDefault2(getTheoremBoostW())}`;
+        document.getElementById('theoremEffectC').innerHTML = ` ^${formatDefault2(getTheoremBoostC())}`;
     }
 }
 
@@ -508,7 +509,8 @@ function respecEthereal() {
         remEUpgClass(e, 'unclickableEthUpg');
     }
     document.getElementById('theoremDisplay').innerHTML = ` ${formatWhole(player.theorems)} `;
-    document.getElementById('theoremEffect').innerHTML = ` ^${formatDefault2(getTheoremBoost())}`;
+    document.getElementById('theoremEffect').innerHTML = ` ^${formatDefault2(getTheoremBoostW())}`;
+    document.getElementById('theoremEffectC').innerHTML = ` ^${formatDefault2(getTheoremBoostC())}`;
 
     if (canTimePrestige()) { timePrestigeNoConfirm(); }
     else { timePrestigeReset(); }
@@ -987,7 +989,8 @@ function completeResearch(id) {
         player.infCompletions = player.infCompletions.plus(1);
         document.getElementById('theoremDisplay').innerHTML = ` ${formatWhole(player.theorems)} `;
         document.getElementById('completionsDisplay').innerHTML = ` ${formatWhole(player.infCompletions)} `;
-        document.getElementById('theoremEffect').innerHTML = ` ^${formatDefault2(getTheoremBoost())}`;
+        document.getElementById('theoremEffect').innerHTML = ` ^${formatDefault2(getTheoremBoostW())}`;
+        document.getElementById('theoremEffectC').innerHTML = ` ^${formatDefault2(getTheoremBoostC())}`;
         document.getElementById('resGoal7').innerHTML = formatWhole(RESEARCH_DATA[7].calcGoal());
     }
     else { unlockArkPart(RESEARCH_DATA[id].unlocks); }
@@ -1033,8 +1036,12 @@ function unlockArkPart(name) {
     player.ark[name].unlocked = true;
 }
 
-function getTheoremBoost() {
+function getTheoremBoostW() {
     return Decimal.pow(1.2, player.theorems);
+}
+
+function getTheoremBoostC() {
+    return Decimal.pow(1.01, player.theorems);
 }
 
 const RESEARCH_DATA = {
