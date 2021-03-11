@@ -1815,6 +1815,7 @@
                 <div id="galButs2" style="text-align: center; width: 100%; margin: auto;"><button id="galaxyNameBut1" class="galaxyNameBut2" onclick="showGalaxies('gal1', 'gal2')">Andromeda/Circinus</button><button id="galaxyNameBut2" class="galaxyNameBut2" onclick="showGalaxies('gal3', 'gal4')">Sculptor Dwarf/Triangulum</button></div>
                 <div id="galButs4" style="text-align: center; width: 100%; margin: auto;"><button id="galaxyNameBut1" class="galaxyNameBut4" onclick="showGalaxy('gal1')">Andromeda</button><button id="galaxyNameBut2" class="galaxyNameBut4" onclick="showGalaxy('gal2')">Circinus</button><button id="galaxyNameBut3" class="galaxyNameBut4" onclick="showGalaxy('gal3')">Sculptor Dwarf</button><button id="galaxyNameBut4" class="galaxyNameBut4" onclick="showGalaxy('gal4')">Triangulum</button></div>
                 <div style="text-align: center; width: 100%; margin: auto;"><button id="galaxyRespecBut" class="galaxyBut" onclick="respecGalaxiesClick()">Respec galaxies - forces ascension</button><button id="milestonesBut" class="galaxyBut" onclick="showMilestones()">Galaxy Milestones</button></div>
+                <div id="galaxyImpExp" style="text-align: center; width: 100%; margin: auto;"><button id="impGalBut" class="galImpExpBut" onclick="showImportGalaxies()">Import Galaxies</button><button id="expGalBut" class="galImpExpBut" onclick="exportGalaxies()">Export Galaxies</button><button id="loadFav" class="galImpExpBut" onclick="importGalaxies(true)">Load Favorite<div id="favLoadNotice">SUCCESS!</div></button><button id="saveFav" class="galImpExpBut" onclick="saveFavorite()">Save Favorite<div id="favSavedNotice">SAVED!</div></button></div>
                 <table id="allGalaxiesTable" style="text-align: center; position: relative; left: -167;">
                     <tr>
                         <td id="gal1" class="gal">
@@ -2179,7 +2180,7 @@
                     <div style="margin: 5px;"><span style=" font-size: 16pt; font-weight: bold;">When you begin a research project, you do a galaxy respec and time respec,</span> but <span style="font-size: 12pt;">ALL</span> of your corpses, astral bricks, buildings, construction, time upgrades, and time crystals are reset, regardless of your milestones, achievements, and project rewards; however, all tabs stay unlocked.<br>(Galactic Vortex and the 4th/5th Time Upgrade columns don't reset, but they have no effect during research.)</div>
                     <div style="margin: 5px;">During astral enslavement, your vassal souls tirelessly study the eldritch sciences of <span style="font-size: 14pt; color: #661503; font-weight: bold; -webkit-text-stroke-width: .3px; -webkit-text-stroke-color: white;">the beyond</span>. As a result, your base astral brick production is square rooted, but you produce Void Research at the same base rate.</div>
                     <div style="margin: 5px;">Additionally, galaxy upgrade costs are tripled (after the cost increase from higher rows), and <span style="font-size: 12pt;">ALL</span> production other than bricks/research is raised to the ^0.9.</div>
-                    <div style="margin: 5px;">To complete a research project, you must reach the required amount of Void Research under these conditions in addition to the specific conditions below.<br><span style=" font-size: 16pt; font-weight: bold;">Completing a project also performs a normal galaxy respec.</div>
+                    <div style="margin: 5px;">To complete a research project, you must reach the required amount of Void Research under these conditions in addition to the specific conditions below.<br><span style=" font-size: 16pt; font-weight: bold;">Completing a project respecs galaxies without an ascension reset.</div>
                     <div style="margin: 5px;"><span style="font-size: 14pt;">NOTE:</span> performing an ascension or galaxy respec will exit the current project and set your void research to 0.</div>
                 </div>
                 <table style="width: auto; text-align: center; margin: 20px auto;">
@@ -2307,7 +2308,7 @@
                     <div style="margin: 5px;"><span style="font-size: 18pt; color: #661503; font-weight: bold; -webkit-text-stroke-width: .5px; -webkit-text-stroke-color: white;">The Beyond holds infinite, untold knowledge.</div>
                     <div style="margin: 5px;">You have the knowledge needed to craft The Ark, but your thirst has not been quenched.</div>
                     <div style="margin: 5px;">Infinite research is the same as research project 6, with corpse production raised ^0.9 a second time. Infinite research can be completed unlimited times, but the goal amount is multiplied by 10 for each completion.</div>
-                    <div style="margin: 5px;">Every completion rewards 1 Impossible Theorem. Each unspent theorem raises the exterminated worlds effect to ^1.1, and they are used to buy Ethereal Upgrades.</div>
+                    <div style="margin: 5px;">Every completion rewards 1 Impossible Theorem. Each unspent theorem raises the exterminated worlds effect to ^1.2, and they are used to buy Ethereal Upgrades.</div>
                 </div>
                 <div id="infResearchDisplayDiv" style="margin: 10px auto; text-align: center;font-size: 15pt;">
                     You have <span id="theoremDisplay" style="white-space: pre; font-size: 19pt; font-weight: bold; color: #661503; -webkit-text-stroke-width: .8px; -webkit-text-stroke-color: white; font-variant-numeric: tabular-nums;"> 0 </span> <span id="theoremTextAmt">impossible theorems</span>, raising the exterminated worlds effect to <span id="theoremEffect" style="white-space: pre; font-size: 17pt; font-weight: bold;"> 1</span>.<br>
@@ -3029,6 +3030,23 @@
                 <span id="offlineEssence" style="display: none;"><span id="offlineTrueGain" style="font-size: 15pt; font-weight: bold; white-space: pre; color: #006ba0;"> 0 </span> true time essence and <span id="offlineAntiGain" style="font-size: 15pt; font-weight: bold; white-space: pre; color: #006ba0;"> 0 </span> anti time essence.<br></span>
             </div>
             <button class="optBut" id="closeOfflinePopup" style="margin: 10px;" onclick="closeOfflinePopup()">CLOSE</button>
+        </div>
+        <div class="gPopup" id="gImportPopup" style="display: none; width: 330px; min-width: 330px; height: 260px; min-height: 260px;">
+            <label id="gImportTextLabel" for="gImportText"><h2>Paste your galaxy code:</h2></label>
+            <textarea id="gImportText" name="gImportText" style="display: block;"></textarea>
+            <div id="gImpErr" style="height: 20px; min-height: 20px;"></div>
+            <div style="margin: 10px;"><button id ="impGalaxyBut" class="optBut" onclick="importGalaxies()" style="float: left;">IMPORT</button></div><div style="margin: 10px;"><button id ="closeImpGalaxyPopup" class="optBut" onclick="closeImpGalaxies()" style="float: right;">CLOSE</button></div>
+        </div>
+        <div class="gPopup" id="gExportPopup" style="display: none; width: 330px; min-width: 330px; height: 235px; min-height: 235px;">
+            <label id="gExportTextLabel" for="gExportText"><h2>Your galaxy code:</h2></label>
+            <textarea id="gExportText" name="gExportText" style="display: block;"></textarea>
+            <div style="margin: auto;"><button id ="closeExpGalaxyPopup" class="optBut" onclick="closeExpGalaxies()">CLOSE</button></div>
+        </div>
+        <div class="gPopup" id="favErrPopup" style="display: none; width: 330px; min-width: 330px; height: 260px; min-height: 260px;">
+            <label id="favErrTextLabel" for="favErrText"><h2>Your saved favorites:</h2></label>
+            <textarea id="favErrExportText" name="favErrExportText" style="display: block;"></textarea>
+            <div id="favErr" style="height: 20px; min-height: 20px;"></div>
+            <div style="margin: auto;"><button id ="closefavErrPopup" class="optBut" onclick="closefavErrPopup()">CLOSE</button></div>
         </div>
         <div class="popup" id="confirmationsPopup">
             <div>

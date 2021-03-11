@@ -762,6 +762,7 @@ const START_PLAYER = {
     activeGalaxies: [4, 'gal1', 'gal2'],
     hotkeysOn: true,
     dontResetSlider: false,
+    favGalaxies: [],
     version: 'v0.3.1_d.5',
 }
 
@@ -2677,6 +2678,7 @@ function fixResetBug() {
     START_PLAYER.activeGalaxies = new Array(4, 'gal1', 'gal2');
     START_PLAYER.hotkeysOn = true;
     START_PLAYER.dontResetSlider = false;
+    START_PLAYER.favGalaxies = [];
     START_PLAYER.version = 'v0.3.1_d.5';
 
     fixData(player, START_PLAYER);

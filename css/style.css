@@ -192,7 +192,22 @@ body {
     box-shadow: 3px 3px #424242;
     width: 300px;
     border-radius: 4px;
-    z-index: 2;
+    z-index: 9;
+    display: none;
+}
+
+.gPopup {
+    position: fixed;
+    left: 50%;
+	top: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    text-align: center;
+    background-color: black;
+    border: 3px solid white;
+    box-shadow: 3px 3px #424242;
+    width: 320px;
+    border-radius: 4px;
+    z-index: 9;
     display: none;
 }
 
@@ -1093,6 +1108,42 @@ option:active, option.active {
     display: none;
 }
 
+#gImportText {
+    min-width: 305px;
+    width: 305px;
+    height: 100px;
+    min-height: 100px;
+    margin: auto;
+    margin-bottom: 20px;
+    background-color: #525252;
+    overflow: auto;
+    display: none;
+}
+
+#gExportText {
+    min-width: 305px;
+    width: 305px;
+    height: 100px;
+    min-height: 100px;
+    margin: auto;
+    margin-bottom: 20px;
+    background-color: #525252;
+    overflow: auto;
+    display: none;
+}
+
+#favErrExportText {
+    min-width: 305px;
+    width: 305px;
+    height: 100px;
+    min-height: 100px;
+    margin: auto;
+    margin-bottom: 20px;
+    background-color: #525252;
+    overflow: auto;
+    display: none;
+}
+
 .timeLabelLeft {
     width: 100px;
     height: 100px;
@@ -1789,6 +1840,56 @@ option:active, option.active {
     cursor: pointer;
     border-radius: 4px;
     font-family: 'Cinzel', serif;
+}
+
+.galImpExpBut {
+    color: white;
+    background-color: #661503;
+    font-style: bold;
+    width: 130px;
+    height: 35px;
+    border: 1px solid #e32d05;
+    margin: 5px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-family: 'Cinzel', serif;
+    position: relative;
+}
+
+#favSavedNotice {
+    color: white;
+    background-color: #661503;
+    font-style: bold;
+    font-size: 18px;
+    width: 128px;
+    height: 33px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-family: 'Cinzel', serif;
+    position: absolute;
+    top: 1px;
+    left: 1px;
+    z-index: 2;
+    transition: opacity 2s;
+    opacity: 0;
+}
+
+#favLoadNotice {
+    color: white;
+    background-color: #661503;
+    font-style: bold;
+    font-size: 18px;
+    width: 128px;
+    height: 33px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-family: 'Cinzel', serif;
+    position: absolute;
+    top: 1px;
+    left: 1px;
+    z-index: 2;
+    transition: opacity 2s;
+    opacity: 0;
 }
 
 .galaxyNameBut2 {
