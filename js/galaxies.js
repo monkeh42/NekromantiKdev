@@ -559,6 +559,10 @@ function buyArkUpgrade(a) {
         document.getElementById(a + 'But').classList.remove('arkUpg');
         document.getElementById(a + 'Text').style.display = 'none';
         document.getElementById(a + 'BoughtText').style.display = 'inline';
+        document.getElementById('upgSoftcapNum1').innerHTML =  `${formatWhole(1000*(2**getNumArkUpgs()))}`;
+        document.getElementById('upgSoftcapNum2').innerHTML =  `${formatWhole(1000*(2**getNumArkUpgs()))}`;
+        document.getElementById('mainSoftcapStart').innerHTML =  `${formatWhole(1000*(2**getNumArkUpgs()))}`;
+        document.getElementById('softcapNum').innerHTML =  `${formatWhole(1000*(2**getNumArkUpgs()))}`;
 
         if (checkForWin()) {
             winGame();
@@ -913,11 +917,48 @@ function getGalaxiesBonus() {
     var e = 1.5;
     var boost = Decimal.max(b.pow(e).plus(1), 1);
     if (hasMilestone(3)) { boost = boost.times(1.5); }
+    return getGalaxySoftcap(boost);
+}
+
+function getGalaxiesBonusNoSC() {
+    var b = new Decimal(player.allTimeStats.totalGalaxies)
+    var e = 1.5;
+    var boost = Decimal.max(b.pow(e).plus(1), 1);
+    if (hasMilestone(3)) { boost = boost.times(1.5); }
     return boost;
+}
+
+function getGalaxiesBonusFixed(gals) {
+    var b = new Decimal(gals)
+    var e = 1.5;
+    var boost = Decimal.max(b.pow(e).plus(1), 1);
+    if (hasMilestone(3)) { boost = boost.times(1.5); }
+    return boost;
+}
+
+function getGalaxySoftcap(eff) {
+    let start = getGalaxiesBonusFixed(1000*(2**getNumArkUpgs()));
+    let mag = 2;
+    if (isSoftcapActive(eff)) {
+        return Decimal.pow(10, Decimal.pow(eff.log10(), 1/mag).times(Decimal.pow(start.log10(), Decimal.sub(1, 1/mag))));
+    } else { return eff; }
+}
+
+function getGalaxyUpgSoftcap(eff) {
+    let start = new Decimal(1000*(2**getNumArkUpgs())+1);
+    let mag = 2;
+    if (eff.gte(start) && !isResearchCompleted(6)) {
+        return Decimal.pow(10, Decimal.pow(eff.log10(), 1/mag).times(Decimal.pow(start.log10(), Decimal.sub(1, 1/mag))));
+    } else { return eff; }
+}
+
+function isSoftcapActive(val) {
+    return (val.gte(getGalaxiesBonusFixed(1000*(2**getNumArkUpgs()))) && !isResearchCompleted(6));
 }
 
 function getBoughtGUpgs() {
     let count = 0;
+    let root
     for (let g in GALAXIES_DATA) {
         for (let u in GALAXIES_DATA[g].upgrades) {
             if (hasGUpgrade(g, u)) { count++; }
@@ -977,6 +1018,13 @@ function completeResearch(id) {
     player.isInResearch = false;
     player.research = new Decimal(0);
 
+    if (id==6) {
+        document.getElementById('upgSoftcapNotice1').style.display = 'none';
+        document.getElementById('upgSoftcapNotice1').style.display = 'none';
+        document.getElementById('softcapNotice').style.display = 'none';
+        document.getElementById('softcapMainDisplay').style.display = 'none';
+    }
+
     if (id==7) {
         player.theorems = player.theorems.plus(1);
         player.infCompletions = player.infCompletions.plus(1);
@@ -985,6 +1033,7 @@ function completeResearch(id) {
         document.getElementById('theoremEffect').innerHTML = ` ^${formatDefault2(getTheoremBoostW())}`;
         document.getElementById('theoremEffectC').innerHTML = ` ^${formatDefault2(getTheoremBoostC())}`;
         document.getElementById('resGoal7').innerHTML = formatWhole(RESEARCH_DATA[7].calcGoal());
+        
     }
     else { unlockArkPart(RESEARCH_DATA[id].unlocks); }
 
@@ -1095,11 +1144,11 @@ const RESEARCH_DATA = {
     },
     7: {
         galaxyLocks: 0,
-        goal: new Decimal(1e17),
+        goal: new Decimal(1e16),
         buttonID: 'startResearch7',
         unlocks: '',
         calcGoal: function() {
-            return this.goal.times(Decimal.pow(100, player.infCompletions));
+            return this.goal.times(Decimal.pow(10, player.infCompletions));
         },
         onComplete: function() {
             return;
@@ -1202,7 +1251,7 @@ const ARK_DATA = {
 
 const ETH_DATA = {
     11: {
-        title: '11',
+        title: 'Hypertime',
         desc: 'The first time upgrade in the fourth and fifth columns stay active during research.',
         cost: new Decimal(1),
         displayEffect: false,
@@ -1218,7 +1267,7 @@ const ETH_DATA = {
         },
     },
     12: {
-        title: '12',
+        title: 'Practical Theoretics',
         desc: 'Each Ark component built multiplies corpse production by 10.',
         cost: new Decimal(1),
         displayEffect: true,
@@ -1234,7 +1283,7 @@ const ETH_DATA = {
         },
     },
     13: {
-        title: '13',
+        title: 'Meta-Solar',
         desc: '<span style="font-weight: bold;">Ultra-Solar</span> stays active during research.',
         cost: new Decimal(1),
         displayEffect: false,
@@ -1250,7 +1299,7 @@ const ETH_DATA = {
         },
     },
     14: {
-        title: '14',
+        title: 'Quantum Equivalence',
         desc: 'Void Research production is multiplied by the log of your current bricks/sec.',
         cost: new Decimal(1),
         displayEffect: true,
@@ -1259,7 +1308,7 @@ const ETH_DATA = {
         displayFormula: function() {return ''},
         buttonID: 'ethUpg14',
         effect: function() {
-            return getBricksPerSecond().log10();
+            return (hasUpgrade(4, 13) && (!player.isInResearch || hasEUpgrade(13))) ? getBricksPerSecond().ln() : getBricksPerSecond().log10();
         },
         onBuy: function() {
             return;
@@ -1551,7 +1600,7 @@ const GALAXIES_DATA = {
                 },
                 effect: function() {
                     let e = new Decimal(player.galaxies.plus(player.spentGalaxies));
-                    return e.plus(1);
+                    return getGalaxyUpgSoftcap(e.plus(1));
                 },
                 onBuy: function() {
                     return;
@@ -1812,7 +1861,7 @@ const GALAXIES_DATA = {
                 },
                 effect: function() {
                     let e = new Decimal(player.galaxies.plus(player.spentGalaxies));
-                    return e.plus(1);
+                    return getGalaxyUpgSoftcap(e.plus(1));
                 },
                 onBuy: function() {
                     return;
@@ -1910,7 +1959,7 @@ const GALAXIES_DATA = {
                 row: 3,
                 position: 1,
                 displayEffect: true,
-                displaySuffix: '/sec (real time)',
+                displaySuffix: '/sec<br>(real time)',
                 displayTooltip: false,
                 displayFormula: function() {return ''},
                 buttonID: 'galaxyUpg4.32',

@@ -593,7 +593,7 @@ const BUILDS_DATA = {
                 displayEffect: true,
                 displaySuffix: 'x',
                 displayTooltip: true,
-                displayFormula: function() { return hasUpgrade(4, 13) ? (hasUpgrade(3, 21) ? '1 + (log(x)^2)/4' : '1 + log(x)/4') : (hasUpgrade(3, 21) ? '1 + (log(x)^2)/4' : '1 + log(x)/4') },
+                displayFormula: function() { return hasUpgrade(4, 13) ? (hasUpgrade(3, 21) ? '1 + (ln(x)^2)/4' : '1 + ln(x)/4') : (hasUpgrade(3, 21) ? '1 + (log(x)^2)/4' : '1 + log(x)/4') },
                 effect: function() {
                     if (hasUpgrade(3, 21)) {
                         var e = (hasUpgrade(4, 13) && (!player.isInResearch || hasEUpgrade(13))) ? Decimal.div(Decimal.pow(Decimal.max(player.bricks, 1).ln(), 2), 4) : Decimal.div(Decimal.pow(Decimal.max(player.bricks, 1).log10(), 2), 4)

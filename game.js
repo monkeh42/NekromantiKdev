@@ -177,6 +177,16 @@ function loadStyles() {
     } 
 
     updateHeaderDisplay();
+    document.getElementById('upgSoftcapNum1').innerHTML =  `${formatWhole(1000*(2**getNumArkUpgs()))}`;
+    document.getElementById('upgSoftcapNum2').innerHTML =  `${formatWhole(1000*(2**getNumArkUpgs()))}`;
+    document.getElementById('mainSoftcapStart').innerHTML =  `${formatWhole(1000*(2**getNumArkUpgs()))}`;
+    document.getElementById('softcapNum').innerHTML =  `${formatWhole(1000*(2**getNumArkUpgs()))}`;
+    if (isResearchCompleted(6)) {
+        document.getElementById('upgSoftcapNotice1').style.display = 'none';
+        document.getElementById('upgSoftcapNotice2').style.display = 'none';
+        document.getElementById('softcapNotice').style.display = 'none';
+        document.getElementById('softcapMainDisplay').style.display = 'none';
+    }
 
     if (canTimePrestige()) {
         document.getElementById('timePrestigeReq').style.display = 'none';
@@ -275,7 +285,7 @@ function loadStyles() {
             document.getElementById('gUpgDesc' + g.toString() + '.' + u.toString()).innerHTML = getGUpgDesc(g, u); 
             if (GALAXIES_DATA[g].upgrades[u].requires.length>0) { document.getElementById('gUpgRequires' + g.toString() + '.' + u.toString()).innerHTML = `<span style=\"font-weight: 800;\">${GALAXIES_DATA[g].upgrades[GALAXIES_DATA[g].upgrades[u].requires[0]].title}</span>${(GALAXIES_DATA[g].upgrades[u].requires.length>1 ? " or <span style=\"font-weight: 800;\">" + GALAXIES_DATA[g].upgrades[GALAXIES_DATA[g].upgrades[u].requires[1]].title + "</span>" : "")}`; }
             document.getElementById('gUpgCost' + g.toString() + '.' + u.toString()).innerHTML = formatWhole(getGUpgCost(g, u)) + ' ' + galaxyTextSingulizer(getGUpgCost(g, u)); 
-            if (isDisplayEffectG(g, u)) { document.getElementById('gUpgEffect' + g.toString() + '.' + u.toString()).innerHTML = formatDefault2(getGUpgEffect(g, u)) + GALAXIES_DATA[g].upgrades[u].displaySuffix; }
+            if (isDisplayEffectG(g, u)) { document.getElementById(g.toString() + '.' + u.toString() + 'GEffect').style.display = 'inline'; }
             else { document.getElementById(g.toString() + '.' + u.toString() + 'GEffect').style.display = 'none'; }
         }
     }
@@ -1000,7 +1010,7 @@ document.onkeydown = function(e) {
     var ctrlDown = e.ctrlKey;
     var shiftDown = e.shiftKey;
     var metaDown = e.metaKey;
-    if (HOTKEYS[key] !== undefined && !ctrlDown && !metaDown) { HOTKEYS[key].onPress(shiftDown); }
+    if (HOTKEYS[key] !== undefined && !ctrlDown && !metaDown && !(document.activeElement.id == 'ascensionBuyerAmount' || document.activeElement.id == 'maxPrestige' || document.activeElement.id == 'sacrificeBuyerAmount')) { HOTKEYS[key].onPress(shiftDown); }
 }
 
 function toggleHotkeys() {

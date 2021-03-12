@@ -652,6 +652,7 @@ const START_PLAYER = {
             'mainTab': false,
             'timeUpgrades': false,
             'timeUpgrades2': false,
+            'timeDims2': false,
         },
         'galaxyTab': {
             'mainTab': false,
@@ -1718,9 +1719,8 @@ const UNLOCKS_DATA = {
         },
         'timeDims2': {
             unlocked: false,
-            idsToShow: ['timeRow5', 'timeRow6', 'timeRow7', 'timeRow8', 'dimBuyer5Cell', 'dimBuyer6Cell', 'dimBuyer7Cell', 'dimBuyer8Cell'],
+            idsToShow: ['timeRow5', 'timeRow6', 'timeRow7', 'timeRow8', 'dimBuyer5Cell', 'dimBuyer6Cell', 'dimBuyer7Cell', 'dimBuyer8Cell', 'spacer1', 'spacer2', 'spacer3', 'spacer4'],
             idsToHide: [],
-            classToShow: 'timeDimSpacer',
             shouldNotify: function() {
                 return false;
             },
@@ -2598,6 +2598,7 @@ function fixResetBug() {
             'mainTab': false,
             'timeUpgrades': false,
             'timeUpgrades2': false,
+            'timeDims2': false,
         },
         'galaxyTab': {
             'mainTab': false,

@@ -758,7 +758,7 @@ const TIME_DATA = {
         },
         41: {
             title: 'Unholy Paradox, Manbat',
-            desc: 'Outside of astral enslavement, the True Time Essence effect applies directly to corpse production.',
+            desc: 'The True Time Essence effect applies directly to corpse production.',
             cost: new Decimal(1e12),
             preReq: null,
             buttonID: 'timeUpg41',
@@ -767,7 +767,7 @@ const TIME_DATA = {
             displayFormula: function() { return '' },
             effect: function() {
                 if (player.isInResearch && !hasEUpgrade(11)) { return new Decimal(1); }
-                else { return player.astralFlag ? new Decimal(1) : getTrueTimeBuff() }
+                else { return getTrueTimeBuff() }
             }
         },
         42: {

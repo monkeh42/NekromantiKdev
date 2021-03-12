@@ -62,7 +62,7 @@
                 </tr>
                 <tr>
                     <td colspan="3">
-                        <div id="unitsBoostDisplay" style="font-size: 10pt; white-space: pre;">Total corpse gain multiplier from units:  <span id="totalMult" style="font-size: 12pt; font-variant-numeric: tabular-nums;">0.0x</span></div>
+                        <div id="galaxiesBonusDisplay" style="display: none;font-size: 10pt; white-space: pre;">You have formed <span id="galaxiesNum" style="font-size: 12pt; white-space: pre; font-variant-numeric: tabular-nums;"> 1 </span> depleted <span id="pluralGalaxy">galaxy</span>, giving a <span id="galaxiesMult" style="font-size: 12pt"> 0.0x </span> bonus to corpse gain.<span id="softcapNotice"> (softcapped at <span id="softcapNum" style="font-size: 12pt; white-space: pre;"> 1,000 </span> galaxies)</span></div>
                     </td>
                 </tr>
                 <tr>
@@ -94,7 +94,7 @@
                         <table cellpadding="0px" cellspacing="0px" style="width: 100%; text-align: center; border-collapse: collapse;">
                             <tr>
                                 <td>
-                                    <div id="galaxiesBonusDisplay" style="display: none;font-size: 10pt; white-space: pre;">You have formed <span id="galaxiesNum" style="font-size: 12pt; white-space: pre; font-variant-numeric: tabular-nums;"> 1 </span> depleted <span id="pluralGalaxy">galaxy</span>, giving a <span id="galaxiesMult" style="font-size: 12pt"> 0.0x </span> bonus to corpse gain.</div>
+                                    <div id="unitsBoostDisplay" style="font-size: 10pt; white-space: pre;">Total corpse gain multiplier from units:  <span id="totalMult" style="font-size: 12pt; font-variant-numeric: tabular-nums;">0.0x</span></div>
                                 </td>
                             </tr><tr>
                                 <td>
@@ -890,7 +890,7 @@
                                                             <label for="timeDim1But">first:</label><br><button onclick="updateDimBuyer(1, 'timeDim1But')" name="timeDim1But" id="timeDim1But" class="timeDimBuyerEnabledBut" style="margin-bottom: 10px;">OFF</button>
                                                         </div>
                                                     </td>
-                                                    <td style="width: 15px;" class="timeDimSpacer" id="spacer1">
+                                                    <td style="width: 15px; display: none;" class="timeDimSpacer" id="spacer1">
                                                         <div style="width: 100%;"></div>
                                                     </td>
                                                     <td id="dimBuyer5Cell" style="display: none;">
@@ -905,7 +905,7 @@
                                                             <label for="timeDim2But">second:</label><br><button onclick="updateDimBuyer(2, 'timeDim2But')" name="timeDim2But" id="timeDim2But" class="timeDimBuyerEnabledBut" style="margin-bottom: 10px;">OFF</button>
                                                         </div>
                                                     </td>
-                                                    <td style="width: 15px;" class="timeDimSpacer" id="spacer2">
+                                                    <td style="width: 15px; display: none;" class="timeDimSpacer" id="spacer2">
                                                         <div style="width: 100%;"></div>
                                                     </td>
                                                     <td id="dimBuyer6Cell" style="display: none;">
@@ -920,7 +920,7 @@
                                                             <label for="timeDim3But">third:</label><br><button onclick="updateDimBuyer(3, 'timeDim3But')" name="timeDim3But" id="timeDim3But" class="timeDimBuyerEnabledBut" style="margin-bottom: 10px;">OFF</button>
                                                         </div>
                                                     </td>
-                                                    <td style="width: 15px;" class="timeDimSpacer" id="spacer3">
+                                                    <td style="width: 15px; display: none;" class="timeDimSpacer" id="spacer3">
                                                         <div style="width: 100%;"></div>
                                                     </td>
                                                     <td id="dimBuyer7Cell" style="display: none;">
@@ -935,7 +935,7 @@
                                                             <label for="timeDim4But">fourth:</label><br><button onclick="updateDimBuyer(4, 'timeDim4But')" name="timeDim4But" id="timeDim4But" class="timeDimBuyerEnabledBut" style="margin-bottom: 10px;">OFF</button>
                                                         </div>
                                                     </td>
-                                                    <td style="width: 15px;" class="timeDimSpacer" id="spacer4">
+                                                    <td style="width: 15px; display: none;" class="timeDimSpacer" id="spacer4">
                                                         <div style="width: 100%;"></div>
                                                     </td>
                                                     <td id="dimBuyer8Cell" style="display: none;">
@@ -1502,7 +1502,7 @@
                             <button id="timeMax4" class="unitMaxT" onclick="buyMaxTime(4)">Buy max (<span id="dim4Max">0</span>)</button>
                         </td>
                     </tr>
-                    <tr id="timeRow5" style="display: table-row;">
+                    <tr id="timeRow5" style="display: none;">
                         <td>
                             Time Dimension 5
                         </td>
@@ -1781,7 +1781,8 @@
                 <tr>
                     <td>
                         <div id="galaxyAmountDisplay" style="font-size: 18pt;">You have <span id="galaxyAmount" style="font-size: 21pt; font-weight: bold; color: #cf2904; white-space: pre;"> 0 </span> <span id="galaxyTextAmt" class="galaxyResourceTexts">depleted galaxies</span> out of <span id="totalGalaxyAmount" style="font-size: 21pt; font-weight: bold; color: #cf2904; white-space: pre;"> 0 </span> total formed.</div>
-                        <div id="galaxyAmountDisplay" style="font-size: 18pt;">You have achieved <span id="ascensionAmount" style="font-size: 21pt; font-weight: bold; color: #cf2904; white-space: pre;"> 0 </span> <span id="ascensionTextAmt" class="galaxyResourceTexts">ascensions</span>.</div>
+                        <div id="ascensionAmountDisplay" style="font-size: 18pt;">You have achieved <span id="ascensionAmount" style="font-size: 21pt; font-weight: bold; color: #cf2904; white-space: pre;"> 0 </span> <span id="ascensionTextAmt" class="galaxyResourceTexts">ascensions</span>.</div>
+                        <div id="softcapMainDisplay" style="font-size: 16pt;">All effects based on total galaxies are softcapped at <span id="mainSoftcapStart" style="font-size: 19pt; font-weight: bold; color: #cf2904; white-space: pre;"> 1,000 </span> galaxies.</div>
                     </td>
                 </tr>
             </table>
@@ -1960,6 +1961,7 @@
                                                 <span class="gUpgRequires">Requires: <span id="gUpgRequires2.31"></span></span><br>
                                                 <span>Cost: <span id="gUpgCost2.31"></span></span><br>
                                                 <span id="2.31GEffect" style="display: none;">Currently: <span id="gUpgEffect2.31"></span></span>
+                                                <span id="upgSoftcapNotice1"> (softcapped at <span id="upgSoftcapNum1">1,000</span> galaxies)</span>
                                             </span>
                                         </button>
                                     </td>
@@ -2096,6 +2098,7 @@
                                                     <span style="display: none;">Requires: <span id="gUpgRequires4.11"></span></span>
                                                     <span>Cost: <span id="gUpgCost4.11"></span></span><br>
                                                     <span id="4.11GEffect" style="display: none;">Currently: <span id="gUpgEffect4.11"></span></span>
+                                                    <span id="upgSoftcapNotice2"> (softcapped at <span id="upgSoftcapNum2">1,000</span> galaxies)</span>
                                                 </span>
                                             </button>
                                         </div>
@@ -2179,30 +2182,11 @@
                 <div id="researchDescription" style="text-align: center; width: 920px; margin: auto; font-size: 11pt;">
                     <div style="margin: 5px;"><span style=" font-size: 16pt; font-weight: bold;">When you begin a research project, you do a galaxy respec and time respec,</span> but <span style="font-size: 12pt;">ALL</span> of your corpses, astral bricks, buildings, construction, time upgrades, and time crystals are reset, regardless of your milestones, achievements, and project rewards; however, all tabs stay unlocked.<br>(Galactic Vortex and the 4th/5th Time Upgrade columns don't reset, but they have no effect during research.)</div>
                     <div style="margin: 5px;">During astral enslavement, your vassal souls tirelessly study the eldritch sciences of <span style="font-size: 14pt; color: #661503; font-weight: bold; -webkit-text-stroke-width: .3px; -webkit-text-stroke-color: white;">the beyond</span>. As a result, your base astral brick production is square rooted, but you produce Void Research at the same base rate.</div>
-                    <div style="margin: 5px;">Additionally, galaxy upgrade costs are tripled (after the cost increase from higher rows), and <span style="font-size: 12pt;">ALL</span> production other than bricks/research is raised to the ^0.9.</div>
+                    <div style="margin: 5px;">Additionally, galaxy upgrade costs are tripled (after the cost increase from higher rows), and <span style="font-size: 12pt;">ALL</span> production other than astral bricks and void research is raised to ^0.9.</div>
                     <div style="margin: 5px;">To complete a research project, you must reach the required amount of Void Research under these conditions in addition to the specific conditions below.<br><span style=" font-size: 16pt; font-weight: bold;">Completing a project respecs galaxies without an ascension reset.</div>
                     <div style="margin: 5px;"><span style="font-size: 14pt;">NOTE:</span> performing an ascension or galaxy respec will exit the current project and set your void research to 0.</div>
                 </div>
                 <table style="width: auto; text-align: center; margin: 20px auto;">
-                    <!--<tr>
-                        <td colspan="3" id="infiniteResearchCell" style="display: none;">
-                            <div id="research7" class="infResearchDiv">
-                                <h6>Infinite Research</h6>
-                                <div id="resConds7">
-                                    You can only buy one galaxy upgrade from each tree and from each row.<br>
-                                    Corpse production is raised to the ^0.9 a second time.
-                                </div>
-                                <div id="resReward7">
-                                    <span style="font-size: 15pt; font-weight: 900;">REWARD:</span> 1 Impossible Theorem.
-                                    <hr width="95%" style="border-color: #661503;">
-                                    Each Theorem multiplies both time essence effects by 1.5x.<br>You have <span id="numTheorems" style="white-space: pre; font-size: 15pt; font-weight: bold; color: #661503; -webkit-text-stroke-width: .5px; -webkit-text-stroke-color: white;"> 0 </span> Impossible Theorems, for a total effect of <span id="theoremEffect" style="white-space: pre; font-size: 15pt; font-weight: bold;"> 1</span>x.<br>
-                                    The Void Research goal amount is multiplied by 100 for every Impossible Theorem you gain.
-                                </div>
-                                <div id="resGoalText7" class="infResGoalText">Current Goal: <span id="resGoal7">1e17</span> Void Research</div>
-                                <button id="startResearch7" class="infResearchButton" onclick="researchButtonClick(7)">BEGIN</button>
-                            </div>
-                        </td>
-                    </tr>-->
                     <tr>
                         <td>
                             <div id="research1" class="researchDiv">
@@ -2288,7 +2272,7 @@
                                 </div>
                                 <hr width="95%" style="border-color: #661503;">
                                 <div id="resReward1" style="margin: 5px; height: 95px; min-height: 95px;">
-                                    <span style="font-size: 15pt; font-weight: 900;">REWARD:</span><br>Unlock the second row of Galactic Vortex upgrades.
+                                    <span style="font-size: 15pt; font-weight: 900;">REWARD:</span><br>Unlock the second row of Galactic Vortex upgrades, and remove all galaxy softcaps.
                                 </div>
                                 <div id="resGoalText6" class="resGoalText">Goal: <span id="resGoal6">1e15</span> Void Research</div>
                                 <button id="startResearch6" class="researchButton" onclick="researchButtonClick(6)">BEGIN</button>
@@ -2384,7 +2368,8 @@
                     <span style="font-size: 16pt; color: #661503; font-weight: bold; -webkit-text-stroke-width: .3px; -webkit-text-stroke-color: white;">"We have found you worthy of our ranks, small one."<br>
                     "Make yourself an ark of astral matter; make rooms in the ark, and cover it inside and outside with time."</span><br>
                     Even in your godlike state this is beyond you. This will require study.<br>
-                    Of course, you have undead souls to do your studying for you.
+                    Of course, you have undead souls to do your studying for you.<br>
+                    <span style="font-size: 14pt; font-weight: bold;">Each Ark component built doubles the number of galaxies the galaxy softcaps start at.</span>
                 </div>
                 <img id="thrusters" class="arkImg" src="../images/thrusters.png">
                 <img id="engines" class="arkImg" src="../images/engines.png">

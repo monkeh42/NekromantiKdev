@@ -146,7 +146,7 @@ function updateGalaxyUpgs() {
                         remGUpgClass(g, u, 'galaxyUpg');
                     }
                 } 
-                if (isDisplayEffectG(g, u)) { document.getElementById('gUpgEffect' + g.toString() + '.' + u.toString()).innerHTML = formatDefault2(getGUpgEffect(g, u)) + GALAXIES_DATA[g].upgrades[u].displaySuffix; }
+                if (isDisplayEffectG(g, u)) { document.getElementById('gUpgEffect' + g.toString() + '.' + u.toString()).innerHTML = formatUnitRow(getGUpgEffect(g, u)) + GALAXIES_DATA[g].upgrades[u].displaySuffix; }
             }
         }
     }
@@ -366,7 +366,7 @@ function updateUnitTiers() {
         displayData.push(['html', UNITS_DATA[i].CMultID, formatUnitRow(UNITS_DATA[i].corpseMult())]);
         if (getUnitProdPerSecond(i).gt(0)) {
             if (i==NUM_UNITS) {
-                if (Decimal.times(getUnitProdPerSecond(i).div(player.units[i].amount.max(1)), 100).gte(0.1)) { displayData.push(['html', UNITS_DATA[i].gainID, '(+' + formatUnitRow(Decimal.times(((player.displayRealTime && ((hasGUpgrade(1, 32) && player.astralFlag) || (hasGUpgrade(4, 22) && !player.astralFlag))) ? getUnitProdPerSecond(i).div(player.units[i].amount.max(1)).times(player.astralFlag ? getRealTimeMultiplier().sqrt().div(getAstralNerf().sqrt()) : getRealTimeMultiplier()) : getUnitProdPerSecond(i).div(player.units[i].amount.max(1))), 100)) + '%/s)']); }
+                if (Decimal.times(getUnitProdPerSecond(i).div(player.units[i].amount.max(1)), 100).gte(0.1)) { displayData.push(['html', UNITS_DATA[i].gainID, '(+' + formatUnitRow(Decimal.times(((player.displayRealTime && ((hasGUpgrade(1, 32) && player.astralFlag) || (hasGUpgrade(4, 22) && !player.astralFlag))) ? getUnitProdPerSecond(i).div(player.units[i].amount.max(1)).times(player.astralFlag ? getRealTimeMultiplier().sqrt().div(Decimal.sqrt(getAstralNerf())) : getRealTimeMultiplier()) : getUnitProdPerSecond(i).div(player.units[i].amount.max(1))), 100)) + '%/s)']); }
                 else if (document.getElementById(UNITS_DATA[i].gainID).innerHTML != '(<0.1%/s)') { displayData.push(['html', UNITS_DATA[i].gainID, '(<0.1%/s)']); }
             } else {
                 if (Decimal.times(getUnitProdPerSecond(i).div(player.units[i].amount.max(1)), 100).gte(0.1)) { displayData.push(['html', UNITS_DATA[i].gainID, '(+' + formatUnitRow(Decimal.times((player.displayRealTime ? getUnitProdPerSecond(i).div(player.units[i].amount.max(1)).times(getRealTimeMultiplier()) : getUnitProdPerSecond(i).div(player.units[i].amount.max(1))), 100)) + '%/s)']); }
