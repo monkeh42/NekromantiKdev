@@ -258,10 +258,8 @@ function loadStyles() {
             if (player.galaxyUpgs[g][u].locked) {
                 document.getElementById(GALAXIES_DATA[g].upgrades[u].buttonID).classList.add('lockedGalaxyUpg'); 
                 document.getElementById(GALAXIES_DATA[g].upgrades[u].buttonID).classList.remove('galaxyUpg');
-                document.getElementById(GALAXIES_DATA[g].upgrades[u].textID).style.display = 'none';
             } else {
                 document.getElementById(GALAXIES_DATA[g].upgrades[u].buttonID).classList.remove('lockedGalaxyUpg');
-                document.getElementById(GALAXIES_DATA[g].upgrades[u].textID).style.display = '';
                 if (hasGUpgrade(g, u)) { 
                     document.getElementById(GALAXIES_DATA[g].upgrades[u].buttonID).classList.add('boughtGalaxyUpg'); 
                     document.getElementById(GALAXIES_DATA[g].upgrades[u].buttonID).classList.remove('galaxyUpg');//+ ((player.tooltipsEnabled && isDisplayTooltipG(g, u)) ? ' tooltip' : '') }

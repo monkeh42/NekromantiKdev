@@ -411,23 +411,19 @@ function buyGUpg(g, u) {
             addGUpgClass(g, 22, 'lockedGalaxyUpg');
             remGUpgClass(g, 22, 'galaxyUpg')
             remGUpgClass(g, 22, 'unclickGalaxyUpg')
-            document.getElementById(GALAXIES_DATA[g].upgrades[22].textID).style.display = 'none';
             player.galaxyUpgs[g][32].locked = true;
             addGUpgClass(g, 32, 'lockedGalaxyUpg');
             remGUpgClass(g, 32, 'galaxyUpg')
             remGUpgClass(g, 32, 'unclickGalaxyUpg')
-            document.getElementById(GALAXIES_DATA[g].upgrades[32].textID).style.display = 'none';
         } else if (u == 22) {
             player.galaxyUpgs[g][21].locked = true;
             addGUpgClass(g, 21, 'lockedGalaxyUpg');
             remGUpgClass(g, 21, 'galaxyUpg')
             remGUpgClass(g, 21, 'unclickGalaxyUpg')
-            document.getElementById(GALAXIES_DATA[g].upgrades[21].textID).style.display = 'none';
             player.galaxyUpgs[g][31].locked = true;
             addGUpgClass(g, 31, 'lockedGalaxyUpg');
             remGUpgClass(g, 31, 'galaxyUpg')
             remGUpgClass(g, 31, 'unclickGalaxyUpg')
-            document.getElementById(GALAXIES_DATA[g].upgrades[31].textID).style.display = 'none';
         }
 
         for (let gg in GALAXIES_DATA) {
@@ -446,7 +442,6 @@ function buyGUpg(g, u) {
                         document.getElementById(GALAXIES_DATA[gg].upgrades[uu].buttonID).classList.add('lockedGalaxyUpg');
                         document.getElementById(GALAXIES_DATA[gg].upgrades[uu].buttonID).classList.remove('galaxyUpg');
                         document.getElementById(GALAXIES_DATA[gg].upgrades[uu].buttonID).classList.remove('unclickGalaxyUpg');
-                        document.getElementById(GALAXIES_DATA[gg].upgrades[uu].textID).style.display = 'none';
                     }
                 }
             }
@@ -461,7 +456,6 @@ function buyGUpg(g, u) {
                             document.getElementById(GALAXIES_DATA[gg].upgrades[uu].buttonID).classList.add('lockedGalaxyUpg');
                             document.getElementById(GALAXIES_DATA[gg].upgrades[uu].buttonID).classList.remove('galaxyUpg');
                             document.getElementById(GALAXIES_DATA[gg].upgrades[uu].buttonID).classList.remove('unclickGalaxyUpg');
-                            document.getElementById(GALAXIES_DATA[gg].upgrades[uu].textID).style.display = 'none';
                         }
                     }
                 } else {
@@ -471,7 +465,6 @@ function buyGUpg(g, u) {
                             document.getElementById(GALAXIES_DATA[gg].upgrades[vv].buttonID).classList.add('lockedGalaxyUpg');
                             document.getElementById(GALAXIES_DATA[gg].upgrades[vv].buttonID).classList.remove('galaxyUpg');
                             document.getElementById(GALAXIES_DATA[gg].upgrades[vv].buttonID).classList.remove('unclickGalaxyUpg');
-                            document.getElementById(GALAXIES_DATA[gg].upgrades[vv].textID).style.display = 'none';
                         }
                     }
                 }
@@ -1041,7 +1034,7 @@ function getTheoremBoostW() {
 }
 
 function getTheoremBoostC() {
-    return Decimal.pow(1.01, player.theorems);
+    return Decimal.pow(1.01, player.infCompletions);
 }
 
 const RESEARCH_DATA = {
