@@ -850,7 +850,7 @@ option:active, option.active {
     opacity: 0.6; 
     z-index: -1;
     background: #4b4b4b url("../images/skull.png") no-repeat center;
-  }
+}
 
 .galaxyUpg:hover {
     background-color: #e32d05;
