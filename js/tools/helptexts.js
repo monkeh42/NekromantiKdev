@@ -87,7 +87,7 @@ const HELP_TEXTS = {
                     Even in your godlike state, the plans for The Ark are beyond you. You must put your enslaved souls to work studying and deciphering them.<br>\
                     There are six research projects, and each unlocks one of the six ark components. Starting a research project inflicts several negative effects:\
                     <ul style="text-align: left;">\
-                        <li>When you start a project, you do a galaxy respec and a time respec. However, ALL of the following are reset to their starting value, regardless of rewards from acheivements/milestones/projects:</li>\
+                        <li>When you start a project, you do a galaxy respec and a time respec. However, ALL of the following are reset to their starting state/value, regardless of rewards from acheivements/milestones/projects:</li>\
                             <ul>\
                                 <li>Corpses</li>\
                                 <li>Astral bricks</li>\
