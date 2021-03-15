@@ -1171,7 +1171,7 @@ const RESEARCH_DATA = {
 
 const ARK_DATA = {
     'thrusters': {
-        name: 'thrusters',
+        name: 'Thrusters',
         desc: '',
         brickCost: new Decimal(1e100),
         timeCost: new Decimal(1e25),
@@ -1186,7 +1186,7 @@ const ARK_DATA = {
         }
     },
     'engines': {
-        name: 'engines',
+        name: 'Engines',
         desc: '',
         brickCost: new Decimal(1e125),
         timeCost: new Decimal(5e27),
@@ -1201,7 +1201,7 @@ const ARK_DATA = {
         }
     },
     'navigation': {
-        name: 'navigation',
+        name: 'Navigation',
         desc: '',
         brickCost: new Decimal(1e150),
         timeCost: new Decimal(1e30),
@@ -1216,7 +1216,7 @@ const ARK_DATA = {
         }
     },
     'torpedos': {
-        name: 'torpedos',
+        name: 'Torpedos',
         desc: '',
         brickCost: new Decimal(1e200),
         timeCost: new Decimal(1e35),
@@ -1231,7 +1231,7 @@ const ARK_DATA = {
         }
     },
     'railguns': {
-        name: 'railguns',
+        name: 'Railguns',
         desc: '',
         brickCost: new Decimal("1e300"),
         timeCost: new Decimal(1e40),
@@ -1246,7 +1246,7 @@ const ARK_DATA = {
         }
     },
     'support': {
-        name: 'support',
+        name: 'Death Support',
         desc: '',
         brickCost: new Decimal("1e400"),
         timeCost: new Decimal(1e45),

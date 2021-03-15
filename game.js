@@ -342,6 +342,7 @@ function loadStyles() {
         }
     } else {
         for (var a in ARK_DATA) {
+            document.getElementById(a + 'Text').innerHTML = "Build component:<br><span style=\"font-weight: 900;\">" + getAUpgName(a) + "</span><br>Cost: " + formatWhole(getAUpgBrickCost(a)) + " astral bricks" + "<br>and " + formatWhole(getAUpgTimeCost(a)) + " time crystals" + (isDisplayEffectA(a) ? ("<br>Currently: " + formatDefault2(getAUpgEffect(a)) + "x") : "");
             if (!arkIsUnlocked(a)) {
                 document.getElementById(a + 'But').classList.add('lockedArkUpg');
                 document.getElementById(a + 'But').classList.remove('arkUpg');
@@ -362,7 +363,6 @@ function loadStyles() {
                         document.getElementById(a + 'But').classList.add('unclickableArkUpg')
                         document.getElementById(a + 'But').classList.remove('arkUpg')
                     }
-                    document.getElementById(a + 'Text').innerHTML = "<span style=\"font-weight: 900;\">" + getAUpgName(a) + "</span><br>" + getAUpgDesc(a) + "<br>Cost: " + formatWhole(getAUpgBrickCost(a)) + " astral bricks" + "<br>and " + formatWhole(getAUpgTimeCost(a)) + " time crystals" + (isDisplayEffectA(a) ? ("<br>Currently: " + formatDefault2(getAUpgEffect(a)) + "x") : "");
                     document.getElementById(a).style.display = arkIsUnlocked(a) ? 'block' : 'none'
                     document.getElementById(a + 'Built').style.display = 'none';
                 }
