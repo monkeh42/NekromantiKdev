@@ -211,6 +211,25 @@ body {
     display: none;
 }
 
+.gSpecPopup {
+    position: fixed;
+    left: 50%;
+	top: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    text-align: center;
+    background-color: black;
+    border: 3px solid white;
+    box-shadow: 3px 3px #424242;
+    width: 520px;
+    min-width: 520px;
+    height: 260px;
+    min-height: 260px;
+    padding: 10px;
+    border-radius: 4px;
+    z-index: 9;
+    display: none;
+}
+
 .offPopup {
     position: absolute;
     text-align: center;
@@ -1698,6 +1717,32 @@ option:active, option.active {
     font-size: 12pt;
 }
 
+.saveLoadFavBut {
+    color: white;
+    background-color: #1f1f1f;
+    font-style: bold;
+    width: 75px;
+    height: 50px;
+    border: 1px solid #525252;
+    cursor: pointer;
+    border-radius: 4px;
+    font-family: 'Cinzel', serif;
+    font-size: 12pt;
+}
+
+.renameFavBut {
+    color: white;
+    background-color: #1f1f1f;
+    font-style: bold;
+    width: 100px;
+    height: 50px;
+    border: 1px solid #525252;
+    cursor: pointer;
+    border-radius: 4px;
+    font-family: 'Cinzel', serif;
+    font-size: 12pt;
+}
+
 #tabButtons {
     width: auto;
     margin: auto;
@@ -1873,6 +1918,19 @@ option:active, option.active {
     border-radius: 4px;
     font-family: 'Cinzel', serif;
     position: relative;
+}
+
+.galShowFavsBut {
+    color: white;
+    background-color: #661503;
+    font-style: bold;
+    width: 270px;
+    height: 35px;
+    border: 1px solid #e32d05;
+    margin: 5px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-family: 'Cinzel', serif;
 }
 
 #favSavedNotice {

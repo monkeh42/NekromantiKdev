@@ -1816,7 +1816,7 @@
                 <div id="galButs2" style="text-align: center; width: 100%; margin: auto;"><button id="galaxyNameBut1" class="galaxyNameBut2" onclick="showGalaxies('gal1', 'gal2')">Andromeda/Circinus</button><button id="galaxyNameBut2" class="galaxyNameBut2" onclick="showGalaxies('gal3', 'gal4')">Sculptor Dwarf/Triangulum</button></div>
                 <div id="galButs4" style="text-align: center; width: 100%; margin: auto;"><button id="galaxyNameBut1" class="galaxyNameBut4" onclick="showGalaxy('gal1')">Andromeda</button><button id="galaxyNameBut2" class="galaxyNameBut4" onclick="showGalaxy('gal2')">Circinus</button><button id="galaxyNameBut3" class="galaxyNameBut4" onclick="showGalaxy('gal3')">Sculptor Dwarf</button><button id="galaxyNameBut4" class="galaxyNameBut4" onclick="showGalaxy('gal4')">Triangulum</button></div>
                 <div style="text-align: center; width: 100%; margin: auto;"><button id="galaxyRespecBut" class="galaxyBut" onclick="respecGalaxiesClick()">Respec galaxies - forces ascension</button><button id="milestonesBut" class="galaxyBut" onclick="showMilestones()">Galaxy Milestones</button></div>
-                <div id="galaxyImpExp" style="text-align: center; width: 100%; margin: auto;"><button id="impGalBut" class="galImpExpBut" onclick="showImportGalaxies()">Import Galaxies</button><button id="expGalBut" class="galImpExpBut" onclick="exportGalaxies()">Export Galaxies</button><button id="loadFav" class="galImpExpBut" onclick="importGalaxies(true)">Load Favorite<div id="favLoadNotice">SUCCESS!</div></button><button id="saveFav" class="galImpExpBut" onclick="saveFavorite()">Save Favorite<div id="favSavedNotice">SAVED!</div></button></div>
+                <div id="galaxyImpExp" style="text-align: center; width: 100%; margin: auto;"><button id="impGalBut" class="galImpExpBut" onclick="showImportGalaxies()">Import Galaxies</button><button id="expGalBut" class="galImpExpBut" onclick="exportGalaxies()">Export Galaxies</button><button id="showFavsBut" class="galShowFavsBut" onclick="showFavPopup()">Load/Save Favorites</button><!--<button id="loadFav" class="galImpExpBut" onclick="importGalaxies(true)">Load Favorite<div id="favLoadNotice">SUCCESS!</div></button><button id="saveFav" class="galImpExpBut" onclick="saveFavorite()">Save Favorite<div id="favSavedNotice">SAVED!</div></button>--></div>
                 <table id="allGalaxiesTable" style="text-align: center; position: relative; left: -167;">
                     <tr>
                         <td id="gal1" class="gal">
@@ -3056,6 +3056,60 @@
                 <span id="offlineEssence" style="display: none;"><span id="offlineTrueGain" style="font-size: 15pt; font-weight: bold; white-space: pre; color: #006ba0;"> 0 </span> true time essence and <span id="offlineAntiGain" style="font-size: 15pt; font-weight: bold; white-space: pre; color: #006ba0;"> 0 </span> anti time essence.<br></span>
             </div>
             <button class="optBut" id="closeOfflinePopup" style="margin: 10px;" onclick="closeOfflinePopup()">CLOSE</button>
+        </div>
+        <div class="gSpecPopup" id="gSpecsPopup" style="display: none;">
+            <table>
+                <tr>
+                    <td width="50%"></td>
+                    <td width="15%"></td>
+                    <td width="15%"></td>
+                    <td width="20%"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <div id="slot1Name">Slot 1</div>
+                    </td>
+                    <td>
+                        <button id="slot1Save" class="saveLoadFavBut" onclick="saveFavorite(1)">SAVE</button>
+                    </td>
+                    <td>
+                        <button id="slot1Load" class="saveLoadFavBut" onclick="importGalaxies(true, 1)">LOAD</button>
+                    </td>
+                    <td>
+                        <button id="slot1Rename" class="renameFavBut" onclick="renameFavorite(1)">RENAME</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div id="slot2Name">Slot 2</div>
+                    </td>
+                    <td>
+                        <button id="slot2Save" class="saveLoadFavBut" onclick="saveFavorite(2)">SAVE</button>
+                    </td>
+                    <td>
+                        <button id="slot2Load" class="saveLoadFavBut" onclick="importGalaxies(true, 2)">LOAD</button>
+                    </td>
+                    <td>
+                        <button id="slot2Rename" class="renameFavBut" onclick="renameFavorite(2)">RENAME</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div id="slot3Name">Slot 3</div>
+                    </td>
+                    <td>
+                        <button id="slot3Save" class="saveLoadFavBut" onclick="saveFavorite(3)">SAVE</button>
+                    </td>
+                    <td>
+                        <button id="slot3Load" class="saveLoadFavBut" onclick="importGalaxies(true, 3)">LOAD</button>
+                    </td>
+                    <td>
+                        <button id="slot3Rename" class="renameFavBut" onclick="renameFavorite(3)">RENAME</button>
+                    </td>
+                </tr>
+            </table>
+            <div id="gSpecErr" style="height: 20px; min-height: 20px;"></div>
+            <div style="margin: 10px auto; width: 310px;"><button id ="resetFavsBut" class="optBut" onclick="resetAllFavs()" style="float: left;">RESET ALL</button><button id ="closeFavPopup" class="optBut" onclick="closeFavPopup()" style="float: right;">CLOSE</button></div>
         </div>
         <div class="gPopup" id="gImportPopup" style="display: none; width: 330px; min-width: 330px; height: 260px; min-height: 260px;">
             <label id="gImportTextLabel" for="gImportText"><h2>Paste your galaxy code:</h2></label>

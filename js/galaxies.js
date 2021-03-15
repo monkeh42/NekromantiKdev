@@ -139,17 +139,37 @@ function generateFavoriteGalaxies() {
     return favs;
 }
 
-function saveFavorite() {
-    if (player.favGalaxies.length>0) {
-        if (!confirm('You already have favorites saved - overwrite?')) {
+function resetAllFavs() {
+    if (!confirm('Are you sure? This will erase all three favorites slots and rename them to "Slot 1", "Slot 2", and "Slot 3".')) {
+        return;
+    }
+    player.favGalaxies = [...START_PLAYER.favGalaxies];
+    player.favGalNames = [...START_PLAYER.favGalNames];
+    for (let i=1; i<4; i++) {
+        document.getElementById('slot' + i.toString() + 'Name').innerHTML = 'Slot ' + i.toString();
+    }
+}
+
+function renameFavorite(i) {
+    let rename = prompt("Enter a new name for this favorites slot:");
+    if (rename !== undefined && rename.length>0) {
+        player.favGalNames[i-1] = rename;
+        document.getElementById('slot' + i.toString() + 'Name').innerHTML = rename;
+    }
+}
+
+function saveFavorite(i) {
+    if (player.favGalaxies[i-1].length>0) {
+        if (!confirm('You already have favorites in this slot - overwrite?')) {
             return;
         }
     }
-    player.favGalaxies = [...generateFavoriteGalaxies()];
-    document.getElementById('favSavedNotice').style.opacity = '1';
+    player.favGalaxies[i-1] = [...generateFavoriteGalaxies()];
+    document.getElementById('gSpecErr').innerHTML = 'Successfully saved to slot 1.';
+    /*document.getElementById('favSavedNotice').style.opacity = '1';
     setTimeout(function() {
         document.getElementById('favSavedNotice').style.opacity = '0';
-    }, 2000);
+    }, 2000);*/
 }
 
 function exportGalaxies() {
@@ -158,11 +178,11 @@ function exportGalaxies() {
     document.getElementById('gExportText').select()
 }
 
-function exportFavGalaxies() {
+function exportFavGalaxies(i) {
     let exp = '';
-    if (player.favGalaxies.length>0) {
-        for (let i=0; i<player.favGalaxies.length; i++) {
-            exp += player.favGalaxies[i] + ', ';
+    if (player.favGalaxies[i-1].length>0) {
+        for (let j=0; j<player.favGalaxies.length; j++) {
+            exp += player.favGalaxies[i-1][j] + ', ';
         }
         exp = exp.slice(0, -2);
     }
@@ -171,8 +191,8 @@ function exportFavGalaxies() {
     document.getElementById('favErrExportText').select()
 }
 
-function importGalaxies(fav=false) {
-    let gals = verifyGalaxyImp(fav);
+function importGalaxies(fav=false, favSlot=0) {
+    let gals = verifyGalaxyImp(fav, favSlot);
     if (gals.length == 0) { return; }
 
     let g=0;
@@ -185,9 +205,7 @@ function importGalaxies(fav=false) {
         if (canAffordGUpg(g, u)) { buyGUpg(g, u); }
         else {
             if (fav) {
-                document.getElementById('favErrPopup').style.display = 'block';
-                document.getElementById('favErr').innerHTML = 'Too expensive; bought ' + formatWhole(count) + '.';
-                exportFavGalaxies();
+                document.getElementById('gSpecErr').innerHTML = 'Too expensive; bought ' + formatWhole(count) + '.';
             } else {
                 document.getElementById('gImpErr').innerHTML = 'Too expensive; bought ' + formatWhole(count) + '.';
             }
@@ -197,15 +215,16 @@ function importGalaxies(fav=false) {
     }
 
     if (fav) { 
-        document.getElementById('favLoadNotice').style.opacity = '1';
+        document.getElementById('gSpecErr').innerHTML = 'Successfully bought ' + formatWhole(count) + ' upgrades.';
+        /*document.getElementById('favLoadNotice').style.opacity = '1';
         setTimeout(function() {
             document.getElementById('favLoadNotice').style.opacity = '0';
-        }, 2000);
+        }, 2000);*/
     }
     else { document.getElementById('gImpErr').innerHTML = 'Successfully bought ' + formatWhole(count) + ' upgrades.'; }
 }
 
-function verifyGalaxyImp(fav=false) {
+function verifyGalaxyImp(fav=false, favSlot=0) {
     let imp = document.getElementById('gImportText').value
     let gals = new Array();
     let dupes = false;
@@ -216,9 +235,7 @@ function verifyGalaxyImp(fav=false) {
 
     if (getBoughtGUpgs() != 0) {
         if (fav) {
-            document.getElementById('favErrPopup').style.display = 'block';
-            document.getElementById('favErr').innerHTML = 'You must respec first.';
-            exportFavGalaxies();
+            document.getElementById('gSpecErr').innerHTML = 'You must respec first.';
         } else {
             document.getElementById('gImpErr').innerHTML = 'You must respec first.';
         }
@@ -227,7 +244,7 @@ function verifyGalaxyImp(fav=false) {
 
     if (imp.length>3 || fav) {
         if (reg.test(imp) || fav) {
-            if (fav) { gals = [...player.favGalaxies]; }
+            if (fav) { gals = [...player.favGalaxies[favSlot]]; }
             else {
                 while (imp.length>2) {
                     gals.push(imp.slice(0, 4));
@@ -262,27 +279,21 @@ function verifyGalaxyImp(fav=false) {
                             u = parseInt(gals[k].slice(2, 4));
                             if (g > parseInt(gals[k+1].slice(0, 1))) {
                                 if (fav) {
-                                    document.getElementById('favErrPopup').style.display = 'block';
-                                    document.getElementById('favErr').innerHTML = 'Error: misordered upgrades.';
-                                    exportFavGalaxies();
+                                    document.getElementById('gSpecErr').innerHTML = 'Error: misordered upgrades.';
                                 } else {
                                     document.getElementById('gImpErr').innerHTML = 'Error: misordered upgrades.';
                                 }
                                 return [];
                             } else if (u > parseInt(gals[k+1].slice(2, 4)) && g == parseInt(gals[k+1].slice(0, 1))) {
                                 if (fav) {
-                                    document.getElementById('favErrPopup').style.display = 'block';
-                                    document.getElementById('favErr').innerHTML = 'Error: misordered upgrades.';
-                                    exportFavGalaxies();
+                                    document.getElementById('gSpecErr').innerHTML = 'Error: misordered upgrades.';
                                 } else {
                                     document.getElementById('gImpErr').innerHTML = 'Error: misordered upgrades.';
                                 }
                                 return [];
                             } else if ((gals.includes(g.toString() + '.21') && gals.includes(g.toString() + '.22')) || (gals.includes(g.toString() + '.31') && gals.includes(g.toString() + '.32'))) {
                                 if (fav) {
-                                    document.getElementById('favErrPopup').style.display = 'block';
-                                    document.getElementById('favErr').innerHTML = 'Error: both upgrade branches.';
-                                    exportFavGalaxies();
+                                    document.getElementById('gSpecErr').innerHTML = 'Error: both upgrade branches.';
                                 } else {
                                     document.getElementById('gImpErr').innerHTML = 'Error: both upgrade branches.';
                                 }
@@ -292,9 +303,7 @@ function verifyGalaxyImp(fav=false) {
                         return gals;
                     } else {
                         if (fav) {
-                            document.getElementById('favErrPopup').style.display = 'block';
-                            document.getElementById('favErr').innerHTML = 'Error: undefined upgrades.';
-                            exportFavGalaxies();
+                            document.getElementById('gSpecErr').innerHTML = 'Error: undefined upgrades.';
                         } else {
                             document.getElementById('gImpErr').innerHTML = 'Error: undefined upgrades.';
                         }
@@ -302,9 +311,7 @@ function verifyGalaxyImp(fav=false) {
                     }
                 } else {
                     if (fav) {
-                        document.getElementById('favErrPopup').style.display = 'block';
-                        document.getElementById('favErr').innerHTML = 'Error: duplicate upgrades.';
-                        exportFavGalaxies();
+                        document.getElementById('gSpecErr').innerHTML = 'Error: duplicate upgrades.';
                     } else {
                         document.getElementById('gImpErr').innerHTML = 'Error: duplicate upgrades.';
                     }
@@ -312,9 +319,7 @@ function verifyGalaxyImp(fav=false) {
                 }
             } else {
                 if (fav) {
-                    document.getElementById('favErrPopup').style.display = 'block';
-                    document.getElementById('favErr').innerHTML = 'Error: too many upgrades.';
-                    exportFavGalaxies();
+                    document.getElementById('gSpecErr').innerHTML = 'Error: too many upgrades.';
                 } else {
                     document.getElementById('gImpErr').innerHTML = 'Error: too many upgrades.';
                 }
@@ -322,9 +327,7 @@ function verifyGalaxyImp(fav=false) {
             }
         } else {
             if (fav) {
-                document.getElementById('favErrPopup').style.display = 'block';
-                document.getElementById('favErr').innerHTML = 'Error: incorrect format.';
-                exportFavGalaxies();
+                document.getElementById('gSpecErr').innerHTML = 'Error: incorrect format.';
             } else {
                 document.getElementById('gImpErr').innerHTML = 'Error: incorrect format.';
             }
@@ -332,9 +335,7 @@ function verifyGalaxyImp(fav=false) {
         }
     } else {
         if (fav) {
-            document.getElementById('favErrPopup').style.display = 'block';
-            document.getElementById('favErr').innerHTML = 'Error: empty or too short code.';
-            exportFavGalaxies();
+            document.getElementById('gSpecErr').innerHTML = 'Error: empty or too short code.';
         } else {
             document.getElementById('gImpErr').innerHTML = 'Error: empty or too short code.';
         }
@@ -353,10 +354,13 @@ function closeExpGalaxies() {
     document.getElementById('gExportText').value = '';
 }
 
-function closefavErrPopup() {
-    document.getElementById('favErrPopup').style.display = 'none';
-    document.getElementById('favErr').innerHTML = '';
-    document.getElementById('favErrExportText').value = '';
+function closeFavPopup() {
+    document.getElementById('gSpecsPopup').style.display = 'none';
+    document.getElementById('gSpecErr').innerHTML = '';
+}
+
+function showFavPopup() {
+    document.getElementById('gSpecsPopup').style.display = 'block';
 }
 
 function showImportGalaxies() {

@@ -688,6 +688,16 @@ const START_PLAYER = {
         53: false,
         54: false,
         55: false,
+        61: false,
+        62: false,
+        63: false,
+        64: false,
+        65: false,
+        71: false,
+        72: false,
+        73: false,
+        74: false,
+        75: false,
     },
 
     milestones: {
@@ -763,7 +773,8 @@ const START_PLAYER = {
     activeGalaxies: [4, 'gal1', 'gal2'],
     hotkeysOn: true,
     dontResetSlider: false,
-    favGalaxies: [],
+    favGalaxies: [[], [], []],
+    favGalNames: ['Slot 1', 'Slot 2', 'Slot 3'],
     version: 'v0.3.1_d.5',
 }
 
@@ -2826,6 +2837,16 @@ function fixResetBug() {
         53: false,
         54: false,
         55: false,
+        61: false,
+        62: false,
+        63: false,
+        64: false,
+        65: false,
+        71: false,
+        72: false,
+        73: false,
+        74: false,
+        75: false,
     });
 
     copyData(START_PLAYER.milestones, {
@@ -2901,7 +2922,8 @@ function fixResetBug() {
     START_PLAYER.activeGalaxies = new Array(4, 'gal1', 'gal2');
     START_PLAYER.hotkeysOn = true;
     START_PLAYER.dontResetSlider = false;
-    START_PLAYER.favGalaxies = [];
+    START_PLAYER.favGalaxies = [[], [], []];
+    START_PLAYER.favGalNames = ['Slot 1', 'Slot 2', 'Slot 3'];
     START_PLAYER.version = 'v0.3.1_d.5';
 
     fixData(player, START_PLAYER);

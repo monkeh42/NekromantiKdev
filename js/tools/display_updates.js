@@ -859,6 +859,10 @@ function updateHeaderDisplay() {
 }
 
 function updatePopupsEtc() {
+    for (let i=1; i<4; i++) {
+        document.getElementById('slot' + i.toString() + 'Name').innerHTML = player.favGalNames[i-1];
+    }
+
     updateSliderDisplay();
 
     updateConfirmationPopupDisplay();
