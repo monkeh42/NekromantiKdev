@@ -249,8 +249,6 @@ function loadStyles() {
     document.getElementById('timeUpgBuyerBut').innerHTML = player.autobuyers['time']['on'] ? 'Time Upgrade Cols 1-3 Autobuyer: ON' : 'Time Upgrade Cols 1-3 Autobuyer: OFF'
     if (hasMilestone(6)) { document.getElementById('extraColsNotice').style.display = ''; }
 
-    
-
     for (var c in CONSTR_DATA) {
         if (!canAffordCUpg(c)) {
             document.getElementById(CONSTR_DATA[c].buttonID).classList.add('unclickableConstrUpg');
@@ -896,15 +894,6 @@ function updateVersion() {
     copyData(player, START_PLAYER);
     updateVersionData(player, tempPlayer);
     player.version = GAME_DATA.version;
-    if (player.version == 'v0.3.2') {
-        if ((!!tempPlayer.achievements[11]) && (typeof tempPlayer.achievements[11] === "object") && player.unlocks['galaxyTab']['mainTab']) {
-            for (let i=1; i<=3; i++) {
-                for (let j=1; j<=5; j++) {
-                    player.achievements[i.toString() + j.toString()] = true;
-                }
-            }
-        }
-    }
     tempPlayer = {};
 }
 

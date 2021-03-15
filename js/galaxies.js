@@ -411,9 +411,6 @@ function buyGUpg(g, u) {
         player.spentGalaxies = player.spentGalaxies.plus(GALAXIES_DATA[g].upgrades[u].cost());
         player.galaxyUpgs[g][u].bought = true;
         GALAXIES_DATA[g].upgrades[u].onBuy();
-        //document.getElementById(GALAXIES_DATA[g].upgrades[u].buttonID).classList.add('boughtGalaxyUpg');
-        //document.getElementById(GALAXIES_DATA[g].upgrades[u].buttonID).classList.remove('galaxyUpg');
-        //document.getElementById(GALAXIES_DATA[g].upgrades[u].buttonID).classList.remove('unclickGalaxyUpg');
         addGUpgClass(g, u, 'boughtGalaxyUpg');
         remGUpgClass(g, u, 'galaxyUpg');
         remGUpgClass(g, u, 'unclickGalaxyUpg');
@@ -571,10 +568,6 @@ function buyArkUpgrade(a) {
         document.getElementById(a + 'But').classList.remove('arkUpg');
         document.getElementById(a + 'Text').style.display = 'none';
         document.getElementById(a + 'BoughtText').style.display = 'inline';
-        document.getElementById('upgSoftcapNum1').innerHTML =  `${formatWhole(1000*(2**getNumCompletedProj()))}`;
-        document.getElementById('upgSoftcapNum2').innerHTML =  `${formatWhole(1000*(2**getNumCompletedProj()))}`;
-        document.getElementById('mainSoftcapStart').innerHTML =  `${formatWhole(1000*(2**getNumCompletedProj()))}`;
-        document.getElementById('softcapNum').innerHTML =  `${formatWhole(1000*(2**getNumCompletedProj()))}`;
 
         if (checkForWin()) {
             winGame();
@@ -1030,6 +1023,10 @@ function completeResearch(id) {
     player.researchProjects[id].active = false;
     player.isInResearch = false;
     player.research = new Decimal(0);
+    document.getElementById('upgSoftcapNum1').innerHTML =  `${formatWhole(1000*(2**getNumCompletedProj()))}`;
+    document.getElementById('upgSoftcapNum2').innerHTML =  `${formatWhole(1000*(2**getNumCompletedProj()))}`;
+    document.getElementById('mainSoftcapStart').innerHTML =  `${formatWhole(1000*(2**getNumCompletedProj()))}`;
+    document.getElementById('softcapNum').innerHTML =  `${formatWhole(1000*(2**getNumCompletedProj()))}`;
 
     if (id==6) {
         document.getElementById('upgSoftcapNotice1').style.display = 'none';

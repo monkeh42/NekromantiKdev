@@ -13,42 +13,8 @@ function updateDisplay(timestamp) {
     }
 
     displayData = new Array(0);
-    /*document.getElementById('testBox').innerHTML = `<h2>log(x) -> sqrt(x)</h2>
-                                                    <br>Industrialize: ${formatDefault2(Decimal.pow(player.buildings[1].amount.sqrt(), 0.5).times(2).plus(1))}x boost,<br>
-                                                    ${formatDefault2(Decimal.pow(player.buildings[1].amount.sqrt(), 0.5).times(2).plus(1).div(getUpgEffect(1, 11)))}x stronger<br>
-                                                    Part Time Jobs: ${formatDefault2(Decimal.pow(player.units[2].amount.sqrt(), 0.5).plus(1))}x boost,<br>
-                                                    ${formatDefault2(Decimal.pow(player.units[2].amount.sqrt(), 0.5).plus(1).div(getUpgEffect(1, 21)))}x stronger<br>
-                                                    Arm the Dead: ${formatDefault2(player.corpses.plus(1))}x boost,<br>
-                                                    ${formatDefault2(player.corpses.plus(1).div(getUpgEffect(1, 23)))}x stronger<br>
-                                                    Astral Forges: ${formatDefault2(Decimal.sqrt(player.bricks.sqrt().plus(1)))}x boost,<br>
-                                                    ${formatDefault2(Decimal.sqrt(player.bricks.sqrt().plus(1)).div(getUpgEffect(2, 12)))}x stronger<br>
-                                                    Astral Siege Engines: ${formatDefault2(Decimal.sqrt(player.bricks.sqrt().plus(1)))}x boost,<br>
-                                                    ${formatDefault2(Decimal.sqrt(player.bricks.sqrt().plus(1)).div(getUpgEffect(2, 13)))}x stronger<br>
-                                                    Astral Kiln Kilns: ${formatDefault2(player.bricks.plus(1))}x boost,<br>
-                                                    ${formatDefault2(player.bricks.plus(1).div(getUpgEffect(2, 21)))}x stronger<br>
-                                                    Astral Time Machine: ${formatDefault2(player.bricks.plus(1))}x boost,<br>
-                                                    ${formatDefault2(player.bricks.plus(1).div(getUpgEffect(2, 22)))}x stronger<br>
-                                                    Astral Magnifying: ${formatDefault2(player.bricks.sqrt().div(4).plus(1))}x boost,<br>
-                                                    ${formatDefault2(player.bricks.sqrt().div(4).plus(1).div(getUpgEffect(2, 23)))}x stronger<br>`
-
-    document.getElementById('testBoxL').innerHTML = `<h2>log(x) -> log(x)^2</h2>
-                                                    <br>Industrialize: ${formatDefault2(Decimal.pow(Decimal.pow(player.buildings[1].amount.log10(), 2), 0.5).times(2).plus(1))}x boost,<br>
-                                                    ${formatDefault2(Decimal.pow(Decimal.pow(player.buildings[1].amount.log10(), 2), 0.5).times(2).plus(1).div(getUpgEffect(1, 11)))}x stronger<br>
-                                                    Part Time Jobs: ${formatDefault2(Decimal.pow(Decimal.pow(player.units[2].amount.log10(), 2), 0.5).plus(1))}x boost,<br>
-                                                    ${formatDefault2(Decimal.pow(Decimal.pow(player.units[2].amount.log10(), 2), 0.5).plus(1).div(getUpgEffect(1, 21)))}x stronger<br>
-                                                    Arm the Dead: ${formatDefault2(Decimal.pow(player.corpses.log10(), 2).pow(2).plus(1))}x boost,<br>
-                                                    ${formatDefault2(Decimal.pow(player.corpses.log10(), 4).plus(1).div(getUpgEffect(1, 23)))}x stronger<br>
-                                                    Astral Forges: ${formatDefault2(Decimal.sqrt(Decimal.pow(player.bricks.log10(), 2).plus(1)))}x boost,<br>
-                                                    ${formatDefault2(Decimal.sqrt(Decimal.pow(player.bricks.log10(), 2).plus(1)).div(getUpgEffect(2, 12)))}x stronger<br>
-                                                    Astral Siege Engines: ${formatDefault2(Decimal.sqrt(Decimal.pow(player.bricks.log10(), 2).plus(1)))}x boost,<br>
-                                                    ${formatDefault2(Decimal.sqrt(Decimal.pow(player.bricks.log10(), 2).plus(1)).div(getUpgEffect(2, 13)))}x stronger<br>
-                                                    Astral Kiln Kilns: ${formatDefault2(Decimal.pow(player.bricks.log10(), 4).plus(1))}x boost,<br>
-                                                    ${formatDefault2(Decimal.pow(player.bricks.log10(), 4).plus(1).div(getUpgEffect(2, 21)))}x stronger<br>
-                                                    Astral Time Machine: ${formatDefault2(Decimal.pow(player.bricks.log10(), 4).plus(1))}x boost,<br>
-                                                    ${formatDefault2(Decimal.pow(player.bricks.log10(), 4).plus(1).div(getUpgEffect(2, 22)))}x stronger<br>
-                                                    Astral Magnifying: ${formatDefault2(Decimal.pow(player.bricks.log10(), 2).div(4).plus(1))}x boost,<br>
-                                                    ${formatDefault2(Decimal.pow(player.bricks.log10(), 2).div(4).plus(1).div(getUpgEffect(2, 23)))}x stronger<br>`*/
 }
+
 
 function updateElement(data) {
     if (data[0] == 'addClass') {
@@ -276,7 +242,7 @@ function updateTimeDisplays() {
 function updateGalaxyDisplays() {
     displayData.push(['html', 'galaxyAmount', formatWhole(player.galaxies)]);
     displayData.push(['html', 'totalGalaxyAmount', formatWhole(player.allTimeStats.totalGalaxies)]);
-    displayData.push(['html', 'ascensionAmount', formatWhole(player.ascensions)]);
+    displayData.push(['html', 'ascensionAmount', formatWhole(player.allTimeStats.totalAscensions)]);
     displayData.push(['html', 'researchAmountHeader', formatUnitRow(player.research)]);
     displayData.push(['html', 'researchGainHeader', ` ${(formatUnitRow(player.astralFlag ? (player.displayRealTime ? getResearchPerSecond().times(getRealTimeMultiplier()) : getResearchPerSecond()) : formatWhole(0)))} `]);
 }

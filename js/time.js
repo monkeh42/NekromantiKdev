@@ -208,40 +208,36 @@ function canTimePrestige() {
 }
 
 function respecTimeClick() {
-    if (player.timeResets.gte(1)) {
-        if (player.timeLocked) {
-            if (player.confirmations['timeRespec']['click']) {
-                if (!confirm('Are you sure? This will reset ALL of your progress before unlocking Time Warp, and all of your time essense.<br>(These confirmations can be disabled in options)')) return
-            }
-
-            player.timeLocked = false;
-            toggleTimeLockDisplay();
-            document.getElementById('timeSlider').removeAttribute('disabled')
-            document.getElementById('timeTabBut').classList.add('timeUnlockedNotify')
-            document.getElementById('timeTabButMid').classList.add('timeUnlockedNotify')
-            document.getElementById('timeDimSubTabBut').classList.add('timeUnlockedNotify')
-            if (canTimePrestige()) { timePrestigeNoConfirm(); }
-            else { timePrestigeReset(); }
+    if (player.timeLocked) {
+        if (player.confirmations['timeRespec']['click']) {
+            if (!confirm('Are you sure? This will reset ALL of your progress before unlocking Time Warp, and all of your time essense.<br>(These confirmations can be disabled in options)')) return
         }
+
+        player.timeLocked = false;
+        toggleTimeLockDisplay();
+        document.getElementById('timeSlider').removeAttribute('disabled')
+        document.getElementById('timeTabBut').classList.add('timeUnlockedNotify')
+        document.getElementById('timeTabButMid').classList.add('timeUnlockedNotify')
+        document.getElementById('timeDimSubTabBut').classList.add('timeUnlockedNotify')
+        if (canTimePrestige()) { timePrestigeNoConfirm(); }
+        else { timePrestigeReset(); }
     }
 }
 
 function respecTimeKey() {
-    if (player.timeResets.gte(1)) {
-        if (player.timeLocked) {
-            if (player.confirmations['timeRespec']['key']) {
-                if (!confirm('Are you sure? This will reset ALL of your progress before unlocking Time Warp, and all of your time essense.<br>(These confirmations can be disabled in options)')) return
-            }
-
-            player.timeLocked = false;
-            toggleTimeLockDisplay();
-            document.getElementById('timeSlider').removeAttribute('disabled')
-            document.getElementById('timeTabBut').classList.add('timeUnlockedNotify')
-            document.getElementById('timeTabButMid').classList.add('timeUnlockedNotify')
-            document.getElementById('timeDimSubTabBut').classList.add('timeUnlockedNotify')
-            if (canTimePrestige()) { timePrestigeNoConfirm(); }
-            else { timePrestigeReset(); }
+    if (player.timeLocked) {
+        if (player.confirmations['timeRespec']['key']) {
+            if (!confirm('Are you sure? This will reset ALL of your progress before unlocking Time Warp, and all of your time essense.<br>(These confirmations can be disabled in options)')) return
         }
+
+        player.timeLocked = false;
+        toggleTimeLockDisplay();
+        document.getElementById('timeSlider').removeAttribute('disabled')
+        document.getElementById('timeTabBut').classList.add('timeUnlockedNotify')
+        document.getElementById('timeTabButMid').classList.add('timeUnlockedNotify')
+        document.getElementById('timeDimSubTabBut').classList.add('timeUnlockedNotify')
+        if (canTimePrestige()) { timePrestigeNoConfirm(); }
+        else { timePrestigeReset(); }
     }
 }
 
