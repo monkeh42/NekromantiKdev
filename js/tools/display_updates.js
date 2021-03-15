@@ -737,6 +737,24 @@ function showChangelog(divID) {
     }
 }
 
+function showChangelogSection(divID) {
+    var allDivs = document.getElementsByClassName('changelogSection');
+    var tab;
+    var log;
+    for (var i=0; i<allDivs.length; i++) {
+        tab = allDivs.item(i);
+        if (tab.id === divID) {
+            (tab.style.display != 'none') ? tab.style.display = 'none': tab.style.display = 'table-cell'
+        } else {
+            tab.style.display = 'none';
+            let allLogs = document.getElementsByClassName('changelogPageDiv');
+            for (let j=0; j<allLogs.length; j++) {
+                allLogs.item(j).style.display = 'none'; 
+            }
+        }
+    }
+}
+
 function toggleConfirmations(action, method, id) {
     player.confirmations[action][method] = !player.confirmations[action][method];
     if (player.confirmations[action][method]) {
