@@ -1448,21 +1448,19 @@ const ACH_DATA = {
         }
     },
     71: {
-        title: 'True Annihilation',
-        desc: 'Ascend for at least 100 galaxies in under 10 seconds.',
+        title: 'How The Turntables',
+        desc: 'Have your true time essence effect be more than double the anti time essence effect, while they\'re both at least 1,000x.',
         secret: false,
         hint: '',
-        reward: 'Your unit corpse multipliers get a boost based on number of ascensions.',
+        reward: 'Double the true time essence effect.',
         hasReward: true,
-        showEffect: true,
+        showEffect: false,
         divID: 'ach71',
         canUnlock: function() {
-            return (player.pastAscRuns.lastRun.galaxyGain.gte(100) && (player.pastAscRuns.lastRun.timeSpent<10000));
+            return (getTrueTimeBuff().gt(getAntiTimeBuff().times(2)) && getAntiTimeBuff().gte(1000));
         },
         effect: function() {
-            let e = new Decimal(player.allTimeStats.totalAscensions);
-            e = e.div(10);
-            return e.plus(1);
+            return new Decimal(2);
         },
         onUnlock: function() {
             return;
@@ -1488,19 +1486,21 @@ const ACH_DATA = {
         }
     },
     73: {
-        title: 'How The Turntables',
-        desc: 'Have your true time essence effect be more than double the anti time essence effect, while they\'re both at least 1,000x.',
+        title: 'True Annihilation',
+        desc: 'Ascend for at least 100 galaxies in under 10 seconds.',
         secret: false,
         hint: '',
-        reward: 'Double the true time essence effect.',
+        reward: 'Your unit corpse multipliers get a boost based on number of ascensions.',
         hasReward: true,
-        showEffect: false,
+        showEffect: true,
         divID: 'ach73',
         canUnlock: function() {
-            return (getTrueTimeBuff().gt(getAntiTimeBuff().times(2)) && getAntiTimeBuff().gte(1000));
+            return (player.pastAscRuns.lastRun.galaxyGain.gte(100) && (player.pastAscRuns.lastRun.timeSpent<10000));
         },
         effect: function() {
-            return new Decimal(2);
+            let e = new Decimal(player.allTimeStats.totalAscensions);
+            e = e.div(50);
+            return e.plus(1);
         },
         onUnlock: function() {
             return;

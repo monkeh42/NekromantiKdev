@@ -101,8 +101,8 @@ function getTrueTimeBuff() {
     if (!player.timeLocked) { return new Decimal(1); }
     var b = new Decimal(Decimal.max(player.trueEssence, 1).log10());
     if (hasGUpgrade(4, 31)) { b = b.pow(getGUpgEffect(4, 31)); }
-    if (hasGUpgrade(4, 41) && hasUpgrade(4, 22) && !player.isInResearch) { b = b.times(getAntiTimeNerf()); }
-    else { b = b.div(getAntiTimeNerf()).times(hasAchievement(73) ? 2 : 1); }
+    if (hasGUpgrade(4, 41) && hasUpgrade(4, 22) && !player.isInResearch) { b = b.times(getAntiTimeNerf()).times(hasAchievement(71) ? 2 : 1); }
+    else { b = b.div(getAntiTimeNerf()).times(hasAchievement(71) ? 2 : 1); }
     b = Decimal.add(b, 1);
     return b;
 }

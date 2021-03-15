@@ -2,7 +2,7 @@
 
 const GAME_DATA = {
     author: 'monkeh42',
-    version: 'v1.0.0_d.3',
+    version: 'v1.0.0_d.4',
 }
 
 const NUM_UNITS = 8;
@@ -696,6 +696,8 @@ function calculateOfflineTime(seconds) {
     var startPhotons = new Decimal(player.buildings[3].amount);
     var startTrue = new Decimal(player.trueEssence);
     var startAnti = new Decimal(player.antiEssence);
+    var startGalaxies = new Decimal(player.galaxies);
+    var startResearch = new Decimal(player.research);
 
     for (var done=0; done<ticks; done++) {
         gameLoop(extra.plus(50), true);
@@ -754,6 +756,20 @@ function calculateOfflineTime(seconds) {
         allZero = false;
     } else {
         document.getElementById('offlineEssence').style.display = 'none';
+    }
+    if (player.galaxies.gt(startGalaxies)) {
+        document.getElementById('offlineGalaxyGain').innerHTML = formatDefault(player.galaxies.minus(startGalaxies));
+        document.getElementById('offlineGalaxy').style.display = 'block';
+        allZero = false;
+    } else {
+        document.getElementById('offlineGalaxy').style.display = 'none';
+    }
+    if (player.research.gt(startResearch)) {
+        document.getElementById('offlineResearchGain').innerHTML = formatDefault(player.research.minus(startResearch));
+        document.getElementById('offlineResearch').style.display = 'block';
+        allZero = false;
+    } else {
+        document.getElementById('offlineResearch').style.display = 'none';
     }
 
     if (allZero) {
@@ -894,6 +910,10 @@ function updateVersion() {
     copyData(player, START_PLAYER);
     updateVersionData(player, tempPlayer);
     player.version = GAME_DATA.version;
+    if (tempPlayer.achievements[73]) { 
+        player.achievements[73] = false;
+        player.achievements[71] = true;
+    }
     tempPlayer = {};
 }
 

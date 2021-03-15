@@ -165,7 +165,7 @@ function saveFavorite(i) {
         }
     }
     player.favGalaxies[i-1] = [...generateFavoriteGalaxies()];
-    document.getElementById('gSpecErr').innerHTML = 'Successfully saved to slot 1.';
+    document.getElementById('gSpecErr').innerHTML = 'Successfully saved to slot ' + i.toString() + '.';
     /*document.getElementById('favSavedNotice').style.opacity = '1';
     setTimeout(function() {
         document.getElementById('favSavedNotice').style.opacity = '0';
@@ -244,7 +244,7 @@ function verifyGalaxyImp(fav=false, favSlot=0) {
 
     if (imp.length>3 || fav) {
         if (reg.test(imp) || fav) {
-            if (fav) { gals = [...player.favGalaxies[favSlot]]; }
+            if (fav) { gals = [...player.favGalaxies[favSlot-1]]; }
             else {
                 while (imp.length>2) {
                     gals.push(imp.slice(0, 4));

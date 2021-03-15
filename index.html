@@ -1782,7 +1782,7 @@
                     <td>
                         <div id="galaxyAmountDisplay" style="font-size: 18pt;">You have <span id="galaxyAmount" style="font-size: 21pt; font-weight: bold; color: #cf2904; white-space: pre;"> 0 </span> <span id="galaxyTextAmt" class="galaxyResourceTexts">depleted galaxies</span> out of <span id="totalGalaxyAmount" style="font-size: 21pt; font-weight: bold; color: #cf2904; white-space: pre;"> 0 </span> total formed.</div>
                         <div id="ascensionAmountDisplay" style="font-size: 18pt;">You have achieved <span id="ascensionAmount" style="font-size: 21pt; font-weight: bold; color: #cf2904; white-space: pre;"> 0 </span> <span id="ascensionTextAmt" class="galaxyResourceTexts">ascensions</span>.</div>
-                        <div id="softcapMainDisplay" style="font-size: 16pt;" data-title="cube root exponent: effect = x*(10^cbrt(log(y))) where x=effect at limit, y=(effect before softcap)/(effect at limit)">All effects based on total galaxies are softcapped at <span id="mainSoftcapStart" style="font-size: 19pt; font-weight: bold; color: #cf2904; white-space: pre;"> 1,000 </span> galaxies.</div>
+                        <div id="softcapMainDisplay" style="font-size: 16pt;" data-title="cube root exponent: effect = x*(10^cbrt(log(y))) where x=effect at limit, y=(effect before softcap)/x">All effects based on total galaxies are softcapped at <span id="mainSoftcapStart" style="font-size: 19pt; font-weight: bold; color: #cf2904; white-space: pre;"> 1,000 </span> galaxies.</div>
                     </td>
                 </tr>
             </table>
@@ -2920,13 +2920,13 @@
                     </tr>
                     <tr>
                         <td>
-                            <div id="ach71" class="achievement achTooltip" onmouseover="mouseoverAchievement(71)"><p>True Annihilation<br>+</p></div>
+                            <div id="ach71" class="achievement achTooltip" onmouseover="mouseoverAchievement(71)"><p>Infinite Knowledge<br>+</p></div>
                         </td>
                         <td>
                             <div id="ach72" class="achievement achTooltip" onmouseover="mouseoverAchievement(72)"><p>Unpossible</p></div>
                         </td>
                         <td>
-                            <div id="ach73" class="achievement achTooltip" onmouseover="mouseoverAchievement(73)"><p>Infinite Knowledge<br>+</p></div>
+                            <div id="ach73" class="achievement achTooltip" onmouseover="mouseoverAchievement(73)"><p>True Annihilation<br>+</p></div>
                         </td>
                         <td>
                             <div id="ach74" class="achievement achTooltip" onmouseover="mouseoverAchievement(74)"><p>Ethereal Fiend</p></div>
@@ -3054,6 +3054,8 @@
                 <span id="offlineAcolyte" style="display: none;"><span id="offlineAcolyteGain" style="font-size: 15pt; font-weight: bold; white-space: pre;"> 0 </span> acolytes.<br></span>
                 <span id="offlinePhoton" style="display: none;"><span id="offlinePhotonGain" style="font-size: 15pt; font-weight: bold; white-space: pre;"> 0 </span> nekro-photons. <br></span>
                 <span id="offlineEssence" style="display: none;"><span id="offlineTrueGain" style="font-size: 15pt; font-weight: bold; white-space: pre; color: #006ba0;"> 0 </span> true time essence and<br><span id="offlineAntiGain" style="font-size: 15pt; font-weight: bold; white-space: pre; color: #006ba0;"> 0 </span> anti time essence.<br></span>
+                <span id="offlineGalaxy" style="display: none;"><span id="offlineGalaxyGain" style="font-size: 15pt; font-weight: bold; white-space: pre; color: #e32d05;"> 0 </span> depleted galaxies. <br></span>
+                <span id="offlineResearch" style="display: none;"><span id="offlineResearchGain" style="font-size: 15pt; font-weight: bold; white-space: pre; color: #661503; -webkit-text-stroke-width: .5px; -webkit-text-stroke-color: white;"> 0 </span> void research. <br></span>
             </div>
             <button class="optBut" id="closeOfflinePopup" style="margin: 10px;" onclick="closeOfflinePopup()">CLOSE</button>
         </div>
