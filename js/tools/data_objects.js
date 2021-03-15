@@ -1341,6 +1341,198 @@ const ACH_DATA = {
             return;
         }
     },
+    61: {
+        title: 'They Came From Beyond',
+        desc: 'Unlock The Ark.',
+        reward: '',
+        secret: false,
+        hint: '',
+        hasReward: false,
+        showEffect: false,
+        divID: 'ach61',
+        canUnlock: function() {
+            return hasMilestone(7);
+        },
+        effect: function() {
+            return new Decimal(1);
+        },
+        onUnlock: function() {
+            return;
+        }
+    },
+    62: {
+        title: 'What Have I Done?',
+        desc: 'Trigger the galaxy effect softcap.',
+        secret: false,
+        hint: '',
+        reward: '',
+        hasReward: false,
+        showEffect: false,
+        divID: 'ach62',
+        canUnlock: function() {
+            return player.galaxies.gt(1000*(2**getNumCompletedProj()));
+        },
+        effect: function() {
+            return new Decimal(1);
+        },
+        onUnlock: function() {
+            return;
+        }
+    },
+    63: {
+        title: 'I\'m Something Of A Scientist',
+        desc: 'Complete a research project.',
+        secret: false,
+        hint: '',
+        reward: '',
+        showEffect: false,
+        hasReward: false,
+        divID: 'ach63',
+        canUnlock: function() {
+            return (getNumCompletedProj()>0);
+        },
+        effect: function() {
+            return new Decimal(1);
+        },
+        onUnlock: function() {
+            return;
+        }
+    },
+    64: {
+        title: 'Infinite Knowledge',
+        desc: 'Unlock Infinite Research.',
+        secret: false,
+        hint: '',
+        reward: 'Completely remove all galaxy effect softcaps.',
+        hasReward: true,
+        showEffect: false,
+        divID: 'ach64',
+        canUnlock: function() {
+            return isResearchCompleted(6);
+        },
+        effect: function() {
+            return new Decimal(1);
+        },
+        onUnlock: function() {
+            return;
+        }
+    },
+    65: {
+        title: 'Covenant Established',
+        desc: 'Construct an Ark component.',
+        secret: false,
+        hint: '',
+        reward: '',
+        showEffect: false,
+        hasReward: false,
+        divID: 'ach65',
+        canUnlock: function() {
+            return (getNumArkUpgs()>0);
+        },
+        effect: function() {
+            return new Decimal(1);
+        },
+        onUnlock: function() {
+            return;
+        }
+    },
+    71: {
+        title: 'True Annihilation',
+        desc: 'Ascend for at least 100 galaxies in under 10 seconds.',
+        secret: false,
+        hint: '',
+        reward: 'Your unit corpse multipliers get a boost based on number of ascensions.',
+        hasReward: true,
+        showEffect: true,
+        divID: 'ach71',
+        canUnlock: function() {
+            return (player.pastAscRuns.lastRun.galaxyGain.gte(100) && (player.pastAscRuns.lastRun.timeSpent<10000));
+        },
+        effect: function() {
+            let e = new Decimal(player.allTimeStats.totalAscensions);
+            e = e.div(10);
+            return e.plus(1);
+        },
+        onUnlock: function() {
+            return;
+        }
+    },
+    72: {
+        title: 'Unpossible',
+        desc: 'Complete Infinite Research once.',
+        secret: false,
+        hint: '',
+        reward: '',
+        hasReward: false,
+        showEffect: false,
+        divID: 'ach72',
+        canUnlock: function() {
+            return player.infCompletions.gt(0);
+        },
+        effect: function() {
+            return new Decimal(1);
+        },
+        onUnlock: function() {
+            return;
+        }
+    },
+    73: {
+        title: 'How The Turntables',
+        desc: 'Have your true time essence effect be more than double the anti time essence effect, while they\'re both at least 1,000x.',
+        secret: false,
+        hint: '',
+        reward: 'Double the true time essence effect.',
+        hasReward: true,
+        showEffect: false,
+        divID: 'ach73',
+        canUnlock: function() {
+            return (getTrueTimeBuff().gt(getAntiTimeBuff().times(2)) && getAntiTimeBuff().gte(1000));
+        },
+        effect: function() {
+            return new Decimal(2);
+        },
+        onUnlock: function() {
+            return;
+        }
+    },
+    74: {
+        title: 'Ethereal Fiend',
+        secret: false,
+        hint: '',
+        desc: 'Buy all four Ethereal Upgrades at once.',
+        reward: '',
+        hasReward: false,
+        showEffect: false,
+        divID: 'ach74',
+        canUnlock: function() {
+            return (hasEUpgrade(11) && hasEUpgrade(12) && hasEUpgrade(13) && hasEUpgrade(14));
+        },
+        effect: function() {
+            return new Decimal(1);
+        },
+        onUnlock: function() {
+            return;
+        }
+    },
+    75: {
+        title: 'Grains Of Sand',
+        secret: false,
+        hint: '',
+        desc: 'Have at least 1e400 corpses.',
+        reward: '',
+        hasReward: false,
+        showEffect: false,
+        divID: 'ach75',
+        canUnlock: function() {
+            return player.corpses.gte("1e400");
+        },
+        effect: function() {
+            return new Decimal(1);
+        },
+        onUnlock: function() {
+            return;
+        }
+    },
 }
 
 const UNLOCKS_DATA = {

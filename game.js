@@ -114,6 +114,11 @@ function loadGame() {
     element.innerHTML += '<br>hotkeys do not trigger if ctrl or command (Mac) is pressed.'
 
     updateAutobuyersDisplay();
+
+    if (player.tooltipsEnabled) {
+        player.tooltipsEnabled = false;
+        toggleTooltips();
+    }
 }
 
 function loadStyles() {
@@ -177,11 +182,11 @@ function loadStyles() {
     } 
 
     updateHeaderDisplay();
-    document.getElementById('upgSoftcapNum1').innerHTML =  `${formatWhole(1000*(2**getNumArkUpgs()))}`;
-    document.getElementById('upgSoftcapNum2').innerHTML =  `${formatWhole(1000*(2**getNumArkUpgs()))}`;
-    document.getElementById('mainSoftcapStart').innerHTML =  `${formatWhole(1000*(2**getNumArkUpgs()))}`;
-    document.getElementById('softcapNum').innerHTML =  `${formatWhole(1000*(2**getNumArkUpgs()))}`;
-    if (isResearchCompleted(6)) {
+    document.getElementById('upgSoftcapNum1').innerHTML =  `${formatWhole(1000*(2**getNumCompletedProj()))}`;
+    document.getElementById('upgSoftcapNum2').innerHTML =  `${formatWhole(1000*(2**getNumCompletedProj()))}`;
+    document.getElementById('mainSoftcapStart').innerHTML =  `${formatWhole(1000*(2**getNumCompletedProj()))}`;
+    document.getElementById('softcapNum').innerHTML =  `${formatWhole(1000*(2**getNumCompletedProj()))}`;
+    if (hasAchievement(64)) {
         document.getElementById('upgSoftcapNotice1').style.display = 'none';
         document.getElementById('upgSoftcapNotice2').style.display = 'none';
         document.getElementById('softcapNotice').style.display = 'none';
@@ -313,6 +318,11 @@ function loadStyles() {
         document.getElementById('trueNerfDivText').style.display = 'none';
         document.getElementById('antiNerfTimesText').style.display = 'inline';
         document.getElementById('trueNerfTimesText').style.display = 'inline';
+    } else {
+        document.getElementById('antiNerfDivText').style.display = 'inline';
+        document.getElementById('trueNerfDivText').style.display = 'inline';
+        document.getElementById('antiNerfTimesText').style.display = 'none';
+        document.getElementById('trueNerfTimesText').style.display = 'none';
     }
 
     document.getElementById('dontResetSliderBox').checked = player.dontResetSlider;
@@ -378,10 +388,6 @@ function loadStyles() {
     }
     
     updatePopupsEtc();
-    if (player.tooltipsEnabled) {
-        player.tooltipsEnabled = false;
-        toggleTooltips();
-    }
 
     for (let id in ACH_DATA) {
         document.getElementById(ACH_DATA[id].divID).setAttribute('data-title', ((ACH_DATA[id].secret && !player.achievements[id]) ? ACH_DATA[id].hint : ACH_DATA[id].desc) + (ACH_DATA[id].hasReward ? ' Reward: ' + ACH_DATA[id].reward : '' ) + (ACH_DATA[id].showEffect ? ' Currently: ' + formatDefault2(ACH_DATA[id].effect()) + 'x' : '' ));

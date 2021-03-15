@@ -741,6 +741,7 @@ function toggleTooltips() {
     document.getElementById('timePrestige').classList.toggle('tooltip');
     document.getElementById('achBoostTooltip').classList.toggle('tooltip');
     document.getElementById('galaxyPrestige').classList.toggle('tooltip');
+    document.getElementById('softcapMainDisplay').classList.toggle('tooltip');
     
     for (let b in BUILDS_DATA) {
         for (let u in BUILDS_DATA[b].upgrades) {

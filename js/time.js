@@ -102,7 +102,7 @@ function getTrueTimeBuff() {
     var b = new Decimal(Decimal.max(player.trueEssence, 1).log10());
     if (hasGUpgrade(4, 31)) { b = b.pow(getGUpgEffect(4, 31)); }
     if (hasGUpgrade(4, 41) && hasUpgrade(4, 22) && !player.isInResearch) { b = b.times(getAntiTimeNerf()); }
-    else { b = b.div(getAntiTimeNerf()); }
+    else { b = b.div(getAntiTimeNerf()).times(hasAchievement(63) ? 2 : 1); }
     b = Decimal.add(b, 1);
     return b;
 }
@@ -368,6 +368,7 @@ function resetTime() {
     for (var i=NUM_TIMEDIMS; i>=1; i--) {
         player.timeDims[i].amount = new Decimal(0);
         player.timeDims[i].bought = new Decimal(0);
+        player.timeDims[i].unlocked = false;
     }
     copyData(player.timeDims, START_PLAYER.timeDims);
 }

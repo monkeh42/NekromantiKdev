@@ -1782,7 +1782,7 @@
                     <td>
                         <div id="galaxyAmountDisplay" style="font-size: 18pt;">You have <span id="galaxyAmount" style="font-size: 21pt; font-weight: bold; color: #cf2904; white-space: pre;"> 0 </span> <span id="galaxyTextAmt" class="galaxyResourceTexts">depleted galaxies</span> out of <span id="totalGalaxyAmount" style="font-size: 21pt; font-weight: bold; color: #cf2904; white-space: pre;"> 0 </span> total formed.</div>
                         <div id="ascensionAmountDisplay" style="font-size: 18pt;">You have achieved <span id="ascensionAmount" style="font-size: 21pt; font-weight: bold; color: #cf2904; white-space: pre;"> 0 </span> <span id="ascensionTextAmt" class="galaxyResourceTexts">ascensions</span>.</div>
-                        <div id="softcapMainDisplay" style="font-size: 16pt;">All effects based on total galaxies are softcapped at <span id="mainSoftcapStart" style="font-size: 19pt; font-weight: bold; color: #cf2904; white-space: pre;"> 1,000 </span> galaxies.</div>
+                        <div id="softcapMainDisplay" style="font-size: 16pt;" data-title="sqrt exponent: effect = x*(10^sqrt(log(y))) where x=effect at limit, y=(effect before softcap)/(effect at limit)">All effects based on total galaxies are softcapped at <span id="mainSoftcapStart" style="font-size: 19pt; font-weight: bold; color: #cf2904; white-space: pre;"> 1,000 </span> galaxies.</div>
                     </td>
                 </tr>
             </table>
@@ -2183,8 +2183,10 @@
                     <div style="margin: 5px;"><span style=" font-size: 16pt; font-weight: bold;">When you begin a research project, you do a galaxy respec and time respec,</span> but <span style="font-size: 12pt;">ALL</span> of your corpses, astral bricks, buildings, construction, time upgrades, and time crystals are reset, regardless of your milestones, achievements, and project rewards; however, all tabs stay unlocked.<br>(Galactic Vortex and the 4th/5th Time Upgrade columns don't reset, but they have no effect during research.)</div>
                     <div style="margin: 5px;">During astral enslavement, your vassal souls tirelessly study the eldritch sciences of <span style="font-size: 14pt; color: #661503; font-weight: bold; -webkit-text-stroke-width: .3px; -webkit-text-stroke-color: white;">the beyond</span>. As a result, your base astral brick production is square rooted, but you produce Void Research at the same base rate.</div>
                     <div style="margin: 5px;">Additionally, galaxy upgrade costs are tripled (after the cost increase from higher rows), and <span style="font-size: 12pt;">ALL</span> production other than astral bricks and void research is raised to ^0.9.</div>
-                    <div style="margin: 5px;">To complete a research project, you must reach the required amount of Void Research under these conditions in addition to the specific conditions below.<br><span style=" font-size: 16pt; font-weight: bold;">Completing a project respecs galaxies without an ascension reset.</div>
+                    <div style="margin: 5px;">To complete a research project, you must reach the required amount of Void Research under these conditions in addition to the specific conditions below.</div>
                     <div style="margin: 5px;"><span style="font-size: 14pt;">NOTE:</span> performing an ascension or galaxy respec will exit the current project and set your void research to 0.</div>
+                    <div style="margin: 5px;"><span style=" font-size: 16pt; font-weight: bold;">Completing a project respecs galaxies without an ascension reset.</div>
+                    <span style="font-size: 14pt; font-weight: bold; color: #e32d05;">Each project completed doubles the number of galaxies the galaxy softcaps start at.</span>
                 </div>
                 <table style="width: auto; text-align: center; margin: 20px auto;">
                     <tr>
@@ -2272,7 +2274,7 @@
                                 </div>
                                 <hr width="95%" style="border-color: #661503;">
                                 <div id="resReward1" style="margin: 5px; height: 95px; min-height: 95px;">
-                                    <span style="font-size: 15pt; font-weight: 900;">REWARD:</span><br>Unlock the second row of Galactic Vortex upgrades, and remove all galaxy softcaps.
+                                    <span style="font-size: 15pt; font-weight: 900;">REWARD:</span><br>Unlock the second row of Galactic Vortex upgrades.
                                 </div>
                                 <div id="resGoalText6" class="resGoalText">Goal: <span id="resGoal6">1e15</span> Void Research</div>
                                 <button id="startResearch6" class="researchButton" onclick="researchButtonClick(6)">BEGIN</button>
@@ -2369,7 +2371,6 @@
                     "Make yourself an ark of astral matter; make rooms in the ark, and cover it inside and outside with time."</span><br>
                     Even in your godlike state this is beyond you. This will require study.<br>
                     Of course, you have undead souls to do your studying for you.<br>
-                    <span style="font-size: 14pt; font-weight: bold;">Each Ark component built doubles the number of galaxies the galaxy softcaps start at.</span>
                 </div>
                 <img id="thrusters" class="arkImg" src="../images/thrusters.png">
                 <img id="engines" class="arkImg" src="../images/engines.png">
@@ -2892,6 +2893,46 @@
                         </td>
                         <td>
                             <div id="ach55" class="achievement achTooltip" onmouseover="mouseoverAchievement(55)"><p>Dear God, Why?</p></div>
+                        </td>
+                    </tr>
+                    <tr style="height: 10px;">
+                        <div style="height: 100%;"></div>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div id="ach61" class="achievement achTooltip" onmouseover="mouseoverAchievement(61)"><p>They Came From Beyond</p></div>
+                        </td>
+                        <td>
+                            <div id="ach62" class="achievement achTooltip" onmouseover="mouseoverAchievement(62)"><p>What Have I Done?</p></div>
+                        </td>
+                        <td>
+                            <div id="ach63" class="achievement achTooltip" onmouseover="mouseoverAchievement(63)"><p>I'm Something Of A Scientist</p></div>
+                        </td>
+                        <td>
+                            <div id="ach64" class="achievement achTooltip" onmouseover="mouseoverAchievement(64)"><p>Infinite Knowledge<br>+</p></div>
+                        </td>
+                        <td>
+                            <div id="ach65" class="achievement achTooltip" onmouseover="mouseoverAchievement(65)"><p>Covenant Established</p></div>
+                        </td>
+                    </tr>
+                    <tr style="height: 10px;">
+                        <div style="height: 100%;"></div>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div id="ach71" class="achievement achTooltip" onmouseover="mouseoverAchievement(71)"><p>True Annihilation<br>+</p></div>
+                        </td>
+                        <td>
+                            <div id="ach72" class="achievement achTooltip" onmouseover="mouseoverAchievement(72)"><p>Unpossible</p></div>
+                        </td>
+                        <td>
+                            <div id="ach73" class="achievement achTooltip" onmouseover="mouseoverAchievement(73)"><p>Infinite Knowledge<br>+</p></div>
+                        </td>
+                        <td>
+                            <div id="ach74" class="achievement achTooltip" onmouseover="mouseoverAchievement(74)"><p>Ethereal Fiend</p></div>
+                        </td>
+                        <td>
+                            <div id="ach75" class="achievement achTooltip" onmouseover="mouseoverAchievement(75)"><p>Grains Of Sand</p></div>
                         </td>
                     </tr>
                 </table>

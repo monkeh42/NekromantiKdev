@@ -56,7 +56,7 @@ function getEUpgCost(e) {
 }
 
 function getEUpgDesc(e) {
-    return ETH_DATA[e].desc;
+    return ETH_DATA[e].desc();
 }
 
 function getEUpgName(e) {
@@ -109,6 +109,14 @@ function isDisplayEffectG(g, u) {
 
 function isDisplayTooltipG(g, u) {
     return GALAXIES_DATA[g].upgrades[u].displayTooltip;
+}
+
+function getNumCompletedProj() {
+    let count = 0;
+    for (let i=1; i<=6; i++) {
+        if (isResearchCompleted(i)) { count++; }
+    }
+    return count;
 }
 
 function generateExportedGalaxies() {
@@ -559,10 +567,10 @@ function buyArkUpgrade(a) {
         document.getElementById(a + 'But').classList.remove('arkUpg');
         document.getElementById(a + 'Text').style.display = 'none';
         document.getElementById(a + 'BoughtText').style.display = 'inline';
-        document.getElementById('upgSoftcapNum1').innerHTML =  `${formatWhole(1000*(2**getNumArkUpgs()))}`;
-        document.getElementById('upgSoftcapNum2').innerHTML =  `${formatWhole(1000*(2**getNumArkUpgs()))}`;
-        document.getElementById('mainSoftcapStart').innerHTML =  `${formatWhole(1000*(2**getNumArkUpgs()))}`;
-        document.getElementById('softcapNum').innerHTML =  `${formatWhole(1000*(2**getNumArkUpgs()))}`;
+        document.getElementById('upgSoftcapNum1').innerHTML =  `${formatWhole(1000*(2**getNumCompletedProj()))}`;
+        document.getElementById('upgSoftcapNum2').innerHTML =  `${formatWhole(1000*(2**getNumCompletedProj()))}`;
+        document.getElementById('mainSoftcapStart').innerHTML =  `${formatWhole(1000*(2**getNumCompletedProj()))}`;
+        document.getElementById('softcapNum').innerHTML =  `${formatWhole(1000*(2**getNumCompletedProj()))}`;
 
         if (checkForWin()) {
             winGame();
@@ -652,6 +660,7 @@ function respecGalaxiesClick() {
         if (player.confirmations['galaxyRespec']['click']) {
             if (!confirm('Are you sure? This will reset ALL of your progress up to unlocking Galaxies.<br>(These confirmations can be disabled in options)')) return
         }
+        if (getBoughtGUpgs() == 0 && !hasAchievement(52)) { unlockAchievement(52); }
         if (canGalaxyPrestige()) { galaxyPrestigeNoConfirm(true); }
         else { galaxyPrestigeReset(true); }
     }
@@ -662,13 +671,13 @@ function respecGalaxiesKey() {
         if (player.confirmations['galaxyRespec']['key']) {
             if (!confirm('Are you sure? This will reset ALL of your progress up to unlocking Galaxies.<br>(These confirmations can be disabled in options)')) return
         }
+        if (getBoughtGUpgs() == 0 && !hasAchievement(52)) { unlockAchievement(52); }
         if (canGalaxyPrestige()) { galaxyPrestigeNoConfirm(true); }
         else { galaxyPrestigeReset(true); }
     }
 }
 
 function respecGalaxies() {
-    if (getBoughtGUpgs() == 0 && !hasAchievement(52)) { unlockAchievement(52); }
     player.galaxies = player.galaxies.plus(player.spentGalaxies);
     player.spentGalaxies = new Decimal(0);
     //unlockRows();
@@ -937,7 +946,7 @@ function getGalaxiesBonusFixed(gals) {
 }
 
 function getGalaxySoftcap(eff) {
-    let start = getGalaxiesBonusFixed(1000*(2**getNumArkUpgs()));
+    let start = getGalaxiesBonusFixed(1000*(2**getNumCompletedProj()));
     let mag = 2;
     if (isSoftcapActive(eff)) {
         return Decimal.pow(10, Decimal.pow(eff.log10(), 1/mag).times(Decimal.pow(start.log10(), Decimal.sub(1, 1/mag))));
@@ -945,15 +954,15 @@ function getGalaxySoftcap(eff) {
 }
 
 function getGalaxyUpgSoftcap(eff) {
-    let start = new Decimal(1000*(2**getNumArkUpgs())+1);
+    let start = new Decimal(1000*(2**getNumCompletedProj())+1);
     let mag = 2;
-    if (eff.gte(start) && !isResearchCompleted(6)) {
+    if (eff.gte(start) && !hasAchievement(64)) {
         return Decimal.pow(10, Decimal.pow(eff.log10(), 1/mag).times(Decimal.pow(start.log10(), Decimal.sub(1, 1/mag))));
     } else { return eff; }
 }
 
 function isSoftcapActive(val) {
-    return (val.gte(getGalaxiesBonusFixed(1000*(2**getNumArkUpgs()))) && !isResearchCompleted(6));
+    return (val.gte(getGalaxiesBonusFixed(1000*(2**getNumCompletedProj()))) && !hasAchievement(64));
 }
 
 function getBoughtGUpgs() {
@@ -1252,7 +1261,7 @@ const ARK_DATA = {
 const ETH_DATA = {
     11: {
         title: 'Hypertime',
-        desc: 'The first time upgrade in the fourth and fifth columns stay active during research.',
+        desc: function() { return `The first time upgrade in the fourth and fifth columns stay active during research.` },
         cost: new Decimal(1),
         displayEffect: false,
         displaySuffix: '',
@@ -1268,7 +1277,7 @@ const ETH_DATA = {
     },
     12: {
         title: 'Practical Theoretics',
-        desc: 'Each Ark component built multiplies corpse production by 10.',
+        desc: function() { return `Each Ark component built multiplies corpse production by 10.` },
         cost: new Decimal(1),
         displayEffect: true,
         displaySuffix: 'x',
@@ -1284,7 +1293,7 @@ const ETH_DATA = {
     },
     13: {
         title: 'Meta-Solar',
-        desc: '<span style="font-weight: bold;">Ultra-Solar</span> stays active during research.',
+        desc: function() { return `<span style="font-weight: bold;">Ultra-Solar</span> stays active during research.` },
         cost: new Decimal(1),
         displayEffect: false,
         displaySuffix: '',
@@ -1300,7 +1309,7 @@ const ETH_DATA = {
     },
     14: {
         title: 'Quantum Equivalence',
-        desc: 'Void Research production is multiplied by the log of your current bricks/sec.',
+        desc: function() { return `Void Research production is multiplied by the log${hasUpgrade(4, 13) ? ' (ln after Ultra-Solar).' : ''} of your current bricks/sec.` },
         cost: new Decimal(1),
         displayEffect: true,
         displaySuffix: '',

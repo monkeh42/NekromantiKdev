@@ -532,7 +532,7 @@ option:active, option.active {
     margin-top: 15px;
 }
 
-.optBut:hover {
+.optBut:hover, .endBut:hover {
     background-color: #525252;
 }
 
@@ -2024,8 +2024,8 @@ option:active, option.active {
 }
 
 .researchDiv {
-    width: 310px;
-    min-width: 310px;
+    width: 300px;
+    min-width: 300px;
     height: 400px;
     min-height: 400px;
     border: 1px solid #e32d05;
