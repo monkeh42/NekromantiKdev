@@ -951,7 +951,7 @@ function getGalaxiesBonusFixed(gals) {
 
 function getGalaxySoftcap(eff) {
     let start = getGalaxiesBonusFixed(1000*(2**getNumCompletedProj()));
-    let mag = 2;
+    let mag = 3;
     if (isSoftcapActive(eff)) {
         return Decimal.pow(10, Decimal.pow(eff.log10(), 1/mag).times(Decimal.pow(start.log10(), Decimal.sub(1, 1/mag))));
     } else { return eff; }
@@ -959,7 +959,7 @@ function getGalaxySoftcap(eff) {
 
 function getGalaxyUpgSoftcap(eff) {
     let start = new Decimal(1000*(2**getNumCompletedProj())+1);
-    let mag = 2;
+    let mag = 3;
     if (eff.gte(start) && !hasAchievement(64)) {
         return Decimal.pow(10, Decimal.pow(eff.log10(), 1/mag).times(Decimal.pow(start.log10(), Decimal.sub(1, 1/mag))));
     } else { return eff; }
