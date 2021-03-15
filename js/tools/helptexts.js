@@ -101,7 +101,7 @@ const HELP_TEXTS = {
                         <li>During a research project:</li>\
                             <ul>\
                                 <li>Astral brick production is square rooted, but during astral enslavement, you produce Void Research at the same base rate (sqrt(corpse_production^0.2)).</li>\
-                                <li>Galaxy upgrade costs are tripled, AFTER the increase in price from otehr bought upgrades.</li>\
+                                <li>Galaxy upgrade costs are tripled, AFTER the increase in price from other bought upgrades.</li>\
                                 <li>Production of units, corpses, building resources, time dimensions, and time essence are raised to ^0.9.</li>\
                                 <li>Each project has a unique effect that is applied in addition to these.</li>\
                             </ul>\
