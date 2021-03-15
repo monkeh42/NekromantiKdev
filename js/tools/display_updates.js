@@ -146,8 +146,8 @@ function updateGalaxyUpgs() {
                         remGUpgClass(g, u, 'galaxyUpg');
                     }
                 } 
-                if (isDisplayEffectG(g, u)) { document.getElementById('gUpgEffect' + g.toString() + '.' + u.toString()).innerHTML = formatUnitRow(getGUpgEffect(g, u)) + GALAXIES_DATA[g].upgrades[u].displaySuffix; }
             }
+            if (isDisplayEffectG(g, u)) { document.getElementById('gUpgEffect' + g.toString() + '.' + u.toString()).innerHTML = formatUnitRow(getGUpgEffect(g, u)) + GALAXIES_DATA[g].upgrades[u].displaySuffix; }
         }
     }
 }

@@ -504,7 +504,7 @@ function save() {
 
 function startGame() {
     var diff = new Date() - player.lastUpdate;
-    if ((diff)>(1000*1000)) {
+    if ((diff)>(300*1000)) {
         calculateOfflineTime(new Decimal(diff/1000));
     }
     else {
@@ -515,7 +515,8 @@ function startGame() {
         save();
     }
 
-    if (player.pastRuns.lastRun.timeSacrificed == 0) { player.pastRuns.lastRun.timeSacrificed = new Date(); }
+    if (player.pastRuns.lastRun.timeSpent == 0) { player.pastRuns.lastRun.timeSacrificed = new Date(); }
+    if (player.pastAscRuns.lastRun.timeSpent == 0) { player.pastAscRuns.lastRun.timeAscended = new Date(); }
     document.getElementById('calcPopupContainer').style.display = 'none';
     document.getElementById('game').style.display = 'block';
 
@@ -871,9 +872,9 @@ function fixData(data, start) {
                 data[item] = new Decimal(data[item]);
             }
         } else if (start[item] instanceof Date) {
-            if (data[item] === undefined || (Object.keys(data[item]).length==0 && typeof data[item] === "object")) {
+            if (data[item] === undefined) {
                 data[item] = new Date(start[item]);
-            }
+            } else { data[item] = new Date(data[item]); }
         } else if ((!!start[item]) && (typeof start[item] === "object")) {
             if (data[item] === undefined) {
                 data[item] = {};
