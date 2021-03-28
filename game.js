@@ -2,7 +2,7 @@
 
 const GAME_DATA = {
     author: 'monkeh42',
-    version: 'v1.0.0_d.4',
+    version: 'v1.1.0_d.1',
 }
 
 const NUM_UNITS = 8;
@@ -24,7 +24,7 @@ const TIERS = {
     8: 'sun eater',
 }
 
-var DEV_SPEED = 1;
+//var app.devSpeed = 1;
 
 var mainLoop;
 
@@ -38,9 +38,17 @@ var asPopupShownTime;
 
 var hidden, visibilityChange, isHidden;
 
-var displayData = new Array(0);
+//var displayData = new Array(0);
 
 var player = {};
+
+var dataKeys = {};
+
+var DATA = {};
+
+var modules;
+
+var timedPopups = [];
 
 //initialize
 
@@ -53,6 +61,7 @@ function init() {
 //load stuff
 
 function loadGame() {
+    setupData();
     player = {};
     var savePlayer = localStorage.getItem('nekrosave');
     if (savePlayer === null || savePlayer === undefined) {
@@ -85,6 +94,15 @@ function loadGame() {
         }
     }
 
+    player.help = false;
+    if (player.win&&!player.continue) { player.continue = true; }
+
+    if (screen.width < 1280 && screen.width > 600 && player.activeGalaxies[0] == '4') {
+        player.activeGalaxies = ['2', '1', '2'];
+    } else if (screen.width <= 600 && player.activeGalaxies[0] != '1') {
+        player.activeGalaxies = ['1', '1', '2'];
+    }
+
     if (typeof document.hidden !== "undefined") { // Opera 12.10 and Firefox 18 and later support
         hidden = "hidden";
         visibilityChange = "visibilitychange";
@@ -112,6 +130,8 @@ function loadGame() {
     }
     element.innerHTML = element.innerHTML.slice(0, -2);
     element.innerHTML += '<br>hotkeys do not trigger if ctrl or command (Mac) is pressed.'
+	
+    
 
     updateAutobuyersDisplay();
 
@@ -119,379 +139,49 @@ function loadGame() {
         player.tooltipsEnabled = false;
         toggleTooltips();
     }
+
+    loadVue();
+    //app.$children[24].num = player.activeGalaxies[0];
+    //app.$children[24].first = player.activeGalaxies[1];
+    //app.$children[24].second = player.activeGalaxies[2];
+    app.galSelected = player.activeGalaxies[0];
+    app.dontRespec = player.dontResetSlider;
+    updateShadow();
 }
 
-function loadStyles() {
-    showTab(player.activeTabs[0], true);
-    showUnitSubTab(player.activeTabs[1]);
-    showBuildingSubTab(player.activeTabs[2]);
-    if (player.unlocks['timeTab']['timeUpgrades']) { showTimeSubTab(player.activeTabs[3]); }
-    else { showTimeSubTab('timeDimSubTab'); }
-    if (player.unlocks['galaxyTab']['arkTab']) { showGalaxySubTab(player.activeTabs[4]); }
-    else { showGalaxySubTab('galaxiesSubTab'); }
-    if (player.activeTabs[0] == 'statsTab' && player.activeTabs[5] != 'achSubTab') { statsSubTabClick(player.activeTabs[5], player.activeTabs[5] + 'But'); }
-    else { showStatsSubTab(player.activeTabs[5]); }
-    if (screen.width < 1280 && screen.width > 600 && player.activeGalaxies[0] == 4) {
-        updateGalaxiesDisplayed(2, 'gal1', 'gal2');
-        document.getElementById('2gal').selected = true;
-    } else if (screen.width <= 600 && player.activeGalaxies[0] > 0) {
-        updateGalaxiesDisplayed(1, 'gal1', 'gal2');
-        document.getElementById('1gal').selected = true;
-    } else {
-        updateGalaxiesDisplayed(player.activeGalaxies[0], player.activeGalaxies[1], player.activeGalaxies[2]);
-        document.getElementById(player.activeGalaxies[0].toString() + 'gal').selected = true;
-    }
+function addData(id, name, data) {
+    DATA[id] = {};
+    copyData(DATA[id], data);
+    dataKeys[id] = name;
+}
 
-    document.documentElement.style.boxShadow = (player.isInResearch ? (getActiveResearch()==7 ? 'inset 0px 0px 20px 10px #613227' : 'inset 0px 0px 20px 10px #e34805') : '') + (player.isInResearch && player.astralFlag ? ', ' : '') + (player.astralFlag ? 'inset 0px 0px 30px 20px #1c8a2e' : '');
-
-    document.getElementById('realTimeDisplayBut').innerHTML = player.displayRealTime ? 'toggle time displays: REAL TIME' : 'toggle time displays: GAME TIME'
-    let elements = document.getElementsByClassName('secDisplay');
-    let el;
-    for (let i=0; i<elements.length; i++) {
-        el = elements.item(i);
-        el.innerHTML = player.displayRealTime ? 'real sec' : 'sec'
-    }
-
-    document.getElementById('versionNumber').innerHTML = GAME_DATA.version;
-    if (!hasMilestone(5)) { player.unlocks['buildingsTab']['vortexTable'] = false; }
-    for (let tab in UNLOCKS_DATA) {
-        for (let key in UNLOCKS_DATA[tab]) {
-            if (player.unlocks[tab][key]) { unlockElementsOnLoad(tab, key) }
-        }
-    }
-
-    for (let i=1; i<=NUM_UNITS; i++) {
-        if (player.units[i].unlocked) { document.getElementById(UNITS_DATA[i].rowID).style.display = 'table-row'; }
-        if (!canAffordUnit(i)) {
-            document.getElementById(UNITS_DATA[i].buttonID).classList.add('unclickableUnit');
-            document.getElementById(UNITS_DATA[i].buttonID).classList.remove('unitBut');
-            document.getElementById(UNITS_DATA[i].maxID).classList.add('unclickableMax');
-            document.getElementById(UNITS_DATA[i].maxID).classList.remove('unitMax');
-        }
-        document.getElementById(UNITS_DATA[i].costID).innerHTML = formatWhole(UNITS_DATA[i].cost());
-    }
-    for (let i=1; i<=NUM_TIMEDIMS; i++) {
-        if (player.timeDims[i].unlocked) { document.getElementById(TIME_DATA[i].rowID).style.display = 'table-row'; }
-        if (!canAffordTime(i)) {
-            document.getElementById(TIME_DATA[i].buttonID).classList.add('unclickableUnitT');
-            document.getElementById(TIME_DATA[i].buttonID).classList.remove('unitButT');
-            document.getElementById(TIME_DATA[i].maxID).classList.add('unclickableMaxT');
-            document.getElementById(TIME_DATA[i].maxID).classList.remove('unitMaxT');
-        }
-        document.getElementById(TIME_DATA[i].costID).innerHTML = formatWhole(TIME_DATA[i].cost());
-    } 
-
-    updateHeaderDisplay();
-    document.getElementById('upgSoftcapNum1').innerHTML =  `${formatWhole(1000*(2**getNumCompletedProj()))}`;
-    document.getElementById('upgSoftcapNum2').innerHTML =  `${formatWhole(1000*(2**getNumCompletedProj()))}`;
-    document.getElementById('mainSoftcapStart').innerHTML =  `${formatWhole(1000*(2**getNumCompletedProj()))}`;
-    document.getElementById('softcapNum').innerHTML =  `${formatWhole(1000*(2**getNumCompletedProj()))}`;
-    if (hasAchievement(64)) {
-        document.getElementById('upgSoftcapNotice1').style.display = 'none';
-        document.getElementById('upgSoftcapNotice2').style.display = 'none';
-        document.getElementById('softcapNotice').style.display = 'none';
-        document.getElementById('softcapMainDisplay').style.display = 'none';
-    }
-
-    if (canTimePrestige()) {
-        document.getElementById('timePrestigeReq').style.display = 'none';
-        document.getElementById('timePrestigeGainDesc').style.display = 'block';
-    } 
-    if (canGalaxyPrestige()) {
-        document.getElementById('galaxyPrestigeReq').style.display = 'none';
-        document.getElementById('galaxyPrestigeGainDesc').style.display = 'block';
-        document.getElementById('galaxyPrestigeNextDesc').style.display = 'block';
-    } 
-
-    for (var b in BUILDS_DATA) {
-        if (isResearchActive(2)) { document.getElementById('factoryBuild').style.textDecoration = 'line-through'; }
-        else { document.getElementById('factoryBuild').style.textDecoration = ''; }
-        for (var u in BUILDS_DATA[b].upgrades) {
-            if (BUILDS_DATA[b].upgrades[u].displayTooltip) { document.getElementById(BUILDS_DATA[b].upgrades[u].buttonID).setAttribute('data-title', BUILDS_DATA[b].upgrades[u].displayFormula()) }
-            if (hasUpgrade(b, u)) {
-                document.getElementById(BUILDS_DATA[b].upgrades[u].buttonID).classList.add(BUILDS_DATA[b].upgradeBtnBought);
-                document.getElementById(BUILDS_DATA[b].upgrades[u].buttonID).classList.remove(BUILDS_DATA[b].upgradeBtnClass);
-            } else {
-                document.getElementById(BUILDS_DATA[b].upgrades[u].buttonID).classList.remove(BUILDS_DATA[b].upgradeBtnBought);
-                if (!canAffordBUpg(b, u)) {
-                    document.getElementById(BUILDS_DATA[b].upgrades[u].buttonID).classList.add(BUILDS_DATA[b].upgradeBtnUnclick);
-                    document.getElementById(BUILDS_DATA[b].upgrades[u].buttonID).classList.remove(BUILDS_DATA[b].upgradeBtnClass);
-                }
-            }
-            document.getElementById('bUpgName' + b.toString() + '.' + u.toString()).innerHTML = getUpgName(b, u);
-            document.getElementById('bUpgDesc' + b.toString() + '.' + u.toString()).innerHTML = getUpgDesc(b, u);
-            document.getElementById('bUpgCost' + b.toString() + '.' + u.toString()).innerHTML = formatDefault2(getUpgCost(b, u)) + ' ' + getUpgResourceName(b);
-            if (isDisplayEffect(b, u)) { document.getElementById(b.toString() + '.' + u.toString() + 'Effect').style.display = '' }
-        }
-    }
-
-    if (hasAchievement(15)) { document.getElementById('keptBricks').style.display = 'block'; }
-    
-    for (var t in TIME_DATA.upgrades) {
-        if (TIME_DATA.upgrades[t].displayTooltip) { document.getElementById(TIME_DATA.upgrades[t].buttonID).setAttribute('data-title', TIME_DATA.upgrades[t].displayFormula()) }
-        if (player.timeUpgs[t]) {
-            document.getElementById(TIME_DATA.upgrades[t].buttonID).classList.add('boughtTimeUpg');
-            document.getElementById(TIME_DATA.upgrades[t].buttonID).classList.remove('timeUpg');
-        } else {
-            document.getElementById(TIME_DATA.upgrades[t].buttonID).classList.remove('boughtTimeUpg');
-            if (!canAffordTUpg(t)) {
-                document.getElementById(TIME_DATA.upgrades[t].buttonID).classList.add('unclickableTimeUpg');
-                document.getElementById(TIME_DATA.upgrades[t].buttonID).classList.remove('timeUpg');
-            }
-        }
-        document.getElementById('tUpgName' + t.toString()).innerHTML = getTUpgName(t);
-        document.getElementById('tUpgDesc' + t.toString()).innerHTML = getTUpgDesc(t);
-        document.getElementById('tUpgCost' + t.toString()).innerHTML = formatDefault2(getTUpgCost(t)) + ' time crystals';
-        if (isDisplayEffectT(t)) { document.getElementById(t.toString() + 'TEffect').style.display = '' }
-        if (TIME_DATA.upgrades[t].preReq != null) { document.getElementById('tUpgRequires' + t.toString()).innerHTML = TIME_DATA.upgrades[TIME_DATA.upgrades[t].preReq].title; }
-    }
-
-    document.getElementById('timeUpgBuyerBut').innerHTML = player.autobuyers['time']['on'] ? 'Time Upgrade Cols 1-3 Autobuyer: ON' : 'Time Upgrade Cols 1-3 Autobuyer: OFF'
-    if (hasMilestone(6)) { document.getElementById('extraColsNotice').style.display = ''; }
-
-    for (var c in CONSTR_DATA) {
-        if (!canAffordCUpg(c)) {
-            document.getElementById(CONSTR_DATA[c].buttonID).classList.add('unclickableConstrUpg');
-            document.getElementById(CONSTR_DATA[c].buttonID).classList.remove('constrUpg');
-        }
-        document.getElementById('cUpgName' + c.toString()).innerHTML = getCUpgName(c);
-        document.getElementById('cUpgDesc' + c.toString()).innerHTML = getCUpgDesc(c);
-        document.getElementById('cUpgCost' + c.toString()).innerHTML = formatDefault(getCUpgCost(c));
-        document.getElementById('cUpgLevel' + c.toString()).innerHTML = formatWhole(player.construction[c]) + (getExtraLevels(c)>0 ? ' + ' + formatWhole(getExtraLevels(c)) : '');
-        if (isDisplayEffectC(c)) {
-            document.getElementById('c' + c.toString() + 'Effect').style.display = '';
-            if (c==5) { document.getElementById('cUpgEffect' + c.toString()).innerHTML = `[+${formatWhole(player.construction[5])}/+${formatWhole(player.construction[5].gt(0) ? Decimal.floor(player.construction[5].minus(1).div(2).plus(1)) : '0')}/+${formatWhole(player.construction[5].gt(0) ? Decimal.floor(player.construction[5].minus(1).div(3).plus(1)) : '0')}/+${formatWhole(player.construction[5].gt(0) ? Decimal.floor(player.construction[5].minus(1).div(4).plus(1)) : '0')}]` }
-            else { document.getElementById('cUpgEffect' + c.toString()).innerHTML = CONSTR_DATA[c].isTimes ? formatDefault2(getCUpgEffect(c)) + CONSTR_DATA[c].displaySuffix : '+' + formatDefault2(getCUpgEffect(c)) }
-        }
-    }    
-
-    for (var g in GALAXIES_DATA) {
-        for (var u in GALAXIES_DATA[g].upgrades) {
-            if (GALAXIES_DATA[g].upgrades[u].displayTooltip) { document.getElementById(GALAXIES_DATA[g].upgrades[u].buttonID).setAttribute('data-title', GALAXIES_DATA[g].upgrades[u].displayFormula()) }
-            if (player.galaxyUpgs[g][u].locked) {
-                document.getElementById(GALAXIES_DATA[g].upgrades[u].buttonID).classList.add('lockedGalaxyUpg'); 
-                document.getElementById(GALAXIES_DATA[g].upgrades[u].buttonID).classList.remove('galaxyUpg');
-            } else {
-                document.getElementById(GALAXIES_DATA[g].upgrades[u].buttonID).classList.remove('lockedGalaxyUpg');
-                if (hasGUpgrade(g, u)) { 
-                    document.getElementById(GALAXIES_DATA[g].upgrades[u].buttonID).classList.add('boughtGalaxyUpg'); 
-                    document.getElementById(GALAXIES_DATA[g].upgrades[u].buttonID).classList.remove('galaxyUpg');//+ ((player.tooltipsEnabled && isDisplayTooltipG(g, u)) ? ' tooltip' : '') }
-                } else {
-                    document.getElementById(GALAXIES_DATA[g].upgrades[u].buttonID).classList.remove('boughtGalaxyUpg');
-                    if (!canAffordGUpg(g, u)) {
-                        document.getElementById(GALAXIES_DATA[g].upgrades[u].buttonID).classList.add('unclickGalaxyUpg'); 
-                        document.getElementById(GALAXIES_DATA[g].upgrades[u].buttonID).classList.remove('galaxyUpg');
-                    }
-                }
-            }
-            document.getElementById('gUpgName' + g.toString() + '.' + u.toString()).innerHTML = getGUpgName(g, u); 
-            document.getElementById('gUpgDesc' + g.toString() + '.' + u.toString()).innerHTML = getGUpgDesc(g, u); 
-            if (GALAXIES_DATA[g].upgrades[u].requires.length>0) { document.getElementById('gUpgRequires' + g.toString() + '.' + u.toString()).innerHTML = `<span style=\"font-weight: 800;\">${GALAXIES_DATA[g].upgrades[GALAXIES_DATA[g].upgrades[u].requires[0]].title}</span>${(GALAXIES_DATA[g].upgrades[u].requires.length>1 ? " or <span style=\"font-weight: 800;\">" + GALAXIES_DATA[g].upgrades[GALAXIES_DATA[g].upgrades[u].requires[1]].title + "</span>" : "")}`; }
-            document.getElementById('gUpgCost' + g.toString() + '.' + u.toString()).innerHTML = formatWhole(getGUpgCost(g, u)) + ' ' + galaxyTextSingulizer(getGUpgCost(g, u)); 
-            if (isDisplayEffectG(g, u)) { document.getElementById(g.toString() + '.' + u.toString() + 'GEffect').style.display = 'inline'; }
-            else { document.getElementById(g.toString() + '.' + u.toString() + 'GEffect').style.display = 'none'; }
-        }
-    }
-
-    for (var e in ETH_DATA) {
-        if (ETH_DATA[e].displayTooltip) { document.getElementById(ETH_DATA[e].buttonID).setAttribute('data-title', ETH_DATA[e].displayFormula()) }
-        if (player.ethUpgs[e]) {
-            document.getElementById(ETH_DATA[e].buttonID).classList.add('boughtEthUpg');
-            document.getElementById(ETH_DATA[e].buttonID).classList.remove('ethUpg');
-        } else {
-            document.getElementById(ETH_DATA[e].buttonID).classList.remove('boughtEthUpg');
-            if (!canAffordEUpg(e)) {
-                document.getElementById(ETH_DATA[e].buttonID).classList.add('unclickableEthUpg');
-                document.getElementById(ETH_DATA[e].buttonID).classList.remove('ethUpg');
-            }
-        }
-        document.getElementById('eUpgName' + e.toString()).innerHTML = getEUpgName(e);
-        document.getElementById('eUpgDesc' + e.toString()).innerHTML = getEUpgDesc(e);
-        document.getElementById('eUpgCost' + e.toString()).innerHTML = formatWhole(getEUpgCost(e));
-        if (isDisplayEffectE(e)) { document.getElementById('e' + e.toString() + 'Effect').style.display = '' }
-    }
-
-    if (hasGUpgrade(4, 41) && hasUpgrade(4, 22)) {
-        document.getElementById('antiNerfDivText').style.display = 'none';
-        document.getElementById('trueNerfDivText').style.display = 'none';
-        document.getElementById('antiNerfTimesText').style.display = 'inline';
-        document.getElementById('trueNerfTimesText').style.display = 'inline';
-    } else {
-        document.getElementById('antiNerfDivText').style.display = 'inline';
-        document.getElementById('trueNerfDivText').style.display = 'inline';
-        document.getElementById('antiNerfTimesText').style.display = 'none';
-        document.getElementById('trueNerfTimesText').style.display = 'none';
-    }
-
-    document.getElementById('dontResetSliderBox').checked = player.dontResetSlider;
-
-    document.getElementById('astralNerf').innerHTML = formatWhole(getAstralNerf());
-    document.getElementById('astralNerfResearch').innerHTML = formatWhole(getAstralNerf());
-
-    if (player.win) {
-        document.getElementById('arkDescription').style.display = 'none';
-        document.getElementById('winDescription').style.display = 'block';
-        document.getElementById('fullyBuilt').style.display = 'none';
-        document.getElementById('arkSubTab').style.height = '100px';
-        for (var a in ARK_DATA) {
-            document.getElementById(a).style.display = 'none';
-            document.getElementById(a + 'But').style.display = 'none';
-            document.getElementById(a + 'Built').style.display = 'none';
-        }
-    } else {
-        for (var a in ARK_DATA) {
-            document.getElementById(a + 'Text').innerHTML = "Build component:<br><span style=\"font-weight: 900;\">" + getAUpgName(a) + "</span><br>Cost: " + formatWhole(getAUpgBrickCost(a)) + " astral bricks" + "<br>and " + formatWhole(getAUpgTimeCost(a)) + " time crystals" + (isDisplayEffectA(a) ? ("<br>Currently: " + formatDefault2(getAUpgEffect(a)) + "x") : "");
-            if (!arkIsUnlocked(a)) {
-                document.getElementById(a + 'But').classList.add('lockedArkUpg');
-                document.getElementById(a + 'But').classList.remove('arkUpg');
-                document.getElementById(a + 'Text').style.display = 'none';
-                document.getElementById(a).style.display = 'none';
-                document.getElementById(a + 'Built').style.display = 'none';
-            } else {
-                if (hasAUpgrade(a)) {
-                    document.getElementById(a + 'But').classList.add('boughtArkUpg');
-                    document.getElementById(a + 'But').classList.remove('arkUpg');
-                    document.getElementById(a).style.display = 'none';
-                    document.getElementById(a + 'Built').style.display = 'block';
-                    document.getElementById(a + 'Text').style.display = 'none';
-                    document.getElementById(a + 'BoughtText').style.display = 'block';
-                } else {
-                    document.getElementById(a + 'Text').style.display = 'block';
-                    if (!canAffordAUpg(a)) {
-                        document.getElementById(a + 'But').classList.add('unclickableArkUpg')
-                        document.getElementById(a + 'But').classList.remove('arkUpg')
-                    }
-                    document.getElementById(a).style.display = arkIsUnlocked(a) ? 'block' : 'none'
-                    document.getElementById(a + 'Built').style.display = 'none';
-                }
-            }
-        }
-    }
-
-    document.getElementById('timeSlider').value = player.antiPercent;
-    if (player.timeLocked) {
-        document.getElementById('lockInTimeBut').classList.add('unclickSliderBut');
-        document.getElementById('lockInTimeBut').classList.remove('timeSliderBut');
-        document.getElementById('respecTimeBut').classList.add('timeSliderBut');
-        document.getElementById('respecTimeBut').classList.remove('unclickSliderBut');
-        document.getElementById('timeSlider').classList.add('sliderLocked');
-        document.getElementById('timeSlider').classList.remove('slider');
-        document.getElementById('timeSlider').disabled = true;
-    } else {
-        if (player.unlocks['timeTab']['mainTab']) {
-            document.getElementById('timeTabBut').classList.add('timeUnlockedNotify')
-            document.getElementById('timeTabButMid').classList.add('timeUnlockedNotify')
-            document.getElementById('timeDimSubTabBut').classList.add('timeUnlockedNotify')
-        }
-    }
-    
-    updatePopupsEtc();
-
-    for (let id in ACH_DATA) {
-        document.getElementById(ACH_DATA[id].divID).setAttribute('data-title', ((ACH_DATA[id].secret && !player.achievements[id]) ? ACH_DATA[id].hint : ACH_DATA[id].desc) + (ACH_DATA[id].hasReward ? ' Reward: ' + ACH_DATA[id].reward : '' ) + (ACH_DATA[id].showEffect ? ' Currently: ' + formatDefault2(ACH_DATA[id].effect()) + 'x' : '' ));
-        if (player.achievements[id]) {
-            document.getElementById(ACH_DATA[id].divID).classList.add('achievementUnlocked');
-            document.getElementById(ACH_DATA[id].divID).classList.remove('achievement');
-        }
-    }
-
-    for (let id in MILES_DATA) {
-        if (player.milestones[id]) {
-            document.getElementById('milestone' + id.toString()).classList.add('milestoneTDUnlocked');
-            document.getElementById('milestone' + id.toString()).classList.remove('milestone');
-            displayData.push(['setProp', 'milestoneReq' + id.toString(), 'text-decoration', 'line-through']);
-        }
-    }
-
-    if (isResearchCompleted(6)) {
-        document.getElementById('theoremDisplay').innerHTML = ` ${formatWhole(player.theorems)} `;
-        document.getElementById('completionsDisplay').innerHTML = ` ${formatWhole(player.infCompletions)} `;
-        document.getElementById('theoremEffect').innerHTML = ` ^${formatDefault2(getTheoremBoostW())}`;
-        document.getElementById('theoremEffectC').innerHTML = ` ^${formatDefault2(getTheoremBoostC())}`;
-        document.getElementById('resGoal7').innerHTML = formatWhole(RESEARCH_DATA[7].calcGoal());
-    }
-
-    if (player.isInResearch) {
-        let id = getActiveResearch();
-        document.getElementById(RESEARCH_DATA[id].buttonID).innerHTML = 'IN PROGRESS';
-        for (let i=1; i<=7; i++) {
-            if (!player.researchProjects[i].completed) {
-                if (i==7) {
-                    document.getElementById(RESEARCH_DATA[i].buttonID).classList.remove('infResearchButton');
-                    if (i==id) {
-                        document.getElementById(RESEARCH_DATA[i].buttonID).classList.add('progressInfResearchButton');
-                    } else {
-                        document.getElementById(RESEARCH_DATA[i].buttonID).style.textDecoration = 'line-through';
-                        document.getElementById(RESEARCH_DATA[i].buttonID).classList.add('unclickInfResearchBut');
-                    }
-                } else {
-                    document.getElementById(RESEARCH_DATA[i].buttonID).classList.remove('researchButton');
-                    if (i==id) {
-                        document.getElementById(RESEARCH_DATA[i].buttonID).classList.add('progressResearchButton');
-                    } else {
-                        document.getElementById(RESEARCH_DATA[i].buttonID).style.textDecoration = 'line-through';
-                        document.getElementById(RESEARCH_DATA[i].buttonID).classList.add('unclickResearchBut');
-                    }
-                }
-            }
-        }
-        if (id==6 || id==7) {
-            let reqs = document.getElementsByClassName('gUpgRequires');
-            for (let i=0; i<reqs.length; i++) {
-                reqs[i].style.textDecoration = 'line-through';
-            }
-        }
-        if (id==7) { document.getElementById('infResearchDisplayDiv').style.display = 'block'; }
-        else { document.getElementById('researchDisplayDiv').style.display = 'block'; }
-        if (id==7) { document.getElementById('infResearchGoalDisplay').innerHTML = ` ${formatWholeUnitRow(RESEARCH_DATA[id].calcGoal())} `; }
-        else { document.getElementById('researchGoalDisplay').innerHTML = ` ${formatWholeUnitRow(RESEARCH_DATA[id].goal)} `; }
-        document.getElementById('vortexProgess').style.display = 'none';
-        document.getElementById('vortexProgessResearch').style.display = '';
-    } else {
-        for (let i=1; i<=7; i++) {
-            if (!player.researchProjects[i].completed) {
-                if (i==7) {
-                    document.getElementById(RESEARCH_DATA[i].buttonID).style.textDecoration = '';
-                    document.getElementById(RESEARCH_DATA[i].buttonID).classList.remove('unclickInfResearchBut');
-                    document.getElementById(RESEARCH_DATA[i].buttonID).classList.add('infResearchButton');
-                    document.getElementById(RESEARCH_DATA[i].buttonID).innerHTML = 'BEGIN';
-                } else {
-                    document.getElementById(RESEARCH_DATA[i].buttonID).style.textDecoration = '';
-                    document.getElementById(RESEARCH_DATA[i].buttonID).classList.remove('unclickResearchBut');
-                    document.getElementById(RESEARCH_DATA[i].buttonID).classList.add('researchButton');
-                    document.getElementById(RESEARCH_DATA[i].buttonID).innerHTML = 'BEGIN';
-                }
-            }
-        }
-        document.getElementById('researchDisplayDiv').style.display = 'none';
-        document.getElementById('infResearchDisplayDiv').style.display = 'none';
-        document.getElementById('vortexProgess').style.display = '';
-        document.getElementById('vortexProgessResearch').style.display = 'none';
-    }
-
-
-    for (let i=1; i<=6; i++) {
-        if (player.researchProjects[i].completed) {
-            document.getElementById(RESEARCH_DATA[i].buttonID).classList.add('completedResearchBut');
-            document.getElementById(RESEARCH_DATA[i].buttonID).classList.remove('researchButton');
-            document.getElementById(RESEARCH_DATA[i].buttonID).innerHTML = 'COMPLETED';
-            unlockArkPart(RESEARCH_DATA[i].unlocks);
-            RESEARCH_DATA[i].onComplete();
-        }
-    }
-
-    if (player.astralFlag) {
-        toggleAstralDisplay();
-        document.getElementById('astralButResearch').innerHTML = 'Toggle Astral: ON';
-        document.getElementById('astralButInfResearch').innerHTML = 'Toggle Astral: ON';
-    }
+function setupData() {
+    addData('sk', 'stat keys', STAT_KEYS);
+    addData('header', 'header displays', HEADER_DATA);
+    addData('tabs', 'tabs and subtabs', TABS_DATA);
+    addData('o', 'options', OPTIONS_DATA);
+    addData('sp', 'start player', START_PLAYER);
+    addData('ul', 'unlocks', UNLOCKS_DATA);
+    addData('ach', 'achievements', ACH_DATA);
+    addData('ms', 'milestones', MILES_DATA);
+    addData('u', 'units', UNITS_DATA);
+    addData('b', 'buildings', BUILDS_DATA[0]);
+    for (let i=1; i<=4; i++) { addData('b'+i.toString(), BUILDS_DATA[i].id, BUILDS_DATA[i]); }
+    addData('c', 'construction', CONSTR_DATA);
+    addData('tu', 'time upgrades', TIME_UPGRADES);
+    addData('td', 'time dimensions', TIME_DIMENSIONS);
+    addData('g', 'galaxies', GALAXIES_DATA[0]);
+    for (let j=1; j<=4; j++) { addData('g'+j.toString(), GALAXIES_DATA[j].name, GALAXIES_DATA[j]); }
+    addData('a', 'ark', ARK_DATA);
+    addData('r', 'research', RESEARCH_DATA);
+    addData('e', 'ethereal', ETH_DATA);
 }
 
 //save stuff
 
 function manualSave() {
     save();
-    showSavePopup();
+    showPopup('savePopup', 'Game Saved!', 2000);
 }
 
 function save() {
@@ -506,20 +196,20 @@ function startGame() {
         calculateOfflineTime(new Decimal(diff/1000));
     }
     else {
-        player.lastUpdate = new Date();
-        player.lastAutoSave = new Date();
-        player.lastAutobuy = new Date();
-        player.lastWindowUpdate = new Date();
-        save();
+        document.getElementById('offlineCalcPopup').style.display = 'none';
+        document.getElementById('game').style.display = 'block';
     }
 
     if (player.pastRuns.lastRun.timeSpent == 0) { player.pastRuns.lastRun.timeSacrificed = new Date(); }
     if (player.pastAscRuns.lastRun.timeSpent == 0) { player.pastAscRuns.lastRun.timeAscended = new Date(); }
-    document.getElementById('calcPopupContainer').style.display = 'none';
-    document.getElementById('game').style.display = 'block';
+    player.lastUpdate = new Date();
+    player.lastAutoSave = new Date();
+    player.lastAutobuy = new Date();
+    player.lastWindowUpdate = new Date();
+    save();
 
-    updateDisplay();
-    loadStyles();
+    //updateDisplay();
+    //loadStyles();
     startInterval();
 }
 
@@ -528,49 +218,65 @@ function startInterval() {
 }
 
 function gameLoop(diff=new Decimal(0), offline=false) {
-    var currentUpdate = new Date().getTime();
-    if (diff.eq(0)) { var diff = new Decimal(currentUpdate - player.lastUpdate); }
-    if (DEV_SPEED>0) { diff = diff.times(DEV_SPEED); }
+    let gain = new Decimal(0);
+    if (!offline) { 
+        var currentUpdate = new Date().getTime();
+        diff = new Decimal(currentUpdate - player.lastUpdate); 
+        if (app.devSpeed>0) { diff = diff.times(app.devSpeed); }
+    }
     var timeBuff;
     if (player.astralFlag) { timeBuff = getAntiTimeBuff().div(getAstralNerf()) }
     else { timeBuff = getTrueTimeBuff(); }
     var realDiff = diff;
     diff = diff.times(timeBuff);
     if (hasGUpgrade(1, 32) || hasGUpgrade(4, 22)) { realDiff = diff.times(timeBuff.sqrt()); } 
+    
     if (player.astralFlag) {
-        player.bricks = player.bricks.plus(getBricksPerSecond().times(diff.div(1000)));
-        player.thisSacStats.totalBricks = player.thisSacStats.totalBricks.plus(getBricksPerSecond().times(diff.div(1000)));
-        player.thisAscStats.totalBricks = player.thisAscStats.totalBricks.plus(getBricksPerSecond().times(diff.div(1000)));
-        player.allTimeStats.totalBricks = player.allTimeStats.totalBricks.plus(getBricksPerSecond().times(diff.div(1000)));
+        gain = getBricksPerSecond().times(diff.div(1000));
+        player.bricks = player.bricks.plus(gain);
+        player.stats['thisSacStats'].totalBricks = player.stats['thisSacStats'].totalBricks.plus(gain);
+        player.stats['thisAscStats'].totalBricks = player.stats['thisAscStats'].totalBricks.plus(gain);
+        player.stats['allTimeStats'].totalBricks = player.stats['allTimeStats'].totalBricks.plus(gain);
+        
         if (hasGUpgrade(1, 22)) {
-            player.corpses = player.corpses.plus(getGUpgEffect(1, 22).times(diff.div(1000)));
-            player.thisSacStats.totalCorpses = player.thisSacStats.totalCorpses.plus(getGUpgEffect(1, 22).times(diff.div(1000)));
-            player.thisAscStats.totalCorpses = player.thisAscStats.totalCorpses.plus(getGUpgEffect(1, 22).times(diff.div(1000)));
-            player.allTimeStats.totalCorpses = player.allTimeStats.totalCorpses.plus(getGUpgEffect(1, 22).times(diff.div(1000)));
+            gain = getGUpgEffect(1, 22).times(diff.div(1000));
+            player.corpses = player.corpses.plus(gain);
+            player.stats['thisSacStats'].totalCorpses = player.stats['thisSacStats'].totalCorpses.plus(gain);
+            player.stats['thisAscStats'].totalCorpses = player.stats['thisAscStats'].totalCorpses.plus(gain);
+            player.stats['allTimeStats'].totalCorpses = player.stats['allTimeStats'].totalCorpses.plus(gain);
+            
         }
         if (player.isInResearch) { player.research = player.research.plus(getResearchPerSecond().times(diff.div(1000))); }
+        
     } else {
-        player.corpses = player.corpses.plus(getCorpsesPerSecond().times(diff.div(1000)));
-        player.thisSacStats.totalCorpses = player.thisSacStats.totalCorpses.plus(getCorpsesPerSecond().times(diff.div(1000)));
-        player.thisAscStats.totalCorpses = player.thisAscStats.totalCorpses.plus(getCorpsesPerSecond().times(diff.div(1000)));
-        player.allTimeStats.totalCorpses = player.allTimeStats.totalCorpses.plus(getCorpsesPerSecond().times(diff.div(1000)));
+        gain = getCorpsesPerSecond().times(diff.div(1000));
+        player.corpses = player.corpses.plus(gain);
+        player.stats['thisSacStats'].totalCorpses = player.stats['thisSacStats'].totalCorpses.plus(gain);
+        player.stats['thisAscStats'].totalCorpses = player.stats['thisAscStats'].totalCorpses.plus(gain);
+        player.stats['allTimeStats'].totalCorpses = player.stats['allTimeStats'].totalCorpses.plus(gain);
+        
         if (hasGUpgrade(4, 32)) {
-            player.bricks = player.bricks.plus(getGUpgEffect(4, 32).times(diff.div(1000)));
-            player.thisSacStats.totalBricks = player.thisSacStats.totalBricks.plus(getGUpgEffect(4, 32).times(diff.div(1000)));
-            player.thisAscStats.totalBricks = player.thisAscStats.totalBricks.plus(getGUpgEffect(4, 32).times(diff.div(1000)));
-            player.allTimeStats.totalBricks = player.allTimeStats.totalBricks.plus(getGUpgEffect(4, 32).times(diff.div(1000)));
+            gain = getGUpgEffect(4, 32).times(diff.div(1000));
+            player.bricks = player.bricks.plus(gain);
+            player.stats['thisSacStats'].totalBricks = player.stats['thisSacStats'].totalBricks.plus(gain);
+            player.stats['thisAscStats'].totalBricks = player.stats['thisAscStats'].totalBricks.plus(gain);
+            player.stats['allTimeStats'].totalBricks = player.stats['allTimeStats'].totalBricks.plus(gain);
+            
         }
     }
-    if (player.corpses.gt(player.thisSacStats.bestCorpses)) { player.thisSacStats.bestCorpses = new Decimal(player.corpses); }
-    if (player.bricks.gt(player.thisSacStats.bestBricks)) { player.thisSacStats.bestBricks = new Decimal(player.bricks); }
-    if (player.corpses.gt(player.thisAscStats.bestCorpses)) { player.thisAscStats.bestCorpses = new Decimal(player.corpses); }
-    if (player.bricks.gt(player.thisAscStats.bestBricks)) { player.thisAscStats.bestBricks = new Decimal(player.bricks); }
-    if (player.corpses.gt(player.allTimeStats.bestCorpses)) { player.allTimeStats.bestCorpses = new Decimal(player.corpses); }
-    if (player.bricks.gt(player.allTimeStats.bestBricks)) { player.allTimeStats.bestBricks = new Decimal(player.bricks); }
+    
+    if (player.corpses.gt(player.stats['thisSacStats'].bestCorpses)) { player.stats['thisSacStats'].bestCorpses = new Decimal(player.corpses); }
+    if (player.bricks.gt(player.stats['thisSacStats'].bestBricks)) { player.stats['thisSacStats'].bestBricks = new Decimal(player.bricks); }
+    if (player.corpses.gt(player.stats['thisAscStats'].bestCorpses)) { player.stats['thisAscStats'].bestCorpses = new Decimal(player.corpses); }
+    if (player.bricks.gt(player.stats['thisAscStats'].bestBricks)) { player.stats['thisAscStats'].bestBricks = new Decimal(player.bricks); }
+    if (player.corpses.gt(player.stats['allTimeStats'].bestCorpses)) { player.stats['allTimeStats'].bestCorpses = new Decimal(player.corpses); }
+    if (player.bricks.gt(player.stats['allTimeStats'].bestBricks)) { player.stats['allTimeStats'].bestBricks = new Decimal(player.bricks); }
+    
     for (var i=1; i<NUM_UNITS; i++) {
         player.units[i].amount = player.units[i].amount.plus(getUnitProdPerSecond(i).times(diff.div(1000)));
     }
     if (hasGUpgrade(2, 41)) { player.units[8].amount = player.units[8].amount.plus(getUnitProdPerSecond(i).times(realDiff.div(1000))); }
+    
     if (player.timeLocked) {
         for (var i=1; i<=NUM_TIMEDIMS; i++) {
             if (i==1) {
@@ -580,7 +286,8 @@ function gameLoop(diff=new Decimal(0), offline=false) {
             else if (i<=4 || hasUpgrade(4, 23)) { player.timeDims[i-1].amount = player.timeDims[i-1].amount.plus(getTimeDimProdPerSecond(i).times(realDiff.div(1000))); }
         }
     }
-    for (var b in BUILDS_DATA) {
+    
+    for (let b=1; b<=4; b++) {
         if (isBuilt(b)) {
             if (b==3) {
                 player.buildings[b].amount = player.buildings[b].amount.plus(getBuildingProdPerSec(b).times(hasGUpgrade(1, 31) ? diff.times(getAstralNerf()).div(1000) : diff.div(1000)));
@@ -594,58 +301,47 @@ function gameLoop(diff=new Decimal(0), offline=false) {
             else { player.buildings[b].amount = player.buildings[b].amount.plus(getBuildingProdPerSec(b).times(diff.div(1000))); }
         }
     }
-
-    updateUnlocks();
-    updateHeaderDisplay();
-    updateAchievements();
-    updateMilestones();
-
-    if (!offline && player.unlocks['unitsTab']['autobuyers']) {
-        var slowAutoBuy = (currentUpdate - player.lastAutobuy)>=(15000/DEV_SPEED);
-        autobuyerTick(slowAutoBuy);
-        if (slowAutoBuy) { player.lastAutobuy = new Date(); }
-    }
+    
     if (!offline) {
-        //allDisplay();
+        updateUnlocks();
+        
+        updateAchievements();
+        
+        updateMilestones();
+    
+
+        if (player.unlocks['autobuyers']) {
+            var slowAutoBuy = (currentUpdate - player.lastAutobuy)>=(15000/app.devSpeed);
+            autobuyerTick(slowAutoBuy);
+            if (slowAutoBuy) { player.lastAutobuy = new Date(); }
+        }
+    
         if ((currentUpdate-player.lastAutoSave)>10000) { 
             player.lastAutoSave = currentUpdate;
             save();
             if (player.headerDisplay['autosavePopup']) {
-                if (!player.win || player.continue) { showAutosavePopup(); }
+                if (!player.win || player.continue) { showPopup('autosavePopup', 'Game Autosaved!', 2000); }
             }
         }
         player.lastUpdate = currentUpdate;
+    
+        player.dontResetSlider = app.dontRespec;
+        player.truePercent = 100 - Number(app.sliderVal);
+        player.antiPercent = Number(app.sliderVal);
+    
+
+    
+        popupTimers(diff.div(1000));
+    
+
+        //if (!isHidden) { window.requestAnimationFrame(updateDisplay); }
     }
-    if (!offline && popupShownTime !== undefined && popupShownTime !== null) {
-        if (currentUpdate-popupShownTime >= 2000) {
-            displayData.push(['setProp', 'achUnlockPopup', 'opacity', '0']);
-            popupShownTime = null;
-        }
-    }
-    if (!offline && mPopupShownTime !== undefined && mPopupShownTime !== null) {
-        if (currentUpdate-mPopupShownTime >= 2000) {
-            displayData.push(['setProp', 'milesUnlockPopup', 'opacity', '0']);
-            mPopupShownTime = null;
-        }
-    }
-    if (!offline && sPopupShownTime !== undefined && sPopupShownTime !== null) {
-        if (currentUpdate-sPopupShownTime >= 2000) {
-            displayData.push(['setProp', 'savePopup', 'opacity', '0']);
-            sPopupShownTime = null;
-        }
-    }
-    if (!offline && asPopupShownTime !== undefined && asPopupShownTime !== null) {
-        if (currentUpdate-asPopupShownTime >= 2000) {
-            displayData.push(['setProp', 'autosavePopup', 'opacity', '0']);
-            asPopupShownTime = null;
-        }
-    }
-    if (!offline && !isHidden) { window.requestAnimationFrame(updateDisplay); }
+    
 }
 
 function handleVisibilityChange() {
     if (!document[hidden]) {
-        displayData = new Array(0);
+        //displayData = new Array(0);
         isHidden = false;
     } else { isHidden = true; }
 }
@@ -673,14 +369,27 @@ function autobuyerTick(slow) {
     if (player.autobuyers['time']['on']) {
         for (let x=1; x<=3; x++) {
             for (let y=1; y<=4; y++) {
-                if (canAffordTUpg(x.toString() + y.toString())) { buyTUpg(x.toString() + y.toString()); }
+                if (canAffordTUpg(x*10+y)) { buyTUpg(x.toString() + y.toString()); }
             }
         }
     }
 }
 
+function showPopup(type, text, ms) {
+    timedPopups.push({className: type, popupText: text, time: ms});
+}
+
+function popupTimers(dif) {
+    for (popup in timedPopups) {
+        timedPopups[popup].time -= dif;
+        if (timedPopups[popup].time <= 0) {
+            timedPopups.splice(popup, 1);
+        }
+    }
+}
+
 function calculateOfflineTime(seconds) {
-    document.getElementById('offlineCalcPopup').style.display = 'block';
+    if (seconds>21600) { seconds = 21600; }
     var ticks = seconds * 20;
     var extra = new Decimal(0);
     var simMilliseconds = 0;
@@ -776,6 +485,7 @@ function calculateOfflineTime(seconds) {
         document.getElementById('offlineZero');
     }
     document.getElementById('offlineCalcPopup').style.display = 'none';
+    document.getElementById('game').style.display = 'block';
     document.getElementById('offlineGainPopup').style.display = 'block';
 }
 
@@ -803,13 +513,13 @@ function importSave() {
     if (imported !== undefined) {
         try {
             copyData(player, JSON.parse(window.atob(imported)));
-            if (Object.keys(player).length == 0) { copyData(player, START_PLAYER); }
+            if (Object.keys(player).length == 0) { copyData(player, DATA.sp); }
         } catch(e) {
             return;
         }
     }
     
-    fixData(player, START_PLAYER); 
+    fixData(player, DATA.sp); 
     if (player.version != GAME_DATA.version) { updateVersion(); }
     save();
     window.location.reload();
@@ -835,7 +545,7 @@ function closeText() {
 }
 
 function exportGameState() {
-    document.getElementById('exportText').value = window.btoa(JSON.stringify(player) + '\n\n') + window.btoa(JSON.stringify(START_PLAYER) + '\n\n') + window.btoa(JSON.stringify(UNITS_DATA) + '\n\n') + window.btoa(JSON.stringify(BUILDS_DATA) + '\n\n') + window.btoa(JSON.stringify(CONSTR_DATA) + '\n\n') + window.btoa(JSON.stringify(TIME_DATA) + '\n\n') + window.btoa(JSON.stringify(UNLOCKS_DATA) + '\n\n');
+    document.getElementById('exportText').value = window.btoa(JSON.stringify(player) + '\n\n') + window.btoa(JSON.stringify(DATA.sp) + '\n\n') + window.btoa(JSON.stringify(DATA.u) + '\n\n') + window.btoa(JSON.stringify(DATA.b) + '\n\n') + window.btoa(JSON.stringify(DATA.c) + '\n\n') + window.btoa(JSON.stringify(DATA.td) + '\n\n') + window.btoa(JSON.stringify(DATA.tu) + '\n\n') + window.btoa(JSON.stringify(DATA.ul) + '\n\n');
     document.getElementById('exportText').style.display = 'block';
     document.getElementById('importConfirm').style.display = 'none';
     document.getElementById('closeText').style.display = 'table-cell';
@@ -907,13 +617,41 @@ function updateVersion() {
     copyData(tempPlayer, player);
     player = {};
     fixResetBug();
-    copyData(player, START_PLAYER);
+    copyData(player, DATA.sp);
     updateVersionData(player, tempPlayer);
     player.version = GAME_DATA.version;
     if (tempPlayer.achievements[73]) { 
         player.achievements[73] = false;
         player.achievements[71] = true;
     }
+    if (tempPlayer.unlocks['unitsTab']['mainTab']) { player.unlocks['units'] = true; }
+    if (tempPlayer.unlocks['unitsTab']['spacePrestige']) { player.unlocks['spacePrestige'] = true; }
+    if (tempPlayer.unlocks['unitsTab']['autobuyers']) { player.unlocks['autobuyers'] = true; }
+    if (tempPlayer.unlocks['unitsTab']['fastBuyers']) { player.unlocks['fastBuyers'] = true; }
+    if (tempPlayer.unlocks['unitsTab']['BulkBuyers']) { player.unlocks['BulkBuyers'] = true; }
+    if (tempPlayer.unlocks['unitsTab']['prestigeBuyer']) { player.unlocks['prestigeBuyer'] = true; }
+    if (tempPlayer.unlocks['unitsTab']['advancedBuyer']) { player.unlocks['advancedBuyer'] = true; }
+    if (tempPlayer.unlocks['unitsTab']['ascensionBuyer']) { player.unlocks['ascensionBuyer'] = true; }
+    if (tempPlayer.unlocks['unitsTab']['timeDimBuyer']) { player.unlocks['timeDimBuyer'] = true; }
+    if (tempPlayer.unlocks['buildingsTab']['factory']) { player.unlocks['factory'] = true; }
+    if (tempPlayer.unlocks['buildingsTab']['factoryRow2']) { player.unlocks['factoryRow2'] = true; }
+    if (tempPlayer.unlocks['buildingsTab']['necropolis']) { player.unlocks['necropolis'] = true; }
+    if (tempPlayer.unlocks['buildingsTab']['necropolisRow2']) { player.unlocks['necropolisRow2'] = true; }
+    if (tempPlayer.unlocks['buildingsTab']['sun']) { player.unlocks['sun'] = true; }
+    if (tempPlayer.unlocks['buildingsTab']['sunRow2']) { player.unlocks['sunRow2'] = true; }
+    if (tempPlayer.unlocks['buildingsTab']['constructionSubTab']) { player.unlocks['construction'] = true; }
+    if (tempPlayer.unlocks['buildingsTab']['constructionRow2']) { player.unlocks['constructionRow2'] = true; }
+    if (tempPlayer.unlocks['buildingsTab']['vortexTable']) { player.unlocks['vortexTable'] = true; }
+    if (tempPlayer.unlocks['buildingsTab']['vortex']) { player.unlocks['vortex'] = true; }
+    if (tempPlayer.unlocks['buildingsTab']['vortexRow2']) { player.unlocks['vortexRow2'] = true; }
+    if (tempPlayer.unlocks['timeTab']['mainTab']) { player.unlocks['time'] = true; }
+    if (tempPlayer.unlocks['timeTab']['timeUpgrades']) { player.unlocks['timeUpgrades'] = true; }
+    if (tempPlayer.unlocks['timeTab']['timeUpgrades2']) { player.unlocks['timeUpgrades2'] = true; }
+    if (tempPlayer.unlocks['timeTab']['timeDims2']) { player.unlocks['timeDims2'] = true; }
+    if (tempPlayer.unlocks['galaxyTab']['mainTab']) { player.unlocks['galaxies'] = true; }
+    if (tempPlayer.unlocks['galaxyTab']['researchTab']) { player.unlocks['research'] = true; }
+    if (tempPlayer.unlocks['galaxyTab']['arkTab']) { player.unlocks['ark'] = true; }
+    if (isResearchCompleted(6)) { player.unlocks['infResearch'] = true; }
     tempPlayer = {};
 }
 
@@ -929,7 +667,7 @@ function updateVersionData(newP, oldP) {
             if (newP[item] === undefined) {
                 newP[item] = [];
             }
-            updateVersionData(newP[item], oldP[item]);
+            if (oldP !== undefined) { updateVersionData(newP[item], oldP[item]); }
         } else if (newP[item] instanceof Decimal) {
             if (oldP[item] !== undefined) {
                 newP[item] = new Decimal(oldP[item]);
@@ -943,11 +681,17 @@ function updateVersionData(newP, oldP) {
                 newP[item] = new Date(oldP[item]);
             }
         } else {
-            if (oldP[item] !== undefined && item != 'version') {
-                if (typeof newP[item] === typeof oldP[item]) { newP[item] = oldP[item]; }
+            if (oldP !== undefined) {
+                if (oldP[item] !== undefined && item != 'version') {
+                    if (typeof newP[item] === typeof oldP[item]) { newP[item] = oldP[item]; }
+                }
             }
         }
     }
+}
+
+function addModule(moduleID, moduleData) {
+
 }
 
 //misc
@@ -976,12 +720,12 @@ function hasAchievement(id) {
 }
 
 function getAchievementEffect(id) {
-    return ACH_DATA[id].effect();
+    return DATA.ach[id].effect();
 }
 
 function getNumAchievements() {
     let count = 0;
-    for (let id in ACH_DATA) {
+    for (let id in DATA.ach) {
         if (player.achievements[id]) { count++ }
     }
     return count;
@@ -1007,12 +751,12 @@ function hasMilestone(id) {
 }
 
 function getMilestoneEffect(id) {
-    return MILES_DATA[id].effect();
+    return DATA.ms[id].effect();
 }
 
 function getNumMilestones() {
     let count = 0;
-    for (let id in MILES_DATA) {
+    for (let id in DATA.ms) {
         if (player.milestones[id]) { count++ }
     }
     return count;
@@ -1031,7 +775,7 @@ document.onkeydown = function(e) {
 
 function toggleHotkeys() {
     player.hotkeysOn = !player.hotkeysOn;
-    document.getElementById('toggleHotkeysBut').innerHTML = player.hotkeysOn ? 'ENABLE HOTKEYS: ON' : 'ENABLE HOTKEYS: OFF'
+    //document.getElementById('toggleHotkeysBut').innerHTML = player.hotkeysOn ? 'ENABLE HOTKEYS: ON' : 'ENABLE HOTKEYS: OFF'
 }
 
 function allAuto(n) {
@@ -1093,13 +837,13 @@ function allAmount() {
 //dev stuff
 
 function changeDevSpeed(num) {
-    DEV_SPEED = num;
-    if (DEV_SPEED!=1) { document.getElementById('devSpeedContainer').style.display = 'block'}
+    app.devSpeed = num;
+    //if (app.devSpeed!=1) { document.getElementById('devSpeedContainer').style.display = 'block'}
 }
 
 function resetDevSpeed() {
-    DEV_SPEED = 1;
-    document.getElementById('devSpeedContainer').style.display = 'none';
+    app.devSpeed = 1;
+    //document.getElementById('devSpeedContainer').style.display = 'none';
 }
 
 function rewindTime() {
