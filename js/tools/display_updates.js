@@ -1,36 +1,3 @@
-//main update loop functions
-
-/*function updateDisplay(timestamp) {
-    for (let z=0; z<displayData.length; z++) {
-        updateElement(displayData[z]);
-        //console.log(z.toString() + ': ' + displayData[z].toString());
-    }
-
-    displayData = new Array(0);
-}
-
-
-function updateElement(data) {
-    console.log('display update');
-    if (data[0] == 'addClass') {
-        document.getElementById(data[1]).classList.add(data[2]);
-    } else if (data[0] == 'remClass') {
-        document.getElementById(data[1]).classList.remove(data[2]);
-    } else if (data[0] == 'togClass') {
-        document.getElementById(data[1]).classList.toggle(data[2]);
-    } else if (data[0] == 'setAttr') {
-        document.getElementById(data[1]).setAttribute(data[2], data[3]);
-    } else if (data[0] == 'setProp') {
-        document.getElementById(data[1]).style.setProperty(data[2], data[3]);
-    } else if (data[0] == 'togDisplay') {
-        document.getElementById(data[1]).style.display = document.getElementById(data[1]).style.display === 'none' ? '' : 'none'
-    } else if (data[0] == 'togVis') {
-        document.getElementById(data[1]).style.visibility = document.getElementById(data[1]).style.visibility === 'hidden' ? 'visible' : 'hidden'
-    } else if (data[0] == 'html') {
-        document.getElementById(data[1]).innerHTML = data[2];
-    }
-}*/
-
 //misc style/display updaters
 
 function updateShadow() {
@@ -39,11 +6,6 @@ function updateShadow() {
 
 function updateSingleBuyer(id, option) {
     player.autobuyers[id][option] = !player.autobuyers[id][option];
-    /*if(player.autobuyers[id][option]) {
-        document.getElementById(button).innerHTML = (option == 'on' ? 'ON' : (option == 'fast' ? 'FAST' : 'MAX'));
-    } else {
-        document.getElementById(button).innerHTML = (option == 'on' ? 'OFF' : (option == 'fast' ? 'SLOW' : 'SINGLE'));
-    }*/
 }
 
 function updateBuyerOrder(unitTier) {
@@ -100,35 +62,6 @@ function updateMaxPrestige() {
         }
     })
 }
-
-/*function updateAutobuyersDisplay() {
-    for (var i=1; i<9; i++) {
-        document.getElementById(player.autobuyers.priority[i-1].toString() + (i).toString()).selected = true;
-        var unitName = DATA.u[i].single.replace(' ', '');
-        document.getElementById(unitName + 'EnabledBut').innerHTML = player.autobuyers[i]['on'] ? 'ON' : 'OFF'
-        document.getElementById(unitName + 'SpeedBut').innerHTML = player.autobuyers[i]['fast'] ? 'FAST' : 'SLOW'
-        document.getElementById(unitName + 'BulkBut').innerHTML = player.autobuyers[i]['bulk'] ? 'MAX' : 'SINGLE'
-    }
-
-    document.getElementById('sacrificeEnabledBut').innerHTML = player.autobuyers[9]['on'] ? 'ON' : 'OFF'
-    document.getElementById('sacrificeSpeedBut').innerHTML = player.autobuyers[9]['fast'] ? 'FAST' : 'SLOW'
-    document.getElementById('sacrificeBuyerAmount').value = formatWholeNoComma(player.autobuyers[9]['amount']);
-    document.getElementById('sacrificeBuyerAdvancedList').options.namedItem(player.autobuyers[9]['type']).selected = true;
-    let sacMethod = document.getElementById('sacrificeBuyerAdvancedList');
-    document.getElementById('sacrificeBuyerAmountLabel').innerHTML = sacMethod.options[sacMethod.selectedIndex].text;
-
-    document.getElementById('prestigeEnabledBut').innerHTML = player.autobuyers[10]['on'] ? 'ON' : 'OFF'
-    document.getElementById('prestigeSpeedBut').innerHTML = player.autobuyers[10]['fast'] ? 'FAST' : 'SLOW'
-    document.getElementById('maxPrestige').value = formatWholeNoComma(player.autobuyers[10]['max']);
-
-    document.getElementById('ascensionEnabledBut').innerHTML = player.autobuyers[11]['on'] ? 'ON' : 'OFF'
-    document.getElementById('ascensionSpeedBut').innerHTML = player.autobuyers[11]['fast'] ? 'FAST' : 'SLOW'
-    document.getElementById('ascensionBuyerAmount').value = formatWholeNoComma(player.autobuyers[11]['amount']);
-
-    for (let j=1; j<=NUM_TIMEDIMS; j++) {
-        if (j<=4 || hasUpgrade(4, 23)) { document.getElementById('timeDim' + j.toString() + 'But').innerHTML = player.autobuyers[12][j] ? 'ON' : 'OFF' }
-    }
-}*/
 
 function toggleTimeUpgBuyer() {
     player.autobuyers['time']['on'] = !player.autobuyers['time']['on'];

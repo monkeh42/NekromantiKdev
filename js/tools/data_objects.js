@@ -3,7 +3,7 @@ var START_PLAYER = {
         numClass: 'defNum',
     },
     corpses: new Decimal(110),
-    corpsesAch13: new Decimal(10),
+    //corpsesAch13: new Decimal(10),
     corpsesAch41: new Decimal(25000),
     units: {
         1: {
@@ -1720,9 +1720,9 @@ var ACH_DATA = {
         desc: 'Unlock Time Warp.',
         secret: false,
         hint: '',
-        reward: 'You start all resets with 10 corpses.',
+        reward: '',//'You start all resets with 10 corpses.',
         showEffect: false,
-        hasReward: true,
+        hasReward: false,
         divID: 'ach13',
         canUnlock: function() {
             return player.unlocks['time'];
@@ -2839,7 +2839,7 @@ function fixResetBug() {
 
     }
     START_PLAYER.corpses = new Decimal(110);
-    START_PLAYER.corpsesAch13 = new Decimal(10);
+    //START_PLAYER.corpsesAch13 = new Decimal(10);
     START_PLAYER.corpsesAch41 = new Decimal(25000);
     copyData(START_PLAYER.units, {
         1: {
