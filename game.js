@@ -2,7 +2,7 @@
 
 const GAME_DATA = {
     author: 'monkeh42',
-    version: 'v1.1.0_d.1',
+    version: 'v1.1.0_d.2',
 }
 
 const NUM_UNITS = 8;
@@ -625,7 +625,7 @@ function updateVersion() {
         player.achievements[73] = false;
         player.achievements[71] = true;
     }
-    if (tempPlayer.version != GAME_DATA.version) {
+    if (tempPlayer.version != GAME_DATA.version && tempPlayer.version.slice(0,4)=='v1.0') {
         if (tempPlayer.unlocks['unitsTab']['mainTab']) { player.unlocks['units'] = true; }
         if (tempPlayer.unlocks['unitsTab']['spacePrestige']) { player.unlocks['spacePrestige'] = true; }
         if (tempPlayer.unlocks['unitsTab']['autobuyers']) { player.unlocks['autobuyers'] = true; }
