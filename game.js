@@ -96,6 +96,11 @@ function loadGame() {
         }
     }
 
+    if (player.activeGalaxies[1].slice(0,3)=='gal') {
+        player.activeGalaxies[1] = '1';
+        player.activeGalaxies[2] = '2';
+    }
+
     player.help = false;
     if (player.win&&!player.continue) { player.continue = true; }
 
