@@ -764,6 +764,7 @@ function galaxyPrestigeReset(respec=false) {
     if (!hasAchievement(43)) { player.subTabs['t'] = 'timeDimSubTab'; }
     save();
     startInterval();
+    updateShadow();
 }
 
 function resetTimeCounts() {
@@ -844,6 +845,7 @@ function researchReset(proj) {
     save();
     //loadStyles();
     startInterval();
+    updateShadow();
 }
 
 function getGalaxiesBonus() {
