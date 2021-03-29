@@ -335,10 +335,10 @@
                         <div id="galSelect" style="text-align: center; width: 100%; margin: auto;">Display  <select v-model="galSelected" id="galDisplaySelect" name="galDisplaySelect" class="galDropdown" v-on:change="changeGalaxiesDisplayed()"><option id="1gal" class="galOptions" value="1">1</option><option id="2gal" class="galOptions" value="2">2</option><option id="4gal" class="galOptions" value="4">4</option></select>  at a time</div>
                         <div id="galButs2" v-bind:style="[(player.activeGalaxies[0]=='2') ? {display: 'block'} : {display: 'none'}]"><layer-button data="g" :width="270" text="Andromeda/Circinus" fname="showGalaxies" :args="['1', '2']"></layer-button><layer-button data="g" :width="270" text="Sculptor Dwarf/Triangulum" fname="showGalaxies" :args="['3', '4']"></layer-button></div>
                         <div id="galButs4" v-bind:style="[(player.activeGalaxies[0]=='1') ? {display: 'block'} : {display: 'none'}]"><layer-button data="g" :width="130" text="Andromeda" fname="showGalaxy" args="1"></layer-button><layer-button data="g" :width="130" text="Circinus" fname="showGalaxy" args="2"></layer-button><layer-button data="g" :width="130" text="Sculptor Dwarf" fname="showGalaxy" args="3"></layer-button><layer-button data="g" :width="130" text="Triangulum" fname="showGalaxy" args="4"></layer-button></div>
-                        <div style="text-align: center; width: 100%; margin: auto;"><layer-button data="g" :width="270" text="Respec galaxies - forces ascension" fname="respecGalaxiesClick"></layer-button><layer-button data="g" :width="270" text="Galaxy Milestones" fname="showMilestones"></layer-button></div>
-                        <div id="galaxyImpExp" style="text-align: center; width: 100%; margin: auto;"><layer-button data="g" :width="130" text="Import Galaxies" fname="showImportGalaxies"></layer-button><layer-button  data="g" :width="130" text="Export Galaxies" fname="exportGalaxies"></layer-button><layer-button data="g" :width="270" text="Load/Save Favorites" fname="showFavPopup"></layer-button><!--<button id="loadFav" class="galImpExpBut" onclick="importGalaxies(true)">Load Favorite<div id="favLoadNotice">SUCCESS!</div></button><button id="saveFav" class="galImpExpBut" onclick="saveFavorite()">Save Favorite<div id="favSavedNotice">SAVED!</div></button>--></div>
+                        <div style="text-align: center; width: 100%; margin: auto;"><layer-button data="g" :width="270" text="Respec galaxies - forces ascension" fname="respecGalaxiesClick"></layer-button><layer-button data="g" :width="270" text="Galaxy Milestones" fname="showNormalPopup" args="mpop"></layer-button></div>
+                        <div id="galaxyImpExp" style="text-align: center; width: 100%; margin: auto;"><layer-button data="g" :width="130" text="Import Galaxies" fname="showImportGalaxies"></layer-button><layer-button  data="g" :width="130" text="Export Galaxies" fname="exportGalaxies"></layer-button><layer-button data="g" :width="270" text="Load/Save Favorites" fname="showNormalPopup" args="fpop"></layer-button></div>
                         
-                        <galaxies-table data="g"></galaxies-table>
+                        <galaxies-table ref="gtable" data="g"></galaxies-table>
                     </div>
                     <div id="researchSubTab" class="galaxySubTab" v-bind:style="[(player.subTabs['g']=='researchSubTab') ? { display: 'block' } : { display: 'none' }]">
                         <div v-if="(player.isInResearch&&!isResearchActive(7))" id="researchDisplayDiv">
@@ -432,22 +432,22 @@
                 </div>
                 <div id="optionsTab" class="pageTab" v-bind:style="[(player.tab=='optionsTab') ? { display: 'block' } : { display: 'none' }]">
                     <options-table></options-table>
-                    <table style="margin: auto;">
+                    <table style="margin: auto; text-align: center;">
                         <tr>
                             <td colspan="4">
-                                <label id="exportTextLabel" for="exportText" style="display: none;">Paste your save here...</label>
+                                <div style="min-height: 25px"><label id="exportTextLabel" for="exportText" style="display: none;">Paste your save here...</label></div>
                                 <textarea id="exportText" name="exportText" style="display: none;"></textarea>
                             </td>
                         </tr>
                         <tr>
-                            <td></td>
-                            <td id="importConfirm" style="display: none;">
+                            <td style="width: 353px;"></td>
+                            <td id="importConfirm" style="display: none; width: 175px;">
                                 <button class="optBut" onclick="importSave()">IMPORT</button>
                             </td>
-                            <td id="closeText" style="display: none;">
+                            <td id="closeText" style="display: none; width: 175px;">
                                 <button class="optBut" onclick="closeText()">CLOSE</button>
                             </td>
-                            <td></td>
+                            <td style="width: 353px;"></td>
                         </tr>
                         <tr>
                             <td colspan="4">
@@ -477,91 +477,12 @@
                     </table>
                     <div style="width: 100%; text-align: center;"><img src="images/NekromantiK_Logo.png" width="250px"></div>
                 </div>
-                <div class="gSpecPopup" id="gSpecsPopup" style="display: none;">
-                    <table>
-                        <tr>
-                            <td width="50%"></td>
-                            <td width="15%"></td>
-                            <td width="15%"></td>
-                            <td width="20%"></td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div id="slot1Name">{{ player.favGalNames[0] }}</div>
-                            </td>
-                            <td>
-                                <button id="slot1Save" class="saveLoadFavBut" onclick="saveFavorite(1)">SAVE</button>
-                            </td>
-                            <td>
-                                <button id="slot1Load" class="saveLoadFavBut" onclick="importGalaxies(true, 1)">LOAD</button>
-                            </td>
-                            <td>
-                                <button id="slot1Rename" class="renameFavBut" onclick="renameFavorite(1)">RENAME</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div id="slot2Name">{{ player.favGalNames[1] }}</div>
-                            </td>
-                            <td>
-                                <button id="slot2Save" class="saveLoadFavBut" onclick="saveFavorite(2)">SAVE</button>
-                            </td>
-                            <td>
-                                <button id="slot2Load" class="saveLoadFavBut" onclick="importGalaxies(true, 2)">LOAD</button>
-                            </td>
-                            <td>
-                                <button id="slot2Rename" class="renameFavBut" onclick="renameFavorite(2)">RENAME</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div id="slot3Name">{{ player.favGalNames[2] }}</div>
-                            </td>
-                            <td>
-                                <button id="slot3Save" class="saveLoadFavBut" onclick="saveFavorite(3)">SAVE</button>
-                            </td>
-                            <td>
-                                <button id="slot3Load" class="saveLoadFavBut" onclick="importGalaxies(true, 3)">LOAD</button>
-                            </td>
-                            <td>
-                                <button id="slot3Rename" class="renameFavBut" onclick="renameFavorite(3)">RENAME</button>
-                            </td>
-                        </tr>
-                    </table>
-                    <div id="gSpecErr" style="height: 20px; min-height: 20px;"></div>
-                    <div style="margin: 10px auto; width: 310px;"><button id ="resetFavsBut" class="optBut" onclick="resetAllFavs()" style="float: left; margin: 2px !important;">RESET ALL</button><button id ="closeFavPopup" class="optBut" onclick="closeFavPopup()" style="float: right; margin: 2px !important;">CLOSE</button></div>
-                </div>
-                <div class="gPopup" id="gImportPopup" style="display: none; width: 330px; min-width: 330px; height: 260px; min-height: 260px;">
-                    <label id="gImportTextLabel" for="gImportText"><h2>Paste your galaxy code:</h2></label>
-                    <textarea id="gImportText" name="gImportText" style="display: block;"></textarea>
-                    <div id="gImpErr" style="height: 20px; min-height: 20px;"></div>
-                    <div style="margin: 10px;"><button id ="impGalaxyBut" class="optBut" onclick="importGalaxies()" style="float: left; margin: 2px !important;">IMPORT</button></div><div style="margin: 10px;"><button id ="closeImpGalaxyPopup" class="optBut" onclick="closeImpGalaxies()" style="float: right; margin: 2px !important;">CLOSE</button></div>
-                </div>
-                <div class="gPopup" id="gExportPopup" style="display: none; width: 330px; min-width: 330px; height: 235px; min-height: 235px;">
-                    <label id="gExportTextLabel" for="gExportText"><h2>Your galaxy code:</h2></label>
-                    <textarea id="gExportText" name="gExportText" style="display: block;"></textarea>
-                    <div style="margin: auto;"><button id ="closeExpGalaxyPopup" class="optBut" onclick="closeExpGalaxies()">CLOSE</button></div>
-                </div>
-                <div class="gPopup" id="favErrPopup" style="display: none; width: 330px; min-width: 330px; height: 260px; min-height: 260px;">
-                    <label id="favErrTextLabel" for="favErrText"><h2>Your saved favorites:</h2></label>
-                    <textarea id="favErrExportText" name="favErrExportText" style="display: block;"></textarea>
-                    <div id="favErr" style="height: 20px; min-height: 20px;"></div>
-                    <div style="margin: auto;"><button id ="closefavErrPopup" class="optBut" onclick="closefavErrPopup()">CLOSE</button></div>
-                </div>
-                <div class="popup" id="confirmationsPopup">
-                        <h2>Confirmations</h2>
-                        <confirm-toggles></confirm-toggles>
-                </div>
-                <header-popup></header-popup>
-                <div class="milestonePopup" id="milestonesPopup">
-                    <div class="cursorContainer"></div>
-                    <div class="milestoneHeaderContainer">
-                        <div class="milestonePopupHeader">MILESTONES</div>
-                        <div class="milestonePopupHeaderX"><a href="javascript:hideMilestones();">X</a></div>
-                        <div class="milestonePopupHR"></div>
-                    </div>
-                    <milestones></milestones>
-                </div>
+                <favs-popup ref="fpop"></favs-popup>
+                <g-import-popup ref="gipop"></g-import-popup>
+                <g-export-popup ref="gepop"></g-export-popup>
+                <milestones-popup ref="mpop"></milestones-popup>
+                <confirmations-popup ref="cpop"></confirmations-popup>
+                <header-popup ref="hpop"></header-popup>
             </div>
         </div>
     </div>

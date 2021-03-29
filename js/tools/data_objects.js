@@ -670,6 +670,15 @@ var START_PLAYER = {
     },
 
     achievements: {
+        rowsUnlocked: {
+            1: true,
+            2: true,
+            3: false,
+            4: false,
+            5: false,
+            6: false,
+            7: false,
+        },
         11: false,
         12: false,
         13: false,
@@ -790,7 +799,7 @@ var START_PLAYER = {
     favGalaxies: [[], [], []],
     favGalNames: ['Slot 1', 'Slot 2', 'Slot 3'],
     help: false,
-    version: 'v1.1.0_d.2',
+    version: 'v1.1.0_d.3',
 }
 
 var STAT_KEYS = {
@@ -1580,13 +1589,13 @@ var OPTIONS_DATA = {
         title: 'CUSTOMIZE HEADER',
         altTitle: '',
         altToggle: function() { return false; },
-        fxn: function() { showNormalPopup(71); },
+        fxn: function() { showNormalPopup('hpop'); },
     },
     31: {
         title: 'TOGGLE CONFIRMATIONS',
         altTitle: '',
         altToggle: function() { return false; },
-        fxn: function() { openConfirmationsPopup(); },
+        fxn: function() { showNormalPopup('cpop'); },
     },
     32: {
         title: 'FORMULA TOOLTIPS: OFF',
@@ -1677,6 +1686,36 @@ var MILES_DATA = {
 var ACH_DATA = {
     rows: 7,
     cols: 5,
+    rowUnlocks: {
+        1: {
+            condition: function() { return true; },
+            unlocked: function() { return player.achievements.rowsUnlocked[1] }
+        },
+        2: {
+            condition: function() { return true; },
+            unlocked: function() { return player.achievements.rowsUnlocked[2] }
+        },
+        3: {
+            condition: function() { return hasAchievement(15); },
+            unlocked: function() { return player.achievements.rowsUnlocked[3] }
+        },
+        4: {
+            condition: function() { return hasAchievement(31); },
+            unlocked: function() { return player.achievements.rowsUnlocked[4] }
+        },
+        5: {
+            condition: function() { return hasAchievement(31); },
+            unlocked: function() { return player.achievements.rowsUnlocked[5] }
+        },
+        6: {
+            condition: function() { return hasAchievement(51); },
+            unlocked: function() { return player.achievements.rowsUnlocked[6] }
+        },
+        7: {
+            condition: function() { return hasAchievement(61); },
+            unlocked: function() { return player.achievements.rowsUnlocked[7] }
+        },
+    },
     11: {
         title: 'The Astral Brick Road',
         desc: 'Unlock Buildings.',
@@ -1775,7 +1814,7 @@ var ACH_DATA = {
             return e.pow(0.2);
         },
         onUnlock: function() {
-            document.getElementById('keptBricks').style.display = 'block';
+            //document.getElementById('keptBricks').style.display = 'block';
         }
     },
     21: {
@@ -2184,7 +2223,7 @@ var ACH_DATA = {
     },
     62: {
         title: 'What Have I Done?',
-        desc: 'Trigger the galaxy effect softcap.',
+        desc: 'Trigger the galaxy effect softcap, or complete all six research projects without triggering it.',
         secret: false,
         hint: '',
         reward: '',
@@ -2192,7 +2231,11 @@ var ACH_DATA = {
         showEffect: false,
         divID: 'ach62',
         canUnlock: function() {
-            return player.galaxies.gt(1000*(2**getNumCompletedProj()));
+            let allProjs = true;
+            for (let i=1; i<=6; i++) {
+                if (!isResearchCompleted(i)) { allProjs = false; }
+            }
+            return (isSoftcapActive(getGalaxiesBonusNoSC())||allProjs);
         },
         effect: function() {
             return new Decimal(1);
@@ -3499,6 +3542,15 @@ function fixResetBug() {
     });
 
     copyData(START_PLAYER.achievements, {
+        rowsUnlocked: {
+            1: true,
+            2: true,
+            3: false,
+            4: false,
+            5: false,
+            6: false,
+            7: false,
+        },
         11: false,
         12: false,
         13: false,
@@ -3611,7 +3663,7 @@ function fixResetBug() {
     START_PLAYER.dontResetSlider = false;
     START_PLAYER.favGalaxies = [[], [], []];
     START_PLAYER.favGalNames = ['Slot 1', 'Slot 2', 'Slot 3'];
-    START_PLAYER.version = 'v1.1.0_d.2';
+    START_PLAYER.version = 'v1.1.0_d.3';
 
     DATA.sp = {};
     copyData(DATA.sp, START_PLAYER);

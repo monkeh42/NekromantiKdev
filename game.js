@@ -2,7 +2,7 @@
 
 const GAME_DATA = {
     author: 'monkeh42',
-    version: 'v1.1.0_d.2',
+    version: 'v1.1.0_d.3',
 }
 
 const NUM_UNITS = 8;
@@ -529,6 +529,7 @@ function importSave() {
 function exportSave() {
     var str = window.btoa(JSON.stringify(player));
 
+    document.getElementById('exportTextLabel').style.display = 'none';
     document.getElementById('exportText').value = str;
     document.getElementById('exportText').style.display = 'block';
     document.getElementById('importConfirm').style.display = 'none';
@@ -654,6 +655,10 @@ function updateVersion() {
         if (tempPlayer.unlocks['galaxyTab']['researchTab']) { player.unlocks['research'] = true; }
         if (tempPlayer.unlocks['galaxyTab']['arkTab']) { player.unlocks['ark'] = true; }
         if (isResearchCompleted(6)) { player.unlocks['infResearch'] = true; }
+
+        for (let k in tempPlayer.allTimeStats) { player.stats['allTimeStats'][k] = tempPlayer.allTimeStats[k]; }
+        for (let m in tempPlayer.thisSacStats) { player.stats['thisSacStats'][m] = tempPlayer.thisSacStats[m]; }
+        for (let n in tempPlayer.thisAscStats) { player.stats['thisAscStats'][n] = tempPlayer.thisAscStats[n]; }
     }
     tempPlayer = {};
 }

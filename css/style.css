@@ -236,6 +236,20 @@ body {
     display: none;
 }
 
+.cPopup {
+    position: absolute;
+    left: 50%;
+	top: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    text-align: center;
+    background-color: black;
+    border: 3px solid white;
+    box-shadow: 3px 3px #424242;
+    width: 350px;
+    border-radius: 4px;
+    z-index: 2;
+}
+
 .gPopup {
     position: fixed;
     left: 50%;
@@ -251,6 +265,40 @@ body {
     display: none;
 }
 
+.giPopup {
+    position: fixed;
+    left: 50%;
+	top: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    text-align: center;
+    background-color: black;
+    border: 3px solid white;
+    box-shadow: 3px 3px #424242;
+    width: 330px;
+    min-width: 330px;
+    height: 235px;
+    min-height: 235px;
+    border-radius: 4px;
+    z-index: 9;
+}
+
+.gePopup {
+    position: fixed;
+    left: 50%;
+	top: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    text-align: center;
+    background-color: black;
+    border: 3px solid white;
+    box-shadow: 3px 3px #424242;
+    width: 330px;
+    min-width: 330px;
+    height: 235px;
+    min-height: 235px;
+    border-radius: 4px;
+    z-index: 9;
+}
+
 .gSpecPopup {
     position: fixed;
     left: 50%;
@@ -262,12 +310,11 @@ body {
     box-shadow: 3px 3px #424242;
     width: 520px;
     min-width: 520px;
-    height: 260px;
-    min-height: 260px;
+    height: 250px;
+    min-height: 250px;
     padding: 10px;
     border-radius: 4px;
     z-index: 9;
-    display: none;
 }
 
 .offPopup {
@@ -353,7 +400,6 @@ body {
     overflow: overlay;
     border-radius: 4px;
     z-index: 8;
-    display: none;
 }
 
 h1 {
@@ -707,6 +753,20 @@ option:active, option.active {
     font-family: 'Cinzel', serif;
     font-size: 12pt;
     margin: 5px;
+}
+
+.favBut {
+    color: white;
+    background-color: #1f1f1f;
+    font-style: bold;
+    width: 150px;
+    height: 50px;
+    border: 1px solid #525252;
+    cursor: pointer;
+    border-radius: 4px;
+    font-family: 'Cinzel', serif;
+    font-size: 12pt;
+    margin: 2px;
 }
 
 .optionsTable {
@@ -1632,7 +1692,6 @@ option:active, option.active {
     height: 100px;
     min-height: 100px;
     margin: auto;
-    margin-bottom: 20px;
     background-color: #525252;
     overflow: auto;
     display: none;
@@ -1660,6 +1719,16 @@ option:active, option.active {
     background-color: #525252;
     overflow: auto;
     display: none;
+}
+
+.favRow {
+    display: flex;
+    justify-content: center;
+    margin: 5px;
+}
+
+.favCell {
+    flex: 1;
 }
 
 .timeLabelLeft {
@@ -2269,6 +2338,7 @@ option:active, option.active {
     border-radius: 4px;
     font-family: 'Cinzel', serif;
     font-size: 12pt;
+    margin: 0px 5px;
 }
 
 .renameFavBut {
@@ -2282,6 +2352,11 @@ option:active, option.active {
     border-radius: 4px;
     font-family: 'Cinzel', serif;
     font-size: 12pt;
+    margin: 0px 5px;
+}
+
+.saveLoadFavBut:hover, .renameFavBut:hover {
+    background-color: #525252;
 }
 
 #tabButtons {
@@ -3148,25 +3223,6 @@ option:active, option.active {
     height: 1280px;
 }
 
-.cursorContainer {
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    background-color: transparent;
-    width: 388px;
-    height: 771px;
-    cursor: move;
-}
-
-.cursorContainer2 {
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    background-color: transparent;
-    width: 338px;
-    height: 652px;
-}
-
 .milestoneHeaderContainer {
     position: fixed;
     background-color: black;
@@ -3278,9 +3334,9 @@ option:active, option.active {
 
 .confirmButtonsTable{
     width: 100%;
-    height: 425px;
-    width: 290px;
-    margin: 5px;
+    height: 415px;
+    width: 320px;
+    margin: 50px 15px 5px;
     border-radius: 4px;
     border-radius: 1px;
 }

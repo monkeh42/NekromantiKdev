@@ -672,7 +672,6 @@ function loadVue() {
 				</div>
 			</div>
 			<button class="displayButSkinny" style="margin: 10px;" v-on:click="setConfDefaults()">defaults</button>
-			<button class="optBut" style="margin: 10px;" v-on:click="closeConfirmationsPopup()">CLOSE</button>
 		</div>
 		`
 	})
@@ -810,9 +809,9 @@ function loadVue() {
 		template: `
 		<div class="achTable">
 			<div v-for="row in DATA.ach.rows" class="achRow">
-				<div v-for="col in DATA.ach.cols">
+				<div v-for="col in DATA.ach.cols"><div v-if="player.achievements.rowsUnlocked[row]">
 					<achievement :data="row*10+col"></achievement>
-				</div>
+				</div></div>
 			</div>
 		</div>
 		`
@@ -839,7 +838,7 @@ function loadVue() {
 		</div>
 		`
 	})
-
+	
 	Vue.component('header-popup', {
 		props: [],
 		data() {
@@ -851,9 +850,123 @@ function loadVue() {
 		<div v-if="isActivePop" class="dPopup">
 			<div class="headerHeaderContainer">
 				<div class="headerPopupHeader">Header Display</div>
-				<div class="headerPopupHeaderX"><a href="javascript:closeNormalPopup(71)">X</a></div>
+				<div class="headerPopupHeaderX"><a href="javascript:closeNormalPopup('hpop')">X</a></div>
 			</div>
 			<display-toggles></display-toggles>
+		</div>
+		`
+	})
+
+	Vue.component('confirmations-popup', {
+		props: [],
+		data() {
+			return {
+				isActivePop: false
+			}
+		},
+		template: `
+		<div v-if="isActivePop" class="cPopup">
+			<div class="headerHeaderContainer">
+				<div class="headerPopupHeader">Confirmations</div>
+				<div class="headerPopupHeaderX"><a href="javascript:closeNormalPopup('cpop')">X</a></div>
+			</div>
+			<confirm-toggles></confirm-toggles>
+		</div>
+		`
+	})
+
+	Vue.component('milestones-popup', {
+		props: [],
+		data() {
+			return {
+				isActivePop: false
+			}
+		},
+		template: `
+		<div v-if="isActivePop" class="milestonePopup">
+			<div class="milestoneHeaderContainer">
+				<div class="milestonePopupHeader">MILESTONES</div>
+				<div class="milestonePopupHeaderX"><a href="javascript:closeNormalPopup('mpop');">X</a></div>
+				<div class="milestonePopupHR"></div>
+			</div>
+			<milestones></milestones>
+		</div>
+		`
+	})
+
+	Vue.component('favs-popup', {
+		props: [],
+		data() {
+			return {
+				isActivePop: false,
+				isGSpecErr: false,
+				gSpecErr: '',
+			}
+		},
+		template: `
+		<div v-if="isActivePop" class="gSpecPopup">
+			<div v-for="i in 3">
+				<fav-row :data="i"></fav-row>
+			</div>
+			<div style="height: 20px; min-height: 20px;"><div v-if="isGSpecErr">{{ gSpecErr }}</div></div>
+			<div style="margin: 10px auto; width: 310px;">
+				<button class="optBut" v-on:click="resetAllFavs()" style="float: left; margin: 2px !important;">RESET ALL</button>
+				<button class="optBut" v-on:click="closeFavPopup()" style="float: right; margin: 2px !important;">CLOSE</button>
+			</div>
+		</div>
+		`
+	})
+
+	Vue.component('g-import-popup', {
+		props: [],
+		data() {
+			return {
+				isActivePop: false,
+				isGImpErr: false,
+				gImpErr: '',
+				gImpText: '',
+			}
+		},
+		template: `
+		<div v-if="isActivePop" class="giPopup">
+			<label id="gImportTextLabel" for="gImportText"><h2>Paste your galaxy code:</h2></label>
+			<textarea v-model="gImpText" id="gImportText" name="gImportText" style="display: block;"></textarea>
+			<div style="height: 20px; min-height: 20px;"><div v-if="isGImpErr">{{ gImpErr }}</div></div>
+			<div style="margin: 5px 10px;">
+				<button class="optBut" v-on:click="importGalaxies()" style="float: left; margin: 2px !important;">IMPORT</button>
+			</div>
+			<div style="margin: 5px 10px;">
+				<button class="optBut" v-on:click="closeImpGalaxies()" style="float: right; margin: 2px !important;">CLOSE</button>
+			</div>
+		</div>
+		`
+	})
+
+	Vue.component('g-export-popup', {
+		props: [],
+		data() {
+			return {
+				isActivePop: false,
+				gExpText: '',
+			}
+		},
+		template: `
+		<div v-if="isActivePop" class="gePopup">
+			<label id="gExportTextLabel" for="gExportText"><h2>Your galaxy code:</h2></label>
+			<textarea v-model="gExpText" id="gExportText" name="gExportText" style="display: block;"></textarea>
+			<div style="margin: auto;"><button class="optBut" v-on:click="closeExpGalaxies()">CLOSE</button></div>
+		</div>
+		`
+	})
+
+	Vue.component('fav-row', {
+		props: ['data'],
+		template: `
+		<div class="favRow">
+			<div class="favCell" style="min-width: 48%; line-height: 50px;">{{ player.favGalNames[data-1] }}</div>
+			<div class="favCell" style="min-width: 15%;"><button class="saveLoadFavBut" v-on:click="saveFavorite(data)">SAVE</button></div>
+			<div class="favCell" style="min-width: 15%;"><button class="saveLoadFavBut" v-on:click="importGalaxies(true, data)">LOAD</button></div>
+			<div class="favCell" style="min-width: 20%;"><button class="renameFavBut" v-on:click="renameFavorite(data)">RENAME</button></div>
 		</div>
 		`
 	})

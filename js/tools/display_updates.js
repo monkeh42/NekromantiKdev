@@ -307,26 +307,26 @@ function changeGalaxiesDisplayed() {
 
 function updateGalaxyDisplayProps() {
     if (player.activeGalaxies[0]=='4') {
-        app.$children[45].displayAll = true;
+        app.$refs['gtable'].displayAll = true;
         for (let i=1; i<=4; i++) {
-            app.$children[45].displaySingles[i-1] = true;
+            app.$refs['gtable'].displaySingles[i-1] = true;
         }
         return;
     }
     else {
         if (player.activeGalaxies[0]=='2') {
-            app.$children[45].displayAll = true;
-            app.$children[45].displayAll = false;
+            app.$refs['gtable'].displayAll = true;
+            app.$refs['gtable'].displayAll = false;
             for (let i=1; i<=4; i++) {
-                if (player.activeGalaxies[1]==i.toString() || player.activeGalaxies[2]==i.toString()) { app.$children[45].displaySingles[i-1] = true; }
-                else { app.$children[45].displaySingles[i-1] = false; }
+                if (player.activeGalaxies[1]==i.toString() || player.activeGalaxies[2]==i.toString()) { app.$refs['gtable'].displaySingles[i-1] = true; }
+                else { app.$refs['gtable'].displaySingles[i-1] = false; }
             }
         } else {
-            app.$children[45].displayAll = true;
-            app.$children[45].displayAll = false;
+            app.$refs['gtable'].displayAll = true;
+            app.$refs['gtable'].displayAll = false;
             for (let i=1; i<=4; i++) {
-                if (player.activeGalaxies[1]==i.toString()) { app.$children[45].displaySingles[i-1] = true; }
-                else { app.$children[45].displaySingles[i-1] = false; }
+                if (player.activeGalaxies[1]==i.toString()) { app.$refs['gtable'].displaySingles[i-1] = true; }
+                else { app.$refs['gtable'].displaySingles[i-1] = false; }
             }
         }
     }
@@ -395,11 +395,14 @@ function unlockItem(item) {
 
 function updateAchievements() {
     for (let id in DATA.ach) {
-        if (id!='rows'&&id!='cols') {
+        if (!isNaN(id)) {
             if (!player.achievements[id] && DATA.ach[id].canUnlock()) {
                 unlockAchievement(id)
             }
         }
+    }
+    for (let row in DATA.ach.rowUnlocks) {
+        if (!player.achievements.rowsUnlocked[row] && DATA.ach.rowUnlocks[row].condition()) { player.achievements.rowsUnlocked[row] = true; }
     }
 }
 
@@ -449,12 +452,12 @@ function showPopup(type, text, ms) {
     timedPopups.push({className: type, popupText: text, time: ms});
 }
 
-function showNormalPopup(pid) {
-    app.$children[pid].isActivePop = true;
+function showNormalPopup(rName) {
+    app.$refs[rName].isActivePop = true;
 }
 
-function closeNormalPopup(pid) {
-    app.$children[pid].isActivePop = false;
+function closeNormalPopup(rName) {
+    app.$refs[rName].isActivePop = false;
 }
 
 //help text generators + related

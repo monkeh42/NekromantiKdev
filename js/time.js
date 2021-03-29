@@ -143,8 +143,6 @@ function buySingleTime(tier) {
         player.crystals = player.crystals.minus(DATA.td[tier].cost());
         player.timeDims[tier].amount = player.timeDims[tier].amount.plus(1);
         player.timeDims[tier].bought = player.timeDims[tier].bought.plus(1);
-        //document.getElementById(DATA.td[tier].costID).innerHTML = formatWhole(DATA.td[tier].cost());
-        //allDisplay();
     }
 }
 
@@ -154,8 +152,6 @@ function buyMaxTime(tier) {
         player.crystals = player.crystals.minus(calculateMaxTimeCost(tier));
         player.timeDims[tier].amount = player.timeDims[tier].amount.plus(totalBought);
         player.timeDims[tier].bought = player.timeDims[tier].bought.plus(totalBought);
-        //document.getElementById(DATA.td[tier].costID).innerHTML = formatWhole(DATA.td[tier].cost());
-        //allDisplay();
     }
 }
 
@@ -200,8 +196,6 @@ function buyTUpg(t) {
     if (canAffordTUpg(t) && !hasTUpgrade(t)) {
         player.timeUpgs[t] = true;
         player.crystals = player.crystals.minus(getTUpgCost(t));
-        //remTUpgClass(t, 'timeUpg');
-        //addTUpgClass(t, 'boughtTimeUpg');
     }
 }
 
@@ -223,9 +217,6 @@ function respecTimeClick() {
         }
 
         player.timeLocked = false;
-        //document.getElementById('timeTabBut').classList.add('timeUnlockedNotify')
-        //document.getElementById('timeTabButMid').classList.add('timeUnlockedNotify')
-        //document.getElementById('timeDimSubTabBut').classList.add('timeUnlockedNotify')
         if (canTimePrestige()) { timePrestigeNoConfirm(); }
         else { timePrestigeReset(); }
     }
@@ -270,9 +261,6 @@ function timePrestige() {
         player.stats['allTimeStats'].totalTimeResets = player.stats['allTimeStats'].totalTimeResets.plus(1);
         if (app.respecNextSac) {
             player.timeLocked = false;
-            //document.getElementById('timeTabBut').classList.add('timeUnlockedNotify')
-            //document.getElementById('timeTabButMid').classList.add('timeUnlockedNotify')
-            //document.getElementById('timeDimSubTabBut').classList.add('timeUnlockedNotify')
             app.respecNextSac = false;
         }
         timePrestigeReset();
@@ -292,9 +280,6 @@ function timePrestigeNoConfirm() {
         player.stats['allTimeStats'].totalTimeResets = player.stats['allTimeStats'].totalTimeResets.plus(1);
         if (app.respecNextSac) {
             player.timeLocked = false;
-                //document.getElementById('timeTabBut').classList.add('timeUnlockedNotify')
-                //document.getElementById('timeTabButMid').classList.add('timeUnlockedNotify')
-                //document.getElementById('timeDimSubTabBut').classList.add('timeUnlockedNotify')
             app.respecNextSac = false;
         }
         timePrestigeReset();
@@ -304,9 +289,6 @@ function timePrestigeNoConfirm() {
 function lockInTime() {
     if (!player.timeLocked) {
         player.timeLocked = true;
-        //document.getElementById('timeTabBut').classList.add('timeUnlockedNotify')
-        //document.getElementById('timeTabButMid').classList.add('timeUnlockedNotify')
-        //document.getElementById('timeDimSubTabBut').classList.add('timeUnlockedNotify')
     }
 }
 
@@ -335,7 +317,6 @@ function timePrestigeReset() {
     for (var i=1; i<=NUM_TIMEDIMS; i++) { player.timeDims[i].amount = player.timeDims[i].bought; }
     if (timeUpgUnlocked) { player.buildings[3].upgrades[13] = true; }
     save();
-    //loadStyles();
     startInterval()
 }
 
