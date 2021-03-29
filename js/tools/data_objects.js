@@ -2,7 +2,7 @@ var START_PLAYER = {
     layerDisplay: {
         numClass: 'defNum',
     },
-    corpses: new Decimal(0),
+    corpses: new Decimal(110),
     corpsesAch13: new Decimal(10),
     corpsesAch41: new Decimal(25000),
     units: {
@@ -251,7 +251,7 @@ var START_PLAYER = {
             'on': false,
         },
         
-        priority: [1, 2, 3, 4, 5, 6, 7, 8],
+        priority: ['1', '2', '3', '4', '5', '6', '7', '8'],
     },
 
     galaxyUpgs: {
@@ -643,7 +643,7 @@ var START_PLAYER = {
         'spacePrestige': false,  
         'autobuyers': false,
         'fastBuyers': false,
-        'BulkBuyers': false,
+        'bulkBuyers': false,
         'prestigeBuyer': false,
         'advancedBuyer': false,
         'ascensionBuyer': false,
@@ -790,7 +790,7 @@ var START_PLAYER = {
     favGalaxies: [[], [], []],
     favGalNames: ['Slot 1', 'Slot 2', 'Slot 3'],
     help: false,
-    version: 'v1.0.0',
+    version: 'v1.1.0_d.1',
 }
 
 var STAT_KEYS = {
@@ -858,6 +858,530 @@ var HEADER_DATA = {
     14: {
         id:'researchGainDisplayHeader',
         text: 'Void research gain',
+    },
+}
+
+var AUTOBUYERS_DATA = {
+    1: {
+        headerText: 'Zombies',
+        prefixText: 'zombie',
+    },
+    2: {
+        headerText: 'Abominations',
+        prefixText: 'abomination',
+    },
+    3: {
+        headerText: 'Skeleton Mages',
+        prefixText: 'skeletonmage',
+    },
+    4: {
+        headerText: 'Banshees',
+        prefixText: 'banshee',
+    },
+    5: {
+        headerText: 'Liches',
+        prefixText: 'lich',
+    },
+    6: {
+        headerText: 'Behemoths',
+        prefixText: 'behemoth',
+    },
+    7: {
+        headerText: 'Ancient Ones',
+        prefixText: 'ancientone',
+    },
+    8: {
+        headerText: 'Sun Eaters',
+        prefixText: 'suneater',
+    },
+    9: {
+        headerText: 'Sacrifice',
+        prefixText: 'sacrifice',
+        labelTexts: {
+            'atx': 'at x crystals',
+            'xtimes': 'at x times last',
+            'afterx': 'after x seconds',
+        },
+    },
+    10: {
+        headerText: 'World Prestige',
+        prefixText: 'prestige',
+    },
+    11: {
+        headerText: 'Ascension',
+        prefixText: 'ascension',
+    },
+    12: {
+        headerText: 'Time Dimensions',
+        prefixText: 'timeDim',
+        1: 'first:',
+        2: 'second:',
+        3: 'third:',
+        4: 'fourth:',
+        5: 'fifth:',
+        6: 'sixth:',
+        7: 'seventh:',
+        8: 'eighth:',
+    },
+    multi: {
+        rows: 3,
+        cols: 4,
+        idPre: 'autobuyer',
+        klass: function() { return 'autobuyerOptions' },
+        numBoxes: 12,
+        numElsByBox: function(i) {
+            return Object.keys(this.dataLists[i]).length;
+        },
+        boxUnlocked: function(i) {
+            if (i<33) { return true; }
+            else {
+                if (i==33) { return player.unlocks['ascensionBuyer']; }
+                else if (i==34) { return player.unlocks['timeDimBuyer']; }
+            }
+        },
+        showEl: function(id, i) {
+            if (id==32&&i==5) { return player.unlocks['prestigeBuyer']; }
+            else { return true; }
+        },
+        dataLists: {
+            11: {
+                1: {
+                    id: 1,
+                    boxID: 1,
+                    tag: 'h2',
+                    klass: function() { return ''; },
+                    htm: function() { return 'Zombies'; }
+                },
+                2: {
+                    id: 2,
+                    boxID: 1,
+                    tag: 'unit-buyer-button',
+                    klass: function() { return ``; },
+                    htm: function() { return 'on'; }
+                },
+                3: {
+                    id: 3,
+                    boxID: 1,
+                    tag: 'unit-buyer-button',
+                    klass: function() { return ``; },
+                    htm: function() { return 'fast'; }
+                },
+                4: {
+                    id: 4,
+                    boxID: 1,
+                    tag: 'unit-buyer-button',
+                    klass: function() { return ``; },
+                    htm: function() { return 'max'; }
+                },
+                5: {
+                    id: 5,
+                    boxID: 1,
+                    tag: 'unit-buyer-priority',
+                    klass: function() { return ``; },
+                    htm: function() { return ''; }
+                },
+            },
+            12: {
+                1: {
+                    id: 1,
+                    boxID: 2,
+                    tag: 'h2',
+                    klass: function() { return ''; },
+                    htm: function() { return 'Abominations'; }
+                },
+                2: {
+                    id: 2,
+                    boxID: 2,
+                    tag: 'unit-buyer-button',
+                    klass: function() { return ``; },
+                    htm: function() { return 'on'; }
+                },
+                3: {
+                    id: 3,
+                    boxID: 2,
+                    tag: 'unit-buyer-button',
+                    klass: function() { return ``; },
+                    htm: function() { return 'fast'; }
+                },
+                4: {
+                    id: 4,
+                    boxID: 2,
+                    tag: 'unit-buyer-button',
+                    klass: function() { return ``; },
+                    htm: function() { return 'max'; }
+                },
+                5: {
+                    id: 5,
+                    boxID: 2,
+                    tag: 'unit-buyer-priority',
+                    klass: function() { return ``; },
+                    htm: function() { return ''; }
+                },
+            },
+            13: {
+                1: {
+                    id: 1,
+                    boxID: 3,
+                    tag: 'h2',
+                    klass: function() { return ''; },
+                    htm: function() { return 'Skeleton Mages'; }
+                },
+                2: {
+                    id: 2,
+                    boxID: 3,
+                    tag: 'unit-buyer-button',
+                    klass: function() { return ``; },
+                    htm: function() { return 'on'; }
+                },
+                3: {
+                    id: 3,
+                    boxID: 3,
+                    tag: 'unit-buyer-button',
+                    klass: function() { return ``; },
+                    htm: function() { return 'fast'; }
+                },
+                4: {
+                    id: 4,
+                    boxID: 3,
+                    tag: 'unit-buyer-button',
+                    klass: function() { return ``; },
+                    htm: function() { return 'max'; }
+                },
+                5: {
+                    id: 5,
+                    boxID: 3,
+                    tag: 'unit-buyer-priority',
+                    klass: function() { return ``; },
+                    htm: function() { return ''; }
+                },
+            },
+            14: {
+                1: {
+                    id: 1,
+                    boxID: 4,
+                    tag: 'h2',
+                    klass: function() { return ''; },
+                    htm: function() { return 'Banshees'; }
+                },
+                2: {
+                    id: 2,
+                    boxID: 4,
+                    tag: 'unit-buyer-button',
+                    klass: function() { return ``; },
+                    htm: function() { return 'on'; }
+                },
+                3: {
+                    id: 3,
+                    boxID: 4,
+                    tag: 'unit-buyer-button',
+                    klass: function() { return ``; },
+                    htm: function() { return 'fast'; }
+                },
+                4: {
+                    id: 4,
+                    boxID: 4,
+                    tag: 'unit-buyer-button',
+                    klass: function() { return ``; },
+                    htm: function() { return 'max'; }
+                },
+                5: {
+                    id: 5,
+                    boxID: 4,
+                    tag: 'unit-buyer-priority',
+                    klass: function() { return ``; },
+                    htm: function() { return ''; }
+                },
+            },
+            21: {
+                1: {
+                    id: 1,
+                    boxID: 5,
+                    tag: 'h2',
+                    klass: function() { return ''; },
+                    htm: function() { return 'Liches'; }
+                },
+                2: {
+                    id: 2,
+                    boxID: 5,
+                    tag: 'unit-buyer-button',
+                    klass: function() { return ``; },
+                    htm: function() { return 'on'; }
+                },
+                3: {
+                    id: 3,
+                    boxID: 5,
+                    tag: 'unit-buyer-button',
+                    klass: function() { return ``; },
+                    htm: function() { return 'fast'; }
+                },
+                4: {
+                    id: 4,
+                    boxID: 5,
+                    tag: 'unit-buyer-button',
+                    klass: function() { return ``; },
+                    htm: function() { return 'max'; }
+                },
+                5: {
+                    id: 5,
+                    boxID: 5,
+                    tag: 'unit-buyer-priority',
+                    klass: function() { return ``; },
+                    htm: function() { return ''; }
+                },
+            },
+            22: {
+                1: {
+                    id: 1,
+                    boxID: 6,
+                    tag: 'h2',
+                    klass: function() { return ''; },
+                    htm: function() { return 'Behemoths'; }
+                },
+                2: {
+                    id: 2,
+                    boxID: 6,
+                    tag: 'unit-buyer-button',
+                    klass: function() { return ``; },
+                    htm: function() { return 'on'; }
+                },
+                3: {
+                    id: 3,
+                    boxID: 6,
+                    tag: 'unit-buyer-button',
+                    klass: function() { return ``; },
+                    htm: function() { return 'fast'; }
+                },
+                4: {
+                    id: 4,
+                    boxID: 6,
+                    tag: 'unit-buyer-button',
+                    klass: function() { return ``; },
+                    htm: function() { return 'max'; }
+                },
+                5: {
+                    id: 5,
+                    boxID: 6,
+                    tag: 'unit-buyer-priority',
+                    klass: function() { return ``; },
+                    htm: function() { return ''; }
+                },
+            },
+            23: {
+                1: {
+                    id: 1,
+                    boxID: 7,
+                    tag: 'h2',
+                    klass: function() { return ''; },
+                    htm: function() { return 'Ancient Ones'; }
+                },
+                2: {
+                    id: 2,
+                    boxID: 7,
+                    tag: 'unit-buyer-button',
+                    klass: function() { return ``; },
+                    htm: function() { return 'on'; }
+                },
+                3: {
+                    id: 3,
+                    boxID: 7,
+                    tag: 'unit-buyer-button',
+                    klass: function() { return ``; },
+                    htm: function() { return 'fast'; }
+                },
+                4: {
+                    id: 4,
+                    boxID: 7,
+                    tag: 'unit-buyer-button',
+                    klass: function() { return ``; },
+                    htm: function() { return 'max'; }
+                },
+                5: {
+                    id: 5,
+                    boxID: 7,
+                    tag: 'unit-buyer-priority',
+                    klass: function() { return ``; },
+                    htm: function() { return ''; }
+                },
+            },
+            24: {
+                1: {
+                    id: 1,
+                    boxID: 8,
+                    tag: 'h2',
+                    klass: function() { return ''; },
+                    htm: function() { return 'Sun Eaters'; }
+                },
+                2: {
+                    id: 2,
+                    boxID: 8,
+                    tag: 'unit-buyer-button',
+                    klass: function() { return ``; },
+                    htm: function() { return 'on'; }
+                },
+                3: {
+                    id: 3,
+                    boxID: 8,
+                    tag: 'unit-buyer-button',
+                    klass: function() { return ``; },
+                    htm: function() { return 'fast'; }
+                },
+                4: {
+                    id: 4,
+                    boxID: 8,
+                    tag: 'unit-buyer-button',
+                    klass: function() { return ``; },
+                    htm: function() { return 'max'; }
+                },
+                5: {
+                    id: 5,
+                    boxID: 8,
+                    tag: 'unit-buyer-priority',
+                    klass: function() { return ``; },
+                    htm: function() { return ''; }
+                },
+            },
+            31: {
+                1: {
+                    id: 1,
+                    boxID: 9,
+                    tag: 'h2',
+                    klass: function() { return ''; },
+                    htm: function() { return 'Sacrifice'; }
+                },
+                2: {
+                    id: 2,
+                    boxID: 9,
+                    tag: 'unit-buyer-button',
+                    klass: function() { return ``; },
+                    htm: function() { return 'on'; }
+                },
+                3: {
+                    id: 3,
+                    boxID: 9,
+                    tag: 'unit-buyer-button',
+                    klass: function() { return ``; },
+                    htm: function() { return 'fast'; }
+                },
+                4: {
+                    id: 4,
+                    boxID: 9,
+                    tag: 'sacrifice-buyer-options',
+                    klass: function() { return ``; },
+                    htm: function() { return ''; }
+                },
+            },
+            32: {
+                1: {
+                    id: 1,
+                    boxID: 10,
+                    tag: 'h2',
+                    klass: function() { return ''; },
+                    htm: function() { return 'World Prestige'; }
+                },
+                2: {
+                    id: 2,
+                    boxID: 10,
+                    tag: 'unit-buyer-button',
+                    klass: function() { return ``; },
+                    htm: function() { return 'on'; }
+                },
+                3: {
+                    id: 3,
+                    boxID: 10,
+                    tag: 'unit-buyer-button',
+                    klass: function() { return ``; },
+                    htm: function() { return 'fast'; }
+                },
+                4: {
+                    id: 4,
+                    boxID: 10,
+                    tag: 'buyer-amount',
+                    klass: function() { return ``; },
+                    htm: function() { return 'max auto prestiges:'; }
+                },
+                5: {
+                    id: 5,
+                    boxID: 10,
+                    tag: 'div',
+                    klass: function() { return 'prestigeLockScreen'; },
+                    htm: function() { return ''; }
+                },
+            },
+            33: {
+                1: {
+                    id: 1,
+                    boxID: 11,
+                    tag: 'h2',
+                    klass: function() { return ''; },
+                    htm: function() { return 'Ascension'; }
+                },
+                2: {
+                    id: 2,
+                    boxID: 11,
+                    tag: 'unit-buyer-button',
+                    klass: function() { return ``; },
+                    htm: function() { return 'on'; }
+                },
+                3: {
+                    id: 3,
+                    boxID: 11,
+                    tag: 'unit-buyer-button',
+                    klass: function() { return ``; },
+                    htm: function() { return 'fast'; }
+                },
+                4: {
+                    id: 4,
+                    boxID: 11,
+                    tag: 'buyer-amount',
+                    klass: function() { return ``; },
+                    htm: function() { return 'at x galaxies:'; }
+                },
+            },
+            34: {
+                1: {
+                    id: 1,
+                    boxID: 12,
+                    tag: 'h2',
+                    klass: function() { return ''; },
+                    htm: function() { return 'Time Dimensions'; }
+                },
+                2: {
+                    id: 2,
+                    boxID: 12,
+                    tag: 'dim-buyer-buttons',
+                    klass: function() { return ''; },
+                    htm: function() { return ''; }
+                },
+                3: {
+                    id: 3,
+                    boxID: 12,
+                    tag: 'dim-buyer-buttons',
+                    klass: function() { return ''; },
+                    htm: function() { return ''; }
+                },
+                4: {
+                    id: 4,
+                    boxID: 12,
+                    tag: 'dim-buyer-buttons',
+                    klass: function() { return ''; },
+                    htm: function() { return ''; }
+                },
+                5: {
+                    id: 5,
+                    boxID: 12,
+                    tag: 'dim-buyer-buttons',
+                    klass: function() { return ''; },
+                    htm: function() { return ''; }
+                },
+                6: {
+                    id: 6,
+                    boxID: 12,
+                    tag: 'dim-buyer-buttons',
+                    klass: function() { return ''; },
+                    htm: function() { return ''; }
+                },
+            },
+        },
     },
 }
 
@@ -1056,7 +1580,7 @@ var OPTIONS_DATA = {
         title: 'CUSTOMIZE HEADER',
         altTitle: '',
         altToggle: function() { return false; },
-        fxn: function() { openDisplayPopup(); },
+        fxn: function() { showNormalPopup(71); },
     },
     31: {
         title: 'TOGGLE CONFIRMATIONS',
@@ -1163,7 +1687,7 @@ var ACH_DATA = {
         showEffect: false,
         divID: 'ach11',
         canUnlock: function() {
-            return player.unlocks['buildingsTab']['mainTab'];
+            return player.unlocks['buildings'];
         },
         effect: function() {
             return new Decimal(1);
@@ -1182,7 +1706,7 @@ var ACH_DATA = {
         showEffect: false,
         divID: 'ach12',
         canUnlock: function() {
-            return player.unlocks['buildingsTab']['construction'];
+            return player.unlocks['construction'];
         },
         effect: function() {
             return new Decimal(1);
@@ -1201,7 +1725,7 @@ var ACH_DATA = {
         hasReward: true,
         divID: 'ach13',
         canUnlock: function() {
-            return player.unlocks['timeTab']['mainTab'];
+            return player.unlocks['time'];
         },
         effect: function() {
             return new Decimal(1);
@@ -1264,7 +1788,7 @@ var ACH_DATA = {
         showEffect: false,
         divID: 'ach21',
         canUnlock: function() {
-            return player.unlocks['timeTab']['timeUpgrades'];
+            return player.unlocks['timeUpgrades'];
         },
         effect: function() {
             return new Decimal(1);
@@ -1516,7 +2040,7 @@ var ACH_DATA = {
         hasReward: false,
         divID: 'ach44',
         canUnlock: function() {
-            return DATA.u[1].mult().gte(10000) && !player.unlocks['timeTab']['mainTab'];
+            return DATA.u[1].mult().gte(10000) && !player.unlocks['time'];
         },
         effect: function() {
             return new Decimal(1);
@@ -2222,19 +2746,19 @@ var HOTKEYS = {
     'w': {
         desc: 'Buildings Tab',
         onPress: function() {
-            if (player.unlocks['buildingsTab']['mainTab']) { showTab('buildingsTab', false, 'buildingsTabBut'); }
+            if (player.unlocks['buildings']) { showTab('buildingsTab', false, 'buildingsTabBut'); }
         }
     },
     'e': {
         desc: 'Time Tab',
         onPress: function() {
-            if (player.unlocks['timeTab']['mainTab']) { showTab('timeTab', false, 'timeTabBut'); }
+            if (player.unlocks['time']) { showTab('timeTab', false, 'timeTabBut'); }
         }
     },
     'r': {
         desc: 'Galaxies Tab',
         onPress: function() {
-            if (player.unlocks['galaxyTab']['mainTab']) { showTab('galaxyTab', false, 'galaxyTabBut'); }
+            if (player.unlocks['galaxies']) { showTab('galaxyTab', false, 'galaxyTabBut'); }
         }
     },
     'f': {
@@ -2314,7 +2838,8 @@ function fixResetBug() {
             player.nextSpaceReset = new Array(1+num, 8);
 
     }
-    START_PLAYER.corpses = new Decimal(10);
+    START_PLAYER.corpses = new Decimal(110);
+    START_PLAYER.corpsesAch13 = new Decimal(10);
     START_PLAYER.corpsesAch41 = new Decimal(25000);
     copyData(START_PLAYER.units, {
         1: {
@@ -2561,7 +3086,7 @@ function fixResetBug() {
         'time': {
             'on': false,
         },
-        priority: [1, 2, 3, 4, 5, 6, 7, 8],
+        priority: ['1', '2', '3', '4', '5', '6', '7', '8'],
     });
 
     copyData(START_PLAYER.pastRuns, {
@@ -2946,7 +3471,7 @@ function fixResetBug() {
         'spacePrestige': false,  
         'autobuyersSubTab': false,
         'fastBuyers': false,
-        'BulkBuyers': false,
+        'bulkBuyers': false,
         'prestigeBuyer': false,
         'advancedBuyer': false,
         'ascensionBuyer': false,
@@ -3086,7 +3611,7 @@ function fixResetBug() {
     START_PLAYER.dontResetSlider = false;
     START_PLAYER.favGalaxies = [[], [], []];
     START_PLAYER.favGalNames = ['Slot 1', 'Slot 2', 'Slot 3'];
-    START_PLAYER.version = 'v0.3.1_d.5';
+    START_PLAYER.version = 'v1.1.0_d.1';
 
     DATA.sp = {};
     copyData(DATA.sp, START_PLAYER);

@@ -188,7 +188,20 @@
                             Once unlocked, the prestige buyer and the fast, bulk, and advanced upgrades are permanently available whenever autobuyers are.<br>
                             Set the world prestige max to 0 for no limit.
                         </div>
-                        <table style="width: auto; margin: auto; text-align: center;">
+                        <div style="text-align: center; margin: 25px auto 5px;">
+                            <input type="radio" id="allBuyers" name="allBuyersCheck" class="buyerRadio" value="all" v-model="allBuyersRadio"><label for="allBuyers">toggle all autobuyers</label>
+                            <input type="radio" id="unitsOnly" name="allBuyersCheck" class="buyerRadio" value="units" v-model="allBuyersRadio"><label for="unitsOnly">toggle unit autobuyers</label>
+                        </div>
+                        <div style="text-align: center; margin: 5px auto;">
+                            <layer-button data="u" :width="180" text="Toggle All On/Off" fname="allAuto" :args="0" addlclass="buyerTog" :cancl="true"></layer-button>
+                            <layer-button data="u" :width="180" text="Turn All On" fname="allAuto" :args="1" addlclass="buyerTog" :cancl="true"></layer-button>
+                            <layer-button data="u" :width="180" text="Turn All Off" fname="allAuto" :args="-1" addlclass="buyerTog" :cancl="true"></layer-button>
+                        </div>
+                        <div style="text-align: center; margin: auto;">
+                            <layer-button data="u" :width="180" text="Toggle All Speed" fname="allSpeed" addlclass="buyerTog" :cancl="player.unlocks['fastBuyers']"></layer-button>
+                            <layer-button data="u" :width="180" text="Toggle All Amount" fname="allAmount" addlclass="buyerTog" :cancl="player.unlocks['bulkBuyers']"></layer-button>
+                        </div>
+                        <!--<table style="width: auto; margin: auto; text-align: center;">
                             <tr style="height: 25px;">
                                 <div style="height: 100%;"></div>
                             </tr>
@@ -219,432 +232,8 @@
                                     <button id="toggleAllAmount" class="allAutoBut" onclick="allAmount()" style="float: left;">Toggle All Amount</button>
                                 </td>
                             </tr>
-                        </table>
-                        <table style="width: auto; text-align: center; margin: auto;">
-                            <tr>
-                                <td>
-                                    <div id="zombieBuyerOptions" class="autobuyerOptions">
-                                        <div class="buyerFrame">
-                                            <h2>Zombies</h2>
-                                            <div id="zombieBuyerEnabledContainer" class="buyerOptionsContainer">
-                                                <label for="zombieEnabledBut">on/off:</label><!-- --><button onclick="updateSingleBuyer(1, 'on', 'zombieEnabledBut')" name="zombieEnabledBut" id="zombieEnabledBut" class="buyerEnabledBut">OFF</button><!-- -->
-                                                <div class="buyerEnabledLock"></div>
-                                            </div>
-                                            <div id="zombieBuyerSpeedContainer" class="buyerOptionsContainer">
-                                                <label for="zombieSpeedBut">speed:</label><!-- --><button onclick="updateSingleBuyer(1, 'fast', 'zombieSpeedBut', 'zombieSpeedBut')" name="zombieSpeedBut" id="zombieSpeedBut" class="buyerSpeedBut" v-html="player.autobuyers[1]['fast'] ? 'FAST' : 'SLOW'" :disabled="!player.unlocks['fastBuyers']">SLOW</button><!-- -->
-                                                <div v-if="!player.unlocks['fastBuyers']" class="buyerSpeedLock"></div>
-                                            </div>
-                                            <div id="zombieBuyerBulkContainer" class="buyerOptionsContainer">
-                                                <label for="zombieBulkBut">amount:</label><!-- --><button onclick="updateSingleBuyer(1, 'bulk', 'zombieBulkBut', 'zombieBulkBut')" name="zombieBulkBut" id="zombieBulkBut" class="buyerBulkBut" v-html="player.autobuyers[1]['bulk'] ? 'MAX' : 'SINGLE'" :disabled="!player.unlocks['bulkBuyers']">SINGLE</button><!-- -->
-                                                <div v-if="!player.unlocks['bulkBuyers']" class="buyerBulkLock"></div>
-                                            </div>
-                                            <div id="zombieBuyerPriorityContainer" class="buyerOptionsContainer priorityContainer">
-                                                <label for="zombiePriority">Priority:</label>
-                                                <select onchange="updateBuyerOrder(1, 'zombiePriority')" id="zombiePriority" name="zombiePriority" class="buyerDropdown">
-                                                    <option id="11" class="priorityOptions" value="1" selected>1</option>
-                                                    <option id="12" class="priorityOptions" value="2">2</option>
-                                                    <option id="13" class="priorityOptions" value="3">3</option>
-                                                    <option id="14" class="priorityOptions" value="4">4</option>
-                                                    <option id="15" class="priorityOptions" value="5">5</option>
-                                                    <option id="16" class="priorityOptions" value="6">6</option>
-                                                    <option id="17" class="priorityOptions" value="7">7</option>
-                                                    <option id="18" class="priorityOptions" value="8">8</option>
-                                                </select>
-                                            </div>
-                                    </div>
-                                </div>
-                                </td>
-                                <td>
-                                    <div id="abominationBuyerOptions" class="autobuyerOptions">
-                                        <div class="buyerFrame">
-                                            <h2>Abominations</h2>
-                                            <div id="abominationBuyerEnabledContainer" class="buyerOptionsContainer">
-                                                <label for="abominationEnabledBut">on/off:</label><!-- --><button onclick="updateSingleBuyer(2, 'on', 'abominationEnabledBut')" name="abominationEnabledBut" id="abominationEnabledBut" class="buyerEnabledBut">OFF</button><!-- -->
-                                                <div class="buyerEnabledLock"></div>
-                                            </div>
-                                            <div id="abominationBuyerSpeedContainer" class="buyerOptionsContainer">
-                                                <label for="abominationSpeedBut">speed:</label><!-- --><button onclick="updateSingleBuyer(2, 'fast', 'abominationSpeedBut')" name="abominationSpeedBut" id="abominationSpeedBut" class="buyerSpeedBut" v-html="player.autobuyers[2]['fast'] ? 'FAST' : 'SLOW'" :disabled="!player.unlocks['fastBuyers']">SLOW</button><!-- -->
-                                                <div v-if="!player.unlocks['fastBuyers']" class="buyerSpeedLock"></div>
-                                                
-                                            </div>
-                                            <div id="abominationBuyerBulkContainer" class="buyerOptionsContainer">
-                                                <label for="abominationBulkBut">amount:</label><!-- --><button onclick="updateSingleBuyer(2, 'bulk', 'abominationBulkBut')" name="abominationBulkBut" id="abominationBulkBut" class="buyerBulkBut" v-html="player.autobuyers[2]['bulk'] ? 'MAX' : 'SINGLE'" :disabled="!player.unlocks['bulkBuyers']">SINGLE</button><!-- -->
-                                                <div v-if="!player.unlocks['bulkBuyers']" class="buyerBulkLock"></div>
-                                            </div>
-                                            <div id="abominationBuyerPriorityContainer" class="buyerOptionsContainer priorityContainer">
-                                                <label for="abominationPriority">Priority:</label>
-                                                <select onchange="updateBuyerOrder(2, 'abominationPriority')" id="abominationPriority" name="abominationPriority" class="buyerDropdown">
-                                                    <option id="21" class="priorityOptions" value="1">1</option>
-                                                    <option id="22" class="priorityOptions" value="2" selected>2</option>
-                                                    <option id="23" class="priorityOptions" value="3">3</option>
-                                                    <option id="24" class="priorityOptions" value="4">4</option>
-                                                    <option id="25" class="priorityOptions" value="5">5</option>
-                                                    <option id="26" class="priorityOptions" value="6">6</option>
-                                                    <option id="27" class="priorityOptions" value="7">7</option>
-                                                    <option id="28" class="priorityOptions" value="8">8</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div id="skeletonmageBuyerOptions" class="autobuyerOptions">
-                                        <div class="buyerFrame">
-                                            <h2>Skeleton Mages</h2>
-                                            <div id="skeletonmageBuyerEnabledContainer" class="buyerOptionsContainer">
-                                                <label for="skeletonmageEnabledBut">on/off:</label><!-- --><button onclick="updateSingleBuyer(3, 'on', 'skeletonmageEnabledBut')" name="skeletonmageEnabledBut" id="skeletonmageEnabledBut" class="buyerEnabledBut">OFF</button><!-- -->
-                                                <div class="buyerEnabledLock"></div>
-                                            </div>
-                                            <div id="skeletonmageBuyerSpeedContainer" class="buyerOptionsContainer">
-                                                <label for="skeletonmageSpeedBut">speed:</label><!-- --><button onclick="updateSingleBuyer(3, 'fast', 'skeletonmageSpeedBut')" name="skeletonmageSpeedBut" id="skeletonmageSpeedBut" class="buyerSpeedBut" v-html="player.autobuyers[3]['fast'] ? 'FAST' : 'SLOW'" :disabled="!player.unlocks['fastBuyers']">SLOW</button><!-- -->
-                                                <div v-if="!player.unlocks['fastBuyers']" class="buyerSpeedLock"></div>
-                                            </div>
-                                            <div id="skeletonmageBuyerBulkContainer" class="buyerOptionsContainer">
-                                                <label for="skeletonmageBulkBut">amount:</label><!-- --><button onclick="updateSingleBuyer(3, 'bulk', 'skeletonmageBulkBut')" name="skeletonmageBulkBut" id="skeletonmageBulkBut" class="buyerBulkBut" v-html="player.autobuyers[3]['bulk'] ? 'MAX' : 'SINGLE'" :disabled="!player.unlocks['bulkBuyers']">SINGLE</button><!-- -->
-                                                <div v-if="!player.unlocks['bulkBuyers']" class="buyerBulkLock"></div>
-                                            </div>
-                                            <div id="skeletonmageBuyerPriorityContainer" class="buyerOptionsContainer priorityContainer">
-                                                <label for="skeletonmagePriority">Priority:</label>
-                                                <select onchange="updateBuyerOrder(3, 'skeletonmagePriority')" id="skeletonmagePriority" name="skeletonmagePriority" class="buyerDropdown">
-                                                    <option id="31" class="priorityOptions" value="1">1</option>
-                                                    <option id="32" class="priorityOptions" value="2">2</option>
-                                                    <option id="33" class="priorityOptions" value="3" selected>3</option>
-                                                    <option id="34" class="priorityOptions" value="4">4</option>
-                                                    <option id="35" class="priorityOptions" value="5">5</option>
-                                                    <option id="36" class="priorityOptions" value="6">6</option>
-                                                    <option id="37" class="priorityOptions" value="7">7</option>
-                                                    <option id="38" class="priorityOptions" value="8">8</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div id="bansheeBuyerOptions" class="autobuyerOptions">
-                                        <div class="buyerFrame">
-                                            <h2>Banshees</h2>
-                                            <div id="bansheeBuyerEnabledContainer" class="buyerOptionsContainer">
-                                                <label for="bansheeEnabledBut">on/off:</label><!-- --><button onclick="updateSingleBuyer(4, 'on', 'bansheeEnabledBut')" name="bansheeEnabledBut" id="bansheeEnabledBut" class="buyerEnabledBut">OFF</button><!-- -->
-                                                <div class="buyerEnabledLock"></div>
-                                            </div>
-                                            <div id="bansheeBuyerSpeedContainer" class="buyerOptionsContainer">
-                                                <label for="bansheeSpeedBut">speed:</label><!-- --><button onclick="updateSingleBuyer(4, 'fast', 'bansheeSpeedBut')" name="bansheeSpeedBut" id="bansheeSpeedBut" class="buyerSpeedBut" v-html="player.autobuyers[4]['fast'] ? 'FAST' : 'SLOW'" :disabled="!player.unlocks['fastBuyers']">SLOW</button><!-- -->
-                                                <div v-if="!player.unlocks['fastBuyers']" class="buyerSpeedLock"></div>
-                                            </div>
-                                            <div id="bansheeBuyerBulkContainer" class="buyerOptionsContainer">
-                                                <label for="bansheeBulkBut">amount:</label><!-- --><button onclick="updateSingleBuyer(4, 'bulk', 'bansheeBulkBut')" name="bansheeBulkBut" id="bansheeBulkBut" class="buyerBulkBut" v-html="player.autobuyers[4]['bulk'] ? 'MAX' : 'SINGLE'" :disabled="!player.unlocks['bulkBuyers']">SINGLE</button><!-- -->
-                                                <div v-if="!player.unlocks['bulkBuyers']" class="buyerBulkLock"></div>
-                                            </div>
-                                            <div id="bansheeBuyerPriorityContainer" class="buyerOptionsContainer priorityContainer">
-                                                <label for="bansheePriority">Priority:</label>
-                                                <select onchange="updateBuyerOrder(4, 'bansheePriority')" id="bansheePriority" name="bansheePriority" class="buyerDropdown">
-                                                    <option id="41" class="priorityOptions" value="1">1</option>
-                                                    <option id="42" class="priorityOptions" value="2">2</option>
-                                                    <option id="43" class="priorityOptions" value="3">3</option>
-                                                    <option id="44" class="priorityOptions" value="4" selected>4</option>
-                                                    <option id="45" class="priorityOptions" value="5">5</option>
-                                                    <option id="46" class="priorityOptions" value="6">6</option>
-                                                    <option id="47" class="priorityOptions" value="7">7</option>
-                                                    <option id="48" class="priorityOptions" value="8">8</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div id="lichBuyerOptions" class="autobuyerOptions">
-                                        <div class="buyerFrame">
-                                            <h2>Liches</h2>
-                                            <div id="lichBuyerEnabledContainer" class="buyerOptionsContainer">
-                                                <label for="lichEnabledBut">on/off:</label><!-- --><button onclick="updateSingleBuyer(5, 'on', 'lichEnabledBut')" name="lichEnabledBut" id="lichEnabledBut" class="buyerEnabledBut">OFF</button><!-- -->
-                                                <div class="buyerEnabledLock"></div>
-                                            </div>
-                                            <div id="lichBuyerSpeedContainer" class="buyerOptionsContainer">
-                                                <label for="lichSpeedBut">speed:</label><!-- --><button onclick="updateSingleBuyer(5, 'fast', 'lichSpeedBut')" name="lichSpeedBut" id="lichSpeedBut" class="buyerSpeedBut" v-html="player.autobuyers[5]['fast'] ? 'FAST' : 'SLOW'" :disabled="!player.unlocks['fastBuyers']">SLOW</button><!-- -->
-                                                <div v-if="!player.unlocks['fastBuyers']" class="buyerSpeedLock"></div>
-                                            </div>
-                                            <div id="lichBuyerBulkContainer" class="buyerOptionsContainer">
-                                                <label for="lichBulkBut">amount:</label><!-- --><button onclick="updateSingleBuyer(5, 'bulk', 'lichBulkBut')" name="lichBulkBut" id="lichBulkBut" class="buyerBulkBut" v-html="player.autobuyers[5]['bulk'] ? 'MAX' : 'SINGLE'" :disabled="!player.unlocks['bulkBuyers']">SINGLE</button><!-- -->
-                                                <div v-if="!player.unlocks['bulkBuyers']" class="buyerBulkLock"></div>
-                                            </div>
-                                            <div id="lichBuyerPriorityContainer" class="buyerOptionsContainer priorityContainer">
-                                                <label for="lichPriority">Priority:</label>
-                                                <select onchange="updateBuyerOrder(5, 'lichPriority')" id="lichPriority" name="lichPriority" class="buyerDropdown">
-                                                    <option id="51" class="priorityOptions" value="1">1</option>
-                                                    <option id="52" class="priorityOptions" value="2">2</option>
-                                                    <option id="53" class="priorityOptions" value="3">3</option>
-                                                    <option id="54" class="priorityOptions" value="4">4</option>
-                                                    <option id="55" class="priorityOptions" value="5" selected>5</option>
-                                                    <option id="56" class="priorityOptions" value="6">6</option>
-                                                    <option id="57" class="priorityOptions" value="7">7</option>
-                                                    <option id="58" class="priorityOptions" value="8">8</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div id="behemothBuyerOptions" class="autobuyerOptions">
-                                        <div class="buyerFrame">
-                                            <h2>Behemoths</h2>
-                                            <div id="behemothBuyerEnabledContainer" class="buyerOptionsContainer">
-                                                <label for="behemothEnabledBut">on/off:</label><!-- --><button onclick="updateSingleBuyer(6, 'on', 'behemothEnabledBut')" name="behemothEnabledBut" id="behemothEnabledBut" class="buyerEnabledBut">OFF</button><!-- -->
-                                                <div class="buyerEnabledLock"></div>
-                                            </div>
-                                            <div id="behemothBuyerSpeedContainer" class="buyerOptionsContainer">
-                                                <label for="behemothSpeedBut">speed:</label><!-- --><button onclick="updateSingleBuyer(6, 'fast', 'behemothSpeedBut')" name="behemothSpeedBut" id="behemothSpeedBut" class="buyerSpeedBut" v-html="player.autobuyers[6]['fast'] ? 'FAST' : 'SLOW'" :disabled="!player.unlocks['fastBuyers']">SLOW</button><!-- -->
-                                                <div v-if="!player.unlocks['fastBuyers']" class="buyerSpeedLock"></div>
-                                            </div>
-                                            <div id="behemothBuyerBulkContainer" class="buyerOptionsContainer">
-                                                <label for="behemothBulkBut">amount:</label><!-- --><button onclick="updateSingleBuyer(6, 'bulk', 'behemothBulkBut')" name="behemothBulkBut" id="behemothBulkBut" class="buyerBulkBut" v-html="player.autobuyers[6]['bulk'] ? 'MAX' : 'SINGLE'" :disabled="!player.unlocks['bulkBuyers']">SINGLE</button><!-- -->
-                                                <div v-if="!player.unlocks['bulkBuyers']" class="buyerBulkLock"></div>
-                                            </div>
-                                            <div id="behemothBuyerPriorityContainer" class="buyerOptionsContainer priorityContainer">
-                                                <label for="behemothPriority">Priority:</label>
-                                                <select onchange="updateBuyerOrder(6, 'behemothPriority')" id="behemothPriority" name="behemothPriority" class="buyerDropdown">
-                                                    <option id="61" class="priorityOptions" value="1">1</option>
-                                                    <option id="62" class="priorityOptions" value="2">2</option>
-                                                    <option id="63" class="priorityOptions" value="3">3</option>
-                                                    <option id="64" class="priorityOptions" value="4">4</option>
-                                                    <option id="65" class="priorityOptions" value="5">5</option>
-                                                    <option id="66" class="priorityOptions" value="6" selected>6</option>
-                                                    <option id="67" class="priorityOptions" value="7">7</option>
-                                                    <option id="68" class="priorityOptions" value="8">8</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div id="ancientoneBuyerOptions" class="autobuyerOptions">
-                                        <div class="buyerFrame">
-                                            <h2>Ancient Ones</h2>
-                                            <div id="ancientoneBuyerEnabledContainer" class="buyerOptionsContainer">
-                                                <label for="ancientoneEnabledBut">on/off:</label><!-- --><button onclick="updateSingleBuyer(7, 'on', 'ancientoneEnabledBut')" name="ancientoneEnabledBut" id="ancientoneEnabledBut" class="buyerEnabledBut">OFF</button><!-- -->
-                                                <div class="buyerEnabledLock"></div>
-                                            </div>
-                                            <div id="ancientoneBuyerSpeedContainer" class="buyerOptionsContainer">
-                                                <label for="ancientoneSpeedBut">speed:</label><!-- --><button onclick="updateSingleBuyer(7, 'fast', 'ancientoneSpeedBut')" name="ancientoneSpeedBut" id="ancientoneSpeedBut" class="buyerSpeedBut" v-html="player.autobuyers[7]['fast'] ? 'FAST' : 'SLOW'" :disabled="!player.unlocks['fastBuyers']">SLOW</button><!-- -->
-                                                <div v-if="!player.unlocks['fastBuyers']" class="buyerSpeedLock"></div>
-                                            </div>
-                                            <div id="ancientoneBuyerBulkContainer" class="buyerOptionsContainer">
-                                                <label for="ancientoneBulkBut">amount:</label><!-- --><button onclick="updateSingleBuyer(7, 'bulk', 'ancientoneBulkBut')" name="ancientoneBulkBut" id="ancientoneBulkBut" class="buyerBulkBut" v-html="player.autobuyers[7]['bulk'] ? 'MAX' : 'SINGLE'" :disabled="!player.unlocks['bulkBuyers']">SINGLE</button><!-- -->
-                                                <div v-if="!player.unlocks['bulkBuyers']" class="buyerBulkLock"></div>
-                                            </div>
-                                            <div id="ancientoneBuyerPriorityContainer" class="buyerOptionsContainer priorityContainer">
-                                                <label for="ancientonePriority">Priority:</label>
-                                                <select onchange="updateBuyerOrder(7, ancientonePriority)" id="ancientonePriority" name="ancientonePriority" class="buyerDropdown">
-                                                    <option id="71" class="priorityOptions" value="1">1</option>
-                                                    <option id="72" class="priorityOptions" value="2">2</option>
-                                                    <option id="73" class="priorityOptions" value="3">3</option>
-                                                    <option id="74" class="priorityOptions" value="4">4</option>
-                                                    <option id="75" class="priorityOptions" value="5">5</option>
-                                                    <option id="76" class="priorityOptions" value="6">6</option>
-                                                    <option id="77" class="priorityOptions" value="7" selected>7</option>
-                                                    <option id="78" class="priorityOptions" value="8">8</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div id="suneaterBuyerOptions" class="autobuyerOptions">
-                                        <div class="buyerFrame">
-                                            <h2>Sun Eaters</h2>
-                                            <div id="suneaterBuyerEnabledContainer" class="buyerOptionsContainer">
-                                                <label for="suneaterEnabledBut">on/off:</label><!-- --><button onclick="updateSingleBuyer(8, 'on', 'suneaterEnabledBut')" name="suneaterEnabledBut" id="suneaterEnabledBut" class="buyerEnabledBut">OFF</button><!-- -->
-                                                <div class="buyerEnabledLock"></div>
-                                            </div>
-                                            <div id="suneaterBuyerSpeedContainer" class="buyerOptionsContainer">
-                                                <label for="suneaterSpeedBut">speed:</label><!-- --><button onclick="updateSingleBuyer(8, 'fast', 'suneaterSpeedBut')" name="suneaterSpeedBut" id="suneaterSpeedBut" class="buyerSpeedBut" v-html="player.autobuyers[8]['fast'] ? 'FAST' : 'SLOW'" :disabled="!player.unlocks['fastBuyers']">SLOW</button><!-- -->
-                                                <div v-if="!player.unlocks['fastBuyers']" class="buyerSpeedLock"></div>
-                                            </div>
-                                            <div id="suneaterBuyerBulkContainer" class="buyerOptionsContainer">
-                                                <label for="suneaterBulkBut">amount:</label><!-- --><button onclick="updateSingleBuyer(8, 'bulk', 'suneaterBulkBut')" name="suneaterBulkBut" id="suneaterBulkBut" class="buyerBulkBut" v-html="player.autobuyers[8]['bulk'] ? 'MAX' : 'SINGLE'" :disabled="!player.unlocks['bulkBuyers']">SINGLE</button><!-- -->
-                                                <div v-if="!player.unlocks['bulkBuyers']" class="buyerBulkLock"></div>
-                                            </div>
-                                            <div id="suneaterBuyerPriorityContainer" class="buyerOptionsContainer priorityContainer">
-                                                <label for="suneaterPriority">Priority:</label>
-                                                <select onchange="updateBuyerOrder(8, 'suneaterPriority')" id="suneaterPriority" name="suneaterPriority" class="buyerDropdown">
-                                                    <option id="81" class="priorityOptions" value="1">1</option>
-                                                    <option id="82" class="priorityOptions" value="2">2</option>
-                                                    <option id="83" class="priorityOptions" value="3">3</option>
-                                                    <option id="84" class="priorityOptions" value="4">4</option>
-                                                    <option id="85" class="priorityOptions" value="5">5</option>
-                                                    <option id="86" class="priorityOptions" value="6">6</option>
-                                                    <option id="87" class="priorityOptions" value="7">7</option>
-                                                    <option id="88" class="priorityOptions" value="8" selected>8</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <table style="margin: auto;">
-                                    <tr>
-                                        <td>
-                                            <div id="sacrificeBuyerOptions" class="autobuyerOptions">
-                                                <div class="buyerFrame">
-                                                    <h2>Sacrifice</h2>
-                                                    <div id="sacrificeBuyerEnabledContainer" class="buyerOptionsContainer">
-                                                        <label for="sacrificeEnabledBut">on/off:</label><!-- --><button onclick="updateSingleBuyer(9, 'on', 'sacrificeEnabledBut')" name="sacrificeEnabledBut" id="sacrificeEnabledBut" class="buyerEnabledBut">OFF</button><!-- -->
-                                                        <div class="buyerEnabledLock"></div>
-                                                    </div>
-                                                    <div id="sacrificeBuyerSpeedContainer" class="buyerOptionsContainer">
-                                                        <label for="sacrificeSpeedBut">speed:</label><!-- --><button onclick="updateSingleBuyer(9, 'fast', 'sacrificeSpeedBut')" name="sacrificeSpeedBut" id="sacrificeSpeedBut" class="buyerSpeedBut" v-html="player.autobuyers[9]['fast'] ? 'FAST' : 'SLOW'" :disabled="!player.unlocks['fastBuyers']">SLOW</button><!-- -->
-                                                        <div v-if="!player.unlocks['fastBuyers']" class="buyerSpeedLock"></div>
-                                                    </div>
-                                                    <span style="position: relative; right: 62px;"><label for="sacrificeBuyerAdvancedList">condition:</label></span>
-                                                    <div id="sacrificeBuyerAmountsContainer" class="buyerOptionsContainerHalf">
-                                                        <div class="buyerOptionsContainer">
-                                                            <div class="buyerAmountTextContainer">
-                                                                <input onchange="updateSacBuyer()" onblur="emptySacrifice()" type="text" size id="sacrificeBuyerAmount" name="sacrificeBuyerConditions" class="buyerText" value="1"><br>
-                                                                <label id="sacrificeBuyerAmountLabel" for="sacrificeBuyerAmount" style="font-size: 10pt;">at x crystals</label>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div id="sacrificeBuyerAdvancedContainer" class="buyerOptionsContainerHalf">
-                                                        <div class="buyerAmountTextContainer">
-                                                            <select onchange="updateSacBuyer()" id="sacrificeBuyerAdvancedList" name="sacrificeBuyerAdvancedList" class="buyerList" size="3" disabled>
-                                                                <option id="atx" value="atx" selected>at x crystals</option>
-                                                                <option id="xtimes" value="xtimes">at x times last</option>
-                                                                <option id="afterx" value="afterx">after x seconds</option>
-                                                            </select>
-                                                        </div>
-                                                        <div v-if="!player.unlocks['advancedBuyer']" class="buyerAdvancedContainer"></div>
-                                                    </div>
-                                                    <span id="sacrificeErr" style="display: none;">invalid input. value set to last valid input: <span id="sacrificeErrValue"></span></span>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div id="prestigeBuyerOptions" class="autobuyerOptions">
-                                                <div class="buyerFrame">
-                                                    <h2>World Prestige</h2>
-                                                    <div id="prestigeBuyerEnabledContainer" class="buyerOptionsContainer">
-                                                        <label for="prestigeEnabledBut">on/off:</label><!-- --><button onclick="updateSingleBuyer(10, 'on', 'prestigeEnabledBut')" name="prestigeEnabledBut" id="prestigeEnabledBut" class="buyerEnabledBut">OFF</button><!-- -->
-                                                        <div class="buyerEnabledLock"></div>
-                                                    </div>
-                                                    <div id="prestigeBuyerSpeedContainer" class="buyerOptionsContainer">
-                                                        <label for="prestigeSpeedBut">speed:</label><!-- --><button onclick="updateSingleBuyer(10, 'fast', 'prestigeSpeedBut')" name="prestigeSpeedBut" id="prestigeSpeedBut" class="buyerSpeedBut" v-html="player.autobuyers[10]['fast'] ? 'FAST' : 'SLOW'" :disabled="!player.unlocks['fastBuyers']">SLOW</button><!-- -->
-                                                        <div v-if="!player.unlocks['fastBuyers']" class="buyerSpeedLock"></div>
-                                                    </div>
-                                                    <div id="prestigeBuyerPriorityContainer" class="buyerOptionsContainer priorityContainer">
-                                                        <label for="maxPrestige">max auto prestiges:</label><input onchange="updateMaxPrestige()" onblur="emptyPrestige()" type="text" size id="maxPrestige" name="maxPrestige" class="buyerTextP" value="0">
-                                                    </div>
-                                                    <span id="prestigeErr" style="display: none;">invalid input. value set to last valid input: <span id="prestigeErrValue"></span></span>
-                                                </div>
-                                                <div v-if="!player.unlocks['prestigeBuyer']" id="prestigeLockScreen"></div>
-                                            </div>
-                                        </td>
-                                        <td id="ascensionBuyerCell" style="display: none;">
-                                            <div id="ascensionBuyerOptions" class="autobuyerOptions">
-                                                <div class="buyerFrame">
-                                                    <h2>Ascension</h2>
-                                                    <div id="ascensionBuyerEnabledContainer" class="buyerOptionsContainer">
-                                                        <label for="ascensionEnabledBut">on/off:</label><!-- --><button onclick="updateSingleBuyer(11, 'on', 'ascensionEnabledBut')" name="ascensionEnabledBut" id="ascensionEnabledBut" class="buyerEnabledBut">OFF</button><!-- -->
-                                                    </div>
-                                                    <div id="ascensionBuyerSpeedContainer" class="buyerOptionsContainer">
-                                                        <label for="ascensionSpeedBut">speed:</label><!-- --><button onclick="updateSingleBuyer(11, 'fast', 'ascensionSpeedBut')" name="ascensionSpeedBut" id="ascensionSpeedBut" class="buyerSpeedBut" v-html="player.autobuyers[11]['fast'] ? 'FAST' : 'SLOW'">SLOW</button><!-- -->
-                                                    </div>
-                                                    <div id="ascensionBuyerBulkContainer" class="buyerOptionsContainer">
-                                                        <div class="ascBuyerAmountTextContainer">
-                                                            <input onchange="updateAscBuyer()" onblur="emptyAscension()" type="text" size id="ascensionBuyerAmount" name="ascensionBuyerAmount" class="buyerText" value="1"><br>
-                                                            <label id="prestigeBuyerAmountLabel" for="ascensionBuyerAmount" style="font-size: 10pt;">at x galaxies</label>
-                                                        </div>
-                                                    </div>
-                                                    <span id="ascensionErr" style="display: none;">invalid input. value set to last valid input: <span id="sacrificeErrValue"></span></span>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td id="timeDimBuyerCell" style="display: none;">
-                                            <div id="timeDimBuyerOptions" class="autobuyerOptions">
-                                                <div class="buyerFrame">
-                                                    <h2>Time Dimensions</h2>
-                                                    <table style="text-align: center; border-collapse: collapse; margin: auto;">
-                                                        <tr>
-                                                            <td colspan="3">
-                                                                <div id="timeDimAllEnabledContainer" class="dimBuyerOptionsContainer">
-                                                                    <button onclick="toggleAllTimeBuyers()" name="timeDimAllBut" id="timeDimAllBut" class="timeDimBuyerAllEnabledBut" style="margin-bottom: 10px;">TOGGLE ALL</button>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <div id="timeDim1EnabledContainer" class="dimBuyerOptionsContainer">
-                                                                    <label for="timeDim1But">first:</label><br><button onclick="updateDimBuyer(1, 'timeDim1But')" name="timeDim1But" id="timeDim1But" class="timeDimBuyerEnabledBut" style="margin-bottom: 10px;">OFF</button>
-                                                                </div>
-                                                            </td>
-                                                            <td style="width: 15px; display: none;" class="timeDimSpacer" id="spacer1">
-                                                                <div style="width: 100%;"></div>
-                                                            </td>
-                                                            <td id="dimBuyer5Cell" style="display: none;">
-                                                                <div id="timeDim1EnabledContainer" class="dimBuyerOptionsContainer">
-                                                                    <label for="timeDim5But">fifth:</label><br><button onclick="updateDimBuyer(5, 'timeDim5But')" name="timeDim5But" id="timeDim5But" class="timeDimBuyerEnabledBut" style="margin-bottom: 10px;">OFF</button>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <div id="timeDim2EnabledContainer" class="dimBuyerOptionsContainer">
-                                                                    <label for="timeDim2But">second:</label><br><button onclick="updateDimBuyer(2, 'timeDim2But')" name="timeDim2But" id="timeDim2But" class="timeDimBuyerEnabledBut" style="margin-bottom: 10px;">OFF</button>
-                                                                </div>
-                                                            </td>
-                                                            <td style="width: 15px; display: none;" class="timeDimSpacer" id="spacer2">
-                                                                <div style="width: 100%;"></div>
-                                                            </td>
-                                                            <td id="dimBuyer6Cell" style="display: none;">
-                                                                <div id="timeDim1EnabledContainer" class="dimBuyerOptionsContainer">
-                                                                    <label for="timeDim6But">sixth:</label><br><button onclick="updateDimBuyer(6, 'timeDim6But')" name="timeDim6But" id="timeDim6But" class="timeDimBuyerEnabledBut" style="margin-bottom: 10px;">OFF</button>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <div id="timeDim3EnabledContainer" class="dimBuyerOptionsContainer">
-                                                                    <label for="timeDim3But">third:</label><br><button onclick="updateDimBuyer(3, 'timeDim3But')" name="timeDim3But" id="timeDim3But" class="timeDimBuyerEnabledBut" style="margin-bottom: 10px;">OFF</button>
-                                                                </div>
-                                                            </td>
-                                                            <td style="width: 15px; display: none;" class="timeDimSpacer" id="spacer3">
-                                                                <div style="width: 100%;"></div>
-                                                            </td>
-                                                            <td id="dimBuyer7Cell" style="display: none;">
-                                                                <div id="timeDim1EnabledContainer" class="dimBuyerOptionsContainer">
-                                                                    <label for="timeDim7But">seventh:</label><br><button onclick="updateDimBuyer(7, 'timeDim7But')" name="timeDim7But" id="timeDim7But" class="timeDimBuyerEnabledBut" style="margin-bottom: 10px;">OFF</button>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <div id="timeDim4EnabledContainer" class="dimBuyerOptionsContainer">
-                                                                    <label for="timeDim4But">fourth:</label><br><button onclick="updateDimBuyer(4, 'timeDim4But')" name="timeDim4But" id="timeDim4But" class="timeDimBuyerEnabledBut" style="margin-bottom: 10px;">OFF</button>
-                                                                </div>
-                                                            </td>
-                                                            <td style="width: 15px; display: none;" class="timeDimSpacer" id="spacer4">
-                                                                <div style="width: 100%;"></div>
-                                                            </td>
-                                                            <td id="dimBuyer8Cell" style="display: none;">
-                                                                <div id="timeDim1EnabledContainer" class="dimBuyerOptionsContainer">
-                                                                    <label for="timeDim8But">eighth:</label><br><button onclick="updateDimBuyer(8, 'timeDim8But')" name="timeDim8But" id="timeDim8But" class="timeDimBuyerEnabledBut" style="margin-bottom: 10px;">OFF</button>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                    </tr>
-                                </table>
-                            </tr>
-                        </table>
+                        </table>-->
+                        <multi-boxes data="ab"></multi-boxes>
                     </div>
                 </div>
                 <div id="buildingsTab" class="pageTab" v-bind:style="[(player.tab=='buildingsTab') ? { display: 'block' } : { display: 'none' }]">
@@ -775,7 +364,7 @@
                             Buying a 4th row upgrade will increase the cost of the 1st row upgrades by 1.<br>
                             A galaxy respec resets all costs to 1, and unlocks all locked upgrades.<br><br>
                         </div>
-                        <div id="galSelect" style="text-align: center; width: 100%; margin: auto;">Display  <select v-model="galSelected" id="galDisplaySelect" name="galDisplaySelect" class="galDropdown" onchange="changeGalaxiesDisplayed()"><option id="1gal" class="galOptions" value="1">1</option><option id="2gal" class="galOptions" value="2">2</option><option id="4gal" class="galOptions" value="4">4</option></select>  at a time</div>
+                        <div id="galSelect" style="text-align: center; width: 100%; margin: auto;">Display  <select v-model="galSelected" id="galDisplaySelect" name="galDisplaySelect" class="galDropdown" v-on:change="changeGalaxiesDisplayed()"><option id="1gal" class="galOptions" value="1">1</option><option id="2gal" class="galOptions" value="2">2</option><option id="4gal" class="galOptions" value="4">4</option></select>  at a time</div>
                         <div id="galButs2" v-bind:style="[(player.activeGalaxies[0]=='2') ? {display: 'block'} : {display: 'none'}]"><layer-button data="g" :width="270" text="Andromeda/Circinus" fname="showGalaxies" :args="['1', '2']"></layer-button><layer-button data="g" :width="270" text="Sculptor Dwarf/Triangulum" fname="showGalaxies" :args="['3', '4']"></layer-button></div>
                         <div id="galButs4" v-bind:style="[(player.activeGalaxies[0]=='1') ? {display: 'block'} : {display: 'none'}]"><layer-button data="g" :width="130" text="Andromeda" fname="showGalaxy" args="1"></layer-button><layer-button data="g" :width="130" text="Circinus" fname="showGalaxy" args="2"></layer-button><layer-button data="g" :width="130" text="Sculptor Dwarf" fname="showGalaxy" args="3"></layer-button><layer-button data="g" :width="130" text="Triangulum" fname="showGalaxy" args="4"></layer-button></div>
                         <div style="text-align: center; width: 100%; margin: auto;"><layer-button data="g" :width="270" text="Respec galaxies - forces ascension" fname="respecGalaxiesClick"></layer-button><layer-button data="g" :width="270" text="Galaxy Milestones" fname="showMilestones"></layer-button></div>
@@ -800,7 +389,7 @@
                             <div style="margin: 5px;"><span style=" font-size: 16pt; font-weight: bold;">Completing a project respecs galaxies without an ascension reset.</div>
                             <span style="font-size: 14pt; font-weight: bold; color: #e32d05;">Each project completed doubles the number of galaxies the galaxy softcaps start at.</span>
                         </div>
-                        <multi-boxes data="r"></multi-box>
+                        <multi-boxes data="r"></multi-boxes>
                     </div>
                     <div id="infResearchSubTab" class="galaxySubTab" v-bind:style="[(player.subTabs['g']=='infResearchSubTab') ? { display: 'block' } : { display: 'none' }]">
                         <div v-if="isResearchActive(7)" id="infResearchDisplayDiv">
@@ -992,17 +581,10 @@
                     <div style="margin: auto;"><button id ="closefavErrPopup" class="optBut" onclick="closefavErrPopup()">CLOSE</button></div>
                 </div>
                 <div class="popup" id="confirmationsPopup">
-                    <div>
                         <h2>Confirmations</h2>
                         <confirm-toggles></confirm-toggles>
                 </div>
-                <div class="dPopup" id="displayPopup">
-                    <div class="headerHeaderContainer">
-                        <div class="headerPopupHeader">Header Display</div>
-                        <div class="headerPopupHeaderX"><a href="javascript:closeDisplayPopup();">X</a></div>
-                    </div>
-                    <display-toggles></display-toggles>
-                </div>
+                <header-popup></header-popup>
                 <div class="milestonePopup" id="milestonesPopup">
                     <div class="cursorContainer"></div>
                     <div class="milestoneHeaderContainer">

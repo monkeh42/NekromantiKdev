@@ -50,6 +50,8 @@ var modules;
 
 var timedPopups = [];
 
+var activePopups = [];
+
 //initialize
 
 function init() {
@@ -133,7 +135,7 @@ function loadGame() {
 	
     
 
-    updateAutobuyersDisplay();
+    //updateAutobuyersDisplay();
 
     if (player.tooltipsEnabled) {
         player.tooltipsEnabled = false;
@@ -164,6 +166,7 @@ function setupData() {
     addData('ul', 'unlocks', UNLOCKS_DATA);
     addData('ach', 'achievements', ACH_DATA);
     addData('ms', 'milestones', MILES_DATA);
+    addData('ab', 'autobuyers', AUTOBUYERS_DATA);
     addData('u', 'units', UNITS_DATA);
     addData('b', 'buildings', BUILDS_DATA[0]);
     for (let i=1; i<=4; i++) { addData('b'+i.toString(), BUILDS_DATA[i].id, BUILDS_DATA[i]); }
@@ -175,6 +178,10 @@ function setupData() {
     addData('a', 'ark', ARK_DATA);
     addData('r', 'research', RESEARCH_DATA);
     addData('e', 'ethereal', ETH_DATA);
+}
+
+function isPopAct() {
+    return player.headPopAct;
 }
 
 //save stuff
@@ -329,8 +336,6 @@ function gameLoop(diff=new Decimal(0), offline=false) {
         player.truePercent = 100 - Number(app.sliderVal);
         player.antiPercent = Number(app.sliderVal);
     
-
-    
         popupTimers(diff.div(1000));
     
 
@@ -349,7 +354,7 @@ function handleVisibilityChange() {
 function autobuyerTick(slow) {
     var tier;
     for (var i=0; i<player.autobuyers.priority.length; i++) {
-        tier = player.autobuyers.priority[i];
+        tier = parseInt(player.autobuyers.priority[i]);
         if (player.autobuyers[tier]['on'] && (player.autobuyers[tier]['fast'] || slow)) {
             if (player.autobuyers[tier]['bulk']) {
                 buyMaxUnits(tier);
@@ -373,10 +378,6 @@ function autobuyerTick(slow) {
             }
         }
     }
-}
-
-function showPopup(type, text, ms) {
-    timedPopups.push({className: type, popupText: text, time: ms});
 }
 
 function popupTimers(dif) {
@@ -624,34 +625,36 @@ function updateVersion() {
         player.achievements[73] = false;
         player.achievements[71] = true;
     }
-    if (tempPlayer.unlocks['unitsTab']['mainTab']) { player.unlocks['units'] = true; }
-    if (tempPlayer.unlocks['unitsTab']['spacePrestige']) { player.unlocks['spacePrestige'] = true; }
-    if (tempPlayer.unlocks['unitsTab']['autobuyers']) { player.unlocks['autobuyers'] = true; }
-    if (tempPlayer.unlocks['unitsTab']['fastBuyers']) { player.unlocks['fastBuyers'] = true; }
-    if (tempPlayer.unlocks['unitsTab']['BulkBuyers']) { player.unlocks['BulkBuyers'] = true; }
-    if (tempPlayer.unlocks['unitsTab']['prestigeBuyer']) { player.unlocks['prestigeBuyer'] = true; }
-    if (tempPlayer.unlocks['unitsTab']['advancedBuyer']) { player.unlocks['advancedBuyer'] = true; }
-    if (tempPlayer.unlocks['unitsTab']['ascensionBuyer']) { player.unlocks['ascensionBuyer'] = true; }
-    if (tempPlayer.unlocks['unitsTab']['timeDimBuyer']) { player.unlocks['timeDimBuyer'] = true; }
-    if (tempPlayer.unlocks['buildingsTab']['factory']) { player.unlocks['factory'] = true; }
-    if (tempPlayer.unlocks['buildingsTab']['factoryRow2']) { player.unlocks['factoryRow2'] = true; }
-    if (tempPlayer.unlocks['buildingsTab']['necropolis']) { player.unlocks['necropolis'] = true; }
-    if (tempPlayer.unlocks['buildingsTab']['necropolisRow2']) { player.unlocks['necropolisRow2'] = true; }
-    if (tempPlayer.unlocks['buildingsTab']['sun']) { player.unlocks['sun'] = true; }
-    if (tempPlayer.unlocks['buildingsTab']['sunRow2']) { player.unlocks['sunRow2'] = true; }
-    if (tempPlayer.unlocks['buildingsTab']['constructionSubTab']) { player.unlocks['construction'] = true; }
-    if (tempPlayer.unlocks['buildingsTab']['constructionRow2']) { player.unlocks['constructionRow2'] = true; }
-    if (tempPlayer.unlocks['buildingsTab']['vortexTable']) { player.unlocks['vortexTable'] = true; }
-    if (tempPlayer.unlocks['buildingsTab']['vortex']) { player.unlocks['vortex'] = true; }
-    if (tempPlayer.unlocks['buildingsTab']['vortexRow2']) { player.unlocks['vortexRow2'] = true; }
-    if (tempPlayer.unlocks['timeTab']['mainTab']) { player.unlocks['time'] = true; }
-    if (tempPlayer.unlocks['timeTab']['timeUpgrades']) { player.unlocks['timeUpgrades'] = true; }
-    if (tempPlayer.unlocks['timeTab']['timeUpgrades2']) { player.unlocks['timeUpgrades2'] = true; }
-    if (tempPlayer.unlocks['timeTab']['timeDims2']) { player.unlocks['timeDims2'] = true; }
-    if (tempPlayer.unlocks['galaxyTab']['mainTab']) { player.unlocks['galaxies'] = true; }
-    if (tempPlayer.unlocks['galaxyTab']['researchTab']) { player.unlocks['research'] = true; }
-    if (tempPlayer.unlocks['galaxyTab']['arkTab']) { player.unlocks['ark'] = true; }
-    if (isResearchCompleted(6)) { player.unlocks['infResearch'] = true; }
+    if (tempPlayer.version != GAME_DATA.version) {
+        if (tempPlayer.unlocks['unitsTab']['mainTab']) { player.unlocks['units'] = true; }
+        if (tempPlayer.unlocks['unitsTab']['spacePrestige']) { player.unlocks['spacePrestige'] = true; }
+        if (tempPlayer.unlocks['unitsTab']['autobuyers']) { player.unlocks['autobuyers'] = true; }
+        if (tempPlayer.unlocks['unitsTab']['fastBuyers']) { player.unlocks['fastBuyers'] = true; }
+        if (tempPlayer.unlocks['unitsTab']['BulkBuyers'] || tempPlayer.unlocks['unitsTab']['bulkBuyers']) { player.unlocks['bulkBuyers'] = true; }
+        if (tempPlayer.unlocks['unitsTab']['prestigeBuyer']) { player.unlocks['prestigeBuyer'] = true; }
+        if (tempPlayer.unlocks['unitsTab']['advancedBuyer']) { player.unlocks['advancedBuyer'] = true; }
+        if (tempPlayer.unlocks['unitsTab']['ascensionBuyer']) { player.unlocks['ascensionBuyer'] = true; }
+        if (tempPlayer.unlocks['unitsTab']['timeDimBuyer']) { player.unlocks['timeDimBuyer'] = true; }
+        if (tempPlayer.unlocks['buildingsTab']['factory']) { player.unlocks['factory'] = true; }
+        if (tempPlayer.unlocks['buildingsTab']['factoryRow2']) { player.unlocks['factoryRow2'] = true; }
+        if (tempPlayer.unlocks['buildingsTab']['necropolis']) { player.unlocks['necropolis'] = true; }
+        if (tempPlayer.unlocks['buildingsTab']['necropolisRow2']) { player.unlocks['necropolisRow2'] = true; }
+        if (tempPlayer.unlocks['buildingsTab']['sun']) { player.unlocks['sun'] = true; }
+        if (tempPlayer.unlocks['buildingsTab']['sunRow2']) { player.unlocks['sunRow2'] = true; }
+        if (tempPlayer.unlocks['buildingsTab']['constructionSubTab']) { player.unlocks['construction'] = true; }
+        if (tempPlayer.unlocks['buildingsTab']['constructionRow2']) { player.unlocks['constructionRow2'] = true; }
+        if (tempPlayer.unlocks['buildingsTab']['vortexTable']) { player.unlocks['vortexTable'] = true; }
+        if (tempPlayer.unlocks['buildingsTab']['vortex']) { player.unlocks['vortex'] = true; }
+        if (tempPlayer.unlocks['buildingsTab']['vortexRow2']) { player.unlocks['vortexRow2'] = true; }
+        if (tempPlayer.unlocks['timeTab']['mainTab']) { player.unlocks['time'] = true; }
+        if (tempPlayer.unlocks['timeTab']['timeUpgrades']) { player.unlocks['timeUpgrades'] = true; }
+        if (tempPlayer.unlocks['timeTab']['timeUpgrades2']) { player.unlocks['timeUpgrades2'] = true; }
+        if (tempPlayer.unlocks['timeTab']['timeDims2']) { player.unlocks['timeDims2'] = true; }
+        if (tempPlayer.unlocks['galaxyTab']['mainTab']) { player.unlocks['galaxies'] = true; }
+        if (tempPlayer.unlocks['galaxyTab']['researchTab']) { player.unlocks['research'] = true; }
+        if (tempPlayer.unlocks['galaxyTab']['arkTab']) { player.unlocks['ark'] = true; }
+        if (isResearchCompleted(6)) { player.unlocks['infResearch'] = true; }
+    }
     tempPlayer = {};
 }
 
@@ -779,58 +782,74 @@ function toggleHotkeys() {
 }
 
 function allAuto(n) {
-    let cbox = document.getElementById('allBuyers');
     if (n<0) {
         for (let i=1; i<9; i++) {
             player.autobuyers[i]['on'] = false;
         }
-        if (cbox.checked) {
+        if (app.allBuyersRadio=='all') {
             player.autobuyers[9]['on'] = false;
-            if (player.unlocks['unitsTab']['prestigeBuyer']) { player.autobuyers[10]['on'] = false; }
+            if (player.unlocks['prestigeBuyer']) { player.autobuyers[10]['on'] = false; }
+            if (player.unlocks['ascensionBuyer']) { player.autobuyers[11]['on'] = false; }
+            if (player.unlocks['timeDimBuyer']) {
+                for (j=1; j<=8; j++) {
+                    if (j<5 || player.unlocks['timeDims2']) { player.autobuyers[12][j] = false; }
+                }
+            }
         }
     } else if (n>0) {
         for (let i=1; i<9; i++) {
             player.autobuyers[i]['on'] = true;
         }
-        if (cbox.checked) {
+        if (app.allBuyersRadio=='all') {
             player.autobuyers[9]['on'] = true;
-            if (player.unlocks['unitsTab']['prestigeBuyer']) { player.autobuyers[10]['on'] = true; }
+            if (player.unlocks['prestigeBuyer']) { player.autobuyers[10]['on'] = true; }
+            if (player.unlocks['ascensionBuyer']) { player.autobuyers[11]['on'] = true; }
+            if (player.unlocks['timeDimBuyer']) {
+                for (j=1; j<=8; j++) {
+                    if (j<5 || player.unlocks['timeDims2']) { player.autobuyers[12][j] = true; }
+                }
+            }
         }
     } else {
         for (let i=1; i<9; i++) {
             player.autobuyers[i]['on'] = !player.autobuyers[i]['on'];
         }
-        if (cbox.checked) {
+        if (app.allBuyersRadio=='all') {
             player.autobuyers[9]['on'] = !player.autobuyers[9]['on'];
-            if (player.unlocks['unitsTab']['prestigeBuyer']) { player.autobuyers[10]['on'] = !player.autobuyers[10]['on']; }
+            if (player.unlocks['prestigeBuyer']) { player.autobuyers[10]['on'] = !player.autobuyers[10]['on']; }
+            if (player.unlocks['ascensionBuyer']) { player.autobuyers[11]['on'] = !player.autobuyers[11]['on']; }
+            if (player.unlocks['timeDimBuyer']) {
+                for (j=1; j<=8; j++) {
+                    if (j<5 || player.unlocks['timeDims2']) { player.autobuyers[12][j] = !player.autobuyers[12][j]; }
+                }
+            }
         }
     }
-    updateAutobuyersDisplay();
 }
 
 function allSpeed() {
-    if (player.unlocks['unitsTab']['fastBuyers']) {
+    if (player.unlocks['fastBuyers']) {
         for (let i=1; i<9; i++) {
             player.autobuyers[i]['fast'] = !player.autobuyers[i]['fast'];
         }
         if (document.getElementById('allBuyers').checked) {
             player.autobuyers[9]['fast'] = !player.autobuyers[9]['fast'];
-            if (player.unlocks['unitsTab']['prestigeBuyer']) { player.autobuyers[10]['fast'] = !player.autobuyers[10]['fast']; }
+            if (player.unlocks['prestigeBuyer']) { player.autobuyers[10]['fast'] = !player.autobuyers[10]['fast']; }
+            if (player.unlocks['ascensionBuyer']) { player.autobuyers[11]['fast'] = !player.autobuyers[11]['fast']; }
         }
-        updateAutobuyersDisplay();
     }
 }
 
 function allAmount() {
-    if (player.unlocks['unitsTab']['bulkBuyers']) {
+    if (player.unlocks['bulkBuyers']) {
         for (let i=1; i<9; i++) {
             player.autobuyers[i]['bulk'] = !player.autobuyers[i]['bulk'];
         }
         if (document.getElementById('allBuyers').checked) {
             player.autobuyers[9]['bulk'] = !player.autobuyers[9]['bulk'];
-            if (player.unlocks['unitsTab']['prestigeBuyer']) { player.autobuyers[10]['bulk'] = !player.autobuyers[10]['bulk']; }
+            if (player.unlocks['prestigeBuyer']) { player.autobuyers[10]['bulk'] = !player.autobuyers[10]['bulk']; }
+            if (player.unlocks['ascensionBuyer']) { player.autobuyers[11]['bulk'] = !player.autobuyers[11]['bulk']; }
         }
-        updateAutobuyersDisplay();
     }
 }
 

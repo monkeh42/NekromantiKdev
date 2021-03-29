@@ -292,7 +292,6 @@ body {
     width: 350px;
     border-radius: 4px;
     z-index: 8;
-    display: none;
     min-height: 400px;
     max-height: 600px;
     overflow: overlay;
@@ -452,6 +451,11 @@ option:active, option.active {
 .unitBut.cant {
     background-color: #4b4b4b;
     border: 1px solid #4b4b4b;
+}
+
+.buyerTog {
+    width: 180px;
+    height: 35px;
 }
 
 .single {
@@ -1822,6 +1826,22 @@ option:active, option.active {
     text-align: center;
 }
 
+.autobuyerTable {
+    width: auto;
+    text-align: center;
+    margin: 5px auto;
+}
+
+.autobuyerRow {
+    display: flex;
+    justify-content: center;
+}
+
+.autobuyerCell {
+    margin: 2px;
+    flex: 1;
+}
+
 .autobuyerOptions {
     color: white;
     background-color: black;
@@ -1832,6 +1852,16 @@ option:active, option.active {
     text-align: center;
     border: 1px solid #460573;
     border-radius: 4px;
+}
+
+.dimBuyerButtonRow {
+    display: flex;
+    justify-content: center;
+}
+
+.dimBuyerButtonCell {
+    margin: 0px 7.5px 0px;
+    flex: 1;
 }
 
 .buyerPriBut {
@@ -1893,7 +1923,7 @@ option:active, option.active {
     color: white;
     background-color: #1f1f1f;
     font-style: bold;
-    margin: 0 auto 20px;
+    margin: 0 auto 10px;
     width: 100px;
     height: 30px;
     border: 1px solid #525252;
@@ -1909,7 +1939,7 @@ option:active, option.active {
     color: white;
     background-color: #1f1f1f;
     font-style: bold;
-    margin: 0 auto 20px;
+    margin: 0 auto 10px;
     width: 150px;
     height: 30px;
     border: 1px solid #525252;
@@ -2029,8 +2059,8 @@ option:active, option.active {
     left: 0px;
     background-color: #3d3d3d;
     border: 1px solid #a3a3a3;
-    padding-left: 5px;
-    padding-right: 5px;
+    padding-left: 6px;
+    padding-right: 6px;
     padding-top: 11px;
     padding-bottom: 13px;
     font-size: 14pt;
@@ -2048,7 +2078,7 @@ option:active, option.active {
 }
 
 .buyerOptionsContainer {
-    width: 125px;
+    width: 170px;
     margin: 0px auto;
     text-align: center;
 }
@@ -2131,6 +2161,7 @@ option:active, option.active {
     outline: none;
     background-color: white;
     cursor: pointer;
+    display: inline-block;
 }
 
 .buyerRadio:checked {
@@ -2954,13 +2985,13 @@ option:active, option.active {
     transform: translateX(-50%);
 }
 
-.researchesTable {
+.researchTable {
     width: auto;
     text-align: center;
     margin: 20px auto;
 }
 
-.researchesRow {
+.researchRow {
     display: flex;
     justify-content: center;
 }

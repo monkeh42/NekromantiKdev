@@ -1035,6 +1035,9 @@ var RESEARCH_DATA = {
         boxUnlocked: function(i) {
             return true;
         },
+        showEl: function(id, i) {
+            return true;
+        },
         dataLists: {
             11: {
                 1: {
@@ -1670,6 +1673,9 @@ var ETH_DATA = {
         boxUnlocked: function(i) {
             return true;
         },
+        showEl: function(id, i) {
+            return true;
+        },
         dataLists: {
             11: {
                 1: {
@@ -1726,6 +1732,7 @@ var ETH_DATA = {
 
 var GALAXIES_DATA = new Array(5);
 GALAXIES_DATA[0] = {
+    displayAllGals: function() { return (player.activeGalaxies[0]=='4'); },
     layerDisplay: {
         layerButtonClass: 'galaxyBut',
         numClass: 'galNum',
@@ -1757,6 +1764,12 @@ GALAXIES_DATA[1] = {
     unlocked: function() { return true; },
     buyUpg: function(data, id) {
         buyGUpg(data.slice(-1), id);
+    },
+    displayGal: function() {
+        if (player.activeGalaxies[0]=='4') { return true; }
+        else if (player.activeGalaxies[1]==this.id.toString()) { return true; }
+        else if (player.activeGalaxies[2]==this.id.toString() && player.activeGalaxies[0]=='2') { return true; }
+        else { return false; }
     },
     upgrades: {
         className: 'galaxyUpg',
@@ -1989,6 +2002,12 @@ GALAXIES_DATA[2] = {
     buyUpg: function(data, id) {
         buyGUpg(data.slice(-1), id);
     },
+    displayGal: function() {
+        if (player.activeGalaxies[0]=='4') { return true; }
+        else if (player.activeGalaxies[1]==this.id.toString()) { return true; }
+        else if (player.activeGalaxies[2]==this.id.toString() && player.activeGalaxies[0]=='2') { return true; }
+        else { return false; }
+    },
     upgrades: {
         className: 'galaxyUpg',
         11: {
@@ -2215,6 +2234,12 @@ GALAXIES_DATA[3] = {
     buyUpg: function(data, id) {
         buyGUpg(data.slice(-1), id);
     },
+    displayGal: function() {
+        if (player.activeGalaxies[0]=='4') { return true; }
+        else if (player.activeGalaxies[1]==this.id.toString()) { return true; }
+        else if (player.activeGalaxies[2]==this.id.toString() && player.activeGalaxies[0]=='2') { return true; }
+        else { return false; }
+    },
     upgrades: {
         className: 'galaxyUpg',
         11: {
@@ -2439,6 +2464,12 @@ GALAXIES_DATA[4] = {
     unlocked: function() { return true; },
     buyUpg: function(data, id) {
         buyGUpg(data.slice(-1), id);
+    },
+    displayGal: function() {
+        if (player.activeGalaxies[0]=='4') { return true; }
+        else if (player.activeGalaxies[1]==this.id.toString()) { return true; }
+        else if (player.activeGalaxies[2]==this.id.toString() && player.activeGalaxies[0]=='2') { return true; }
+        else { return false; }
     },
     upgrades: {
         className: 'galaxyUpg',

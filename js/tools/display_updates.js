@@ -37,81 +37,71 @@ function updateShadow() {
     app.shadowStyle = (player.isInResearch ? (getActiveResearch()==7 ? 'inset 0px 0px 20px 10px #613227' : 'inset 0px 0px 20px 10px #e34805') : '') + (player.isInResearch && player.astralFlag ? ', ' : '') + (player.astralFlag ? 'inset 0px 0px 30px 20px #1c8a2e' : '');
 }
 
-function updateSingleBuyer(id, option, button) {
+function updateSingleBuyer(id, option) {
     player.autobuyers[id][option] = !player.autobuyers[id][option];
-    if(player.autobuyers[id][option]) {
+    /*if(player.autobuyers[id][option]) {
         document.getElementById(button).innerHTML = (option == 'on' ? 'ON' : (option == 'fast' ? 'FAST' : 'MAX'));
     } else {
         document.getElementById(button).innerHTML = (option == 'on' ? 'OFF' : (option == 'fast' ? 'SLOW' : 'SINGLE'));
-    }
+    }*/
 }
 
-function updateBuyerOrder(tier, id) {
-    let pri = parseInt(document.getElementById(id).value);
-    let index = newPriority.indexOf(tier);
-    if (newPriority[pri-1] === undefined) { newPriority[pri-1] = parseInt(tier); }
-    else {
-        if (index>=0) { newPriority.splice(index, 1); }
-        newPriority.splice(pri-1, 0, tier);
-    }
-}
-
-function emptyPrestige() {
-    if (document.getElementById('maxPrestige').value == '') { document.getElementById('maxPrestige').value = formatWholeNoComma(player.autobuyers[10]['max']); }
-}
-
-function emptySacrifice() {
-    if (document.getElementById('sacrificeBuyerAmount').value == '') { document.getElementById('sacrificeBuyerAmount').value = formatWholeNoComma(player.autobuyers[9]['amount']); }
+function updateBuyerOrder(unitTier) {
+    Vue.nextTick(function() {
+        let pri = parseInt(app.$children[9].$children[unitTier-1].$children[3].priSelected);
+        let index = player.autobuyers.priority.indexOf(unitTier.toString());
+        if (player.autobuyers.priority[pri-1] === undefined) { newPriority[pri-1] = unitTier.toString(); }
+        else {
+            if (index>=0) { player.autobuyers.priority.splice(index, 1); }
+            player.autobuyers.priority.splice(pri-1, 0, unitTier.toString());
+        }
+    })
 }
 
 function updateSacBuyer() {
-    let sacMethod = document.getElementById('sacrificeBuyerAdvancedList');
-    document.getElementById('sacrificeBuyerAmountLabel').innerHTML = sacMethod.options[sacMethod.selectedIndex].text;
-    if (document.getElementById('sacrificeBuyerAmount').value != '') {
-        try {
-            player.autobuyers[9]['amount'] = new Decimal(document.getElementById('sacrificeBuyerAmount').value);
-            if (document.getElementById('sacrificeErr').style.display == '') { document.getElementById('sacrificeErr').style.display = 'none' }
+    Vue.nextTick(function() {
+        player.autobuyers[9]['type'] = app.$children[9].$children[8].$children[2].sacType;
+        if (app.$children[9].$children[8].$children[2].sacAmount != '') {
+            try {
+                player.autobuyers[9]['amount'] = new Decimal(app.$children[9].$children[8].$children[2].sacAmount);
+                app.$children[9].$children[8].$children[2].sacError = false;
+            }
+            catch(err) {
+                app.$children[9].$children[8].$children[2].sacError = true;
+            }
         }
-        catch(err) {
-            document.getElementById('sacrificeErr').style.display = '';
-            document.getElementById('sacrificeErrValue').innerHTML = formatWholeNoComma(player.autobuyers[9]['amount']);
-        }
-    }
-    player.autobuyers[9]['amount'] = new Decimal(document.getElementById('sacrificeBuyerAmount').value);
-    player.autobuyers[9]['type'] = document.getElementById('sacrificeBuyerAdvancedList').value;
-}
-
-function emptyAscension() {
-    if (document.getElementById('ascensionBuyerAmount').value == '') { document.getElementById('ascensionBuyerAmount').value = formatWholeNoComma(player.autobuyers[11]['amount']); }
+    })
 }
 
 function updateAscBuyer() {
-    if (document.getElementById('ascensionBuyerAmount').value != '') {
-        try {
-            player.autobuyers[11]['amount'] = new Decimal(document.getElementById('ascensionBuyerAmount').value);
-            if (document.getElementById('ascensionErr').style.display == '') { document.getElementById('ascensionErr').style.display = 'none' }
+    Vue.nextTick(function() {
+        if (app.$children[9].$children[10].$children[2].ascAmount != '') {
+            try {
+                player.autobuyers[11]['amount'] = new Decimal(app.$children[9].$children[10].$children[2].ascAmount);
+                app.$children[9].$children[10].$children[2].ascError = false;
+            }
+            catch(err) {
+                app.$children[9].$children[10].$children[2].ascError = true;
+            }
         }
-        catch(err) {
-            document.getElementById('ascensionErr').style.display = '';
-            document.getElementById('ascensionErrValue').innerHTML = formatWholeNoComma(player.autobuyers[11]['amount']);
-        }
-    }
+    })
 }
 
 function updateMaxPrestige() {
-    if (document.getElementById('maxPrestige').value != '') {
-        try {
-            player.autobuyers[10]['max'] = new Decimal(document.getElementById('maxPrestige').value);
-            if (document.getElementById('prestigeErr').style.display == '') { document.getElementById('prestigeErr').style.display = 'none' }
+    Vue.nextTick(function() {
+        if (app.$children[9].$children[9].$children[2].prestAmount != '') {
+            try {
+                player.autobuyers[10]['max'] = new Decimal(app.$children[9].$children[9].$children[2].prestAmount);
+                app.$children[9].$children[9].$children[2].prestError = false;
+            }
+            catch(err) {
+                app.$children[9].$children[9].$children[2].prestError = true;
+            }
         }
-        catch(err) {
-            document.getElementById('prestigeErr').style.display = '';
-            document.getElementById('prestigeErrValue').innerHTML = formatWholeNoComma(player.autobuyers[10]['max']);
-        }
-    }
+    })
 }
 
-function updateAutobuyersDisplay() {
+/*function updateAutobuyersDisplay() {
     for (var i=1; i<9; i++) {
         document.getElementById(player.autobuyers.priority[i-1].toString() + (i).toString()).selected = true;
         var unitName = DATA.u[i].single.replace(' ', '');
@@ -138,20 +128,20 @@ function updateAutobuyersDisplay() {
     for (let j=1; j<=NUM_TIMEDIMS; j++) {
         if (j<=4 || hasUpgrade(4, 23)) { document.getElementById('timeDim' + j.toString() + 'But').innerHTML = player.autobuyers[12][j] ? 'ON' : 'OFF' }
     }
-}
+}*/
 
 function toggleTimeUpgBuyer() {
     player.autobuyers['time']['on'] = !player.autobuyers['time']['on'];
 }
 
-function updateDimBuyer(tier, button) {
+function updateDimBuyer(tier) {
     player.autobuyers[12][tier] = !player.autobuyers[12][tier];
-    document.getElementById(button).innerHTML = player.autobuyers[12][tier] ? 'ON' : 'OFF'
+    //document.getElementById(button).innerHTML = player.autobuyers[12][tier] ? 'ON' : 'OFF'
 }
 
 function toggleAllTimeBuyers() {
     for (let i=1; i<=NUM_TIMEDIMS; i++) {
-        if (i<=4 || player.unlocks['timeTab']['timeDims2']) { updateDimBuyer(i, 'timeDim' + i.toString() + 'But'); }
+        if (i<=4 || player.unlocks['timeDims2']) { updateDimBuyer(i); }
     }
 }
 
@@ -227,7 +217,7 @@ function closeConfirmationsPopup() {
 
 function openDisplayPopup() {   
     document.getElementById('displayPopup').style.display = 'block';
-    dragElement(document.getElementById('displayPopup'));
+    //dragElement(document.getElementById('displayPopup'));
 }
 
 function closeDisplayPopup() {
@@ -264,28 +254,28 @@ function cycleSubtabs() {
     if (tabName === null) {return}
     switch (tabName) {
         case 'unitsTab':
-            if (player.unlocks['unitsTab']['autobuyers']) {
+            if (player.unlocks['autobuyers']) {
                 if (isActiveTab('autobuyersSubTab')) { showUnitSubTab('unitsSubTab', 'unitsSubTabBut', 'unitsTabBut') }
                 else { showUnitSubTab('autobuyersSubTab', 'autobuyersSubTabBut', 'unitsTabBut') }
             }
             break;
         case 'buildingsTab':
-            if (player.unlocks['buildingsTab']['construction']) {
+            if (player.unlocks['construction']) {
                 if (isActiveTab('constructionSubTab')) { showBuildingSubTab('buildingsSubTab', 'buildingsSubTabBut', 'buildingsTabBut') }
                 else { showBuildingSubTab('constructionSubTab', 'constructionSubTabBut', 'buildingsTabBut') }
             }
             break;
         case 'timeTab':
-            if (player.unlocks['timeTab']['timeUpgrades']) {
+            if (player.unlocks['timeUpgrades']) {
                 if (isActiveTab('timeUpgSubTab')) { showTimeSubTab('timeDimSubTab', 'timeDimSubTabBut', 'timeTabBut') }
                 else { showTimeSubTab('timeUpgSubTab', 'timeUpgSubTabBut', 'timeTabBut') }
             }
             break;
         case 'galaxyTab':
-            if (player.unlocks['galaxyTab']['arkTab']) {
+            if (player.unlocks['ark']) {
                 if (isActiveTab('galaxiesSubTab')) { showGalaxySubTab('researchSubTab', 'researchSubTabBut', 'galaxyTabBut') }
                 else if (isActiveTab('researchSubTab')) {
-                    if (player.unlocks['galaxyTab']['infiniteResearch']) {
+                    if (player.unlocks['infResearch']) {
                         showGalaxySubTab('infResearchSubTab', 'infResearchSubTabBut', 'galaxyTabBut')
                     } else { showGalaxySubTab('arkSubTab', 'arkSubTabBut', 'galaxyTabBut') }
                 }
@@ -365,35 +355,53 @@ function showResponsive() {
 }*/
 
 function showGalaxy(num) {
-    player.activeGalaxies[0] = '1';
     player.activeGalaxies[1] = num;
-    app.$children[24].num = '1';
-    app.$children[24].first = num;
+    updateGalaxyDisplayProps();
 }
 
 function showGalaxies(num1, num2) {
-    player.activeGalaxies[0] = '2';
     player.activeGalaxies[1] = num1;
     player.activeGalaxies[2] = num2;
-    app.$children[24].num = '2';
-    app.$children[24].first = num1;
-    app.$children[24].second = num2;
+    updateGalaxyDisplayProps();
 }
 
 function changeGalaxiesDisplayed() {
     Vue.nextTick(function() {
         player.activeGalaxies[0] = app.galSelected;
-        player.activeGalaxies[1] = '1';
-        player.activeGalaxies[2] = '2';
-        app.$children[24].num = app.galSelected;
-        app.$children[24].first = '1';
-        app.$children[24].second = '2';
+        updateGalaxyDisplayProps();
     })
+}
+
+function updateGalaxyDisplayProps() {
+    if (player.activeGalaxies[0]=='4') {
+        app.$children[45].displayAll = true;
+        for (let i=1; i<=4; i++) {
+            app.$children[45].displaySingles[i-1] = true;
+        }
+        return;
+    }
+    else {
+        if (player.activeGalaxies[0]=='2') {
+            app.$children[45].displayAll = true;
+            app.$children[45].displayAll = false;
+            for (let i=1; i<=4; i++) {
+                if (player.activeGalaxies[1]==i.toString() || player.activeGalaxies[2]==i.toString()) { app.$children[45].displaySingles[i-1] = true; }
+                else { app.$children[45].displaySingles[i-1] = false; }
+            }
+        } else {
+            app.$children[45].displayAll = true;
+            app.$children[45].displayAll = false;
+            for (let i=1; i<=4; i++) {
+                if (player.activeGalaxies[1]==i.toString()) { app.$children[45].displaySingles[i-1] = true; }
+                else { app.$children[45].displaySingles[i-1] = false; }
+            }
+        }
+    }
 }
 
 function showMilestones() {
     document.getElementById('milestonesPopup').style.display = 'block';
-    dragElement(document.getElementById('milestonesPopup'));
+    //dragElement(document.getElementById('milestonesPopup'));
 }
 
 function hideMilestones() {
@@ -504,17 +512,25 @@ function galaxyTextSingulizer(amt) {
     else { return 'galaxies'; }
 }
 
-//help text generators + related
-
-function checkUnlocked(tab, unlock) {
-    return player.unlocks[tab][unlock];
+function showPopup(type, text, ms) {
+    timedPopups.push({className: type, popupText: text, time: ms});
 }
+
+function showNormalPopup(pid) {
+    app.$children[pid].isActivePop = true;
+}
+
+function closeNormalPopup(pid) {
+    app.$children[pid].isActivePop = false;
+}
+
+//help text generators + related
 
 function generateHelpText(tab) {
     var hText = HELP_TEXTS[tab]['mainTab'];
 
     for (k in HELP_TEXTS[tab]) {
-        if (k != 'mainTab' && HELP_TEXTS[tab][k] != '' && checkUnlocked(tab, k)) { hText = hText + HELP_TEXTS[tab][k] + '<br>'; }
+        if (k != 'mainTab' && HELP_TEXTS[tab][k] != '' && player.unlocks[k]) { hText = hText + HELP_TEXTS[tab][k] + '<br>'; }
     }
     return hText;
 }

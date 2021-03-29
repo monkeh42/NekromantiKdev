@@ -2,6 +2,135 @@ var app;
 
 function loadVue() {
 
+	
+
+	Vue.component('buyer-amount', {
+		props: ['id'],
+		data() {
+			return {
+				prestAmount: player.autobuyers[10].max,
+				prestError: false,
+				ascAmount: player.autobuyers[11].amount,
+				ascError: false
+			}
+		},
+		template: `
+		<div v-if="id==32">
+			<div class="buyerOptionsContainer priorityContainer">
+				<label for="maxPrestige">{{ DATA.ab.multi.dataLists[id][4].htm() }}</label><input v-model="prestAmount" v-on:change="updateMaxPrestige()" type="text" id="maxPrestige" name="maxPrestige" class="buyerTextP">
+			</div>
+			<span>(set to 0 for unlimited)</span><br>
+			<span v-if="prestError">invalid input. value set to last valid input: {{ formatWholeNoComma(player.autobuyers[10]['max']) }}</span>
+		</div>
+		<div v-else-if="id==33">
+			<div class="buyerOptionsContainer priorityContainer">
+				<label for="ascensionBuyerAmount">{{ DATA.ab.multi.dataLists[id][4].htm() }}</label><input v-model="ascAmount" v-on:change="updateAscBuyer()" type="text" id="ascensionBuyerAmount" name="ascensionBuyerAmount" class="buyerTextP">
+			</div>
+			<span v-if="ascError">invalid input. value set to last valid input: {{ formatWholeNoComma(player.autobuyers[11]['amount']) }}</span>
+		</div>
+		`
+	})
+
+	Vue.component('sacrifice-buyer-options', {
+		props: [],
+		data() {
+			return {
+				sacAmount: player.autobuyers[9].amount,
+				sacType: player.autobuyers[9].type,
+				sacError: false
+			}
+		},
+		template: `
+		<div>
+			<span style="position: relative; right: 62px;"><label for="sacrificeBuyerAdvancedList">condition:</label></span>
+			<div id="sacrificeBuyerAmountsContainer" class="buyerOptionsContainerHalf">
+				<div class="buyerAmountTextContainer">
+					<input v-model="sacAmount" v-on:change="updateSacBuyer()" type="text" id="sacrificeBuyerAmount" name="sacrificeBuyerConditions" class="buyerText"><br>
+					<label id="sacrificeBuyerAmountLabel" for="sacrificeBuyerAmount" style="font-size: 10pt;">{{ DATA.ab[9].labelTexts[sacType] }}</label>
+				</div>
+			</div>
+			<div id="sacrificeBuyerAdvancedContainer" class="buyerOptionsContainerHalf">
+				<div class="buyerAmountTextContainer">
+					<select v-model="sacType" v-on:change="updateSacBuyer()" id="sacrificeBuyerAdvancedList" name="sacrificeBuyerAdvancedList" class="buyerList" size="3" :disabled="!player.unlocks['advancedBuyer']">
+						<option id="atx" value="atx">at x crystals</option>
+						<option id="xtimes" value="xtimes">at x times last</option>
+						<option id="afterx" value="afterx">after x seconds</option>
+					</select>
+				</div>
+				<div v-if="!player.unlocks['advancedBuyer']" class="buyerAdvancedContainer"></div>
+			</div>
+			<span v-if="sacError">invalid input. value set to last valid input: {{ formatWholeNoComma(player.autobuyers[9]['amount']) }}</span>
+		</div>
+		`
+	})
+
+	Vue.component('unit-buyer-priority', {
+		props: ['id'],
+		data() {
+			return {
+				priSelected: (player.autobuyers.priority.indexOf(this.id.toString())+1).toString()
+			}
+		},
+		template: `
+		<div class="buyerOptionsContainer priorityContainer">
+			<label :for="DATA.ab[id].prefixText + 'Priority'">Priority:</label>
+			<select v-model="priSelected" v-on:change="updateBuyerOrder(id)" :id="DATA.ab[id].prefixText + 'Priority'" class="buyerDropdown">
+				<option :id="(id*10+1).toString()" class="priorityOptions" value="1">1</option>
+				<option :id="(id*10+2).toString()" class="priorityOptions" value="2">2</option>
+				<option :id="(id*10+3).toString()" class="priorityOptions" value="3">3</option>
+				<option :id="(id*10+4).toString()" class="priorityOptions" value="4">4</option>
+				<option :id="(id*10+5).toString()" class="priorityOptions" value="5">5</option>
+				<option :id="(id*10+6).toString()" class="priorityOptions" value="6">6</option>
+				<option :id="(id*10+7).toString()" class="priorityOptions" value="7">7</option>
+				<option :id="(id*10+8).toString()" class="priorityOptions" value="8">8</option>
+			</select>
+		</div>
+		`
+	})
+
+	//data = buyer id, method = 'on', 'fast', or 'max'
+	Vue.component('unit-buyer-button', {
+		props: ['data', 'method'],
+		template: `
+		<div v-if="method=='on'">
+			<div class="buyerOptionsContainer">
+				<label :for="DATA.ab[data].prefixText + 'EnabledBut'">on/off:</label><!-- --><button v-on:click="updateSingleBuyer(data, 'on')" :id="DATA.ab[data].prefixText + 'EnabledBut'" class="buyerEnabledBut" v-html="player.autobuyers[data]['on'] ? 'ON' : 'OFF'"></button><!-- -->	
+			</div>
+		</div>
+		<div v-else-if="method=='fast'">
+			<div class="buyerOptionsContainer">
+				<label :for="DATA.ab[data].prefixText + 'SpeedBut'">speed:</label><!-- --><button onclick="updateSingleBuyer(data, 'fast')" :id="DATA.ab[data].prefixText + 'SpeedBut'" class="buyerSpeedBut" v-html="player.autobuyers[data]['fast'] ? 'FAST' : 'SLOW'" :disabled="!player.unlocks['fastBuyers']"></button><!-- -->
+				<div v-if="!player.unlocks['fastBuyers']" class="buyerSpeedLock"></div>
+			</div>
+		</div>
+		<div v-else-if="method=='max'">
+			<div class="buyerOptionsContainer">
+				<label :for="DATA.ab[data].prefixText + 'BulkBut'">amount:</label><!-- --><button onclick="updateSingleBuyer(data, 'fast')" :id="DATA.ab[data].prefixText + 'BulkBut'" class="buyerBulkBut" v-html="player.autobuyers[data]['bulk'] ? 'MAX' : 'SINGLE'" :disabled="!player.unlocks['bulkBuyers']"></button><!-- -->
+				<div v-if="!player.unlocks['bulkBuyers']" class="buyerBulkLock"></div>
+			</div>
+		</div>
+		`
+	})
+
+	Vue.component('dim-buyer-buttons', {
+		props: ['data'],
+		template: `
+		<div v-if="data==0">
+			<button v-on:click="toggleAllTimeBuyers()" name="timeDimAllBut" id="timeDimAllBut" class="timeDimBuyerAllEnabledBut">TOGGLE ALL</button>
+		</div>
+		<div v-else>
+			<div class="dimBuyerButtonRow">
+				<div class="dimBuyerButtonCell">
+					<label :for="'timeDim' + data + 'But'">{{ DATA.ab[12][data] }}</label><br><button v-on:click="updateDimBuyer(data)" :name="'timeDim' + data + 'But'" :id="'timeDim' + data + 'But'" class="timeDimBuyerEnabledBut" v-html="player.autobuyers[12][data] ? 'ON' : 'OFF'"></button>
+				</div>
+				<div v-if="player.unlocks['timeDims2']" class="dimBuyerButtonCell">
+					<label :for="'timeDim' + (data+4) + 'But'">{{ DATA.ab[12][data+4] }}</label><br><button v-on:click="updateDimBuyer(data+4)" :name="'timeDim' + (data+4) + 'But'" :id="'timeDim' + (data+4) + 'But'" class="timeDimBuyerEnabledBut" v-html="player.autobuyers[12][data+4] ? 'ON' : 'OFF'"></button>
+				</div>
+			</div>
+		</div>
+		`
+	})
+
 	Vue.component('tab-button', {
 		props: ['data', 'active'],
 		template: `
@@ -123,9 +252,9 @@ function loadVue() {
 	Vue.component('multi-boxes', {
 		props: ['data'],
 		template: `
-		<div class="researchesTable">
-			<div v-for="row in DATA[data].multi.rows" class="researchesRow">
-				<div v-for="col in DATA[data].multi.cols"><div class="researchCell">
+		<div v-bind:class="{ [DATA[data].multi.idPre + 'Table']: true }">
+			<div v-for="row in DATA[data].multi.rows" v-bind:class="{ [DATA[data].multi.idPre + 'Row']: true }">
+				<div v-for="col in DATA[data].multi.cols"><div v-if="DATA[data].multi.boxUnlocked(row*10+col)" v-bind:class="{ [DATA[data].multi.idPre + 'Cell']: true }">
 					<multi-box :data="data" :id="row*10+col"></multi-box>
 				</div></div>
 			</div>
@@ -138,7 +267,12 @@ function loadVue() {
 		template: `
 		<div v-bind:class="{ [DATA[data].multi.klass()]: true }">
 			<div v-for="i in DATA[data].multi.numElsByBox(id)">
-				<component v-if="DATA[data].multi.boxUnlocked(id)" :is="DATA[data].multi.dataLists[id][i].tag" v-bind:class="{ [DATA[data].multi.dataLists[id][i].klass()]: true }" 
+				<component v-if="(DATA[data].multi.dataLists[id][i].tag=='dim-buyer-buttons')&&DATA[data].multi.showEl(id, i)" :is="DATA[data].multi.dataLists[id][i].tag" :data="i-2"></component>
+				<component v-else-if="(DATA[data].multi.dataLists[id][i].tag=='sacrifice-buyer-options')&&DATA[data].multi.showEl(id, i)" :is="DATA[data].multi.dataLists[id][i].tag"></component>
+				<component v-else-if="(DATA[data].multi.dataLists[id][i].tag=='buyer-amount')&&DATA[data].multi.showEl(id, i)" :is="DATA[data].multi.dataLists[id][i].tag" :id="id"></component>
+				<component v-else-if="(DATA[data].multi.dataLists[id][i].tag=='unit-buyer-button')&&DATA[data].multi.showEl(id, i)" :is="DATA[data].multi.dataLists[id][i].tag" :data="DATA[data].multi.dataLists[id][i].boxID" :method="(DATA[data].multi.dataLists[id][i].htm())"></component>
+				<component v-else-if="(DATA[data].multi.dataLists[id][i].tag=='unit-buyer-priority')&&DATA[data].multi.showEl(id, i)" :is="DATA[data].multi.dataLists[id][i].tag" :id="DATA[data].multi.dataLists[id][i].boxID"></component>
+				<component v-else-if="DATA[data].multi.showEl(id, i)" :is="DATA[data].multi.dataLists[id][i].tag" v-bind:class="{ [DATA[data].multi.dataLists[id][i].klass()]: true }" 
 							v-bind:style="(DATA[data].multi.dataLists[id][i].style !== undefined) ? DATA[data].multi.dataLists[id][i].style() : {}" 
 							v-html="DATA[data].multi.dataLists[id][i].htm()" 
 							v-on:click="(DATA[data].multi.dataLists[id][i].click !== undefined) ? DATA[data].multi.dataLists[id][i].click().handle(DATA[data].multi.dataLists[id][i].click().arg) : function() {}">
@@ -297,14 +431,18 @@ function loadVue() {
 		props: [],
 		data() {
 			return {
-				num: player.activeGalaxies[0],
-				first: player.activeGalaxies[1],
-				second: player.activeGalaxies[2],
+				displayAll: (player.activeGalaxies[0]=='4'),
+				displaySingles: [
+					(player.activeGalaxies[0]=='4'||player.activeGalaxies[1]=='1'||(player.activeGalaxies[0]=='2' && player.activeGalaxies[2]=='1')),
+					(player.activeGalaxies[0]=='4'||player.activeGalaxies[1]=='2'||(player.activeGalaxies[0]=='2' && player.activeGalaxies[2]=='2')),
+					(player.activeGalaxies[0]=='4'||player.activeGalaxies[1]=='3'||(player.activeGalaxies[0]=='2' && player.activeGalaxies[2]=='3')),
+					(player.activeGalaxies[0]=='4'||player.activeGalaxies[1]=='4'||(player.activeGalaxies[0]=='2' && player.activeGalaxies[2]=='4'))
+				],
 			}
 		},
 		template: `
-		<div v-bind:class="{galaxiesTable4Cont: (num=='4'), galaxiesTableCont: (num!='4')}">
-			<div v-for="gal in 4"><div v-if="(num=='4')||(first==gal.toString())||((second==gal.toString())&&(num=='2'))" class="galaxyCell">
+		<div v-bind:class="{ galaxiesTable4Cont: displayAll, galaxiesTableCont: !displayAll }">
+			<div v-for="gal in 4"><div v-if="displaySingles[gal-1]" class="galaxyCell">
 				<galaxy-table :data="'g'+gal.toString()"></galaxy-table>
 			</div></div>
 		</div>
@@ -359,7 +497,7 @@ function loadVue() {
 			<div v-for="row in DATA['o'].rows" class="optRow">
 				<div v-for="col in DATA['o'].cols"><div class="optButCell">
 					<opt-button :data="10*row+col"></opt-button>
-				</div><div>
+				</div></div>
 			</div>
 		</div>
 		`
@@ -379,16 +517,25 @@ function loadVue() {
 				type: null,
 				default: null,
 			},
+			cancl: {
+				type: Boolean,
+				default: false,
+			},
+			addlclass: {
+				type: String,
+				default: '',
+			},
 		},
 		methods: {
 			call(f, a) {
 				if (a === null) { window[f](); }
 				else if (Array.isArray(a)) { window[f](a[0], a[1]); }
 				else { window[f](a); }
-			}
+			},
+			canClick() { return this.cancl; }
 		},
 		template: `
-		<button v-on:click="call(fname, args)" v-bind:class="{ [DATA[data].layerDisplay.layerButtonClass]: true }" v-bind:style="[(height==0) ? {'width': width+'px'} : {'width': width+'px', 'height': height+'px'}]" v-html="text"></button>
+		<button v-on:click="call(fname, args)" v-bind:class="{ [DATA[data].layerDisplay.layerButtonClass]: true, [addlclass]: (addlclass!=''), can: canClick(), cant: !canClick() }" v-bind:style="[(height==0) ? {'width': width+'px'} : {'width': width+'px', 'height': height+'px'}]" v-html="text"></button>
 		`
 	})
 
@@ -693,7 +840,25 @@ function loadVue() {
 		`
 	})
 
-    app = new Vue({
+	Vue.component('header-popup', {
+		props: [],
+		data() {
+			return {
+				isActivePop: false
+			}
+		},
+		template: `
+		<div v-if="isActivePop" class="dPopup">
+			<div class="headerHeaderContainer">
+				<div class="headerPopupHeader">Header Display</div>
+				<div class="headerPopupHeaderX"><a href="javascript:closeNormalPopup(71)">X</a></div>
+			</div>
+			<display-toggles></display-toggles>
+		</div>
+		`
+	})
+
+	app = new Vue({
 		el: "#app",
 		data: {
 			player,
@@ -718,6 +883,8 @@ function loadVue() {
 			hasEUpgrade,
 			hasMilestone,
 			hasAchievement,
+			showNormalPopup,
+			closeNormalPopup,
 			HOTKEYS,
             DATA,
             GAME_DATA,
@@ -733,6 +900,9 @@ function loadVue() {
 				'header': false,
 			},
 			timedPopups,
+			activePopups,
+			showNormalPopup,
+			closeNormalPopup,
 			getCorpsesPerSecond,
 			getCorpseMultFromUnits,
 			getGalaxiesBonus,
@@ -762,8 +932,9 @@ function loadVue() {
 			generateLastSac,
 			generateSacAvgs,
 			generateSacString,
-			isOffline: false,
 			galSelected: player.activeGalaxies[0],
+			isOffline: false,
+			allBuyersRadio: 'all',
 			respecNextGal: false,
 			respecNextSac: false,
 			dontRespec: player.dontResetSlider,
@@ -773,4 +944,6 @@ function loadVue() {
 			showHelp: false,
 		},
 	})
+
+    
 }
