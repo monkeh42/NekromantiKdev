@@ -877,11 +877,11 @@ function loadVue() {
 		},
 		template: `
 		<div id="popupContainer">
-			<transition name="fade">
-				<div v-for="popup, index in timedPopups">
+			<transition-group name="fade">
+				<div v-for="popup, index in timedPopups" v-bind:key="'p'+index">
 					<div v-bind:class="popup.className" v-html="popup.popupText"></div>
 				</div>
-			</transition>
+			</transition-group>
 		</div>
 		`
 	})
