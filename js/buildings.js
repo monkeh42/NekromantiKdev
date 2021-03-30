@@ -1158,7 +1158,7 @@ BUILDS_DATA[4] = {
             id: 13,
             tier: 4,
             title: 'Ultra-Solar',
-            desc: function() { return `ALL upgrade formulas based on log(x) are now based on ln(x) (<span style="font-weight: 800;">Solar Flares</span> still appplies to building upgrades).`; },
+            desc: function() { return `ALL upgrade formulas based on log(x) are now based on ln(x) (<span style="font-weight: 800;">Solar Flares</span> still applies to building upgrades).`; },
             cost: function() { return new Decimal(100) },
             resource: 'black holes',
             isBought: function() {

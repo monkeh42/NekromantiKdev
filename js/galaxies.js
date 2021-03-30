@@ -671,7 +671,6 @@ function galaxyPrestigeReset(respec=false, startingResearch=false) {
     
     if (!hasAchievement(42)) {
         copyData(player.autobuyers, DATA.sp.autobuyers);
-        updateAutobuyersDisplay();
     }
 
     player.pastAscRuns.lastRun.galaxyGain = calculateGalaxyGain();
