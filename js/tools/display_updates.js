@@ -183,37 +183,35 @@ function subTabButtonClick(layer, id) {
 }
 
 function cycleSubtabs() {
-    let tabName = getActiveTab();
-    if (tabName === null) {return}
-    switch (tabName) {
+    switch (player.tab) {
         case 'unitsTab':
             if (player.unlocks['autobuyers']) {
-                if (isActiveTab('autobuyersSubTab')) { showUnitSubTab('unitsSubTab', 'unitsSubTabBut', 'unitsTabBut') }
-                else { showUnitSubTab('autobuyersSubTab', 'autobuyersSubTabBut', 'unitsTabBut') }
+                if (player.subTabs['u']=='autobuyersSubTab') { player.subTabs['u'] = 'unitsSubTab'; }
+                else { player.subTabs['u'] = 'autobuyersSubTab'; }
             }
             break;
         case 'buildingsTab':
             if (player.unlocks['construction']) {
-                if (isActiveTab('constructionSubTab')) { showBuildingSubTab('buildingsSubTab', 'buildingsSubTabBut', 'buildingsTabBut') }
-                else { showBuildingSubTab('constructionSubTab', 'constructionSubTabBut', 'buildingsTabBut') }
+                if (player.subTabs['b']=='constructionSubTab') { player.subTabs['b'] = 'buildingsSubTab'; }
+                else { player.subTabs['b'] = 'constructionSubTab'; }
             }
             break;
         case 'timeTab':
             if (player.unlocks['timeUpgrades']) {
-                if (isActiveTab('timeUpgSubTab')) { showTimeSubTab('timeDimSubTab', 'timeDimSubTabBut', 'timeTabBut') }
-                else { showTimeSubTab('timeUpgSubTab', 'timeUpgSubTabBut', 'timeTabBut') }
+                if (player.subTabs['t']=='timeUpgSubTab') { player.subTabs['t'] = 'timeDimSubTab'; }
+                else { player.subTabs['t'] = 'timeUpgSubTab'; }
             }
             break;
         case 'galaxyTab':
             if (player.unlocks['ark']) {
-                if (isActiveTab('galaxiesSubTab')) { showGalaxySubTab('researchSubTab', 'researchSubTabBut', 'galaxyTabBut') }
-                else if (isActiveTab('researchSubTab')) {
+                if (player.subTabs['g']=='galaxiesSubTab') { player.subTabs['g'] = 'researchSubTab'; }
+                else if (player.subTabs['g']=='researchSubTab') {
                     if (player.unlocks['infResearch']) {
-                        showGalaxySubTab('infResearchSubTab', 'infResearchSubTabBut', 'galaxyTabBut')
-                    } else { showGalaxySubTab('arkSubTab', 'arkSubTabBut', 'galaxyTabBut') }
+                        player.subTabs['g'] = 'infResearchSubTab';
+                    } else { player.subTabs['g'] = 'arkSubTab'; }
                 }
-                else if (isActiveTab('infResearchSubTab')) { showGalaxySubTab('arkSubTab', 'arkSubTabBut', 'galaxyTabBut') }
-                else { showGalaxySubTab('galaxiesSubTab', 'galaxiesSubTabBut', 'galaxyTabBut') }
+                else if (player.subTabs['g']=='infResearchSubTab') { player.subTabs['g'] = 'arkSubTab'; }
+                else { player.subTabs['g'] = 'galaxiesSubTab'; }
             }
             break;
     }

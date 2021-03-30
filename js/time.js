@@ -82,23 +82,25 @@ function isAutoSacTriggered() {
     }
 }
 
-function getTimeDimProdPerSecond(tier) {
+function getTimeDimProdPerSecond(tier, disp=false) {
     if (tier > NUM_TIMEDIMS) { return new Decimal(0); }
     var p = player.timeDims[tier].amount.times(DATA.td[tier].mult());
     if (player.isInResearch) { p = p.pow(0.9); }
-    return p;
+    if (disp && player.displayRealTime) { return p.times(getRealTimeDimMultiplier()); }
+    else { return p; }
 }
 
-function getEssenceProdPerSecond() {
+function getEssenceProdPerSecond(disp=false) {
     var p = player.timeDims[1].amount.times(DATA.td[1].mult());
     if (hasUpgrade(2, 22)) { p = p.times(getUpgEffect(2, 22)); }
     if (hasGUpgrade(4, 11)) { p = p.times(getGUpgEffect(4, 11)); }
     if (player.isInResearch) { p = p.pow(0.9); }
-    return p;
+    if (disp && player.displayRealTime) { return p.times(getRealTimeDimMultiplier()); }
+    else { return p; }
 }
 
-function getEssenceProdAfterSlider(t) {
-    return (t=='true' ? getEssenceProdPerSecond().times(player.truePercent/100) : getEssenceProdPerSecond().times(player.antiPercent/100))
+function getEssenceProdAfterSlider(t, disp=false) {
+    return (t=='true' ? getEssenceProdPerSecond(disp).times(player.truePercent/100) : getEssenceProdPerSecond(disp).times(player.antiPercent/100))
 }
 
 function getTrueTimeBuff() {
@@ -229,9 +231,6 @@ function respecTimeKey() {
         }
 
         player.timeLocked = false;
-        //document.getElementById('timeTabBut').classList.add('timeUnlockedNotify')
-        //document.getElementById('timeTabButMid').classList.add('timeUnlockedNotify')
-        //document.getElementById('timeDimSubTabBut').classList.add('timeUnlockedNotify')
         if (canTimePrestige()) { timePrestigeNoConfirm(); }
         else { timePrestigeReset(); }
     }
@@ -402,7 +401,7 @@ var TIME_DIMENSIONS = {
             if (hasTUpgrade(31)) { m = m.times(getTUpgEffect(31)); }
             return m;
         },
-        gainPercent: function() { return getTimeDimProdPerSecond(this.tier+1).div(this.amount()).times(100); },
+        gainPercent: function() { return getTimeDimProdPerSecond(this.tier+1, true).div(this.amount()).times(100); },
         bought: function() { return player.timeDims[this.tier].bought; },
         amount: function() { return player.timeDims[this.tier].amount; },
         tier: 1,
@@ -437,7 +436,7 @@ var TIME_DIMENSIONS = {
             if (hasTUpgrade(31)) { m = m.times(getTUpgEffect(31)); }
             return m;
         },
-        gainPercent: function() { return getTimeDimProdPerSecond(this.tier+1).div(this.amount()).times(100); },
+        gainPercent: function() { return getTimeDimProdPerSecond(this.tier+1, true).div(this.amount()).times(100); },
         bought: function() { return player.timeDims[this.tier].bought; },
         amount: function() { return player.timeDims[this.tier].amount; },
         tier: 2,
@@ -472,7 +471,7 @@ var TIME_DIMENSIONS = {
             if (hasTUpgrade(31)) { m = m.times(getTUpgEffect(31)); }
             return m;
         },
-        gainPercent: function() { return getTimeDimProdPerSecond(this.tier+1).div(this.amount()).times(100); },
+        gainPercent: function() { return getTimeDimProdPerSecond(this.tier+1, true).div(this.amount()).times(100); },
         bought: function() { return player.timeDims[this.tier].bought; },
         amount: function() { return player.timeDims[this.tier].amount; },
         tier: 3,
@@ -507,7 +506,7 @@ var TIME_DIMENSIONS = {
             if (hasTUpgrade(31)) { m = m.times(getTUpgEffect(31)); }
             return m;
         },
-        gainPercent: function() { return getTimeDimProdPerSecond(this.tier+1).div(this.amount()).times(100); },
+        gainPercent: function() { return getTimeDimProdPerSecond(this.tier+1, true).div(this.amount()).times(100); },
         bought: function() { return player.timeDims[this.tier].bought; },
         amount: function() { return player.timeDims[this.tier].amount; },
         tier: 4,
@@ -542,7 +541,7 @@ var TIME_DIMENSIONS = {
             if (hasTUpgrade(31)) { m = m.times(getTUpgEffect(31)); }
             return m;
         },
-        gainPercent: function() { return getTimeDimProdPerSecond(this.tier+1).div(this.amount()).times(100); },
+        gainPercent: function() { return getTimeDimProdPerSecond(this.tier+1, true).div(this.amount()).times(100); },
         bought: function() { return player.timeDims[this.tier].bought; },
         amount: function() { return player.timeDims[this.tier].amount; },
         tier: 5,
@@ -577,7 +576,7 @@ var TIME_DIMENSIONS = {
             if (hasTUpgrade(31)) { m = m.times(getTUpgEffect(31)); }
             return m;
         },
-        gainPercent: function() { return getTimeDimProdPerSecond(this.tier+1).div(this.amount()).times(100); },
+        gainPercent: function() { return getTimeDimProdPerSecond(this.tier+1, true).div(this.amount()).times(100); },
         bought: function() { return player.timeDims[this.tier].bought; },
         amount: function() { return player.timeDims[this.tier].amount; },
         tier: 6,
@@ -612,7 +611,7 @@ var TIME_DIMENSIONS = {
             if (hasTUpgrade(31)) { m = m.times(getTUpgEffect(31)); }
             return m;
         },
-        gainPercent: function() { return getTimeDimProdPerSecond(this.tier+1).div(this.amount()).times(100); },
+        gainPercent: function() { return getTimeDimProdPerSecond(this.tier+1, true).div(this.amount()).times(100); },
         bought: function() { return player.timeDims[this.tier].bought; },
         amount: function() { return player.timeDims[this.tier].amount; },
         tier: 7,
@@ -647,7 +646,7 @@ var TIME_DIMENSIONS = {
             if (hasTUpgrade(31)) { m = m.times(getTUpgEffect(31)); }
             return m;
         },
-        gainPercent: function() { return getTimeDimProdPerSecond(this.tier+1).div(this.amount()).times(100); },
+        gainPercent: function() { return getTimeDimProdPerSecond(this.tier+1, true).div(this.amount()).times(100); },
         bought: function() { return player.timeDims[this.tier].bought; },
         amount: function() { return player.timeDims[this.tier].amount; },
         tier: 8,

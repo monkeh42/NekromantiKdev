@@ -2,8 +2,8 @@ var START_PLAYER = {
     layerDisplay: {
         numClass: 'defNum',
     },
-    corpses: new Decimal(110),
-    //corpsesAch13: new Decimal(10),
+    corpses: new Decimal(0),
+    corpsesAch13: new Decimal(10),
     corpsesAch41: new Decimal(25000),
     units: {
         1: {
@@ -792,14 +792,13 @@ var START_PLAYER = {
     displayRealTime: false,
     tab: 'unitsTab',
     subTabs: { 'u': 'unitsSubTab', 'b': 'buildingsSubTab', 't': 'timeDimSubTab', 'g': 'galaxiesSubTab', 's': 'statSubTab' },
-    activeTabs: ['unitsTab', 'unitsSubTab', 'buildingsSubTab', 'timeDimSubTab', 'galaxiesSubTab', 'statSubTab'],
     activeGalaxies: ['4', '1', '2'],
     hotkeysOn: true,
     dontResetSlider: false,
     favGalaxies: [[], [], []],
     favGalNames: ['Slot 1', 'Slot 2', 'Slot 3'],
     help: false,
-    version: 'v1.1.0_d.3',
+    version: 'v1.1.0_d.4',
 }
 
 var STAT_KEYS = {
@@ -2738,125 +2737,139 @@ var UNLOCKS_DATA = {
 }
 
 var HOTKEYS = {
-    'm': {
+    '1': {
+        key: 'm',
         desc: 'Max All Units',
         onPress: function() {
             buyMaxAll();
         }
     },
-    'a': {
+    '2': {
+        key: 'a',
         desc: 'Toggle Astral Enslavement',
         onPress: function() {
             toggleAstral();
         }
     },
-    'p': {
+    '3': {
+        key: 'p',
         desc: 'World Prestige',
         onPress: function() {
             spacePrestigeKey();
         }
     },
-    's': {
+    '4': {
+        key: 's',
         desc: 'Sacrifice',
         onPress: function() {
             timePrestigeKey();
         }
     },
-    't': {
+    '5': {
+        key: 't',
         desc: 'Respec Time Production',
         onPress: function() {
             respecTimeKey();
         }
     },
-    'n': {
+    '6': {
+        key: 'n',
         desc: 'Ascension',
         onPress: function() {
             galaxyPrestigeKey();
         }
     },
-    'g': {
+    '7': {
+        key: 'g',
         desc: 'Respec Galaxies',
         onPress: function() {
             respecGalaxiesKey();
         }
     },
-    'q': {
+    '8': {
+        key: 'q',
         desc: 'Units Tab',
         onPress: function() {
-            showTab('unitsTab', false, 'unitsTabBut');
+            player.tab = 'unitsTab';
         }
     },
-    'w': {
+    '9': {
+        key: 'w',
         desc: 'Buildings Tab',
         onPress: function() {
-            if (player.unlocks['buildings']) { showTab('buildingsTab', false, 'buildingsTabBut'); }
+            if (player.unlocks['buildings']) { player.tab = 'buildingsTab'; }
         }
     },
-    'e': {
+    '10': {
+        key: 'e',
         desc: 'Time Tab',
         onPress: function() {
-            if (player.unlocks['time']) { showTab('timeTab', false, 'timeTabBut'); }
+            if (player.unlocks['time']) { player.tab = 'timeTab'; }
         }
     },
-    'r': {
+    '11': {
+        key: 'r',
         desc: 'Galaxies Tab',
         onPress: function() {
-            if (player.unlocks['galaxies']) { showTab('galaxyTab', false, 'galaxyTabBut'); }
+            if (player.unlocks['galaxies']) { player.tab = 'galaxyTab'; }
         }
     },
-    'f': {
+    '12': {
+        key: 'f',
         desc: 'Cycle Subtabs',
         onPress: function() {
             cycleSubtabs();
         }
     },
-    '1': {
-        desc: 'Buy One Zombie',
-        onPress: function(shiftPressed) {
-            shiftPressed ? buyMaxUnits(1) : buySingleUnit(1)
-        }
-    },
-    '2': {
-        desc: 'Buy One Abomination',
-        onPress: function(shiftPressed) {
-            shiftPressed ? buyMaxUnits(2) : buySingleUnit(2)
-        }
-    },
-    '3': {
-        desc: 'Buy One Skeleton Mage',
-        onPress: function(shiftPressed) {
-            shiftPressed ? buyMaxUnits(3) : buySingleUnit(3)
-        }
-    },
-    '4': {
-        desc: 'Buy One Banshee',
-        onPress: function(shiftPressed) {
-            shiftPressed ? buyMaxUnits(4) : buySingleUnit(4)
-        }
-    },
-    '5': {
-        desc: 'Buy One Lich',
-        onPress: function(shiftPressed) {
-            shiftPressed ? buyMaxUnits(5) : buySingleUnit(5)
-        }
-    },
-    '6': {
-        desc: 'Buy One Behemoth',
-        onPress: function(shiftPressed) {
-            shiftPressed ? buyMaxUnits(6) : buySingleUnit(6)
-        }
-    },
-    '7': {
-        desc: 'Buy One Ancient One',
-        onPress: function(shiftPressed) {
-            shiftPressed ? buyMaxUnits(7) : buySingleUnit(7)
-        }
-    },
-    '8': {
-        desc: 'Buy One Sun Eater',
-        onPress: function(shiftPressed) {
-            shiftPressed ? buyMaxUnits(8) : buySingleUnit(8)
-        }
+    units: {
+        '1': {
+            desc: 'Buy One Zombie',
+            onPress: function(shiftPressed) {
+                shiftPressed ? buyMaxUnits(1) : buySingleUnit(1)
+            }
+        },
+        '2': {
+            desc: 'Buy One Abomination',
+            onPress: function(shiftPressed) {
+                shiftPressed ? buyMaxUnits(2) : buySingleUnit(2)
+            }
+        },
+        '3': {
+            desc: 'Buy One Skeleton Mage',
+            onPress: function(shiftPressed) {
+                shiftPressed ? buyMaxUnits(3) : buySingleUnit(3)
+            }
+        },
+        '4': {
+            desc: 'Buy One Banshee',
+            onPress: function(shiftPressed) {
+                shiftPressed ? buyMaxUnits(4) : buySingleUnit(4)
+            }
+        },
+        '5': {
+            desc: 'Buy One Lich',
+            onPress: function(shiftPressed) {
+                shiftPressed ? buyMaxUnits(5) : buySingleUnit(5)
+            }
+        },
+        '6': {
+            desc: 'Buy One Behemoth',
+            onPress: function(shiftPressed) {
+                shiftPressed ? buyMaxUnits(6) : buySingleUnit(6)
+            }
+        },
+        '7': {
+            desc: 'Buy One Ancient One',
+            onPress: function(shiftPressed) {
+                shiftPressed ? buyMaxUnits(7) : buySingleUnit(7)
+            }
+        },
+        '8': {
+            desc: 'Buy One Sun Eater',
+            onPress: function(shiftPressed) {
+                shiftPressed ? buyMaxUnits(8) : buySingleUnit(8)
+            }
+        },
     },
 }
 
@@ -2881,8 +2894,8 @@ function fixResetBug() {
             player.nextSpaceReset = new Array(1+num, 8);
 
     }
-    START_PLAYER.corpses = new Decimal(110);
-    //START_PLAYER.corpsesAch13 = new Decimal(10);
+    START_PLAYER.corpses = new Decimal(0);
+    START_PLAYER.corpsesAch13 = new Decimal(10);
     START_PLAYER.corpsesAch41 = new Decimal(25000);
     copyData(START_PLAYER.units, {
         1: {
@@ -3657,13 +3670,13 @@ function fixResetBug() {
 
     START_PLAYER.tooltipsEnabled = false;
     START_PLAYER.displayRealTime = false;
-    START_PLAYER.activeTabs = new Array('unitsTab', 'unitsSubTab', 'buildingsSubTab', 'timeDimSubTab', 'galaxiesSubTab', 'statSubTab');
+    START_PLAYER.subTabs = { 'u': 'unitsSubTab', 'b': 'buildingsSubTab', 't': 'timeDimSubTab', 'g': 'galaxiesSubTab', 's': 'statSubTab' };
     START_PLAYER.activeGalaxies = new Array('4', '1', '2');
     START_PLAYER.hotkeysOn = true;
     START_PLAYER.dontResetSlider = false;
     START_PLAYER.favGalaxies = [[], [], []];
     START_PLAYER.favGalNames = ['Slot 1', 'Slot 2', 'Slot 3'];
-    START_PLAYER.version = 'v1.1.0_d.3';
+    START_PLAYER.version = 'v1.1.0_d.4';
 
     DATA.sp = {};
     copyData(DATA.sp, START_PLAYER);

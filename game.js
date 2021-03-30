@@ -2,7 +2,7 @@
 
 const GAME_DATA = {
     author: 'monkeh42',
-    version: 'v1.1.0_d.3',
+    version: 'v1.1.0_d.4',
 }
 
 const NUM_UNITS = 8;
@@ -24,8 +24,6 @@ const TIERS = {
     8: 'sun eater',
 }
 
-//var app.devSpeed = 1;
-
 var mainLoop;
 
 var popupShownTime;
@@ -38,8 +36,6 @@ var asPopupShownTime;
 
 var hidden, visibilityChange, isHidden;
 
-//var displayData = new Array(0);
-
 var player = {};
 
 var dataKeys = {};
@@ -51,6 +47,8 @@ var modules;
 var timedPopups = [];
 
 var activePopups = [];
+
+const HOTKEY_KEYS = { 'm': 1, 'a': 2, 'p': 3, 's': 4, 't': 5, 'n': 6, 'g': 7, 'q': 8, 'w': 9, 'e': 10, 'r': 11, 'f': 12 };
 
 //initialize
 
@@ -110,47 +108,12 @@ function loadGame() {
         player.activeGalaxies = ['1', '1', '2'];
     }
 
-    if (typeof document.hidden !== "undefined") { // Opera 12.10 and Firefox 18 and later support
-        hidden = "hidden";
-        visibilityChange = "visibilitychange";
-    } else if (typeof document.msHidden !== "undefined") {
-        hidden = "msHidden";
-        visibilityChange = "msvisibilitychange";
-    } else if (typeof document.webkitHidden !== "undefined") {
-        hidden = "webkitHidden";
-        visibilityChange = "webkitvisibilitychange";
-    }
-    document.addEventListener(visibilityChange, handleVisibilityChange, false);
-
-    var element = document.getElementById('hotkeysList');
-    var count = 0;
-    element.innerHTML = 'Number Keys 1-8: Buy Single Unit; shift+(1-8): Buy Max Units;<br>';
-    for (var k in HOTKEYS) {
-        if ((count == 4 || k=='q') && k!='f') {
-            count = 0;
-            element.innerHTML += '<br>';
-        }
-        if (isNaN(k)) {
-            element.innerHTML += k + ': ' + HOTKEYS[k].desc + '; ';
-            count++;
-        }
-    }
-    element.innerHTML = element.innerHTML.slice(0, -2);
-    element.innerHTML += '<br>hotkeys do not trigger if ctrl or command (Mac) is pressed.'
-	
-    
-
-    //updateAutobuyersDisplay();
-
     if (player.tooltipsEnabled) {
         player.tooltipsEnabled = false;
         toggleTooltips();
     }
 
     loadVue();
-    //app.$children[24].num = player.activeGalaxies[0];
-    //app.$children[24].first = player.activeGalaxies[1];
-    //app.$children[24].second = player.activeGalaxies[2];
     app.galSelected = player.activeGalaxies[0];
     app.dontRespec = player.dontResetSlider;
     updateShadow();
@@ -163,6 +126,7 @@ function addData(id, name, data) {
 }
 
 function setupData() {
+    addData('hk', 'hotkeys', HOTKEYS);
     addData('sk', 'stat keys', STAT_KEYS);
     addData('header', 'header displays', HEADER_DATA);
     addData('tabs', 'tabs and subtabs', TABS_DATA);
@@ -183,10 +147,6 @@ function setupData() {
     addData('a', 'ark', ARK_DATA);
     addData('r', 'research', RESEARCH_DATA);
     addData('e', 'ethereal', ETH_DATA);
-}
-
-function isPopAct() {
-    return player.headPopAct;
 }
 
 //save stuff
@@ -220,8 +180,6 @@ function startGame() {
     player.lastWindowUpdate = new Date();
     save();
 
-    //updateDisplay();
-    //loadStyles();
     startInterval();
 }
 
@@ -342,18 +300,8 @@ function gameLoop(diff=new Decimal(0), offline=false) {
         player.antiPercent = Number(app.sliderVal);
     
         popupTimers(diff.div(1000));
-    
-
-        //if (!isHidden) { window.requestAnimationFrame(updateDisplay); }
     }
     
-}
-
-function handleVisibilityChange() {
-    if (!document[hidden]) {
-        //displayData = new Array(0);
-        isHidden = false;
-    } else { isHidden = true; }
 }
 
 function autobuyerTick(slow) {
@@ -505,17 +453,14 @@ function hardReset() {
 }
 
 function importToggle() {
-    document.getElementById('exportTextLabel').style.display = 'block';
-    document.getElementById('exportText').value = '';
-    document.getElementById('exportText').style.display = 'block';
-    document.getElementById('importConfirm').style.display = 'table-cell';
-    document.getElementById('closeText').style.display = 'table-cell';
-    document.getElementById('closeText').removeAttribute('colspan');
-    document.getElementById('exportText').focus();
+    app.exportTextArea = '';
+    app.importing = true;
+    app.exporting = false;
+    setTimeout(function() { app.$refs['exptextarea'].focus() }, 10);
 }
 
 function importSave() {
-    var imported = document.getElementById('exportText').value;
+    var imported = app.exportTextArea;
     if (imported !== undefined) {
         try {
             copyData(player, JSON.parse(window.atob(imported)));
@@ -532,23 +477,16 @@ function importSave() {
 }
 
 function exportSave() {
-    var str = window.btoa(JSON.stringify(player));
-
-    document.getElementById('exportTextLabel').style.display = 'none';
-    document.getElementById('exportText').value = str;
-    document.getElementById('exportText').style.display = 'block';
-    document.getElementById('importConfirm').style.display = 'none';
-    document.getElementById('closeText').style.display = 'table-cell';
-    document.getElementById('closeText').setAttribute('colspan', '2');
-    document.getElementById('exportText').select();
+    app.importing = false;
+    app.exporting = true;
+    app.exportTextArea = window.btoa(JSON.stringify(player));
+    setTimeout(function() { app.$refs['exptextarea'].select() }, 10);
 }
 
 function closeText() {
-    document.getElementById('exportTextLabel').style.display = 'none';
-    document.getElementById('exportText').style.display = 'none';
-    document.getElementById('importConfirm').style.display = 'none';
-    document.getElementById('closeText').style.display = 'none';
-    document.getElementById('closeText').removeAttribute('colspan');
+    app.importing = false;
+    app.exporting = false;
+    app.exportTextArea = '';
 }
 
 function exportGameState() {
@@ -703,10 +641,6 @@ function updateVersionData(newP, oldP) {
     }
 }
 
-function addModule(moduleID, moduleData) {
-
-}
-
 //misc
 
 function getRealTimeMultiplier() {
@@ -716,6 +650,16 @@ function getRealTimeMultiplier() {
         mult = mult.times(getAntiTimeBuff());
     } else {
         mult = mult.times(getTrueTimeBuff());
+    }
+    return mult;
+}
+
+function getRealTimeDimMultiplier() {
+    let mult = new Decimal(1);
+    if (player.astralFlag && hasGUpgrade(1, 32)) {
+        mult = mult.times(getAntiTimeBuff().sqrt());
+    } else if (!player.astralFlag && hasGUpgrade(4, 22)) {
+        mult = mult.times(getTrueTimeBuff().sqrt());
     }
     return mult;
 }
@@ -783,12 +727,14 @@ document.onkeydown = function(e) {
     var ctrlDown = e.ctrlKey;
     var shiftDown = e.shiftKey;
     var metaDown = e.metaKey;
-    if (HOTKEYS[key] !== undefined && !ctrlDown && !metaDown && !(document.activeElement.id == 'ascensionBuyerAmount' || document.activeElement.id == 'maxPrestige' || document.activeElement.id == 'sacrificeBuyerAmount')) { HOTKEYS[key].onPress(shiftDown); }
+    if (DATA.hk[HOTKEY_KEYS[key]] !== undefined && !ctrlDown && !metaDown && !(document.activeElement.id == 'ascensionBuyerAmount' || document.activeElement.id == 'maxPrestige' || document.activeElement.id == 'sacrificeBuyerAmount')) {
+        if (isNaN(key)) { DATA.hk[HOTKEY_KEYS[key]].onPress(shiftDown); }
+        else { DATA.hk.units[key].onPress(shiftDown); }
+    }
 }
 
 function toggleHotkeys() {
     player.hotkeysOn = !player.hotkeysOn;
-    //document.getElementById('toggleHotkeysBut').innerHTML = player.hotkeysOn ? 'ENABLE HOTKEYS: ON' : 'ENABLE HOTKEYS: OFF'
 }
 
 function allAuto(n) {
@@ -867,17 +813,8 @@ function allAmount() {
 
 function changeDevSpeed(num) {
     app.devSpeed = num;
-    //if (app.devSpeed!=1) { document.getElementById('devSpeedContainer').style.display = 'block'}
 }
 
 function resetDevSpeed() {
     app.devSpeed = 1;
-    //document.getElementById('devSpeedContainer').style.display = 'none';
-}
-
-function rewindTime() {
-    clearInterval(mainLoop);
-    player.lastUpdate = player.lastUpdate - (3600*1000);
-    save();
-    window.location.reload();
 }

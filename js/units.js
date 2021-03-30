@@ -11,10 +11,15 @@ function canUnlock(tier) {
 //production/calculation
 
 function zap() {
-    player.corpses = player.corpses.plus(1);
+    player.corpses = player.corpses.plus(getZapGain());
 }
 
-function getCorpsesPerSecond() {
+function getZapGain() {
+    let z = Decimal.floor(player.units[1].amount.sqrt());
+    return Decimal.max(z, 1);
+}
+
+function getCorpsesPerSecond(disp=false) {
     let c = player.units[1].amount.gt(0) ? player.units[1].amount.times(getTotalCorpseMult()) : new Decimal(0);
     if (hasTUpgrade(41)) { c = c.times(getTUpgEffect(41)); }
     if (hasTUpgrade(42)) { c = c.times(getTUpgEffect(42)); }
@@ -23,16 +28,18 @@ function getCorpsesPerSecond() {
         c = c.pow(0.9);
         if (isResearchActive(7)) { c = c.pow(0.9); }
     }
-    return c;
+    if (disp && player.displayRealTime) { return c.times(getRealTimeMultiplier()); }
+    else { return c; }
 }
 
-function getUnitProdPerSecond(tier) {
+function getUnitProdPerSecond(tier, disp=false) {
     if (tier == NUM_UNITS) { return (hasGUpgrade(2, 41)) ? new Decimal(Decimal.max(getEssenceProdPerSecond(), 1).log10()) : new Decimal(0); }
     let p = player.units[tier+1].amount;
     if (!hasGUpgrade(2, 21)) { p = p.div(tier+1); }
     p = p.times(DATA.u[tier+1].prodMult());
     if (player.isInResearch) { p = p.pow(0.9); }
-    return p;
+    if (disp && player.displayRealTime) { return p.times(getRealTimeMultiplier()); }
+    else { return p; }
 }
 
 function getCorpseMultFromUnits() {
@@ -656,7 +663,7 @@ var UNITS_DATA = {
             if (hasGUpgrade(2, 31)) { m = m.times(getGUpgEffect(2, 31)); }
             return m.plus(DATA.u[this.tier+1].prodMult());
         },
-        gainPercent: function() { return getUnitProdPerSecond(this.tier).div(this.amount()).times(100); },
+        gainPercent: function() { return getUnitProdPerSecond(this.tier, true).div(this.amount()).times(100); },
         bought: function() { return player.units[this.tier].bought; },
         amount: function() { return player.units[this.tier].amount; },
         tier: 1,
@@ -722,7 +729,7 @@ var UNITS_DATA = {
             if (hasGUpgrade(2, 31)) { m = m.times(getGUpgEffect(2, 31)); }
             return m.plus(DATA.u[this.tier+1].prodMult());
         },
-        gainPercent: function() { return getUnitProdPerSecond(this.tier).div(this.amount()).times(100); },
+        gainPercent: function() { return getUnitProdPerSecond(this.tier, true).div(this.amount()).times(100); },
         bought: function() { return player.units[this.tier].bought; },
         amount: function() { return player.units[this.tier].amount; },
         tier: 2,
@@ -787,7 +794,7 @@ var UNITS_DATA = {
             if (hasGUpgrade(2, 31)) { m = m.times(getGUpgEffect(2, 31)); }
             return m.plus(DATA.u[this.tier+1].prodMult());
         },
-        gainPercent: function() { return getUnitProdPerSecond(this.tier).div(this.amount()).times(100); },
+        gainPercent: function() { return getUnitProdPerSecond(this.tier, true).div(this.amount()).times(100); },
         bought: function() { return player.units[this.tier].bought; },
         amount: function() { return player.units[this.tier].amount; },
         tier: 3,
@@ -852,7 +859,7 @@ var UNITS_DATA = {
             if (hasGUpgrade(2, 31)) { m = m.times(getGUpgEffect(2, 31)); }
             return m.plus(DATA.u[this.tier+1].prodMult());
         },
-        gainPercent: function() { return getUnitProdPerSecond(this.tier).div(this.amount()).times(100); },
+        gainPercent: function() { return getUnitProdPerSecond(this.tier, true).div(this.amount()).times(100); },
         bought: function() { return player.units[this.tier].bought; },
         amount: function() { return player.units[this.tier].amount; },
         tier: 4,
@@ -917,7 +924,7 @@ var UNITS_DATA = {
             if (hasGUpgrade(2, 31)) { m = m.times(getGUpgEffect(2, 31)); }
             return m.plus(DATA.u[this.tier+1].prodMult());
         },
-        gainPercent: function() { return getUnitProdPerSecond(this.tier).div(this.amount()).times(100); },
+        gainPercent: function() { return getUnitProdPerSecond(this.tier, true).div(this.amount()).times(100); },
         bought: function() { return player.units[this.tier].bought; },
         amount: function() { return player.units[this.tier].amount; },
         tier: 5,
@@ -982,7 +989,7 @@ var UNITS_DATA = {
             if (hasGUpgrade(2, 31)) { m = m.times(getGUpgEffect(2, 31)); }
             return m.plus(DATA.u[this.tier+1].prodMult());
         },
-        gainPercent: function() { return getUnitProdPerSecond(this.tier).div(this.amount()).times(100); },
+        gainPercent: function() { return getUnitProdPerSecond(this.tier, true).div(this.amount()).times(100); },
         bought: function() { return player.units[this.tier].bought; },
         amount: function() { return player.units[this.tier].amount; },
         tier: 6,
@@ -1047,7 +1054,7 @@ var UNITS_DATA = {
             if (hasGUpgrade(2, 31)) { m = m.times(getGUpgEffect(2, 31)); }
             return m.plus(DATA.u[this.tier+1].prodMult());
         },
-        gainPercent: function() { return getUnitProdPerSecond(this.tier).div(this.amount()).times(100); },
+        gainPercent: function() { return getUnitProdPerSecond(this.tier, true).div(this.amount()).times(100); },
         bought: function() { return player.units[this.tier].bought; },
         amount: function() { return player.units[this.tier].amount; },
         tier: 7,
@@ -1116,7 +1123,7 @@ var UNITS_DATA = {
             if (hasGUpgrade(2, 31)) { m = m.times(getGUpgEffect(2, 31)); }
             return m;
         },
-        gainPercent: function() { return getUnitProdPerSecond(this.tier).div(this.amount()).times(100); },
+        gainPercent: function() { return getUnitProdPerSecond(this.tier, true).div(this.amount()).times(100); },
         bought: function() { return player.units[this.tier].bought; },
         amount: function() { return player.units[this.tier].amount; },
         tier: 8,

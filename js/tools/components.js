@@ -333,8 +333,8 @@ function loadVue() {
 				<div>
 					<h3 v-html="DATA[data].id"></h3>
 					you have <num-text data="sp" :val="formatDefault(player.buildings[DATA[data].tier].amount)" :label="DATA[data].resource"></num-text><br>
-					<span v-if="DATA[data].displayResourceGain">you are producing <num-text data="sp" :val="formatDefault(player.buildings[DATA[data].tier].amount)" :label="DATA[data].resource"></num-text>/sec (based on your {{ DATA[data].basedOn }})<br></span>
-					<span v-if="data=='b3'"><div v-if="player.astralFlag" style="min-height: 30px;">you are producing <num-text data="sp" :val="formatDefault(DATA[data].prod())" label="nekro-photons"></num-text>/real sec, only during astral enslavement.<br></div><div v-else style="min-height: 25px; margin-top: 5px;" v-html="DATA[data].extraText()+'<br>'"></div></span>
+					<span v-if="DATA[data].displayResourceGain">you are producing <num-text data="sp" :val="formatDefault(DATA[data].prod(true))" :label="DATA[data].resource"></num-text>/<span v-html="player.displayRealTime ? 'real sec' : 'sec'"></span> (based on your {{ DATA[data].basedOn }})<br></span>
+					<span v-if="data=='b3'"><div v-if="player.astralFlag" style="min-height: 30px;">you are producing <num-text data="sp" :val="formatDefault(DATA[data].prod(true))" label="nekro-photons"></num-text>/<span v-html="player.displayRealTime ? 'real sec' : 'sec'"></span>, only during astral enslavement.<br></div><div v-else style="min-height: 25px; margin-top: 5px;" v-html="DATA[data].extraText()+'<br>'"></div></span>
 					<span v-else-if="DATA[data].hasExtraText" style="font-variant-numeric: tabular-nums;" v-html="DATA[data].extraText()+'<br>'"></span>
 					<div v-for="row in DATA[data].upgrades.rows" class="buildingUpgRow">
 						<div v-for="col in DATA[data].upgrades.cols"><div v-if="(DATA[data].upgrades[row*10+col]!== undefined) && DATA[data].upgrades[row*10+col].unlocked()" class="buildingUpgCell">
@@ -927,10 +927,15 @@ function loadVue() {
 				gImpText: '',
 			}
 		},
+		methods: {
+			focusInput() {
+				this.$refs['gitext'].focus();
+			}
+		},
 		template: `
 		<div v-if="isActivePop" class="giPopup">
 			<label id="gImportTextLabel" for="gImportText"><h2>Paste your galaxy code:</h2></label>
-			<textarea v-model="gImpText" id="gImportText" name="gImportText" style="display: block;"></textarea>
+			<textarea v-model="gImpText" ref="gitext" id="gImportText" name="gImportText" style="display: block;"></textarea>
 			<div style="height: 20px; min-height: 20px;"><div v-if="isGImpErr">{{ gImpErr }}</div></div>
 			<div style="margin: 5px 10px;">
 				<button class="optBut" v-on:click="importGalaxies()" style="float: left; margin: 2px !important;">IMPORT</button>
@@ -950,10 +955,15 @@ function loadVue() {
 				gExpText: '',
 			}
 		},
+		methods: {
+			selectInput() {
+				this.$refs['getext'].select();
+			}
+		},
 		template: `
 		<div v-if="isActivePop" class="gePopup">
 			<label id="gExportTextLabel" for="gExportText"><h2>Your galaxy code:</h2></label>
-			<textarea v-model="gExpText" id="gExportText" name="gExportText" style="display: block;"></textarea>
+			<textarea v-model="gExpText" ref="getext" id="gExportText" name="gExportText" style="display: block;"></textarea>
 			<div style="margin: auto;"><button class="optBut" v-on:click="closeExpGalaxies()">CLOSE</button></div>
 		</div>
 		`
@@ -967,6 +977,19 @@ function loadVue() {
 			<div class="favCell" style="min-width: 15%;"><button class="saveLoadFavBut" v-on:click="saveFavorite(data)">SAVE</button></div>
 			<div class="favCell" style="min-width: 15%;"><button class="saveLoadFavBut" v-on:click="importGalaxies(true, data)">LOAD</button></div>
 			<div class="favCell" style="min-width: 20%;"><button class="renameFavBut" v-on:click="renameFavorite(data)">RENAME</button></div>
+		</div>
+		`
+	})
+
+	Vue.component('hotkeys-display', {
+		props: [],
+		template: `
+		<div class="hotkeysDesc">
+			<div><span style="font-size: 18pt; font-weight: bold;">hotkeys: </span>Number Keys 1-8: Buy Single Unit; shift+(1-8): Buy Max Units;</div>
+			<div v-for="i in (Object.keys(DATA.hk).length-1)" style="display: inline;">
+				<span v-html="DATA.hk[i].key + ': ' + DATA.hk[i].desc + '; '"></span><br v-if="i==4||i==7">
+			</div>
+			<div style="font-size: 12pt; font-weight: bold;">hotkeys do not trigger if ctrl or command (mac) is pressed.</div>
 		</div>
 		`
 	})
@@ -1055,6 +1078,9 @@ function loadVue() {
 			shadowStyle: '',
 			devSpeed: 1,
 			showHelp: false,
+			importing: false,
+			exporting: false,
+			exportTextArea: '',
 		},
 	})
 

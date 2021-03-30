@@ -91,7 +91,7 @@ function getBuildingProdPerSec(b) {
 
 //production/calculation
 
-function getBricksPerSecond() {
+function getBricksPerSecond(disp=false) {
     var e = hasGUpgrade(1, 21) ? 0.3 : 0.2
     if (hasUpgrade(4, 21)) { e = new Decimal(getResourceEff(4).plus(e)) }
     var b = getCorpsesPerSecond().pow(e);
@@ -102,7 +102,8 @@ function getBricksPerSecond() {
     if (hasGUpgrade(3, 41)) { b = b.times(getGUpgEffect(3, 41)); }
     if (hasTUpgrade(52)) { b = b.times(getTUpgEffect(52)); }
     if (hasUpgrade(4, 23) && !player.isInResearch && player.corpses.gt("2.5e309")) { b = b.pow(1.2); }
-    return b;
+    if (disp && player.displayRealTime) { return b.times(getRealTimeMultiplier()); }
+    else { return b; }
 }
 
 //buy functions
@@ -129,15 +130,6 @@ function buyCUpg(c) {
         player.construction[c] = player.construction[c].plus(1);
         if (DATA.c.upgrades[c].onBuy !== undefined) { DATA.c.upgrades[c].onBuy() }
     }
-    /*document.getElementById('cUpgCost' + c.toString()).innerHTML = formatDefault(getCUpgCost(c));
-    document.getElementById('cUpgLevel' + c.toString()).innerHTML = formatWhole(player.construction[c]) + (getExtraLevels(c)>0 ? ' + ' + formatWhole(getExtraLevels(c)) : '');
-    if (c==5) {
-        for (let i=1; i<=4; i++) {
-            document.getElementById('cUpgLevel' + i.toString()).innerHTML = formatWhole(player.construction[i]) + (getExtraLevels(i)>0 ? ' + ' + formatWhole(getExtraLevels(i)) : '');
-        }
-    }
-    if (c==5) { document.getElementById('cUpgEffect' + c.toString()).innerHTML = `[+${formatWhole(player.construction[5])}/+${formatWhole(player.construction[5].gt(0) ? Decimal.floor(player.construction[5].minus(1).div(2).plus(1)) : '0')}/+${formatWhole(player.construction[5].gt(0) ? Decimal.floor(player.construction[5].minus(1).div(3).plus(1)) : '0')}/+${formatWhole(player.construction[5].gt(0) ? Decimal.floor(player.construction[5].minus(1).div(4).plus(1)) : '0')}]` }
-    else if (isDisplayEffectC(c)) { document.getElementById('cUpgEffect' + c.toString()).innerHTML = DATA.c.upgrades[c].isTimes ? formatDefault2(getCUpgEffect(c)) + DATA.c.upgrades[c].displaySuffix : '+' + formatDefault2(getCUpgEffect(c)) }*/
 }
 
 function buyMaxConstr(upg) {
@@ -321,13 +313,14 @@ BUILDS_DATA[1] = {
         e = e.plus(getCUpgEffect(2));
         return e;
     },
-    prod: function() {
+    prod: function(disp=false) {
         var p = Decimal.pow(this.pBase(), this.pExp());
         if (hasUpgrade(2, 12)) { p = p.times(getUpgEffect(2, 12)); }
         if (hasUpgrade(1, 21)) { p = p.times(getUpgEffect(1, 21)); }
         if (hasTUpgrade(23)) { p = p.times(getTUpgEffect(23)) }
         if (player.isInResearch) { p = p.pow(0.9); }
-        return p;
+        if (disp && player.displayRealTime) { return p.times(getRealTimeMultiplier()); }
+        else { return p; }
     },
     resourceEff: function() {
         var r = new Decimal(1);
@@ -575,12 +568,13 @@ BUILDS_DATA[2] = {
         var e = 0.2;
         return e;
     },
-    prod: function() {
+    prod: function(disp=false) {
         var p = Decimal.pow(this.pBase(), this.pExp());
         if (hasTUpgrade(23)) { p = p.times(getTUpgEffect(23)) }
         if (hasGUpgrade(3, 31)) { p = p.pow(2); }
         if (player.isInResearch) { p = p.pow(0.9); }
-        return p;
+        if (disp && player.displayRealTime) { return p.times(getRealTimeMultiplier()); }
+        else { return p; }
     },
     resourceEff: function() {
         var r = new Decimal(1);
@@ -834,13 +828,16 @@ BUILDS_DATA[3] = {
         var e = 1;
         return e;
     },
-    prod: function() {
+    prod: function(disp=false) {
         var p = Decimal.pow(this.pBase(), this.pExp());
         if (hasAchievement(25)) { p = p.times(getAchievementEffect(25)) }
         if (hasUpgrade(2, 23)) { p = p.times(getUpgEffect(2, 23)); }
         if (hasTUpgrade(23)) { p = p.times(getTUpgEffect(23)) }
         if (player.isInResearch) { p = p.pow(0.9); }
-        if (player.astralFlag) { return p; }
+        if (player.astralFlag) {
+            if (disp && player.displayRealTime) { return p.times(getRealTimeMultiplier()); }
+            else { return p; }
+        }
         else { return new Decimal(0); }
     },
     resourceEff: function() {

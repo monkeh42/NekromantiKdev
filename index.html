@@ -71,7 +71,7 @@
                         </tr>
                         <tr>
                             <td colspan="3">
-                                <div>You are harvesting <num-text data="u" :val="player.astralFlag ? '0' : formatDefault(getCorpsesPerSecond())" label="corpses"></num-text>/<span v-html="player.displayRealTime ? 'real sec' : 'sec'"></span>.<span v-if="devSpeed!=1" v-html="'<br>(@ '+devSpeed.toString()+'x time speed)'"></span></div>
+                                <div>You are harvesting <num-text data="u" :val="player.astralFlag ? '0' : formatDefault(getCorpsesPerSecond(true))" label="corpses"></num-text>/<span v-html="player.displayRealTime ? 'real sec' : 'sec'"></span>.<span v-if="devSpeed!=1" v-html="'<br>(@ '+devSpeed.toString()+'x time speed)'"></span></div>
                             </td>
                         </tr>
                         <tr>
@@ -104,7 +104,7 @@
                                     </tr>
                                     <tr>
                                         <td>
-                                            <div v-if="player.headerDisplay['bricksGainDisplayHeader']&&player.headerDisplayUnlocked['bricksGainDisplayHeader']" style="font-size: 10pt;">You are gaining <num-text data="b" :val="player.astralFlag ? formatDefault(getBricksPerSecond()) : '0'" label="astral bricks"></num-text>/<span v-html="player.displayRealTime ? 'real sec' : 'sec'"></span>.</div>
+                                            <div v-if="player.headerDisplay['bricksGainDisplayHeader']&&player.headerDisplayUnlocked['bricksGainDisplayHeader']" style="font-size: 10pt;">You are gaining <num-text data="b" :val="player.astralFlag ? formatDefault(getBricksPerSecond(true)) : '0'" label="astral bricks"></num-text>/<span v-html="player.displayRealTime ? 'real sec' : 'sec'"></span>.</div>
                                         </td>
                                     </tr>
                                 </table>
@@ -141,7 +141,7 @@
                                     </tr>
                                     <tr>
                                         <td>
-                                            <div v-if="player.headerDisplay['researchGainDisplayHeader']&&player.headerDisplayUnlocked['researchGainDisplayHeader']" style="font-size: 10pt;">You are gaining <num-text data="e" :val="formatDefault(getResearchPerSecond())" label="void research"></num-text>/<span v-html="player.displayRealTime ? 'real sec' : 'sec'"></span>.</div>
+                                            <div v-if="player.headerDisplay['researchGainDisplayHeader']&&player.headerDisplayUnlocked['researchGainDisplayHeader']" style="font-size: 10pt;">You are gaining <num-text data="e" :val="formatDefault(getResearchPerSecond(true))" label="void research"></num-text>/<span v-html="player.displayRealTime ? 'real sec' : 'sec'"></span>.</div>
                                         </td>
                                     </tr>
                                 </table>
@@ -173,8 +173,8 @@
                 <div id="unitsTab" class="pageTab" v-bind:style="[(player.tab=='unitsTab') ? { display: 'block' } : { display: 'none' }]">
                     <sub-nav data="u" :ids="['units', 'autobuyers']" :active="player.subTabs['u']"></sub-nav>
                     <div id="unitsSubTab" class="unitSubTab" v-bind:style="[(player.subTabs['u']=='unitsSubTab') ? { display: 'block' } : { display: 'none' }]">
-                        <div style="width: 250px; margin: 10px auto;">
-                            <button v-bind:class="{ zapBut: true, can: true, }" onClick="zap()">UNLEASH DEATH<br><span style="font-size: 14pt;">gain 1 corpse</span></button>
+                        <div style="width: 350px; margin: 10px auto;">
+                            <button v-bind:class="{ zapBut: true, can: true, }" onClick="zap()">UNLEASH DEATH<br><span style="font-size: 14pt;">gain <num-text data="sp" :val="formatWhole(getZapGain())" label="corpses"></num-text></span><br><span style="font-size: 10pt; font-weight: 400;">(square root of your zombies, rounded down)</span></button>
                         </div>
                         <dimension-table data="u"></dimension-table>
                         <div v-if="player.units[4].bought.gte(1) || player.ascensions.gt(0)" id="spacePresContainer" style="text-align: center; margin-top: 25px;">
@@ -215,7 +215,7 @@
                         <tr>
                             <td colspan="3" id="brickTooltip" data-title="corpse production rate ^0.2">
                                 <div style="font-size: 18pt;">Your unholy hordes have forged <num-text data="b" :val="formatDefault(player.bricks)" label="astral bricks"></num-text>.</div>
-                                <div v-if="player.astralFlag" id="brickGainDiv" style="font-size: 15pt;">You are gaining <num-text data="b" :val="formatDefault(getBricksPerSecond())" label="bricks"></num-text>/<span v-html="player.displayRealTime ? 'real sec' : 'sec'"></span>. (@ {{ getAstralNerf() }}x slower time speed)</div>
+                                <div v-if="player.astralFlag" id="brickGainDiv" style="font-size: 15pt;">You are gaining <num-text data="b" :val="formatDefault(getBricksPerSecond(true))" label="bricks"></num-text>/<span v-html="player.displayRealTime ? 'real sec' : 'sec'"></span>. (@ {{ getAstralNerf() }}x slower time speed)</div>
                                 <div v-if="hasAchievement(15)" id="keptBricks" style="font-size: 15pt;">You will keep <num-text data="b" :val="formatDefault(getAchievementEffect(15))" label="bricks"></num-text> on sacrifice.</div>
                                 <span style="font-size: 11pt">You can now force the dead you harvest to work for your rapidly growing empire. While Astral Enslavement is active, time goes 10x slower,
                                 and you won't gain any corpses; instead, those tortured, miasmic souls will suffer tirelessly making bricks for your most unholy of foundations.<br></span>
@@ -258,14 +258,14 @@
                         <tr>
                             <td width="100px;">
                                 <div class="timeLabelLeft">TRUE<br>TIME</div>
-                                <div><span id="trueTimeAmt" style="color: #006ba0; font-weight: bold; font-variant-numeric: tabular-nums;" v-html="formatUnitRow(player.trueEssence)"></span><br>essence</span><br>+<span id="trueTimeGain" style="color: #006ba0; font-weight: bold; font-variant-numeric: tabular-nums;" v-html="formatUnitRow(getEssenceProdAfterSlider('true'))"></span><br>per <span v-html="player.displayRealTime ? 'real sec' : 'sec'"></span></div>
+                                <div><span id="trueTimeAmt" style="color: #006ba0; font-weight: bold; font-variant-numeric: tabular-nums;" v-html="formatUnitRow(player.trueEssence)"></span><br>essence</span><br>+<span id="trueTimeGain" style="color: #006ba0; font-weight: bold; font-variant-numeric: tabular-nums;" v-html="formatUnitRow(getEssenceProdAfterSlider('true', true))"></span><br>per <span v-html="player.displayRealTime ? 'real sec' : 'sec'"></span></div>
                             </td>
                             <td><div id="trueTooltip" style="width: 43%; margin-left: 40px; float: left;" data-title="boost: 1 + log(x)/nerf&#xA;nerf: log(x)^0.2">Your True Time Essence speeds up normal time by<br><span id="trueTimeBuff" style="font-size: 16pt;" v-html="formatDefault2(getTrueTimeBuff())"></span>x<br> <span v-if="!hasGUpgrade(4, 41) || !hasUpgrade(4, 22)" id="antiNerfDivText">but it divides</span><span v-else id="antiNerfTimesText" style="display: none;">and it multiplies</span> the Anti Time Essence effect by<br><span id="trueTimeNerf" style="font-size: 16pt;" v-html="formatDefault2(getTrueTimeBuff())"></span></div>
                                 <div id="antiTooltip"style="width: 43%; margin-right: 40px; float: right;" data-title="boost: 1 + 2*log(x)/nerf&#xA;nerf: log(x)^0.2">Your Anti Time Essence speeds up astral time by<br><span id="antiTimeBuff" style="font-size: 16pt;" v-html="formatDefault2(getAntiTimeBuff())"></span>x<br> <span v-if="!hasGUpgrade(4, 41) || !hasUpgrade(4, 22)" id="trueNerfDivText">but it divides</span><span v-else id="trueNerfTimesText" style="display: none;">and it multiplies</span> the True Time Essence effect by<br><span id="antiTimeNerf" style="font-size: 16pt;" v-html="formatDefault2(getAntiTimeBuff())"></span></div>
                             </td>
                             <td width="100px;">
                                 <div class="timeLabelRight">ANTI<br>TIME</div>
-                                <div><span id="antiTimeAmt" style="color: #006ba0; font-weight: bold; font-variant-numeric: tabular-nums;" v-html="formatUnitRow(player.antiEssence)"></span><br>essence</span><br>+<span id="antiTimeGain" style="color: #006ba0; font-weight: bold; font-variant-numeric: tabular-nums;" v-html="formatUnitRow(getEssenceProdAfterSlider('true'))"></span><br>per <span v-html="player.displayRealTime ? 'real sec' : 'sec'"></span></div>
+                                <div><span id="antiTimeAmt" style="color: #006ba0; font-weight: bold; font-variant-numeric: tabular-nums;" v-html="formatUnitRow(player.antiEssence)"></span><br>essence</span><br>+<span id="antiTimeGain" style="color: #006ba0; font-weight: bold; font-variant-numeric: tabular-nums;" v-html="formatUnitRow(getEssenceProdAfterSlider('anti', true))"></span><br>per <span v-html="player.displayRealTime ? 'real sec' : 'sec'"></span></div>
                             </td>
                         </tr>
                         <tr>
@@ -343,7 +343,7 @@
                     <div id="researchSubTab" class="galaxySubTab" v-bind:style="[(player.subTabs['g']=='researchSubTab') ? { display: 'block' } : { display: 'none' }]">
                         <div v-if="(player.isInResearch&&!isResearchActive(7))" id="researchDisplayDiv">
                             You have <num-text data="e" :val="formatUnitRow(player.research)" label="void research"></num-text>.<br>
-                            You are producing <num-text data="e" :val="formatUnitRow(getResearchPerSecond())" label="void research"></num-text>/<span v-html="player.displayRealTime ? 'real sec' : 'sec'"></span>. <span v-if="player.astralFlag" id="infResearchAstralNotice">(@ <span id="astralNerfInfResearch" v-html="getAstralNerf()"></span>x slower time speed)</span><br>
+                            You are producing <num-text data="e" :val="formatUnitRow(getResearchPerSecond(true))" label="void research"></num-text>/<span v-html="player.displayRealTime ? 'real sec' : 'sec'"></span>. <span v-if="player.astralFlag" id="infResearchAstralNotice">(@ <span id="astralNerfInfResearch" v-html="getAstralNerf()"></span>x slower time speed)</span><br>
                             Goal: <num-text data="e" :val="formatUnitRow(getCurrentGoal())" label="void research"></num-text>.<br>
                             <layer-button data="e" :width="250" :text="'Toggle Astral: ' + (player.astralFlag ? 'ON' : 'OFF')" fname="toggleAstral"></layer-button><br><!--<button id="astralButResearch" onclick="toggleAstralResearch()">Toggle Astral: OFF</button>-->
                             <layer-button data="e" :width="250" :text="'Cancel Research Project<br>(forces an ascension reset)'" fname="respecGalaxiesClick"></layer-button>
@@ -362,7 +362,7 @@
                     <div id="infResearchSubTab" class="galaxySubTab" v-bind:style="[(player.subTabs['g']=='infResearchSubTab') ? { display: 'block' } : { display: 'none' }]">
                         <div v-if="isResearchActive(7)" id="infResearchDisplayDiv">
                             You have <num-text data="e" :val="formatUnitRow(player.research)" label="void research"></num-text>.<br>
-                            You are producing <num-text data="e" :val="formatUnitRow(getResearchPerSecond())" label="void research"></num-text>/<span v-html="player.displayRealTime ? 'real sec' : 'sec'"></span>. <span v-if="player.astralFlag" id="infResearchAstralNotice">(@ <span id="astralNerfInfResearch" v-html="getAstralNerf()"></span>x slower time speed)</span><br>
+                            You are producing <num-text data="e" :val="formatUnitRow(getResearchPerSecond(true))" label="void research"></num-text>/<span v-html="player.displayRealTime ? 'real sec' : 'sec'"></span>. <span v-if="player.astralFlag" id="infResearchAstralNotice">(@ <span id="astralNerfInfResearch" v-html="getAstralNerf()"></span>x slower time speed)</span><br>
                             Goal: <num-text data="e" :val="formatUnitRow(getCurrentGoal())" label="void research"></num-text>.<br>
                             <layer-button data="e" :width="225" :text="'Toggle Astral: ' + (player.astralFlag ? 'ON' : 'OFF')" fname="toggleAstral"></layer-button><br><!--<button id="astralButInfResearch" onclick="toggleAstralResearch()">Toggle Astral: OFF</button>-->
                             <layer-button data="e" :width="250" :text="'Cancel Research Project<br>(forces an ascension reset)'" fname="respecGalaxiesClick"></layer-button>
@@ -432,49 +432,19 @@
                 </div>
                 <div id="optionsTab" class="pageTab" v-bind:style="[(player.tab=='optionsTab') ? { display: 'block' } : { display: 'none' }]">
                     <options-table></options-table>
-                    <table style="margin: auto; text-align: center;">
-                        <tr>
-                            <td colspan="4">
-                                <div style="min-height: 25px"><label id="exportTextLabel" for="exportText" style="display: none;">Paste your save here...</label></div>
-                                <textarea id="exportText" name="exportText" style="display: none;"></textarea>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="width: 353px;"></td>
-                            <td id="importConfirm" style="display: none; width: 175px;">
-                                <button class="optBut" onclick="importSave()">IMPORT</button>
-                            </td>
-                            <td id="closeText" style="display: none; width: 175px;">
-                                <button class="optBut" onclick="closeText()">CLOSE</button>
-                            </td>
-                            <td style="width: 353px;"></td>
-                        </tr>
-                        <tr>
-                            <td colspan="4">
-                                <div style="text-align: center; width: 100%; margin: auto;">
-                                    <span style="font-weight: bold;">HOTKEYS: </span><span id="hotkeysList" style="font-size: 11pt;"></span>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr style="height: 15px;">
-                            <div style="height: 100%;"></div>
-                        </tr>
-                        <tr>
-                            <td colspan="4">
-                                <div style="height: 50px; width: 100%; text-align: center;"><a href="https://discord.gg/H2V7FfT4Rt" target="_blank"><img src="images/discord.png" width="50px" style="margin-top:10px;"></a></div>
-                            </td>
-                        </tr>
-                        <tr style="height: 15px;">
-                            <div style="height: 100%;"></div>
-                        </tr>
-                        <tr>
-                            <td colspan="4">
-                                <div style="font-size: 10pt; text-align: center;">This game was made by monkeh42, and is very heavily influenced by hevipelle's <a href="https://ivark.github.io/" target="_blank">Antimatter Dimensions</a>, jacorb's <a href="https://jacorb90.github.io/Prestige-Tree/" target="_blank">The Prestige Tree</a>, and similar games.<br>
-                                Thanks to hevipelle and jacorb for making their games (and making their code open) and thanks to patashu for <a href="https://github.com/Patashu/break_infinity.js" target="_blank">break_infinity.js</a>.<br>
-                                Thanks toughtoffee for the awesome logo/favicon.</div>
-                            </td>
-                        </tr>
-                    </table>
+                    <div style="margin: auto; text-align: center;">
+                        <div style="min-height: 25px"><div v-if="importing"><label id="exportTextLabel" for="exportText">Paste your save here...</label></div></div>
+                        <div v-if="importing||exporting"><textarea ref="exptextarea" v-model="exportTextArea" id="exportText" name="exportText"></textarea></div>
+                        <div style="width: auto; margin: auto; display: flex; justify-content: center;">
+                            <div v-if="importing" style="flex: 1; width: 150px; max-width: 150px; margin: 5px;"><button class="optBut" v-on:click="importSave()">IMPORT</button></div>
+                            <div v-if="importing||exporting" style="flex: 1; width: 150px; max-width: 150px; margin: 5px;"><button class="optBut" v-on:click="closeText()">CLOSE</button></div>
+                        </div>
+                    </div>
+                    <hotkeys-display></hotkeys-display>
+                    <div style="width: 100%; text-align: center; margin: 15px auto; font-weight: bold;"><a class="whiteLink" href="https://discord.gg/H2V7FfT4Rt" target="_blank"><img src="images/discord.png" width="50px" style="margin-top:10px;"><br>DISCORD</a></div>
+                    <div style="font-size: 10pt; text-align: center; margin: 15px auto;">This game was made by monkeh42, and is very heavily influenced by hevipelle's <a href="https://ivark.github.io/" target="_blank">Antimatter Dimensions</a>, jacorb's <a href="https://jacorb90.github.io/Prestige-Tree/" target="_blank">The Prestige Tree</a>, and similar games.<br>
+                        Thanks to hevipelle and jacorb for making their games (and making their code open) and thanks to patashu for <a href="https://github.com/Patashu/break_infinity.js" target="_blank">break_infinity.js</a>.<br>
+                        Thanks toughtoffee for the awesome logo/favicon.</div>
                     <div style="width: 100%; text-align: center;"><img src="images/NekromantiK_Logo.png" width="250px"></div>
                 </div>
                 <favs-popup ref="fpop"></favs-popup>
