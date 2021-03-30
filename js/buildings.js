@@ -169,19 +169,19 @@ function toggleAstral() {
     }
 }
 
-function resetBuildingResources(sacrifice=false, ascension=false, startResearch=false) {
+function resetBuildingResources(sacrifice=false, ascension=false, startingResearch=false) {
     if (player.astralFlag) { toggleAstral(); }
-    if (!hasAchievement(15) || ascension || startResearch) { player.bricks = new Decimal(DATA.sp.bricks); }
+    if (!hasAchievement(15) || ascension || startingResearch) { player.bricks = new Decimal(DATA.sp.bricks); }
     else if (sacrifice) { player.bricks = new Decimal(getAchievementEffect(15)); } 
     for (let b=1; b<4; b++) {
         if (b!=3 || !hasAchievement(51)) { player.buildings[b].amount = new Decimal(DATA.sp.buildings[b].amount); }
     }
 }
 
-function resetBuildings(ascension=false, startResearch=false) {
+function resetBuildings(ascension=false, startingResearch=false) {
     if (player.astralFlag) { toggleAstral(); }
     
-    if (((hasTUpgrade(24) && !ascension) || (hasAchievement(53) && !player.isInResearch))&&!startResearch) {
+    if (((hasTUpgrade(24) && !ascension) || (hasAchievement(53) && !player.isInResearch))&&!startingResearch) {
         player.worlds = new Decimal(4);
         player.spaceResets = new Decimal(4);
         player.nextSpaceReset = [3, 8];
@@ -209,9 +209,8 @@ function resetBuildings(ascension=false, startResearch=false) {
     tempFactory.upgrades[22] = false;
     tempFactory.upgrades[23] = false;
     tempFactory.amount = new Decimal(0);
-    copyData(player.buildings, DATA.sp.buildings);
-    copyData(player.buildings[4], tempVortex);
-    if (!hasMilestone(1)&&!startResearch) { copyData(player.construction, DATA.sp.construction); }
+    copyBuildings();
+    if (!hasMilestone(1)||startingResearch) { copyData(player.construction, DATA.sp.construction); }
     player.unlocks['buildings'] = false;
     player.unlocks['factory'] = false;
     player.unlocks['factoryRow2'] = false;
@@ -229,11 +228,11 @@ function resetBuildings(ascension=false, startResearch=false) {
         player.unlocks['time'] = true;
         player.unlocks['timeUpgrades'] = true;
     }
-    if (hasMilestone(1)&&!startResearch) {
+    if (hasMilestone(1)&&!startingResearch) {
         player.unlocks['construction'] = true;
         player.unlocks['constructionRow2'] = true;
     }
-    if (isResearchCompleted(2)&&!startResearch) {
+    if (isResearchCompleted(2)&&!startingResearch) {
         copyData(player.buildings[1], tempFactory);
         player.unlocks['factory'] = factory;
     }
@@ -243,7 +242,9 @@ function resetBuildings(ascension=false, startResearch=false) {
         player.spaceResets = new Decimal(4);
         player.nextSpaceReset = [3, 8];
         if (!ascension) {
-            copyData(player.buildings[3], tempSun);
+            copyData(player.buildings[3].upgrades, tempSun.upgrades);
+            player.buildings[3].amount = new Decimal(tempSun.amount);
+            player.buildings[3].built = tempSun.built;
             player.unlocks['sun'] = sun;
             player.unlocks['sunRow2'] = sunRow2;
         }
@@ -282,8 +283,16 @@ function resetBuildings(ascension=false, startResearch=false) {
         player.stats['thisAscStats'].bestWorlds = player.worlds;
     }
 
-    if (tempSun.upgrades[13] && (!ascension || hasAchievement(43)) && !startResearch) { player.buildings[3].upgrades[13] = tempSun.upgrades[13]; }
-    if (tempSun.upgrades[23] && !startResearch) { player.buildings[3].upgrades[23] = tempSun.upgrades[23]; }
+    if (tempSun.upgrades[13] && (!ascension || hasAchievement(43)) && !startingResearch) { player.buildings[3].upgrades[13] = tempSun.upgrades[13]; }
+    if (tempSun.upgrades[23] && !startingResearch) { player.buildings[3].upgrades[23] = tempSun.upgrades[23]; }
+}
+
+function copyBuildings() {
+    for (let i=1; i<4; i++) {
+        copyData(player.buildings[i].upgrades, DATA.sp.buildings[i].upgrades);
+        player.buildings[i].amount = new Decimal(DATA.sp.buildings[i].amount);
+        player.buildings[i].built = DATA.sp.buildings[i].built;
+    }
 }
 
 //data

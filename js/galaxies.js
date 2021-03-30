@@ -681,9 +681,9 @@ function galaxyPrestigeReset(respec=false, startingResearch=false) {
     copyData(player.pastAscRuns.lastTen[0], player.pastAscRuns.lastRun);
     copyData(player.pastRuns, DATA.sp.pastRuns);
 
-    resetTime();
+    resetTime(startingResearch);
     resetTimeCounts(startingResearch);
-    resetUnits();
+    resetUnits(true);
     resetBuildingResources(false, true, startingResearch);
     resetBuildings(true, startingResearch);
     if (!startingResearch) {
@@ -708,6 +708,7 @@ function galaxyPrestigeReset(respec=false, startingResearch=false) {
     if (!hasAchievement(42)) { player.subTabs['u'] = 'unitsSubTab'; }
     if (!hasMilestone(1)) { player.subTabs['b'] = 'buildingsSubTab'; }
     if (!hasAchievement(43)) { player.subTabs['t'] = 'timeDimSubTab'; }
+    if (startingResearch) { resLockGalaxies(); }
     save();
     startInterval();
     updateShadow();

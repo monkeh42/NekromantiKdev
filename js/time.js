@@ -320,7 +320,7 @@ function timePrestigeReset() {
     startInterval()
 }
 
-function resetTime(startResearch=false) {
+function resetTime(startingResearch=false) {
     let firstColumn = new Array(4);
     let newColumns = {};
     let rapidFire = player.timeUpgs[24];
@@ -330,10 +330,10 @@ function resetTime(startResearch=false) {
         newColumns['5' + i.toString()] = player.timeUpgs['5' + i.toString()];
     }
     copyData(player.timeUpgs, DATA.sp.timeUpgs);
-    if (hasMilestone(2)&&!startResearch) {
+    if (hasMilestone(2)&&!startingResearch) {
         for (let i=1; i<=4; i++) { player.timeUpgs['1' + i.toString()] = firstColumn[i]; }
     }
-    if (hasMilestone(3)&&!startResearch) { player.timeUpgs[24] = rapidFire; }
+    if (hasMilestone(3)&&!startingResearch) { player.timeUpgs[24] = rapidFire; }
     if (hasMilestone(6)) {
         for (let i=1; i<=4; i++) {
             player.timeUpgs['4' + i.toString()] = newColumns['4' + i.toString()];

@@ -83,13 +83,13 @@ function loadVue() {
 			<span style="position: relative; right: 62px;"><label for="sacrificeBuyerAdvancedList">condition:</label></span>
 			<div id="sacrificeBuyerAmountsContainer" class="buyerOptionsContainerHalf">
 				<div class="buyerAmountTextContainer">
-					<input v-model="sacAmount" v-on:change="updateSacBuyer()" type="text" id="sacrificeBuyerAmount" name="sacrificeBuyerConditions" class="buyerText"><br>
+					<input v-model="sacAmount" v-on:change="updateSac()" type="text" id="sacrificeBuyerAmount" name="sacrificeBuyerConditions" class="buyerText"><br>
 					<label id="sacrificeBuyerAmountLabel" for="sacrificeBuyerAmount" style="font-size: 10pt;">{{ DATA.ab[9].labelTexts[sacType] }}</label>
 				</div>
 			</div>
 			<div id="sacrificeBuyerAdvancedContainer" class="buyerOptionsContainerHalf">
 				<div class="buyerAmountTextContainer">
-					<select v-model="sacType" v-on:change="updateSacBuyer()" id="sacrificeBuyerAdvancedList" name="sacrificeBuyerAdvancedList" class="buyerList" size="3" :disabled="!player.unlocks['advancedBuyer']">
+					<select v-model="sacType" v-on:change="updateSac()" id="sacrificeBuyerAdvancedList" name="sacrificeBuyerAdvancedList" class="buyerList" size="3" :disabled="!player.unlocks['advancedBuyer']">
 						<option id="atx" value="atx">at x crystals</option>
 						<option id="xtimes" value="xtimes">at x times last</option>
 						<option id="afterx" value="afterx">after x seconds</option>
@@ -290,7 +290,7 @@ function loadVue() {
         <div class="dimTable">
 		<dimension-header :data="data"></dimension-header>
 			<div v-for="tier in DATA[data].numTiers">
-				<div v-if="(data=='u'&&DATA.ul.units[tier]())||(data=='td'&&DATA.ul.dimensions[tier]())">
+				<div v-if="(data=='u'&&player.units[tier].unlocked)||(data=='td'&&player.timeDims[tier].unlocked)">
 					<dimension :data="data" :id="tier"></dimension>
 				</div>
 			</div>
