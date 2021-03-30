@@ -214,7 +214,9 @@ function spacePrestigeReset() {
 
 function resetUnits() {
     for (var z=NUM_UNITS; z>0; z--) {
-        copyData(player.units[z], DATA.sp.units[z]);
+        player.units[z].bought = new Decimal(DATA.sp.units[z].bought);
+        player.units[z].amount = new Decimal(DATA.sp.units[z].amount);
+        player.units[z].unlocked = DATA.sp.units[z].unlocked;
     }
 }
 

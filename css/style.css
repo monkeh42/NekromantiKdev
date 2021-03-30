@@ -1125,7 +1125,7 @@ option:active, option.active {
 
 .galaxyUpg.locked {
     background-color: transparent;
-    border: 3px solid #40ff00;
+    border: 3px solid black;
     position: relative;
     z-index: 1;
 }

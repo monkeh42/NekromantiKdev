@@ -324,7 +324,7 @@ function loadVue() {
 				<component v-else-if="DATA[data].multi.showEl(id, i)" :is="DATA[data].multi.dataLists[id][i].tag" v-bind:class="{ [DATA[data].multi.dataLists[id][i].klass()]: true }" 
 							v-bind:style="(DATA[data].multi.dataLists[id][i].style !== undefined) ? DATA[data].multi.dataLists[id][i].style() : {}" 
 							v-html="DATA[data].multi.dataLists[id][i].htm()" 
-							v-on:click="(DATA[data].multi.dataLists[id][i].click !== undefined) ? DATA[data].multi.dataLists[id][i].click().handle(DATA[data].multi.dataLists[id][i].click().arg) : function() {}">
+							v-on:click="function() { if(DATA[data].multi.dataLists[id][i].click!==undefined) { DATA[data].multi.dataLists[id][i].click() } }">
 				</component>
 			</div>
 		</div>

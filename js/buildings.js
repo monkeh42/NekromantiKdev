@@ -169,19 +169,19 @@ function toggleAstral() {
     }
 }
 
-function resetBuildingResources(sacrifice=false, ascension=false) {
+function resetBuildingResources(sacrifice=false, ascension=false, startResearch=false) {
     if (player.astralFlag) { toggleAstral(); }
-    if (!hasAchievement(15) || ascension) { player.bricks = new Decimal(DATA.sp.bricks); }
+    if (!hasAchievement(15) || ascension || startResearch) { player.bricks = new Decimal(DATA.sp.bricks); }
     else if (sacrifice) { player.bricks = new Decimal(getAchievementEffect(15)); } 
     for (let b=1; b<4; b++) {
         if (b!=3 || !hasAchievement(51)) { player.buildings[b].amount = new Decimal(DATA.sp.buildings[b].amount); }
     }
 }
 
-function resetBuildings(ascension=false) {
+function resetBuildings(ascension=false, startResearch=false) {
     if (player.astralFlag) { toggleAstral(); }
     
-    if ((hasTUpgrade(24) && !ascension) || (hasAchievement(53) && !player.isInResearch)) {
+    if (((hasTUpgrade(24) && !ascension) || (hasAchievement(53) && !player.isInResearch))&&!startResearch) {
         player.worlds = new Decimal(4);
         player.spaceResets = new Decimal(4);
         player.nextSpaceReset = [3, 8];
@@ -211,7 +211,7 @@ function resetBuildings(ascension=false) {
     tempFactory.amount = new Decimal(0);
     copyData(player.buildings, DATA.sp.buildings);
     copyData(player.buildings[4], tempVortex);
-    if (!hasMilestone(1)) { copyData(player.construction, DATA.sp.construction); }
+    if (!hasMilestone(1)&&!startResearch) { copyData(player.construction, DATA.sp.construction); }
     player.unlocks['buildings'] = false;
     player.unlocks['factory'] = false;
     player.unlocks['factoryRow2'] = false;
@@ -225,14 +225,15 @@ function resetBuildings(ascension=false) {
     if (player.isInResearch) {
         player.unlocks['buildings'] = true;;
         player.unlocks['construction'] = true;
+        player.unlocks['constructionRow2'] = true;
         player.unlocks['time'] = true;
         player.unlocks['timeUpgrades'] = true;
     }
-    if (hasMilestone(1)) {
+    if (hasMilestone(1)&&!startResearch) {
         player.unlocks['construction'] = true;
         player.unlocks['constructionRow2'] = true;
     }
-    if (isResearchCompleted(2)) {
+    if (isResearchCompleted(2)&&!startResearch) {
         copyData(player.buildings[1], tempFactory);
         player.unlocks['factory'] = factory;
     }
@@ -281,8 +282,8 @@ function resetBuildings(ascension=false) {
         player.stats['thisAscStats'].bestWorlds = player.worlds;
     }
 
-    if (tempSun.upgrades[13] && (!ascension || hasAchievement(43))) { player.buildings[3].upgrades[13] = tempSun.upgrades[13]; }
-    if (tempSun.upgrades[23]) { player.buildings[3].upgrades[23] = tempSun.upgrades[23]; }
+    if (tempSun.upgrades[13] && (!ascension || hasAchievement(43)) && !startResearch) { player.buildings[3].upgrades[13] = tempSun.upgrades[13]; }
+    if (tempSun.upgrades[23] && !startResearch) { player.buildings[3].upgrades[23] = tempSun.upgrades[23]; }
 }
 
 //data

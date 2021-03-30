@@ -391,6 +391,12 @@ function updateUnlocks() {
     for (let id in DATA.ul.main) {
         if (!player.unlocks[id] && DATA.ul.main[id].condition()) { unlockItem(id); }
     }
+    for (let jd in DATA.ul.units) {
+        if (!player.units[jd].unlocked && DATA.ul.units[jd]()) { player.units[jd].unlocked = true; }
+    }
+    for (let kd in DATA.ul.dimensions) {
+        if (!player.timeDims[kd].unlocked && DATA.ul.dimensions[kd]()) { player.timeDims[kd].unlocked = true; }
+    }
 }
 
 function unlockItem(item) {

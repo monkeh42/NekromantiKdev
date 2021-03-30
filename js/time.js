@@ -288,6 +288,7 @@ function timePrestigeNoConfirm() {
 function lockInTime() {
     if (!player.timeLocked) {
         player.timeLocked = true;
+
     }
 }
 
@@ -319,7 +320,7 @@ function timePrestigeReset() {
     startInterval()
 }
 
-function resetTime() {
+function resetTime(startResearch=false) {
     let firstColumn = new Array(4);
     let newColumns = {};
     let rapidFire = player.timeUpgs[24];
@@ -329,10 +330,10 @@ function resetTime() {
         newColumns['5' + i.toString()] = player.timeUpgs['5' + i.toString()];
     }
     copyData(player.timeUpgs, DATA.sp.timeUpgs);
-    if (hasMilestone(2)) {
+    if (hasMilestone(2)&&!startResearch) {
         for (let i=1; i<=4; i++) { player.timeUpgs['1' + i.toString()] = firstColumn[i]; }
     }
-    if (hasMilestone(3)) { player.timeUpgs[24] = rapidFire; }
+    if (hasMilestone(3)&&!startResearch) { player.timeUpgs[24] = rapidFire; }
     if (hasMilestone(6)) {
         for (let i=1; i<=4; i++) {
             player.timeUpgs['4' + i.toString()] = newColumns['4' + i.toString()];
@@ -341,9 +342,19 @@ function resetTime() {
     }
 
     for (var i=NUM_TIMEDIMS; i>=1; i--) {
-        copyData(player.timeDims[i], DATA.sp.timeDims[i]);
+        player.timeDims[i].bought = new Decimal(DATA.sp.timeDims[i].bought);
+        player.timeDims[i].amount = new Decimal(DATA.sp.timeDims[i].amount);
+        player.timeDims[i].unlocked = DATA.sp.timeDims[i].unlocked;
     }
     
+}
+
+function resetTimeDims() {
+    for (var i=NUM_TIMEDIMS; i>=1; i--) {
+        player.timeDims[i].bought = new Decimal(DATA.sp.timeDims[i].bought);
+        player.timeDims[i].amount = new Decimal(DATA.sp.timeDims[i].amount);
+        player.timeDims[i].unlocked = DATA.sp.timeDims[i].unlocked;
+    }
 }
 
 //data

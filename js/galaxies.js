@@ -654,13 +654,13 @@ function galaxyPrestigeNoConfirm(respec=false) {
     }
 }
 
-function galaxyPrestigeReset(respec=false) {
+function galaxyPrestigeReset(respec=false, startingResearch=false) {
     if (player.astralFlag) { toggleAstral(); }
     if (player.timeLocked && !player.dontResetSlider) {
         player.timeLocked = false;
     }
     clearInterval(mainLoop);
-    if (player.isInResearch) {
+    if (player.isInResearch&&!startingResearch) {
         let id = getActiveResearch();
         player.isInResearch = false;
         player.researchProjects[getActiveResearch()].active = false;
@@ -683,26 +683,29 @@ function galaxyPrestigeReset(respec=false) {
     copyData(player.pastRuns, DATA.sp.pastRuns);
 
     resetTime();
-    resetTimeCounts();
+    resetTimeCounts(startingResearch);
     resetUnits();
-    resetBuildingResources(false, true);
-    resetBuildings(true);
-    if (!hasAchievement(42)) { player.unlocks['autobuyers'] = false; }
-    if (!hasAchievement(43)) {
-        player.unlocks['time'] = false;
-        player.unlocks['timeUpgrades'] = false;
-        player.unlocks['timeUpgrades2'] = false;
-        player.unlocks['timeDims'] = false;
+    resetBuildingResources(false, true, startingResearch);
+    resetBuildings(true, startingResearch);
+    if (!startingResearch) {
+        if (!hasAchievement(42)) { player.unlocks['autobuyers'] = false; }
+        if (!hasAchievement(43)) {
+            player.unlocks['time'] = false;
+            player.unlocks['timeUpgrades'] = false;
+            player.unlocks['timeUpgrades2'] = false;
+            player.unlocks['timeDims'] = false;
+        }
+        else { player.unlocks['time'] = false; }
     }
-    else { player.unlocks['time'] = false; }
     
-    
-    if (app.respecNextGal || respec) {
+    if (app.respecNextGal || respec || startingResearch) {
         respecGalaxies();
     }
     app.respecNextGal = false;
 
-    player.corpses = hasAchievement(41) ? new Decimal(DATA.sp.corpsesAch41) : (hasAchievement(13) ? new Decimal(DATA.sp.corpsesAch13) : new Decimal(DATA.sp.corpses))
+    
+
+    player.corpses = (hasAchievement(41)&&!startingResearch) ? new Decimal(DATA.sp.corpsesAch41) : (hasAchievement(13) ? new Decimal(DATA.sp.corpsesAch13) : new Decimal(DATA.sp.corpses))
     if (!hasAchievement(42)) { player.subTabs['u'] = 'unitsSubTab'; }
     if (!hasMilestone(1)) { player.subTabs['b'] = 'buildingsSubTab'; }
     if (!hasAchievement(43)) { player.subTabs['t'] = 'timeDimSubTab'; }
@@ -711,9 +714,9 @@ function galaxyPrestigeReset(respec=false) {
     updateShadow();
 }
 
-function resetTimeCounts() {
+function resetTimeCounts(startingResearch=false) {
     player.timeResets = new Decimal(DATA.sp.timeResets);
-    player.crystals = new Decimal(hasMilestone(4) ? DATA.sp.milesCrystals : DATA.sp.crystals);
+    player.crystals = new Decimal((hasMilestone(4)&&!startingResearch) ? DATA.sp.milesCrystals : DATA.sp.crystals);
     player.trueEssence = new Decimal(DATA.sp.trueEssence);
     player.antiEssence = new Decimal(DATA.sp.antiEssence);
     if (!player.dontResetSlider) {
@@ -741,10 +744,10 @@ function researchReset(proj) {
         time5[i-1] = player.timeUpgs['5' + i.toString()];
     }
 
-    copyData(player.units, DATA.sp.units);
+    resetUnits();
     copyData(player.buildings, DATA.sp.buildings);
     copyData(player.construction, DATA.sp.construction);
-    copyData(player.timeDims, DATA.sp.timeDims);
+    resetTimeDims();
     copyData(player.timeUpgs, DATA.sp.timeUpgs);
     player.corpses = new Decimal(DATA.sp.corpsesAch13);
     player.bricks = new Decimal(DATA.sp.bricks);
@@ -790,6 +793,18 @@ function researchReset(proj) {
     //loadStyles();
     startInterval();
     updateShadow();
+}
+
+function resLockGalaxies() {
+    let proj = getActiveResearch();
+    let g = DATA.r[proj].galaxyLock;
+    if (g>0) {
+        for (let u in DATA['g'+g.toString()].upgrades) {
+            if (u!='className') {
+                player.galaxyUpgs[g][u].locked = true;
+            }
+        }
+    } 
 }
 
 function getGalaxiesBonus() {
@@ -935,7 +950,7 @@ function startResearch(id) {
     player.researchProjects[id].active = true;
     player.isInResearch = true;
     updateShadow();
-    researchReset(id);
+    galaxyPrestigeReset(true, true);
 }
 
 function unlockArkPart(name) {
@@ -1086,10 +1101,7 @@ var RESEARCH_DATA = {
                     klass: function() { return `${isResearchCompleted(this.boxID) ? 'completedResearchBut' : (player.isInResearch ? (isResearchActive(this.boxID) ? 'progressResearchButton' : 'unclickResearchBut') : 'researchButton')}`; },
                     htm: function() { return `${isResearchActive(this.boxID) ? 'IN PROGRESS' : (isResearchCompleted(this.boxID) ? 'COMPLETED' : 'BEGIN')}`; },
                     style: function() { return ((player.isInResearch&&!isResearchCompleted(this.boxID)&&!isResearchActive(this.boxID)) ? {'text-decoration': 'line-through'} : {}); },
-                    click: function() { return {
-                                            handle: researchButtonClick,
-                                            arg: this.boxID,
-                                        } }
+                    click: function() { researchButtonClick(this.boxID); }
                 }
             },
             12: {
@@ -1142,10 +1154,7 @@ var RESEARCH_DATA = {
                     klass: function() { return `${isResearchCompleted(this.boxID) ? 'completedResearchBut' : (player.isInResearch ? (isResearchActive(this.boxID) ? 'progressResearchButton' : 'unclickResearchBut') : 'researchButton')}`; },
                     htm: function() { return `${isResearchActive(this.boxID) ? 'IN PROGRESS' : (isResearchCompleted(this.boxID) ? 'COMPLETED' : 'BEGIN')}`; },
                     style: function() { return ((player.isInResearch&&!isResearchCompleted(this.boxID)&&!isResearchActive(this.boxID)) ? {'text-decoration': 'line-through'} : {}); },
-                    click: function() { return {
-                                            handle: researchButtonClick,
-                                            arg: this.boxID,
-                                        } }
+                    click: function() { researchButtonClick(this.boxID); }
                 }
             },
             13: {
@@ -1198,10 +1207,7 @@ var RESEARCH_DATA = {
                     klass: function() { return `${isResearchCompleted(this.boxID) ? 'completedResearchBut' : (player.isInResearch ? (isResearchActive(this.boxID) ? 'progressResearchButton' : 'unclickResearchBut') : 'researchButton')}`; },
                     htm: function() { return `${isResearchActive(this.boxID) ? 'IN PROGRESS' : (isResearchCompleted(this.boxID) ? 'COMPLETED' : 'BEGIN')}`; },
                     style: function() { return ((player.isInResearch&&!isResearchCompleted(this.boxID)&&!isResearchActive(this.boxID)) ? {'text-decoration': 'line-through'} : {}); },
-                    click: function() { return {
-                                            handle: researchButtonClick,
-                                            arg: this.boxID,
-                                        } }
+                    click: function() { researchButtonClick(this.boxID); }
                 }
             },
             21: {
@@ -1254,10 +1260,7 @@ var RESEARCH_DATA = {
                     klass: function() { return `${isResearchCompleted(this.boxID) ? 'completedResearchBut' : (player.isInResearch ? (isResearchActive(this.boxID) ? 'progressResearchButton' : 'unclickResearchBut') : 'researchButton')}`; },
                     htm: function() { return `${isResearchActive(this.boxID) ? 'IN PROGRESS' : (isResearchCompleted(this.boxID) ? 'COMPLETED' : 'BEGIN')}`; },
                     style: function() { return ((player.isInResearch&&!isResearchCompleted(this.boxID)&&!isResearchActive(this.boxID)) ? {'text-decoration': 'line-through'} : {}); },
-                    click: function() { return {
-                                            handle: researchButtonClick,
-                                            arg: this.boxID,
-                                        } }
+                    click: function() { researchButtonClick(this.boxID); }
                 }
             },
             22: {
@@ -1310,10 +1313,7 @@ var RESEARCH_DATA = {
                     klass: function() { return `${isResearchCompleted(this.boxID) ? 'completedResearchBut' : (player.isInResearch ? (isResearchActive(this.boxID) ? 'progressResearchButton' : 'unclickResearchBut') : 'researchButton')}`; },
                     htm: function() { return `${isResearchActive(this.boxID) ? 'IN PROGRESS' : (isResearchCompleted(this.boxID) ? 'COMPLETED' : 'BEGIN')}`; },
                     style: function() { return ((player.isInResearch&&!isResearchCompleted(this.boxID)&&!isResearchActive(this.boxID)) ? {'text-decoration': 'line-through'} : {}); },
-                    click: function() { return {
-                                            handle: researchButtonClick,
-                                            arg: this.boxID,
-                                        } }
+                    click: function() { researchButtonClick(this.boxID); }
                 }
             },
             23: {
@@ -1366,10 +1366,7 @@ var RESEARCH_DATA = {
                     klass: function() { return `${isResearchCompleted(this.boxID) ? 'completedResearchBut' : (player.isInResearch ? (isResearchActive(this.boxID) ? (canCompleteResearch(this.boxID) ? 'researchButton' : 'progressResearchButton') : 'unclickResearchBut') : 'researchButton')}`; },
                     htm: function() { return `${isResearchCompleted(this.boxID) ? 'COMPLETED' : (player.isInResearch ? (isResearchActive(this.boxID) ? (canCompleteResearch(this.boxID) ? 'COMPLETE<br>PROJECT' : 'IN PROGRESS') : 'BEGIN') : 'BEGIN')}`; },
                     style: function() { return ((player.isInResearch&&!isResearchCompleted(this.boxID)&&!isResearchActive(this.boxID)) ? {'text-decoration': 'line-through'} : {}); },
-                    click: function() { return {
-                                            handle: researchButtonClick,
-                                            arg: this.boxID,
-                                        } }
+                    click: function() { researchButtonClick(this.boxID); }
                 }
             },
         },
