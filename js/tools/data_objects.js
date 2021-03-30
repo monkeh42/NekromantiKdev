@@ -1841,9 +1841,9 @@ var ACH_DATA = {
         desc: 'Unlock Time Warp.',
         secret: false,
         hint: '',
-        reward: '',//'You start all resets with 10 corpses.',
+        reward: 'You start all resets with 10 corpses.',
         showEffect: false,
-        hasReward: false,
+        hasReward: true,
         divID: 'ach13',
         canUnlock: function() {
             return player.unlocks['time'];
