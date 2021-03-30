@@ -288,6 +288,8 @@ function resetBuildings(ascension=false) {
 //data
 var BUILDS_DATA = new Array(5);
 BUILDS_DATA[0] = {
+    notify:  false,
+    indirect: false,
     layerDisplay: {
         numClass: 'brickNum',
     }

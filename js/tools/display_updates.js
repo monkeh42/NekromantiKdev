@@ -174,12 +174,19 @@ function isHelp() {
 function tabButtonClick(id) {
     if (DATA.tabs[id]===undefined || player.tab==id) { return; }
     if (id=='h') { player.help = !player.help; }
-    else { player.tab = DATA.tabs[id].pid; }
+    else {
+        player.tab = DATA.tabs[id].pid;
+        if (id!='o' && id!='s') { player.tabNotify[id].notify = false; }
+    }
 }
 
 function subTabButtonClick(layer, id) {
     if (DATA.tabs[layer]===undefined || DATA.tabs[layer].subTabs[id]===undefined || player.subTabs[layer]==id) { return; }
     player.subTabs[layer] = DATA.tabs[layer].subTabs[id].pid;
+    if (layer!='s') {
+        player.tabNotify[layer][id.slice(0, 1)].notify = false;
+        player.tabNotify[layer].indirect = false;
+    }
 }
 
 function cycleSubtabs() {
@@ -447,7 +454,7 @@ function galaxyTextSingulizer(amt) {
 }
 
 function showPopup(type, text, ms) {
-    timedPopups.push({className: type, popupText: text, time: ms});
+    app.$refs['popupscontainer'].timedPopups.push({'className': type, 'popupText': text, 'time': ms});
 }
 
 function showNormalPopup(rName) {
@@ -563,4 +570,11 @@ function generateAscAvgs() {
     }
 
     return `${formatTime(totalTime/count, 'num')}; ${formatDefault2(totalGain/count)} galaxies; ${ formatDefault2(totalGain.div(totalTime/(60*1000))) + " galaxies/min" }`;
+}
+
+function confirmation(text, f, a=null) {
+    app.$refs['confpop'].confirmText = text;
+    app.$refs['confpop'].fname = f;
+    app.$refs['confpop'].arg = a;
+    app.$refs['confpop'].isActivePop = true;
 }

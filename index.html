@@ -154,8 +154,8 @@
                         </tr>
                     </table>
                 </div>
-                <popups></popups>
-                <div class="offPopup" id="achUnlockPopup">
+                <popups ref="popupscontainer"></popups>
+                <!--<div class="offPopup" id="achUnlockPopup">
                     Achievement Unlocked!
                 </div>
                 <div class="offPopup" id="milesUnlockPopup">
@@ -166,7 +166,7 @@
                 </div>
                 <div class="offPopup" id="autosavePopup">
                     Game Autosaved!
-                </div>
+                </div>-->
             </div>
             <main-nav :data="['u', 'b', 't', 'g', 's', 'o', 'h']" :active="player.tab"></main-nav>
             <div id="game">
@@ -260,8 +260,8 @@
                                 <div class="timeLabelLeft">TRUE<br>TIME</div>
                                 <div><span id="trueTimeAmt" style="color: #006ba0; font-weight: bold; font-variant-numeric: tabular-nums;" v-html="formatUnitRow(player.trueEssence)"></span><br>essence</span><br>+<span id="trueTimeGain" style="color: #006ba0; font-weight: bold; font-variant-numeric: tabular-nums;" v-html="formatUnitRow(getEssenceProdAfterSlider('true', true))"></span><br>per <span v-html="player.displayRealTime ? 'real sec' : 'sec'"></span></div>
                             </td>
-                            <td><div id="trueTooltip" style="width: 43%; margin-left: 40px; float: left;" data-title="boost: 1 + log(x)/nerf&#xA;nerf: log(x)^0.2">Your True Time Essence speeds up normal time by<br><span id="trueTimeBuff" style="font-size: 16pt;" v-html="formatDefault2(getTrueTimeBuff())"></span>x<br> <span v-if="!hasGUpgrade(4, 41) || !hasUpgrade(4, 22)" id="antiNerfDivText">but it divides</span><span v-else id="antiNerfTimesText" style="display: none;">and it multiplies</span> the Anti Time Essence effect by<br><span id="trueTimeNerf" style="font-size: 16pt;" v-html="formatDefault2(getTrueTimeBuff())"></span></div>
-                                <div id="antiTooltip"style="width: 43%; margin-right: 40px; float: right;" data-title="boost: 1 + 2*log(x)/nerf&#xA;nerf: log(x)^0.2">Your Anti Time Essence speeds up astral time by<br><span id="antiTimeBuff" style="font-size: 16pt;" v-html="formatDefault2(getAntiTimeBuff())"></span>x<br> <span v-if="!hasGUpgrade(4, 41) || !hasUpgrade(4, 22)" id="trueNerfDivText">but it divides</span><span v-else id="trueNerfTimesText" style="display: none;">and it multiplies</span> the True Time Essence effect by<br><span id="antiTimeNerf" style="font-size: 16pt;" v-html="formatDefault2(getAntiTimeBuff())"></span></div>
+                            <td><div id="trueTooltip" style="width: 43%; margin-left: 40px; float: left;" data-title="boost: 1 + log(x)/nerf&#xA;nerf: log(x)^0.2">Your True Time Essence speeds up normal time by<br><span id="trueTimeBuff" style="font-size: 16pt; font-variant-numeric: tabular-nums;" v-html="formatDefault2(getTrueTimeBuff())"></span>x<br> <span v-if="!hasGUpgrade(4, 41) || !hasUpgrade(4, 22)" id="antiNerfDivText">but it divides</span><span v-else id="antiNerfTimesText" style="display: none;">and it multiplies</span> the Anti Time Essence effect by<br><span id="trueTimeNerf" style="font-size: 16pt; font-variant-numeric: tabular-nums;" v-html="formatDefault2(getTrueTimeBuff())"></span></div>
+                                <div id="antiTooltip"style="width: 43%; margin-right: 40px; float: right;" data-title="boost: 1 + 2*log(x)/nerf&#xA;nerf: log(x)^0.2">Your Anti Time Essence speeds up astral time by<br><span id="antiTimeBuff" style="font-size: 16pt; font-variant-numeric: tabular-nums;" v-html="formatDefault2(getAntiTimeBuff())"></span>x<br> <span v-if="!hasGUpgrade(4, 41) || !hasUpgrade(4, 22)" id="trueNerfDivText">but it divides</span><span v-else id="trueNerfTimesText" style="display: none;">and it multiplies</span> the True Time Essence effect by<br><span id="antiTimeNerf" style="font-size: 16pt; font-variant-numeric: tabular-nums;" v-html="formatDefault2(getAntiTimeBuff())"></span></div>
                             </td>
                             <td width="100px;">
                                 <div class="timeLabelRight">ANTI<br>TIME</div>
@@ -375,7 +375,7 @@
                         </div>
                         <div id="infResearchDisplayDiv" style="margin: 10px auto; text-align: center;font-size: 15pt;">
                             You have <num-text data="sp" :val="formatWhole(player.theorems)" label="impossible theorem"></num-text><span v-if="!player.theorems.eq(1)">s</span>, raising the exterminated worlds effect to ^<span id="theoremEffect" style=" font-size: 17pt; font-weight: bold;" v-html="formatDefault2(getTheoremBoostW())"></span><br>
-                            You have completed <num-text data="sp" :val="formatWhole(player.infCompletions)" label="infinite research projects"><span v-if="!player.infCompletions.eq(1)">s</span>, raising time crystal gain to ^<span id="theoremEffectC" style=" font-size: 17pt; font-weight: bold;" v-html="formatDefault2(getTheoremBoostC())"></span>.
+                            You have completed <num-text data="sp" :val="formatWhole(player.infCompletions)" label="infinite research projects"></num-text>, raising time crystal gain to ^<span id="theoremEffectC" style=" font-size: 17pt; font-weight: bold;" v-html="formatDefault2(getTheoremBoostC())"></span>.
                         </div>
                         <multi-box data="e" :id="11"></multi-box>
                         <eth-upg-table data="e"></eth-upg-table>
@@ -447,6 +447,7 @@
                         Thanks toughtoffee for the awesome logo/favicon.</div>
                     <div style="width: 100%; text-align: center;"><img src="images/NekromantiK_Logo.png" width="250px"></div>
                 </div>
+                <confirm-popup ref="confpop"></confirm-popup>
                 <favs-popup ref="fpop"></favs-popup>
                 <g-import-popup ref="gipop"></g-import-popup>
                 <g-export-popup ref="gepop"></g-export-popup>

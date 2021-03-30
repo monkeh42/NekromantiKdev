@@ -550,24 +550,22 @@ function continueGame() {
 
 function respecGalaxiesClick() {
     if (player.ascensions.gte(1)) {
-        if (player.confirmations['galaxyRespec']['click']) {
-            if (!confirm('Are you sure? This will reset ALL of your progress up to unlocking Galaxies.<br>(These confirmations can be disabled in options)')) return
-        }
-        if (getBoughtGUpgs() == 0 && !hasAchievement(52)) { unlockAchievement(52); }
-        if (canGalaxyPrestige()) { galaxyPrestigeNoConfirm(true); }
-        else { galaxyPrestigeReset(true); }
+        if (player.confirmations['galaxyRespec']['click']) { confirmation(DATA.g.prestige.confirmPopText, 'respecGalaxiesAch'); }
+        else { respecGalaxiesAch(); }
     }
 }
 
 function respecGalaxiesKey() {
     if (player.ascensions.gte(1)) {
-        if (player.confirmations['galaxyRespec']['key']) {
-            if (!confirm('Are you sure? This will reset ALL of your progress up to unlocking Galaxies.<br>(These confirmations can be disabled in options)')) return
-        }
-        if (getBoughtGUpgs() == 0 && !hasAchievement(52)) { unlockAchievement(52); }
-        if (canGalaxyPrestige()) { galaxyPrestigeNoConfirm(true); }
-        else { galaxyPrestigeReset(true); }
+        if (player.confirmations['galaxyRespec']['key']) { confirmation(DATA.g.prestige.confirmPopText, 'respecGalaxiesAch'); }
+        else { respecGalaxiesAch(); }
     }
+}
+
+function respecGalaxiesAch() {
+    if (getBoughtGUpgs() == 0 && !hasAchievement(52)) { unlockAchievement(52); }
+    if (canGalaxyPrestige()) { galaxyPrestigeNoConfirm(true); }
+    else { galaxyPrestigeReset(true); }
 }
 
 function respecGalaxies() {
@@ -577,13 +575,17 @@ function respecGalaxies() {
 }
 
 function galaxyPrestigeClick() {
-    if (player.confirmations['galaxyPrestige']['click']) { galaxyPrestige(); }
-    else { galaxyPrestigeNoConfirm(); }
+    if (canGalaxyPrestige()) {
+        if (player.confirmations['galaxyPrestige']['click']) { confirmation(DATA.g.prestige.confirmPopText, 'galaxyPrestigeNoConfirm'); }
+        else { galaxyPrestigeNoConfirm(); }
+    }
 }
 
 function galaxyPrestigeKey() {
-    if (player.confirmations['galaxyPrestige']['key']) { galaxyPrestige(); }
-    else { galaxyPrestigeNoConfirm(); }
+    if (canGalaxyPrestige()) {
+        if (player.confirmations['galaxyPrestige']['key']) { confirmation(DATA.g.prestige.confirmPopText, 'galaxyPrestigeNoConfirm'); }
+        else { galaxyPrestigeNoConfirm(); }
+    }
 }
 
 function canGalaxyPrestige() {
@@ -663,7 +665,7 @@ function galaxyPrestigeReset(respec=false) {
         player.isInResearch = false;
         player.researchProjects[getActiveResearch()].active = false;
         player.research = new Decimal(0);
-        document.documentElement.style.boxShadow = '';
+        updateShadow();
         respec = true;
     }
     
@@ -884,7 +886,7 @@ function isResearchCompleted(i) {
 }
 
 function getCurrentGoal() {
-    if (!player.isResearchActive) { return new Decimal(0); }
+    if (!player.isInResearch) { return new Decimal(0); }
     let proj = getActiveResearch();
     if (proj==7) { return DATA.r[proj].calcGoal(); }
     else { return DATA.r[proj].goal; }
@@ -1706,14 +1708,14 @@ var ETH_DATA = {
                     boxID: 7,
                     tag: 'div',
                     klass: function() { return `infResGoal`; },
-                    htm: function() { return `<h6>Current Goal: 1e16 Void Research</h6>`; }
+                    htm: function() { return `<h6>Current Goal: ${formatWhole(DATA.r[7].calcGoal())} Void Research</h6>`; }
                 },
                 6: {
                     id: 6,
                     boxID: 7,
                     tag: 'button',
-                    klass: function() { return `${player.isInResearch&&isResearchActive(this.boxID) ? (canCompleteResearch(this.boxID) ? 'infResearchButton' : 'progressInfResearchButton') : 'infResearchButton'}`; },
-                    htm: function() { return `${player.isInResearch&&isResearchActive(this.boxID) ? (canCompleteResearch(this.boxID) ? 'COMPLETE<br>PROJECT' : 'IN PROGRESS') : 'BEGIN' }`; },
+                    klass: function() { return `${player.isInResearch&&!isResearchActive(this.boxID) ? 'unclickInfResearchBut' : (player.isInResearch&&isResearchActive(this.boxID) ? (canCompleteResearch() ? 'infResearchButton' : 'progressInfResearchButton') : 'infResearchButton')}`; },
+                    htm: function() { return `${player.isInResearch&&isResearchActive(this.boxID) ? (canCompleteResearch() ? 'COMPLETE<br>PROJECT' : 'IN PROGRESS') : 'BEGIN' }`; },
                     click: function() { return {
                                             handle: researchButtonClick,
                                             arg: this.boxID,
@@ -1727,6 +1729,8 @@ var ETH_DATA = {
 
 var GALAXIES_DATA = new Array(5);
 GALAXIES_DATA[0] = {
+    notify:  false,
+    indirect: false,
     layerDisplay: {
         layerButtonClass: 'galaxyBut',
         numClass: 'galNum',
@@ -1735,6 +1739,7 @@ GALAXIES_DATA[0] = {
         className: 'galaxyPrestige',
         heading: 'ASCENSION',
         desc: 'Ascend your mortal form and gain true infernal might - gather your exterminated worlds and form a Depleted Galaxy to rule.<br>This resets everything that sacrifice does, plus time crystals, Time Dimensions, and Time Upgrades.',
+        confirmPopText: 'This will reset ALL of your progress up to unlocking Galaxies.<br><span style="font-size: 11pt;">(These confirmations can be disabled in options)</span>',
         displayDesc: function() { return true; },
         displayTooltip: true,
         displayFormula: function() { return 'floor(worlds^(worlds/10 - sqrt(worlds/10)))' },
@@ -1743,7 +1748,7 @@ GALAXIES_DATA[0] = {
         gainResource: 'depleted galaxies',
         getReqAmount: function() { return 'at least 10'; },
         getReqResource: function() { return 'exterminated worlds'; },
-        doReset: function() { galaxyPrestige(); },
+        doReset: function() { galaxyPrestigeClick(); },
         showNextAt: true,
         getNextAt: function() {
             return calculateNextGalaxy();

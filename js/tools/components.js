@@ -14,17 +14,41 @@ function loadVue() {
 				ascError: false
 			}
 		},
+		methods: {
+			updatePrestige() {
+				if (this.prestAmount != '') {
+					try {
+						player.autobuyers[10]['max'] = new Decimal(this.prestAmount);
+						this.prestError = false;
+					}
+					catch(err) {
+						this.prestError = true;
+					}
+				}
+			},
+			updateAsc() {
+				if (this.ascAmount != '') {
+					try {
+						player.autobuyers[11]['amount'] = new Decimal(this.ascAmount);
+						this.ascError = false;
+					}
+					catch(err) {
+						this.ascError = true;
+					}
+				}
+			}
+		},
 		template: `
 		<div v-if="id==32">
 			<div class="buyerOptionsContainer priorityContainer">
-				<label for="maxPrestige">{{ DATA.ab.multi.dataLists[id][4].htm() }}</label><input v-model="prestAmount" v-on:change="updateMaxPrestige()" type="text" id="maxPrestige" name="maxPrestige" class="buyerTextP">
+				<label for="maxPrestige">{{ DATA.ab.multi.dataLists[id][4].htm() }}</label><input v-model="prestAmount" v-on:change="updatePrestige()" type="text" id="maxPrestige" name="maxPrestige" class="buyerTextP">
 			</div>
 			<span>(set to 0 for unlimited)</span><br>
 			<span v-if="prestError">invalid input. value set to last valid input: {{ formatWholeNoComma(player.autobuyers[10]['max']) }}</span>
 		</div>
 		<div v-else-if="id==33">
 			<div class="buyerOptionsContainer priorityContainer">
-				<label for="ascensionBuyerAmount">{{ DATA.ab.multi.dataLists[id][4].htm() }}</label><input v-model="ascAmount" v-on:change="updateAscBuyer()" type="text" id="ascensionBuyerAmount" name="ascensionBuyerAmount" class="buyerTextP">
+				<label for="ascensionBuyerAmount">{{ DATA.ab.multi.dataLists[id][4].htm() }}</label><input v-model="ascAmount" v-on:change="updateAsc()" type="text" id="ascensionBuyerAmount" name="ascensionBuyerAmount" class="buyerTextP">
 			</div>
 			<span v-if="ascError">invalid input. value set to last valid input: {{ formatWholeNoComma(player.autobuyers[11]['amount']) }}</span>
 		</div>
@@ -38,6 +62,20 @@ function loadVue() {
 				sacAmount: player.autobuyers[9].amount,
 				sacType: player.autobuyers[9].type,
 				sacError: false
+			}
+		},
+		methods: {
+			updateSac() {
+				player.autobuyers[9]['type'] = this.sacType;
+        		if (this.sacAmount != '') {
+					try {
+						player.autobuyers[9]['amount'] = new Decimal(this.sacAmount);
+						this.sacError = false;
+					}
+					catch(err) {
+						this.sacError = true;
+					}
+				}
 			}
 		},
 		template: `
@@ -133,18 +171,29 @@ function loadVue() {
 
 	Vue.component('tab-button', {
 		props: ['data', 'active'],
+		methods: {
+			isNotify(tab) { return player.tabNotify[tab].notify },
+			isIndirect(tab) { return player.tabNotify[tab].indirect },
+		},
 		template: `
 		<div v-if="DATA.tabs[data].unlocked()">
-			<button v-bind:class="{ tabBut: true, tabButSelected: (active==DATA.tabs[data].pid && data!='h'), helpButSelected: (data=='h' && player.help) }" v-on:click="tabButtonClick(data)" v-html="((data=='h' && player.help) ? 'CLOSE HELP' : DATA.tabs[data].title)"></button>
+			<button v-bind:class="{ tabBut: true, tabButSelected: (active==DATA.tabs[data].pid && data!='h'), helpButSelected: (data=='h' && player.help), tabButNotify: isNotify(data), tabButIndirectNotify: isIndirect(data) }" v-on:click="tabButtonClick(data)" v-html="((data=='h' && player.help) ? 'CLOSE HELP' : DATA.tabs[data].title)"></button>
 		</div>
 		`
 	}) 
 
 	Vue.component('sub-tab-button', {
 		props: ['data', 'id', 'active'],
+		methods: {
+			isNotify(tab, sub) {
+				if (sub.slice(0,5)=='timeU') { return player.tabNotify[tab]['u'].notify }
+				else if (sub.slice(0,5)=='timeD') { return player.tabNotify[tab]['d'].notify }
+				else { return player.tabNotify[tab][sub.slice(0,1)].notify }
+			},
+		},
 		template: `
 		<div v-if="DATA.tabs[data].subTabs[id].unlocked()">
-			<button v-bind:class="{ subTabBut: true, tabButSelected: (active==DATA.tabs[data].subTabs[id].pid) }" v-on:click="subTabButtonClick(data, id)" v-html="DATA.tabs[data].subTabs[id].title"></button>
+			<button v-bind:class="{ subTabBut: true, tabButSelected: (active==DATA.tabs[data].subTabs[id].pid), tabButNotify: isNotify(data, id) }" v-on:click="subTabButtonClick(data, id)" v-html="DATA.tabs[data].subTabs[id].title"></button>
 		</div>
 		`
 	}) 
@@ -308,7 +357,7 @@ function loadVue() {
 					<span v-html="DATA[data].upgrades[id].title" style="font-weight: 900;"></span><br>
 					<span v-html="DATA[data].upgrades[id].desc()+'<br>'"></span>
 					<span v-if="DATA[data].upgrades[id].requires!==undefined"><span v-if="DATA[data].upgrades[id].requires.length>0"v-bind:style="[strikeout(data) ? { 'text-decoration': 'line-through' } : { 'text-decoration': '' }]">Requires: <span style="font-weight: 900;" v-html="DATA[data].upgrades[DATA[data].upgrades[id].requires[0]].title"></span><span v-if="DATA[data].upgrades[id].requires.length>1"> or <span style="font-weight: 900;" v-html="DATA[data].upgrades[DATA[data].upgrades[id].requires[1]].title"></span></span><br></span></span> 
-					Cost: <span v-if="data=='a'" v-html="DATA[data].upgrades[id].cost()"></span><span v-else><num-text-plain :val="formatWhole(DATA[data].upgrades[id].cost())" :label="DATA[data].upgrades[id].resource"></num-text-plain></span>
+					Cost: <span v-if="data=='a'" v-html="DATA[data].upgrades[id].cost()"></span><span v-else><num-text-plain :val="formatDefault(DATA[data].upgrades[id].cost())" :label="DATA[data].upgrades[id].resource"></num-text-plain></span>
 					<span v-if="data=='c'"><br>Level: {{ formatWhole(player.construction[id]) + (DATA[data].upgrades[id].extraLevels()>0 ? ' + ' + formatWhole(DATA[data].upgrades[id].extraLevels()) : '') }}</span>
 					<span v-if="DATA[data].upgrades[id].displayEffect"><br>Currently: <span v-html="DATA[data].upgrades[id].effectString()"></span></span>
 				</div>
@@ -817,23 +866,60 @@ function loadVue() {
 		`
 	})
 
-	Vue.component('popup', {
-		props: ['data', 'text'],
-		template: `
-		<div v-bind:class="{ [data]: true }" v-html="text"></div>
-		`
-	})
+	
 
 	Vue.component('popups', {
 		props: [],
+		data() {
+			return {
+				timedPopups: []
+			}
+		},
 		template: `
 		<div id="popupContainer">
-			<div v-for="popup in timedPopups">
-				<transition name="fade">
-					<div v-if="timedPopups[popup].time>0">
-						<popup :data="timedPopups[popup].className" :text="timedPopups[popup].popupText"></popup>
-					</div>
-				</transition>
+			<transition name="fade">
+				<div v-for="popup, index in timedPopups">
+					<div v-bind:class="popup.className" v-html="popup.popupText"></div>
+				</div>
+			</transition>
+		</div>
+		`
+	})
+
+	//data is the name of the function to call on confirm
+	Vue.component('confirm-popup', {
+		props: [],
+		data() {
+			return {
+				isActivePop: false,
+				confirmText: '',
+				fname: '',
+				arg: null,
+			}
+		},
+		methods: {
+			confirmYes() {
+				this.isActivePop = false;
+				this.confirmText = '';
+				if (this.arg==null) { window[this.fname](); }
+				else { window[this.fname](this.arg); }
+				this.fname = '';
+				this.arg = null;
+			},
+			confirmNo() {
+				this.isActivePop = false;
+				this.confirmText = '';
+				this.fname = '';
+				this.arg = null;
+			}
+		},
+		template: `
+		<div v-if="isActivePop" class="confPopup">
+			<h3>Are You Sure?</h3>
+			<div style="margin: auto;" v-html="confirmText"></div>
+			<div style="display: flex; justify-content: center; margin: 10px auto;">
+				<div style="flex: 1; max-width: 100px; margin: 5px;"><button class="confirmBut" v-on:click="confirmYes()">YES</button></div>
+				<div style="flex: 1; max-width: 100px; margin: 5px;"><button class="confirmBut" v-on:click="confirmNo()">NO</button></div>
 			</div>
 		</div>
 		`
@@ -1035,8 +1121,6 @@ function loadVue() {
 				'confirmations': false, 
 				'header': false,
 			},
-			timedPopups,
-			activePopups,
 			showNormalPopup,
 			closeNormalPopup,
 			getCorpsesPerSecond,

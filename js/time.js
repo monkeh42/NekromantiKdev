@@ -214,36 +214,36 @@ function timeLockRespec() {
 
 function respecTimeClick() {
     if (player.timeLocked) {
-        if (player.confirmations['timeRespec']['click']) {
-            if (!confirm('Are you sure? This will reset ALL of your progress before unlocking Time Warp, and all of your time essense.<br>(These confirmations can be disabled in options)')) return
-        }
-
-        player.timeLocked = false;
-        if (canTimePrestige()) { timePrestigeNoConfirm(); }
-        else { timePrestigeReset(); }
+        if (player.confirmations['timeRespec']['click']) { confirmation(DATA.td.prestige.confirmPopText, 'respecTime'); }
+        else { respecTime() }
     }
 }
 
 function respecTimeKey() {
     if (player.timeLocked) {
-        if (player.confirmations['timeRespec']['key']) {
-            if (!confirm('Are you sure? This will reset ALL of your progress before unlocking Time Warp, and all of your time essense.<br>(These confirmations can be disabled in options)')) return
-        }
-
-        player.timeLocked = false;
-        if (canTimePrestige()) { timePrestigeNoConfirm(); }
-        else { timePrestigeReset(); }
+        if (player.confirmations['timeRespec']['key']) { confirmation(DATA.td.prestige.confirmPopText, 'respecTime'); }
+        else { respecTime() }
     }
 }
 
+function respecTime() {
+    player.timeLocked = false;
+    if (canTimePrestige()) { timePrestigeNoConfirm(); }
+    else { timePrestigeReset(); }
+}
+
 function timePrestigeClick() {
-    if (player.confirmations['timePrestige']['click']) { timePrestige(); }
-    else { timePrestigeNoConfirm(); }
+    if (canTimePrestige()) {
+        if (player.confirmations['timePrestige']['click']) { confirmation(DATA.td.prestige.confirmPopText, 'timePrestigeNoConfirm'); }
+        else { timePrestigeNoConfirm(); }
+    }
 }
 
 function timePrestigeKey() {
-    if (player.confirmations['timePrestige']['key']) { timePrestige(); }
-    else { timePrestigeNoConfirm(); }
+    if (canTimePrestige()) {
+        if (player.confirmations['timePrestige']['key']) { confirmation(DATA.td.prestige.confirmPopText, 'timePrestigeNoConfirm'); }
+        else { timePrestigeNoConfirm(); }
+    }
 }
 
 function timePrestige() {
@@ -348,6 +348,11 @@ function resetTime() {
 
 //data
 
+var TIME_DATA = {
+    notify: false,
+    indirect: false,
+}
+
 var TIME_DIMENSIONS = {
     layerDisplay: {
         numClass: 'timeNum',
@@ -357,6 +362,7 @@ var TIME_DIMENSIONS = {
         className: 'timePrestige',
         heading: 'sacrifice your empire',
         desc: 'Perform a dark ritual to transmute all you have achieved into time crystals. This will reset all your corpses, units, worlds, bricks, buildings, upgrades, earned time dimensions, and time essence, but you will gain time crystals based on your corpses.',
+        confirmPopText: 'This will reset ALL of your progress before unlocking Time Warp, and all of your time essense.<br><span style="font-size: 11pt;">(These confirmations can be disabled in options)</span>',
         displayDesc: function() { return !player.stats['thisAscStats'].totalCrystals.gt(2000); },
         displayTooltip: true,
         displayFormula: function() { return 'floor(10^(corpses_exponent/20 - 0.65))' },
@@ -365,7 +371,7 @@ var TIME_DIMENSIONS = {
         gainResource: 'time crystals',
         getReqAmount: function() { return 'at least ' + (isResearchCompleted(5) ? '1e15' : '1e20'); },
         getReqResource: function() { return 'corpses' },
-        doReset: function() { timePrestige(); },
+        doReset: function() { timePrestigeClick(); },
         showNextAt: false,
         getNextAt: function() {
             return;

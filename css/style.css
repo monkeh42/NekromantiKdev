@@ -236,6 +236,20 @@ body {
     display: none;
 }
 
+.confPopup {
+    position: fixed;
+    left: 50%;
+	top: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    text-align: center;
+    background-color: black;
+    border: 3px solid white;
+    box-shadow: 3px 3px #424242;
+    width: 400px;
+    border-radius: 4px;
+    z-index: 2;
+}
+
 .cPopup {
     position: absolute;
     left: 50%;
@@ -755,6 +769,19 @@ option:active, option.active {
     margin: 5px;
 }
 
+.confirmBut {
+    color: white;
+    background-color: #1f1f1f;
+    font-style: bold;
+    width: 100px;
+    height: 40px;
+    border: 1px solid #525252;
+    cursor: pointer;
+    border-radius: 4px;
+    font-family: 'Cinzel', serif;
+    font-size: 12pt;
+}
+
 .favBut {
     color: white;
     background-color: #1f1f1f;
@@ -833,7 +860,7 @@ option:active, option.active {
     margin-top: 15px;
 }
 
-.optBut:hover, .endBut:hover {
+.confirmBut:hover, .optBut:hover, .endBut:hover {
     background-color: #525252;
 }
 
@@ -2465,6 +2492,7 @@ option:active, option.active {
     border: 3px solid white;
     width: 300px;
     border-radius: 4px;
+    opacity: 0.4;
 }
 
 .milestonesNotify {

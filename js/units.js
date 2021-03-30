@@ -140,13 +140,17 @@ function canSpacePrestige() {
 }
 
 function spacePrestigeClick() {
-    if (player.confirmations['worldPrestige']['click']) { spacePrestige(); }
-    else { spacePrestigeNoConfirm(); }
+    if (canSpacePrestige()) {
+        if (player.confirmations['worldPrestige']['click']) { confirmation(DATA.u.prestige.confirmPopText, 'spacePrestigeNoConfirm'); }
+        else { spacePrestigeNoConfirm(); }
+    }
 }
 
 function spacePrestigeKey() {
-    if (player.confirmations['worldPrestige']['key']) { spacePrestige(); }
-    else { spacePrestigeNoConfirm(); }
+    if (canSpacePrestige()) {
+        if (player.confirmations['worldPrestige']['key']) { confirmation(DATA.u.prestige.confirmPopText, 'spacePrestigeNoConfirm'); }
+        else { spacePrestigeNoConfirm(); }
+    }
 }
 
 function spacePrestige() {
@@ -217,6 +221,8 @@ function resetUnits() {
 //data
 
 var UNITS_DATA = {
+    notify:  false,
+    indirect: false,
     layerDisplay: {
         layerButtonClass: 'unitBut',
         numClass: 'corpseNum',
@@ -233,8 +239,8 @@ var UNITS_DATA = {
         boxUnlocked: function(i) {
             let boxid=this.dataLists[i].boxID;
             if (boxid<=10) { return true; }
-            else if (boxid==11) { return player.unlocks['unitsTab']['timeDimBuyer']; }
-            else if (boxid==12) { return player.unlocks['unitsTab']['ascensionBuyer']; }
+            else if (boxid==11) { return player.unlocks['timeDimBuyer']; }
+            else if (boxid==12) { return player.unlocks['ascensionBuyer']; }
         },
         dataLists: {
             11: {
@@ -579,6 +585,7 @@ var UNITS_DATA = {
         className: 'spacePrestige',
         heading: 'This world is dead and empty...',
         desc: 'Give up all your units and corpses to exterminate a new world. You gain a boost to corpse gain based on total exterminated worlds.',
+        confirmPopText: 'This will reset ALL of your corpses, units, and astral bricks.<br><span style="font-size: 11pt;">(These confirmations can be disabled in options)</span>',
         displayDesc: function() { return !player.spaceResets.gt(2); },
         displayTooltip: false,
         displayFormula: function() { return '' },
@@ -598,7 +605,7 @@ var UNITS_DATA = {
                     return 'lich'; 
             }
         },
-        doReset: function() { spacePrestige(); },
+        doReset: function() { spacePrestigeClick(); },
         showNextAt: false,
         getNextAt: function() {
             return;

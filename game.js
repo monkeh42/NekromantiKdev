@@ -2,7 +2,7 @@
 
 const GAME_DATA = {
     author: 'monkeh42',
-    version: 'v1.1.0_d.4',
+    version: 'v1.1.0_d.5',
 }
 
 const NUM_UNITS = 8;
@@ -44,7 +44,7 @@ var DATA = {};
 
 var modules;
 
-var timedPopups = [];
+//var timedPopups = [];
 
 var activePopups = [];
 
@@ -140,6 +140,7 @@ function setupData() {
     addData('b', 'buildings', BUILDS_DATA[0]);
     for (let i=1; i<=4; i++) { addData('b'+i.toString(), BUILDS_DATA[i].id, BUILDS_DATA[i]); }
     addData('c', 'construction', CONSTR_DATA);
+    addData('t', 'time', TIME_DATA);
     addData('tu', 'time upgrades', TIME_UPGRADES);
     addData('td', 'time dimensions', TIME_DIMENSIONS);
     addData('g', 'galaxies', GALAXIES_DATA[0]);
@@ -197,7 +198,8 @@ function gameLoop(diff=new Decimal(0), offline=false) {
     var timeBuff;
     if (player.astralFlag) { timeBuff = getAntiTimeBuff().div(getAstralNerf()) }
     else { timeBuff = getTrueTimeBuff(); }
-    var realDiff = diff;
+    var realDiff = new Decimal(diff);
+    var trueDiff = new Decimal(realDiff);
     diff = diff.times(timeBuff);
     if (hasGUpgrade(1, 32) || hasGUpgrade(4, 22)) { realDiff = diff.times(timeBuff.sqrt()); } 
     
@@ -299,7 +301,7 @@ function gameLoop(diff=new Decimal(0), offline=false) {
         player.truePercent = 100 - Number(app.sliderVal);
         player.antiPercent = Number(app.sliderVal);
     
-        popupTimers(diff.div(1000));
+        popupTimers(trueDiff);
     }
     
 }
@@ -334,10 +336,10 @@ function autobuyerTick(slow) {
 }
 
 function popupTimers(dif) {
-    for (popup in timedPopups) {
-        timedPopups[popup].time -= dif;
-        if (timedPopups[popup].time <= 0) {
-            timedPopups.splice(popup, 1);
+    for (popup in app.$refs['popupscontainer'].timedPopups) {
+        app.$refs['popupscontainer'].timedPopups[popup]['time'] -= dif;
+        if (app.$refs['popupscontainer'].timedPopups[popup]['time'] <= 0) {
+            app.$refs['popupscontainer'].timedPopups.splice(popup, 1);
         }
     }
 }
@@ -602,6 +604,12 @@ function updateVersion() {
         for (let k in tempPlayer.allTimeStats) { player.stats['allTimeStats'][k] = tempPlayer.allTimeStats[k]; }
         for (let m in tempPlayer.thisSacStats) { player.stats['thisSacStats'][m] = tempPlayer.thisSacStats[m]; }
         for (let n in tempPlayer.thisAscStats) { player.stats['thisAscStats'][n] = tempPlayer.thisAscStats[n]; }
+
+        for (let key in player.unlocks) {
+            if (player.unlocks[key]) {
+                DATA.ul.main[key].onUnlock();
+            }
+        }
     }
     tempPlayer = {};
 }
