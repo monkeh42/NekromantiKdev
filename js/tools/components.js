@@ -177,7 +177,7 @@ function loadVue() {
 		},
 		template: `
 		<div v-if="DATA.tabs[data].unlocked()">
-			<button v-bind:class="{ tabBut: true, tabButSelected: (active==DATA.tabs[data].pid && data!='h'), helpButSelected: (data=='h' && player.help), tabButNotify: isNotify(data), tabButIndirectNotify: isIndirect(data) }" v-on:click="tabButtonClick(data)" v-html="((data=='h' && player.help) ? 'CLOSE HELP' : DATA.tabs[data].title)"></button>
+			<button v-bind:class="{ tabBut: true, tabButSelected: (active==DATA.tabs[data].pid && data!='h'), helpButSelected: (data=='h' && player.help), tabButNotify: isNotify(data), tabButIndirectNotify: isIndirect(data), timeUnlockedNotify: (data=='t'&&!player.timeLocked) }" v-on:click="tabButtonClick(data)" v-html="((data=='h' && player.help) ? 'CLOSE HELP' : DATA.tabs[data].title)"></button>
 		</div>
 		`
 	}) 
@@ -193,7 +193,7 @@ function loadVue() {
 		},
 		template: `
 		<div v-if="DATA.tabs[data].subTabs[id].unlocked()">
-			<button v-bind:class="{ subTabBut: true, tabButSelected: (active==DATA.tabs[data].subTabs[id].pid), tabButNotify: isNotify(data, id) }" v-on:click="subTabButtonClick(data, id)" v-html="DATA.tabs[data].subTabs[id].title"></button>
+			<button v-bind:class="{ subTabBut: true, tabButSelected: (active==DATA.tabs[data].subTabs[id].pid), tabButNotify: isNotify(data, id), timeUnlockedNotify: (id=='dims'&&!player.timeLocked) }" v-on:click="subTabButtonClick(data, id)" v-html="DATA.tabs[data].subTabs[id].title"></button>
 		</div>
 		`
 	}) 
