@@ -536,11 +536,9 @@ function congrats() {
 
 function continueGame() {
     player.continue = true;
-    document.getElementById('arkDescription').style.display = 'none';
-    document.getElementById('winDescription').style.display = 'block';
-    document.getElementById('arkSubTab').style.height = '100px';
-    showTab('unitsTab', false, 'unitsTabBut');
-    showUnitSubTab('unitsSubTab', 'unitsSubTabBut', 'unitsTabBut');
+    //document.getElementById('arkSubTab').style.height = '100px';
+    player.tab = 'unitsTab';
+    player.subTabs['u'] = 'unitsSubTab';
     document.getElementById('htmlBody').classList.remove('hidden-scrollbar');
     document.getElementById('winScreen').style.opacity = '0';
     setTimeout(function() {
@@ -1099,7 +1097,7 @@ var RESEARCH_DATA = {
                     boxID: 1,
                     tag: 'button',
                     klass: function() { return `${isResearchCompleted(this.boxID) ? 'completedResearchBut' : (player.isInResearch ? (isResearchActive(this.boxID) ? 'progressResearchButton' : 'unclickResearchBut') : 'researchButton')}`; },
-                    htm: function() { return `${isResearchActive(this.boxID) ? 'IN PROGRESS' : (isResearchCompleted(this.boxID) ? 'COMPLETED' : 'BEGIN')}`; },
+                    htm: function() { return `${isResearchCompleted(this.boxID) ? 'COMPLETED' : (player.isInResearch ? (isResearchActive(this.boxID) ? (canCompleteResearch(this.boxID) ? 'COMPLETE<br>PROJECT' : 'IN PROGRESS') : 'BEGIN') : 'BEGIN')}`; },
                     style: function() { return ((player.isInResearch&&!isResearchCompleted(this.boxID)&&!isResearchActive(this.boxID)) ? {'text-decoration': 'line-through'} : {}); },
                     click: function() { researchButtonClick(this.boxID); }
                 }
@@ -1152,7 +1150,7 @@ var RESEARCH_DATA = {
                     boxID: 2,
                     tag: 'button',
                     klass: function() { return `${isResearchCompleted(this.boxID) ? 'completedResearchBut' : (player.isInResearch ? (isResearchActive(this.boxID) ? 'progressResearchButton' : 'unclickResearchBut') : 'researchButton')}`; },
-                    htm: function() { return `${isResearchActive(this.boxID) ? 'IN PROGRESS' : (isResearchCompleted(this.boxID) ? 'COMPLETED' : 'BEGIN')}`; },
+                    htm: function() { return `${isResearchCompleted(this.boxID) ? 'COMPLETED' : (player.isInResearch ? (isResearchActive(this.boxID) ? (canCompleteResearch(this.boxID) ? 'COMPLETE<br>PROJECT' : 'IN PROGRESS') : 'BEGIN') : 'BEGIN')}`; },
                     style: function() { return ((player.isInResearch&&!isResearchCompleted(this.boxID)&&!isResearchActive(this.boxID)) ? {'text-decoration': 'line-through'} : {}); },
                     click: function() { researchButtonClick(this.boxID); }
                 }
@@ -1205,7 +1203,7 @@ var RESEARCH_DATA = {
                     boxID: 3,
                     tag: 'button',
                     klass: function() { return `${isResearchCompleted(this.boxID) ? 'completedResearchBut' : (player.isInResearch ? (isResearchActive(this.boxID) ? 'progressResearchButton' : 'unclickResearchBut') : 'researchButton')}`; },
-                    htm: function() { return `${isResearchActive(this.boxID) ? 'IN PROGRESS' : (isResearchCompleted(this.boxID) ? 'COMPLETED' : 'BEGIN')}`; },
+                    htm: function() { return `${isResearchCompleted(this.boxID) ? 'COMPLETED' : (player.isInResearch ? (isResearchActive(this.boxID) ? (canCompleteResearch(this.boxID) ? 'COMPLETE<br>PROJECT' : 'IN PROGRESS') : 'BEGIN') : 'BEGIN')}`; },
                     style: function() { return ((player.isInResearch&&!isResearchCompleted(this.boxID)&&!isResearchActive(this.boxID)) ? {'text-decoration': 'line-through'} : {}); },
                     click: function() { researchButtonClick(this.boxID); }
                 }
@@ -1258,7 +1256,7 @@ var RESEARCH_DATA = {
                     boxID: 4,
                     tag: 'button',
                     klass: function() { return `${isResearchCompleted(this.boxID) ? 'completedResearchBut' : (player.isInResearch ? (isResearchActive(this.boxID) ? 'progressResearchButton' : 'unclickResearchBut') : 'researchButton')}`; },
-                    htm: function() { return `${isResearchActive(this.boxID) ? 'IN PROGRESS' : (isResearchCompleted(this.boxID) ? 'COMPLETED' : 'BEGIN')}`; },
+                    htm: function() { return `${isResearchCompleted(this.boxID) ? 'COMPLETED' : (player.isInResearch ? (isResearchActive(this.boxID) ? (canCompleteResearch(this.boxID) ? 'COMPLETE<br>PROJECT' : 'IN PROGRESS') : 'BEGIN') : 'BEGIN')}`; },
                     style: function() { return ((player.isInResearch&&!isResearchCompleted(this.boxID)&&!isResearchActive(this.boxID)) ? {'text-decoration': 'line-through'} : {}); },
                     click: function() { researchButtonClick(this.boxID); }
                 }
@@ -1311,7 +1309,7 @@ var RESEARCH_DATA = {
                     boxID: 5,
                     tag: 'button',
                     klass: function() { return `${isResearchCompleted(this.boxID) ? 'completedResearchBut' : (player.isInResearch ? (isResearchActive(this.boxID) ? 'progressResearchButton' : 'unclickResearchBut') : 'researchButton')}`; },
-                    htm: function() { return `${isResearchActive(this.boxID) ? 'IN PROGRESS' : (isResearchCompleted(this.boxID) ? 'COMPLETED' : 'BEGIN')}`; },
+                    htm: function() { return `${isResearchCompleted(this.boxID) ? 'COMPLETED' : (player.isInResearch ? (isResearchActive(this.boxID) ? (canCompleteResearch(this.boxID) ? 'COMPLETE<br>PROJECT' : 'IN PROGRESS') : 'BEGIN') : 'BEGIN')}`; },
                     style: function() { return ((player.isInResearch&&!isResearchCompleted(this.boxID)&&!isResearchActive(this.boxID)) ? {'text-decoration': 'line-through'} : {}); },
                     click: function() { researchButtonClick(this.boxID); }
                 }

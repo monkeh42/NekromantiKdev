@@ -381,7 +381,7 @@
                         <eth-upg-table data="e"></eth-upg-table>
                     </div>
                     <div id="arkSubTab" class="galaxySubTab" v-bind:style="[(player.subTabs['g']=='arkSubTab') ? { display: 'block' } : { display: 'none' }]">
-                        <div v-if="player.win" id="winDescription" style="text-align: center; width: 100%; font-size: 32pt; color: #661503; font-weight: bold; -webkit-text-stroke-width: 1px; -webkit-text-stroke-color: white; display: none;">YOU HAVE GONE BEYOND.</div>
+                        <div v-if="player.win" id="winDescription" style="text-align: center; width: 100%; font-size: 32pt; color: #661503; font-weight: bold; -webkit-text-stroke-width: 1px; -webkit-text-stroke-color: white;">YOU HAVE GONE BEYOND.</div>
                         <div v-if="!player.win" id="arkDescription" style="text-align: center; width: 100%;">
                             <span style="font-size: 17pt; font-weight: bold; color: #e32d05;">You receive a message from beyond.</span><br>
                             <span style="font-size: 16pt; color: #661503; font-weight: bold; -webkit-text-stroke-width: .3px; -webkit-text-stroke-color: white;">"We have found you worthy of our ranks, small one."<br>
@@ -389,19 +389,19 @@
                             Even in your godlike state this is beyond you. This will require study.<br>
                             Of course, you have undead souls to do your studying for you.<br>
                         </div>
-                        <img id="thrusters" class="arkImg" v-bind:style="{ display: (player.ark['thrusters'].unlocked ? (!player.ark['thrusters'].bought ? 'none' : 'block') : 'none') }" src="../images/thrusters.png">
-                        <img id="engines" class="arkImg" v-bind:style="{ display: (player.ark['engines'].unlocked ? (!player.ark['engines'].bought ? 'none' : 'block') : 'none') }" src="../images/engines.png">
-                        <img id="navigation" class="arkImg" v-bind:style="{ display: (player.ark['navigation'].unlocked ? (!player.ark['navigation'].bought ? 'none' : 'block') : 'none') }" src="../images/navigation.png">
-                        <img id="torpedos" class="arkImg" v-bind:style="{ display: (player.ark['torpedos'].unlocked ? (!player.ark['torpedos'].bought ? 'none' : 'block') : 'none') }" src="../images/torpedos.png">
-                        <img id="railguns" class="arkImg" v-bind:style="{ display: (player.ark['railguns'].unlocked ? (!player.ark['railguns'].bought ? 'none' : 'block') : 'none') }" src="../images/railguns.png">
-                        <img id="support" class="arkImg" v-bind:style="{ display: (player.ark['support'].unlocked ? (!player.ark['support'].bought ? 'none' : 'block') : 'none') }" src="../images/support.png">
-                        <img id="thrustersBuilt" class="arkImgBuilt" v-bind:style="{ display: (player.ark['thrusters'].bought ? (player.win ? 'none' : 'block') : 'none') }" src="../images/thrusterscolor.png">
-                        <img id="enginesBuilt" class="arkImgBuilt" v-bind:style="{ display: (player.ark['engines'].bought ? (player.win ? 'none' : 'block') : 'none') }" src="../images/enginescolor.png">
-                        <img id="navigationBuilt" class="arkImgBuilt" v-bind:style="{ display: (player.ark['navigation'].bought ? (player.win ? 'none' : 'block') : 'none') }" src="../images/navigationcolor.png">
-                        <img id="torpedosBuilt" class="arkImgBuilt" v-bind:style="{ display: (player.ark['torpedos'].bought ? (player.win ? 'none' : 'block') : 'none') }" src="../images/torpedoscolor.png">
-                        <img id="railgunsBuilt" class="arkImgBuilt" v-bind:style="{ display: (player.ark['railguns'].unlocked ? (player.win ? 'none' : 'block') : 'none') }" src="../images/railgunscolor.png">
-                        <img id="supportBuilt" class="arkImgBuilt" v-bind:style="{ display: (player.ark['support'].bought ? (player.win ? 'none' : 'block') : 'none') }" src="../images/supportcolor.png">
-                        <img id="fullyBuilt" class="arkImgBuilt" v-bind:style="{ display: ((player.win&&!player.continue) ? 'block' : 'none') }" src="../images/spaceshipcolor.png">
+                        <img v-if="player.ark['thrusters'].unlocked&&!player.ark['thrusters'].bought" id="thrusters" class="arkImg" style="display: block;" src="../images/thrusters.png">
+                        <img v-if="player.ark['engines'].unlocked&&!player.ark['engines'].bought" id="engines" class="arkImg" style="display: block;" src="../images/engines.png">
+                        <img v-if="player.ark['navigation'].unlocked&&!player.ark['navigation'].bought" id="navigation" class="arkImg" style="display: block;" src="../images/navigation.png">
+                        <img v-if="player.ark['torpedos'].unlocked&&!player.ark['torpedos'].bought" id="torpedos" class="arkImg" style="display: block;" src="../images/torpedos.png">
+                        <img v-if="player.ark['railguns'].unlocked&&!player.ark['railguns'].bought" id="railguns" class="arkImg" style="display: block;" src="../images/railguns.png">
+                        <img v-if="player.ark['support'].unlocked&&!player.ark['support'].bought" id="support" class="arkImg" style="display: block;" src="../images/support.png">
+                        <img v-if="player.ark['thrusters'].bought&&!player.win" id="thrustersBuilt" class="arkImgBuilt" style="display: block;" src="../images/thrusterscolor.png">
+                        <img v-if="player.ark['engines'].bought&&!player.win" id="enginesBuilt" class="arkImgBuilt" style="display: block;" src="../images/enginescolor.png">
+                        <img v-if="player.ark['navigation'].bought&&!player.win" id="navigationBuilt" class="arkImgBuilt" style="display: block;" src="../images/navigationcolor.png">
+                        <img v-if="player.ark['torpedos'].bought&&!player.win" id="torpedosBuilt" class="arkImgBuilt" style="display: block;" src="../images/torpedoscolor.png">
+                        <img v-if="player.ark['railguns'].bought&&!player.win" id="railgunsBuilt" class="arkImgBuilt" style="display: block;" src="../images/railgunscolor.png">
+                        <img v-if="player.ark['support'].bought&&!player.win" id="supportBuilt" class="arkImgBuilt" style="display: block;" src="../images/supportcolor.png">
+                        <img v-if="player.win&&!player.continue" id="fullyBuilt" class="arkImgBuilt" style="display: block;" src="../images/spaceshipcolor.png">
                         <upgrade data="a" cssid="thrustersBut" :id="'thrusters'" extra="1"></upgrade>
                         <upgrade data="a" cssid="enginesBut" :id="'engines'" extra="2"></upgrade>
                         <upgrade data="a" cssid="navigationBut" :id="'navigation'" extra="3"></upgrade>

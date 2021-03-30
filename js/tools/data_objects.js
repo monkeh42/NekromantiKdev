@@ -881,7 +881,7 @@ var START_PLAYER = {
     favGalaxies: [[], [], []],
     favGalNames: ['Slot 1', 'Slot 2', 'Slot 3'],
     help: false,
-    version: 'v1.1.0_d.5',
+    version: 'v1.1.0_d.6',
 }
 
 var STAT_KEYS = {
@@ -3861,7 +3861,7 @@ function fixResetBug() {
     START_PLAYER.dontResetSlider = false;
     START_PLAYER.favGalaxies = [[], [], []];
     START_PLAYER.favGalNames = ['Slot 1', 'Slot 2', 'Slot 3'];
-    START_PLAYER.version = 'v1.1.0_d.5';
+    START_PLAYER.version = 'v1.1.0_d.6';
 
     DATA.sp = {};
     copyData(DATA.sp, START_PLAYER);
