@@ -137,13 +137,13 @@ function loadVue() {
 		</div>
 		<div v-else-if="method=='fast'">
 			<div class="buyerOptionsContainer">
-				<label :for="DATA.ab[data].prefixText + 'SpeedBut'">speed:</label><!-- --><button onclick="updateSingleBuyer(data, 'fast')" :id="DATA.ab[data].prefixText + 'SpeedBut'" class="buyerSpeedBut" v-html="player.autobuyers[data]['fast'] ? 'FAST' : 'SLOW'" :disabled="!player.unlocks['fastBuyers']"></button><!-- -->
+				<label :for="DATA.ab[data].prefixText + 'SpeedBut'">speed:</label><!-- --><button v-on:click="updateSingleBuyer(data, 'fast')" :id="DATA.ab[data].prefixText + 'SpeedBut'" class="buyerSpeedBut" v-html="player.autobuyers[data]['fast'] ? 'FAST' : 'SLOW'" :disabled="!player.unlocks['fastBuyers']"></button><!-- -->
 				<div v-if="!player.unlocks['fastBuyers']" class="buyerSpeedLock"></div>
 			</div>
 		</div>
 		<div v-else-if="method=='max'">
 			<div class="buyerOptionsContainer">
-				<label :for="DATA.ab[data].prefixText + 'BulkBut'">amount:</label><!-- --><button onclick="updateSingleBuyer(data, 'fast')" :id="DATA.ab[data].prefixText + 'BulkBut'" class="buyerBulkBut" v-html="player.autobuyers[data]['bulk'] ? 'MAX' : 'SINGLE'" :disabled="!player.unlocks['bulkBuyers']"></button><!-- -->
+				<label :for="DATA.ab[data].prefixText + 'BulkBut'">amount:</label><!-- --><button v-on:click="updateSingleBuyer(data, 'bulk')" :id="DATA.ab[data].prefixText + 'BulkBut'" class="buyerBulkBut" v-html="player.autobuyers[data]['bulk'] ? 'MAX' : 'SINGLE'" :disabled="!player.unlocks['bulkBuyers']"></button><!-- -->
 				<div v-if="!player.unlocks['bulkBuyers']" class="buyerBulkLock"></div>
 			</div>
 		</div>
@@ -193,7 +193,7 @@ function loadVue() {
 		},
 		template: `
 		<div v-if="DATA.tabs[data].subTabs[id].unlocked()">
-			<button v-bind:class="{ subTabBut: true, tabButSelected: (active==DATA.tabs[data].subTabs[id].pid), tabButNotify: isNotify(data, id), timeUnlockedNotify: (id=='dims'&&!player.timeLocked) }" v-on:click="subTabButtonClick(data, id)" v-html="DATA.tabs[data].subTabs[id].title"></button>
+			<button v-bind:class="{ subTabBut: true, tabButSelected: (active==DATA.tabs[data].subTabs[id].pid), tabButNotify: isNotify(data, id), timeUnlockedNotify: (id=='dims'&&!player.timeLocked) }" v-bind:style="[(isResearchCompleted(6)&&(id=='research')) ? { 'text-decoration': 'line-through' } : {}]" v-on:click="subTabButtonClick(data, id)" v-html="DATA.tabs[data].subTabs[id].title"></button>
 		</div>
 		`
 	}) 
@@ -321,7 +321,7 @@ function loadVue() {
 				<component v-else-if="(DATA[data].multi.dataLists[id][i].tag=='buyer-amount')&&DATA[data].multi.showEl(id, i)" :is="DATA[data].multi.dataLists[id][i].tag" :id="id"></component>
 				<component v-else-if="(DATA[data].multi.dataLists[id][i].tag=='unit-buyer-button')&&DATA[data].multi.showEl(id, i)" :is="DATA[data].multi.dataLists[id][i].tag" :data="DATA[data].multi.dataLists[id][i].boxID" :method="(DATA[data].multi.dataLists[id][i].htm())"></component>
 				<component v-else-if="(DATA[data].multi.dataLists[id][i].tag=='unit-buyer-priority')&&DATA[data].multi.showEl(id, i)" :is="DATA[data].multi.dataLists[id][i].tag" :id="DATA[data].multi.dataLists[id][i].boxID"></component>
-				<component v-else-if="(DATA[data].multi.dataLists[id][i].tag=='button')&&data!='e'" :is="DATA[data].multi.dataLists[id][i].tag" v-bind:class="{ completedResearchBut: isResearchCompleted(DATA[data].multi.dataLists[id][i].boxID), researchButton: (canCompleteResearch(DATA[data].multi.dataLists[id][i].boxID)||!player.isInResearch), progressResearchButton: (isResearchActive(DATA[data].multi.dataLists[id][i].boxID)&&!canCompleteResearch(DATA[data].multi.dataLists[id][i].boxID)), unclickResearchBut: (player.isInResearch&&!isResearchActive(DATA[data].multi.dataLists[id][i].boxID)) }"
+				<component v-else-if="(DATA[data].multi.dataLists[id][i].tag=='button')&&data!='e'" :is="DATA[data].multi.dataLists[id][i].tag" v-bind:class="{ completedResearchBut: isResearchCompleted(DATA[data].multi.dataLists[id][i].boxID), researchButton: (canCompleteResearch(DATA[data].multi.dataLists[id][i].boxID)||!player.isInResearch), progressResearchButton: (isResearchActive(DATA[data].multi.dataLists[id][i].boxID)&&!canCompleteResearch(DATA[data].multi.dataLists[id][i].boxID)), unclickResearchBut: (player.isInResearch&&!isResearchActive(DATA[data].multi.dataLists[id][i].boxID)&&!isResearchCompleted(DATA[data].multi.dataLists[id][i].boxID)) }"
 							v-bind:style="((player.isInResearch&&!isResearchCompleted(DATA[data].multi.dataLists[id][i].boxID)&&!isResearchActive(DATA[data].multi.dataLists[id][i].boxID)) ? {'text-decoration': 'line-through'} : {})" v-on:click="researchButtonClick(DATA[data].multi.dataLists[id][i].boxID)"
 							v-html="(isResearchCompleted(DATA[data].multi.dataLists[id][i].boxID) ? 'COMPLETED' : (player.isInResearch ? (isResearchActive(DATA[data].multi.dataLists[id][i].boxID) ? (canCompleteResearch(DATA[data].multi.dataLists[id][i].boxID) ? 'COMPLETE<br>PROJECT' : 'IN PROGRESS') : 'BEGIN') : 'BEGIN'))"></component>
 				<component v-else-if="(DATA[data].multi.dataLists[id][i].tag=='button')&&data=='e'" :is="DATA[data].multi.dataLists[id][i].tag" v-bind:class="{ completedInfResearchBut: isResearchCompleted(DATA[data].multi.dataLists[id][i].boxID), infResearchButton: (canCompleteResearch(7)||!player.isInResearch), progressInfResearchButton: (isResearchActive(7)&&!canCompleteResearch(7)), unclickInfResearchBut: (player.isInResearch&&!isResearchActive(7)) }"
@@ -388,9 +388,9 @@ function loadVue() {
 				<div>
 					<h3 v-html="DATA[data].id"></h3>
 					you have <num-text data="sp" :val="formatDefault(player.buildings[DATA[data].tier].amount)" :label="DATA[data].resource"></num-text><br>
-					<span v-if="DATA[data].displayResourceGain">you are producing <num-text data="sp" :val="formatDefault(DATA[data].prod(true))" :label="DATA[data].resource"></num-text>/<span v-html="player.displayRealTime ? 'real sec' : 'sec'"></span> (based on your {{ DATA[data].basedOn }})<br></span>
-					<span v-if="data=='b3'"><div v-if="player.astralFlag" style="min-height: 30px;">you are producing <num-text data="sp" :val="formatDefault(DATA[data].prod(true))" label="nekro-photons"></num-text>/<span v-html="player.displayRealTime ? 'real sec' : 'sec'"></span>, only during astral enslavement.<br></div><div v-else style="min-height: 25px; margin-top: 5px;" v-html="DATA[data].extraText()+'<br>'"></div></span>
-					<span v-else-if="DATA[data].hasExtraText" style="font-variant-numeric: tabular-nums;" v-html="DATA[data].extraText()+'<br>'"></span>
+					<span v-if="DATA[data].displayResourceGain" v-bind:class="{ tooltip: player.tooltipsEnabled }" :data-title="DATA[data].gainTooltip">you are producing <num-text data="sp" :val="formatDefault(DATA[data].prod(true))" :label="DATA[data].resource"></num-text>/<span v-html="player.displayRealTime ? 'real sec' : 'sec'"></span> (based on your {{ DATA[data].basedOn }})<br></span>
+					<span v-if="data=='b3'"><div v-if="player.astralFlag" style="min-height: 30px;" v-bind:class="{ tooltip: player.tooltipsEnabled }" :data-title="DATA[data].gainTooltip">you are producing <num-text data="sp" :val="formatDefault(DATA[data].prod(true))" label="nekro-photons"></num-text>/<span v-html="player.displayRealTime ? 'real sec' : 'sec'"></span>, only during astral enslavement.<br></div><div v-else style="min-height: 25px; margin-top: 5px;" v-html="DATA[data].extraText()+'<br>'"></div></span>
+					<span v-else-if="DATA[data].hasExtraText" v-bind:class="{ tooltip: (data=='b4'&&player.tooltipsEnabled) }" :data-title="(data=='b4' ? DATA[data].gainTooltip : '')" style="font-variant-numeric: tabular-nums;" v-html="DATA[data].extraText()+'<br>'"></span>
 					<div v-for="row in DATA[data].upgrades.rows" class="buildingUpgRow">
 						<div v-for="col in DATA[data].upgrades.cols"><div v-if="(DATA[data].upgrades[row*10+col]!== undefined) && DATA[data].upgrades[row*10+col].unlocked()" class="buildingUpgCell">
 							<upgrade :data = "data" :id = "(row*10+col).toString()"></upgrade>
@@ -852,10 +852,13 @@ function loadVue() {
 				if (DATA.ach[id].hasReward) { str += (' Reward: ' + DATA.ach[id].reward); }
 				if (DATA.ach[id].showEffect) { str += (' Currently: ' + formatDefault2(DATA.ach[id].effect()) + 'x'); }
 				return str;
+			},
+			isNew() {
+				return 
 			}
 		},
 		template: `
-		<div v-bind:class="{ achievement: true, locked: !player.achievements[data], unlocked: player.achievements[data], achTooltip: true }" v-bind:data-title="genTooltip(data)" v-html="'<p>'+DATA.ach[data].title+(DATA.ach[data].reward ? '<br>+' : '')+'</p>'"></div>
+		<div v-bind:class="{ achievement: true, locked: !player.achievements[data], unlocked: player.achievements[data], new: player.tabNotify.ach[data], achTooltip: true }" v-bind:data-title="genTooltip(data)" v-on:mouseover="mouseoverAchievement(data)" v-html="'<p>'+DATA.ach[data].title+(DATA.ach[data].reward ? '<br>+' : '')+'</p>'"></div>
 		`
 	})
 
@@ -1027,7 +1030,7 @@ function loadVue() {
 		template: `
 		<div v-if="isActivePop" class="giPopup">
 			<label id="gImportTextLabel" for="gImportText"><h2>Paste your galaxy code:</h2></label>
-			<textarea v-model="gImpText" ref="gitext" id="gImportText" name="gImportText" style="display: block;"></textarea>
+			<textarea v-model="gImpText" ref="gitext" id="gImportText" name="gImportText" style="display: block; resize: none;"></textarea>
 			<div style="height: 20px; min-height: 20px;"><div v-if="isGImpErr">{{ gImpErr }}</div></div>
 			<div style="margin: 5px 10px;">
 				<button class="optBut" v-on:click="importGalaxies()" style="float: left; margin: 2px !important;">IMPORT</button>
@@ -1055,7 +1058,7 @@ function loadVue() {
 		template: `
 		<div v-if="isActivePop" class="gePopup">
 			<label id="gExportTextLabel" for="gExportText"><h2>Your galaxy code:</h2></label>
-			<textarea v-model="gExpText" ref="getext" id="gExportText" name="gExportText" style="display: block;"></textarea>
+			<textarea v-model="gExpText" ref="getext" id="gExportText" name="gExportText" style="display: block; resize: none;"></textarea>
 			<div style="margin: auto;"><button class="optBut" v-on:click="closeExpGalaxies()">CLOSE</button></div>
 		</div>
 		`

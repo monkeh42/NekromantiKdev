@@ -69,7 +69,6 @@ function toggleTimeUpgBuyer() {
 
 function updateDimBuyer(tier) {
     player.autobuyers[12][tier] = !player.autobuyers[12][tier];
-    //document.getElementById(button).innerHTML = player.autobuyers[12][tier] ? 'ON' : 'OFF'
 }
 
 function toggleAllTimeBuyers() {
@@ -82,23 +81,10 @@ function toggleAllTimeBuyers() {
 
 function toggleRealTimeDisplays() {
     player.displayRealTime = !player.displayRealTime;
-    //document.getElementById('realTimeDisplayBut').innerHTML = player.displayRealTime ? 'toggle time displays: REAL TIME' : 'toggle time displays: GAME TIME'
-    let elements = document.getElementsByClassName('secDisplay');
-    let el;
-    for (let i=0; i<elements.length; i++) {
-        el = elements.item(i);
-        el.innerHTML = player.displayRealTime ? 'real sec' : 'sec'
-    }
 }
 
 function toggleTooltips() {
     player.tooltipsEnabled = !player.tooltipsEnabled;
-    //document.getElementById('toggleTooltips').innerHTML = player.tooltipsEnabled ? 'TOGGLE FORMULA TOOLTIPS: ON' : 'TOGGLE FORMULA TOOLTIPS: OFF' 
-
-    document.getElementById('brickTooltip').classList.toggle('tooltip');
-    document.getElementById('trueTooltip').classList.toggle('tooltip');
-    document.getElementById('antiTooltip').classList.toggle('tooltip');
-    document.getElementById('achBoostTooltip').classList.toggle('tooltip');
 }
 
 function showChangelog(divID) {
@@ -138,23 +124,6 @@ function toggleConfirmations(action, method) {
 
 function toggleDisplay(id) {
     player.headerDisplay[id] = !player.headerDisplay[id];
-}
-
-function openConfirmationsPopup() {
-    document.getElementById('confirmationsPopup').style.display = 'block';
-}
-
-function closeConfirmationsPopup() {
-    document.getElementById('confirmationsPopup').style.display = 'none';
-}
-
-function openDisplayPopup() {   
-    document.getElementById('displayPopup').style.display = 'block';
-    //dragElement(document.getElementById('displayPopup'));
-}
-
-function closeDisplayPopup() {
-    document.getElementById('displayPopup').style.display = 'none';
 }
 
 function setDisplayDefaults() {
@@ -224,48 +193,11 @@ function cycleSubtabs() {
     }
 }
 
-function isActiveTab(tabName) {
-    return (document.getElementById(tabName).style.display == 'block');
-}
-
-function getActiveTab() {
-    var allTabs = document.getElementsByClassName('pageTab');
-    var tab;
-    for (var i=0; i<allTabs.length; i++) {
-        tab = allTabs.item(i);
-        if (tab.style.display === 'block') {
-            return tab.id;
-        }
-    }
-    return null;
-}
-
-function getActiveTabs() {
-    var allTabs = document.getElementsByClassName('pageTab');
-    var tab;
-    var allSubTabs = document.getElementsByClassName('subTab');
-    var subTab;
-    var aTabs = [];
-    for (var i=0; i<allTabs.length; i++) {
-        tab = allTabs.item(i);
-        if (tab.style.display === 'block') {
-            aTabs.push(tab.id);
-        }
-    }
-    for (var j=0; j<allSubTabs.length; j++) {
-        subTab = allSubTabs.item(j);
-        if (subTab.style.display === 'block') {
-            aTabs.push(subTab.id);
-        }
-    }
-    return aTabs;
-}
-
-function showResponsive() {
+/*function showResponsive() {
 
 }
 
-/*function showTabR(tabName, buttonName) {
+function showTabR(tabName, buttonName) {
     let bName = tabName + 'But'
     var allTabs = document.getElementsByClassName('pageTab');
     var tab;
@@ -338,52 +270,19 @@ function updateGalaxyDisplayProps() {
 }
 
 function showMilestones() {
-    document.getElementById('milestonesPopup').style.display = 'block';
-    //dragElement(document.getElementById('milestonesPopup'));
+    showNormalPopup('mpop');
+    player.tabNotify['g'].indirect = false;
+    player.tabNotify['g']['g'].notify = false;
+    player.tabNotify.milestones = false;
 }
 
-function hideMilestones() {
-    document.getElementById('milestonesPopup').style.display = 'none';
-}
-
-function dragElement(elmnt) {
-    var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-    if (document.getElementById(elmnt.id + "header")) {
-      // if present, the header is where you move the DIV from:
-      document.getElementById(elmnt.id + "header").onmousedown = dragMouseDown;
-    } else {
-      // otherwise, move the DIV from anywhere inside the DIV:
-      elmnt.onmousedown = dragMouseDown;
-    }
-  
-    function dragMouseDown(e) {
-      e = e || window.event;
-      e.preventDefault();
-      // get the mouse cursor position at startup:
-      pos3 = e.clientX;
-      pos4 = e.clientY;
-      document.onmouseup = closeDragElement;
-      // call a function whenever the cursor moves:
-      document.onmousemove = elementDrag;
-    }
-  
-    function elementDrag(e) {
-      e = e || window.event;
-      e.preventDefault();
-      // calculate the new cursor position:
-      pos1 = pos3 - e.clientX;
-      pos2 = pos4 - e.clientY;
-      pos3 = e.clientX;
-      pos4 = e.clientY;
-      // set the element's new position:
-      elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
-      elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
-    }
-  
-    function closeDragElement() {
-      // stop moving when mouse button is released:
-      document.onmouseup = null;
-      document.onmousemove = null;
+function checkResearchProg() {
+    if (!player.isInResearch) { return; }
+    let proj = getActiveResearch();
+    if (canCompleteResearch()) {
+        player.tabNotify['g'].indirect = true;
+        if (proj==7) { player.tabNotify['g']['i'].notify = true; }
+        else { player.tabNotify['g']['r'].notify = true; }
     }
 }
 
@@ -419,17 +318,17 @@ function updateAchievements() {
 
 function unlockAchievement(a) {
     player.achievements[a] = true;
+    player.tabNotify['s'].indirect = true;
+    player.tabNotify['s']['a'].notify = true;
+    player.tabNotify.ach[a] = true;
     showPopup('achUnlockPopup', 'Achievement Unlocked!', 2000);
     DATA.ach[a].onUnlock();
 }
 
 function mouseoverAchievement(ach) {
-    if (document.getElementById(DATA.ach[ach].divID).classList.contains('achievementNew')) { document.getElementById(DATA.ach[ach].divID).classList.remove('achievementNew'); }
-    for (let id in player.achievements) {
-        if (document.getElementById(DATA.ach[ach].divID).classList.contains('achievementNew')) { return; }
-    }
-    document.getElementById('statsTabBut').classList.remove('tabButIndirectNotify');
-    document.getElementById('achSubTabBut').classList.remove('tabButNotify');
+    player.tabNotify['s'].indirect = false;
+    player.tabNotify['s']['a'].notify = false;
+    player.tabNotify.ach[ach] = false;
 }
 
 function updateMilestones() {
@@ -442,6 +341,9 @@ function updateMilestones() {
 
 function unlockMilestone(m) {
     player.milestones[m] = true;
+    player.tabNotify['g'].indirect = true;
+    player.tabNotify['g']['g'].notify = true;
+    player.tabNotify.milestones = true;
     showPopup('milesUnlockPopup', 'Milestone Unlocked!', 2000);
 }
 

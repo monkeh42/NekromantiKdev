@@ -126,6 +126,10 @@
     font-variant-numeric: tabular-nums;
 }
 
+.pageTab {
+    min-height: 1024px;
+}
+
 html, body {
     margin: 0px;
     padding: 0px;
@@ -219,7 +223,8 @@ body {
     right: 50%;
     height: 200px;
     transform: translateX(200%);
-    z-index: -1;
+    pointer-events: none;
+    z-index: 9;
 }
 
 .popup {
@@ -2447,7 +2452,7 @@ option:active, option.active {
     margin: auto;
 }
 
-.achievementNew {
+.achievement.new {
     box-shadow: 0px 0px 10px 5px goldenrod;
 }
 
@@ -2467,6 +2472,7 @@ option:active, option.active {
     width: 300px;
     margin: 10px;
     border-radius: 4px;
+    z-index: 9;
 }
 
 .milesUnlockPopup {
@@ -2477,6 +2483,7 @@ option:active, option.active {
     width: 300px;
     margin: 10px;
     border-radius: 4px;
+    z-index: 9;
 }
 
 .savePopup {
@@ -2487,6 +2494,7 @@ option:active, option.active {
     width: 300px;
     margin: 10px;
     border-radius: 4px;
+    z-index: 9;
 }
 
 .autosavePopup {
@@ -2498,6 +2506,7 @@ option:active, option.active {
     margin: 10px;
     border-radius: 4px;
     opacity: 0.4;
+    z-index: 9;
 }
 
 .milestonesNotify {

@@ -344,7 +344,7 @@ function resetTime(startingResearch=false) {
     for (var i=NUM_TIMEDIMS; i>=1; i--) {
         player.timeDims[i].bought = new Decimal(DATA.sp.timeDims[i].bought);
         player.timeDims[i].amount = new Decimal(DATA.sp.timeDims[i].amount);
-        player.timeDims[i].unlocked = DATA.sp.timeDims[i].unlocked;
+        if(!player.unlocks['timeDims2']) { player.timeDims[i].unlocked = DATA.sp.timeDims[i].unlocked; }
     }
     
 }
@@ -376,7 +376,7 @@ var TIME_DIMENSIONS = {
         confirmPopText: 'This will reset ALL of your progress before unlocking Time Warp, and all of your time essense.<br><span style="font-size: 11pt;">(These confirmations can be disabled in options)</span>',
         displayDesc: function() { return !player.stats['thisAscStats'].totalCrystals.gt(2000); },
         displayTooltip: true,
-        displayFormula: function() { return 'floor(10^(corpses_exponent/20 - 0.65))' },
+        displayFormula: function() { return (isResearchCompleted(5) ? 'floor(10^(corpses_exponent/15 - 0.65))' : 'floor(10^(corpses_exponent/20 - 0.65))') },
         canReset: function() { return canTimePrestige(); },
         getGain: function() { return calculateCrystalGain(); },
         gainResource: 'time crystals',

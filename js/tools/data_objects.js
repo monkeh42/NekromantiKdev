@@ -789,6 +789,44 @@ var START_PLAYER = {
     },
 
     tabNotify: {
+        milestones: false,
+        ach: {
+            11: false,
+            12: false,
+            13: false,
+            14: false,
+            15: false,
+            21: false,
+            22: false,
+            23: false,
+            24: false,
+            25: false,
+            31: false,
+            32: false,
+            33: false,
+            34: false,
+            35: false,
+            41: false,
+            42: false,
+            43: false,
+            44: false,
+            45: false,
+            51: false,
+            52: false,
+            53: false,
+            54: false,
+            55: false,
+            61: false,
+            62: false,
+            63: false,
+            64: false,
+            65: false,
+            71: false,
+            72: false,
+            73: false,
+            74: false,
+            75: false,
+        },
         'u': {
             notify: false,
             indirect: false,
@@ -881,7 +919,7 @@ var START_PLAYER = {
     favGalaxies: [[], [], []],
     favGalNames: ['Slot 1', 'Slot 2', 'Slot 3'],
     help: false,
-    version: 'v1.1.0_d.6',
+    version: 'v1.1.0',
 }
 
 var STAT_KEYS = {
@@ -1756,7 +1794,7 @@ var MILES_DATA = {
     },
     7: {
         reqText: 'Own four 4th row upgrades.',
-        rewardText: 'Unlock two more construction upgrades, and construction is never reset.',
+        rewardText: 'Unlock <span style="font-weight: 900;">Void Research</span> and <span style="font-weight: 900;">The Ark</span>.',
         id: 7,
         canUnlock: function() {
             return getBoughtGUpgsByRow(4) == 4;
@@ -1896,7 +1934,7 @@ var ACH_DATA = {
             return e.pow(0.2);
         },
         onUnlock: function() {
-            //document.getElementById('keptBricks').style.display = 'block';
+            return;
         }
     },
     21: {
@@ -3008,6 +3046,9 @@ function fixResetBug() {
             player.nextSpaceReset = new Array(1+num, 8);
 
     }
+    copyData(START_PLAYER.layerDisplay, {
+        numClass: 'defNum',
+    });
     START_PLAYER.corpses = new Decimal(0);
     START_PLAYER.corpsesAch13 = new Decimal(10);
     START_PLAYER.corpsesAch41 = new Decimal(25000);
@@ -3142,7 +3183,7 @@ function fixResetBug() {
             bought: new Decimal(0)
         },
         5: {
-            unlocked: true,
+            unlocked: false,
             amount: new Decimal(0),
             bought: new Decimal(0)
         },
@@ -3551,9 +3592,6 @@ function fixResetBug() {
         },
     });
 
-    START_PLAYER.isInResearch = false;
-    START_PLAYER.research = new Decimal(0),
-
     START_PLAYER.bricks = new Decimal(0);
     START_PLAYER.brickGainExp = 0.2;
     START_PLAYER.astralFlag = false;
@@ -3636,36 +3674,34 @@ function fixResetBug() {
     START_PLAYER.lastAutobuy = new Date();
 
     copyData(START_PLAYER.unlocks, {
-        'unitsTab': true,
-        'unitsSubTab': true,
+        'units': true,
         'spacePrestige': false,  
-        'autobuyersSubTab': false,
+        'autobuyers': false,
         'fastBuyers': false,
         'bulkBuyers': false,
         'prestigeBuyer': false,
         'advancedBuyer': false,
         'ascensionBuyer': false,
         'timeDimBuyer': false,
-        'buildingsTab': false,
+        'buildings': false,
         'factory': false,
         'factoryRow2': false,
         'necropolis': false,
         'necropolisRow2':false,
         'sun': false,
         'sunRow2': false,
-        'constructionSubTab': false,
+        'construction': false,
         'constructionRow2': false,
         'vortexTable': false,
         'vortex': false,
-        'timeTab': false,
-        'timeDimSubTab': false,
-        'timeUpgSubTab': false,
+        'time': false,
+        'timeUpgrades': false,
         'timeUpgrades2': false,
         'timeDims2': false,
-        'galaxyTab': false,
-        'researchTab': false,
-        'infResearchTab': false,
-        'arkTab': false,
+        'galaxies': false,
+        'research': false,
+        'infResearch': false,
+        'ark': false,
     });
 
     copyData(START_PLAYER.achievements, {
@@ -3783,6 +3819,44 @@ function fixResetBug() {
     });
 
     copyData(START_PLAYER.tabNotify, {
+        milestones: false,
+        ach: {
+            11: false,
+            12: false,
+            13: false,
+            14: false,
+            15: false,
+            21: false,
+            22: false,
+            23: false,
+            24: false,
+            25: false,
+            31: false,
+            32: false,
+            33: false,
+            34: false,
+            35: false,
+            41: false,
+            42: false,
+            43: false,
+            44: false,
+            45: false,
+            51: false,
+            52: false,
+            53: false,
+            54: false,
+            55: false,
+            61: false,
+            62: false,
+            63: false,
+            64: false,
+            65: false,
+            71: false,
+            72: false,
+            73: false,
+            74: false,
+            75: false,
+        },
         'u': {
             notify: false,
             indirect: false,
@@ -3842,6 +3916,18 @@ function fixResetBug() {
         's': {
             notify: false,
             indirect: false,
+            's': {
+                notify: false,
+                indirect: false,
+            },
+            'l': {
+                notify: false,
+                indirect: false,
+            },
+            'a': {
+                notify: false,
+                indirect: false,
+            },
         },
         'o': {
             notify: false,
@@ -3855,13 +3941,15 @@ function fixResetBug() {
 
     START_PLAYER.tooltipsEnabled = false;
     START_PLAYER.displayRealTime = false;
+    START_PLAYER.tab = 'unitsTab';
     START_PLAYER.subTabs = { 'u': 'unitsSubTab', 'b': 'buildingsSubTab', 't': 'timeDimSubTab', 'g': 'galaxiesSubTab', 's': 'statSubTab' };
     START_PLAYER.activeGalaxies = new Array('4', '1', '2');
     START_PLAYER.hotkeysOn = true;
     START_PLAYER.dontResetSlider = false;
     START_PLAYER.favGalaxies = [[], [], []];
     START_PLAYER.favGalNames = ['Slot 1', 'Slot 2', 'Slot 3'];
-    START_PLAYER.version = 'v1.1.0_d.6';
+    START_PLAYER.help = false;
+    START_PLAYER.version = 'v1.1.0';
 
     DATA.sp = {};
     copyData(DATA.sp, START_PLAYER);

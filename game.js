@@ -2,7 +2,7 @@
 
 const GAME_DATA = {
     author: 'monkeh42',
-    version: 'v1.1.0_d.6',
+    version: 'v1.1.0',
 }
 
 const NUM_UNITS = 8;
@@ -280,6 +280,8 @@ function gameLoop(diff=new Decimal(0), offline=false) {
         updateAchievements();
         
         updateMilestones();
+
+        checkResearchProg();
     
 
         if (player.unlocks['autobuyers']) {
@@ -491,14 +493,14 @@ function closeText() {
     app.exportTextArea = '';
 }
 
-function exportGameState() {
+/*function exportGameState() {
     document.getElementById('exportText').value = window.btoa(JSON.stringify(player) + '\n\n') + window.btoa(JSON.stringify(DATA.sp) + '\n\n') + window.btoa(JSON.stringify(DATA.u) + '\n\n') + window.btoa(JSON.stringify(DATA.b) + '\n\n') + window.btoa(JSON.stringify(DATA.c) + '\n\n') + window.btoa(JSON.stringify(DATA.td) + '\n\n') + window.btoa(JSON.stringify(DATA.tu) + '\n\n') + window.btoa(JSON.stringify(DATA.ul) + '\n\n');
     document.getElementById('exportText').style.display = 'block';
     document.getElementById('importConfirm').style.display = 'none';
     document.getElementById('closeText').style.display = 'table-cell';
     document.getElementById('closeText').setAttribute('colspan', '2');
     document.getElementById('exportText').select();
-}
+}*/
 
 //fixes and data manipulation
 
@@ -567,10 +569,6 @@ function updateVersion() {
     copyData(player, DATA.sp);
     updateVersionData(player, tempPlayer);
     player.version = GAME_DATA.version;
-    if (tempPlayer.achievements[73]) { 
-        player.achievements[73] = false;
-        player.achievements[71] = true;
-    }
     if (tempPlayer.version != GAME_DATA.version && tempPlayer.version.slice(0,4)=='v1.0') {
         if (tempPlayer.unlocks['unitsTab']['mainTab']) { player.unlocks['units'] = true; }
         if (tempPlayer.unlocks['unitsTab']['spacePrestige']) { player.unlocks['spacePrestige'] = true; }
@@ -610,6 +608,7 @@ function updateVersion() {
                 DATA.ul.main[key].onUnlock();
             }
         }
+        copyData(player.tabNotify, DATA.sp.tabNotify);
     }
     tempPlayer = {};
 }
@@ -796,7 +795,7 @@ function allSpeed() {
         for (let i=1; i<9; i++) {
             player.autobuyers[i]['fast'] = !player.autobuyers[i]['fast'];
         }
-        if (document.getElementById('allBuyers').checked) {
+        if (app.allBuyersRadio=='all') {
             player.autobuyers[9]['fast'] = !player.autobuyers[9]['fast'];
             if (player.unlocks['prestigeBuyer']) { player.autobuyers[10]['fast'] = !player.autobuyers[10]['fast']; }
             if (player.unlocks['ascensionBuyer']) { player.autobuyers[11]['fast'] = !player.autobuyers[11]['fast']; }
@@ -809,7 +808,7 @@ function allAmount() {
         for (let i=1; i<9; i++) {
             player.autobuyers[i]['bulk'] = !player.autobuyers[i]['bulk'];
         }
-        if (document.getElementById('allBuyers').checked) {
+        if (app.allBuyersRadio=='all') {
             player.autobuyers[9]['bulk'] = !player.autobuyers[9]['bulk'];
             if (player.unlocks['prestigeBuyer']) { player.autobuyers[10]['bulk'] = !player.autobuyers[10]['bulk']; }
             if (player.unlocks['ascensionBuyer']) { player.autobuyers[11]['bulk'] = !player.autobuyers[11]['bulk']; }

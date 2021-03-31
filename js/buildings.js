@@ -310,6 +310,7 @@ BUILDS_DATA[1] = {
     tier: 1,
     resource: 'armaments',
     displayResourceGain: true,
+    gainTooltip: 'sqrt(log(x))',
     basedOn: 'zombies',
     hasExtraText: false,
     extraText: function() { return '' },
@@ -566,6 +567,7 @@ BUILDS_DATA[2] = {
     tier: 2,
     resource: 'acolytes',
     displayResourceGain: true,
+    gainTooltip: 'x^0.2',
     basedOn: 'bought sun eaters',
     hasExtraText: true,
     extraText: function() { return `your acolytes chant into the astral abyss, boosting your astral brick gain by <span style="font-weight: bold; font-size: 15pt;">${formatDefault(this.resourceEff())}x</span>` },
@@ -827,6 +829,7 @@ BUILDS_DATA[3] = {
     tier: 3,
     resource: 'nekro-photons',
     displayResourceGain: false,
+    gainTooltip: '2/sec',
     hasExtraText: true,
     extraText: function() { return 'Nekro-photon production is disabled outside of astral enslavement.' },
     cost: new Decimal(1e8),
@@ -1059,10 +1062,11 @@ BUILDS_DATA[4] = {
     tier: 4,
     resource: 'black holes',
     displayResourceGain: false,
+    gainTooltip: '.001*(total_galaxies - black_holes)%/sec',
     hasExtraText: true,
     extraText: function() { return `your next black hole is <span style="font-weight: bold; font-size: 15pt;">${formatUnitRow(player.buildings[4].progress)}%</span> complete.<br>
                                     ${player.isInResearch ? 'progress is halted during research.' : 'progress is based on your total depleted galaxies minus your black holes.'}<br>
-                                    your black holes add to the depleted galaxy gain exponent. currently: <span style="font-weight: bold; font-size: 15pt;">+${formatDefault(this.resourceEff())}</span><br>
+                                    your black holes add to the depleted galaxy gain exponent. currently: <span style="font-weight: bold; font-size: 15pt;">+${formatDefault2(this.resourceEff())}</span><br>
                                     the galactic vortex, black holes, and black hole production progress are never reset.`},
     cost: new Decimal(1e60),
     upgResource: 'black holes',
@@ -1238,12 +1242,7 @@ BUILDS_DATA[4] = {
             displayTooltip: false,
             displayFormula: function() { return '' },
             onBuy: function() {
-                if (hasGUpgrade(4, 41)) {
-                    document.getElementById('antiNerfDivText').style.display = 'none';
-                    document.getElementById('trueNerfDivText').style.display = 'none';
-                    document.getElementById('antiNerfTimesText').style.display = 'inline';
-                    document.getElementById('trueNerfTimesText').style.display = 'inline';
-                }
+                return;
             },
             effect: function() {
                 return new Decimal(1);

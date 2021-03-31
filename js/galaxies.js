@@ -677,7 +677,8 @@ function galaxyPrestigeReset(respec=false, startingResearch=false) {
     if (player.pastAscRuns.lastRun.galaxyGain.gt(player.stats['allTimeStats'].bestGalaxyGain)) { player.stats['allTimeStats'].bestGalaxyGain = new Decimal(player.pastAscRuns.lastRun.galaxyGain) }
     for (var i=9; i>=0; i--) { copyData(player.pastAscRuns.lastTen[i], player.pastAscRuns.lastTen[i-1]); }
     copyData(player.pastAscRuns.lastTen[0], player.pastAscRuns.lastRun);
-    copyData(player.pastRuns, DATA.sp.pastRuns);
+    for (var j=0; j<10; j++) { copyData(player.pastRuns.lastTen[j], DATA.sp.pastRuns.lastTen[j]); }
+    copyData(player.pastRuns.lastRun, DATA.sp.pastRuns.lastRun)
 
     resetTime(startingResearch);
     resetTimeCounts(startingResearch);
@@ -930,16 +931,11 @@ function completeResearch(id) {
     }
     else { unlockArkPart(DATA.r[id].unlocks); }
 
-    if (id==6 || id==7) {
-        let reqs = document.getElementsByClassName('gUpgRequires');
-        for (let i=0; i<reqs.length; i++) {
-            reqs[i].style.textDecoration = '';
-        }
-    }
-
     updateShadow();
     DATA.r[id].onComplete(id);
-
+    player.tabNotify['g'].indirect = false;
+    if (id==7) { player.tabNotify['g']['i'].notify = false; }
+    else { player.tabNotify['g']['r'].notify = false; }
     respecGalaxies();
 }
 
@@ -953,7 +949,6 @@ function startResearch(id) {
 
 function unlockArkPart(name) {
     if (!player.researchProjects[DATA.a.upgrades[name].project].completed || hasAUpgrade(name)) { return; }
-    document.getElementById(name).style.display = 'block';
     player.ark[name].unlocked = true;
 }
 
@@ -1008,8 +1003,7 @@ var RESEARCH_DATA = {
         buttonID: 'startResearch5',
         unlocks: 'railguns',
         onComplete: function() {
-            //document.getElementById('staticSacReq').innerHTML = ' 1e15 ';
-            //document.getElementById('timePrestige').setAttribute('data-title', 'floor(10^(corpses_exponent/15 - 0.65))');
+            return;
         }
     },
     6: {
@@ -1018,7 +1012,7 @@ var RESEARCH_DATA = {
         buttonID: 'startResearch6',
         unlocks: 'support',
         onComplete: function() {
-            document.getElementById('researchSubTabBut').style.textDecoration = 'line-through';
+            //document.getElementById('researchSubTabBut').style.textDecoration = 'line-through';
         }
     },
     7: {
@@ -2658,12 +2652,7 @@ GALAXIES_DATA[4] = {
                 return '';
             },
             onBuy: function() {
-                if (hasUpgrade(4, 22)) {
-                    document.getElementById('antiNerfDivText').style.display = 'none';
-                    document.getElementById('trueNerfDivText').style.display = 'none';
-                    document.getElementById('antiNerfTimesText').style.display = 'inline';
-                    document.getElementById('trueNerfTimesText').style.display = 'inline';
-                }
+                return;
             }
         },
     },
