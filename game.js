@@ -599,9 +599,21 @@ function updateVersion() {
         if (tempPlayer.unlocks['galaxyTab']['arkTab']) { player.unlocks['ark'] = true; }
         if (isResearchCompleted(6)) { player.unlocks['infResearch'] = true; }
 
-        for (let k in tempPlayer.allTimeStats) { player.stats['allTimeStats'][k] = tempPlayer.allTimeStats[k]; }
-        for (let m in tempPlayer.thisSacStats) { player.stats['thisSacStats'][m] = tempPlayer.thisSacStats[m]; }
-        for (let n in tempPlayer.thisAscStats) { player.stats['thisAscStats'][n] = tempPlayer.thisAscStats[n]; }
+        for (let k in tempPlayer.allTimeStats) {
+            if (k!='displayStats' && k!='label' && k!='wentAstral' && k!='hasGoneAstral') {
+                player.stats['allTimeStats'][k] = new Decimal(tempPlayer.allTimeStats[k]);
+            }
+        }
+        for (let m in tempPlayer.thisSacStats) {
+            if (m!='displayStats' && m!='label' && m!='wentAstral' && m!='hasGoneAstral') {
+                player.stats['thisSacStats'][m] = new Decimal(tempPlayer.thisSacStats[m]);
+            }
+        }
+        for (let n in tempPlayer.thisAscStats) {
+            if (n!='displayStats' && n!='label' && n!='wentAstral' && n!='hasGoneAstral') {
+                player.stats['thisAscStats'][n] = new Decimal(tempPlayer.thisAscStats[n]);
+            }
+        }
 
         for (let key in player.unlocks) {
             if (player.unlocks[key]) {
