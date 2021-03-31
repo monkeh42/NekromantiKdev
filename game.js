@@ -2,7 +2,7 @@
 
 const GAME_DATA = {
     author: 'monkeh42',
-    version: 'v1.1.0',
+    version: 'v1.1.1',
 }
 
 const NUM_UNITS = 8;
@@ -453,8 +453,11 @@ function calculateOfflineTime(seconds) {
 
 //import, export, etc
 
+function hardResetClick() {
+    confirmation('This will reset ALL of your progress and can\'t be undone.', 'hardReset')
+}
+
 function hardReset() {
-    if (!confirm("Are you sure? This will reset ALL of your progress.")) return
     player = null;
     save();
     window.location.reload(true);
