@@ -132,7 +132,8 @@ function setDisplayDefaults() {
 
 function setConfDefaults() {
     for (let i=1; i<=DATA.ul.confirmations.rows; i++) {
-        player.confirmations[DATA.ul.confirmations[i].id] = DATA.sp.confirmations[DATA.ul.confirmations[i].id];
+        player.confirmations[DATA.ul.confirmations[i].id]['key'] = DATA.sp.confirmations[DATA.ul.confirmations[i].id]['key'];
+        player.confirmations[DATA.ul.confirmations[i].id]['click'] = DATA.sp.confirmations[DATA.ul.confirmations[i].id]['click'];
     }
 }
 
