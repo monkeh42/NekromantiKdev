@@ -758,8 +758,8 @@ BUILDS_DATA[2] = {
             id: 22,
             tier: 2,
             title: 'Astral Time Machine',
-            desc: function() { return 'Boost time essence production based on astral bricks.'; },
-            cost: function() { return new Decimal(1e12) },
+            desc: function() { return '<span style="text-decoration: line-through;">Boost time essence production based on astral bricks.</span><br>????'; },
+            cost: function() { return new Decimal("Infinity") },
             resource: 'astral bricks',
             isBought: function() {
                 return player.buildings[2].upgrades[this.id]
@@ -1225,7 +1225,7 @@ BUILDS_DATA[4] = {
             id: 22,
             tier: 4,
             title: 'Evil Particle Collider',
-            desc: function() { return 'If you have galaxy upgrade 4.41, true and anti time essence boost each other\'s effects instead of nerfing them.'; },
+            desc: function() { return '<span style="font-size: 115%;">THIS IS GETTING NERFED.</span><br>If you have galaxy upgrade 4.41, true and anti time emitters boost each other\'s effects instead of nerfing them.'; },
             cost: function() { return new Decimal(1000) },
             resource: 'black holes',
             isBought: function() {
@@ -1255,7 +1255,7 @@ BUILDS_DATA[4] = {
             id: 23,
             tier: 4,
             title: 'Break Arbitrary',
-            desc: function() { return 'Unlock the next four time dimensions, and crystal gain and brick production are raised ^1.2 while you have more than 2.5e309 corpses.'; },
+            desc: function() { return '<span style="text-decoration: line-through;">Unlock the next four time dimensions, and</span> ??? crystal gain and brick production are raised ^1.2 while you have more than 2.5e309 corpses.'; },
             cost: function() { return new Decimal(5000) },
             resource: 'black holes',
             isBought: function() {

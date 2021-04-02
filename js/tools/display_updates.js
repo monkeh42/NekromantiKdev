@@ -67,7 +67,7 @@ function toggleTimeUpgBuyer() {
     player.autobuyers['time']['on'] = !player.autobuyers['time']['on'];
 }
 
-function updateDimBuyer(tier) {
+/*function updateDimBuyer(tier) {
     player.autobuyers[12][tier] = !player.autobuyers[12][tier];
 }
 
@@ -75,7 +75,7 @@ function toggleAllTimeBuyers() {
     for (let i=1; i<=NUM_TIMEDIMS; i++) {
         if (i<=4 || player.unlocks['timeDims2']) { updateDimBuyer(i); }
     }
-}
+}*/
 
 //generic UI stuff (tabs, toggles, popups etc)
 
@@ -175,7 +175,7 @@ function cycleSubtabs() {
             break;
         case 'timeTab':
             if (player.unlocks['timeUpgrades']) {
-                if (player.subTabs['t']=='timeUpgSubTab') { player.subTabs['t'] = 'timeDimSubTab'; }
+                if (player.subTabs['t']=='timeUpgSubTab') { player.subTabs['t'] = 'refinerySubTab'; }
                 else { player.subTabs['t'] = 'timeUpgSubTab'; }
             }
             break;
@@ -350,16 +350,6 @@ function unlockMilestone(m) {
 
 function closeOfflinePopup() {
     document.getElementById('offlineGainPopup').style.display = 'none';
-}
-
-function ascensionTextSingulizer(amt) {
-    if ((new Decimal(1)).eq(amt)) { return 'ascension'; }
-    else { return 'ascensions'; }
-}
-
-function galaxyTextSingulizer(amt) {
-    if ((new Decimal(1)).eq(amt)) { return 'galaxy'; }
-    else { return 'galaxies'; }
 }
 
 function showPopup(type, text, ms) {

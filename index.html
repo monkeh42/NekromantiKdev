@@ -94,7 +94,7 @@
                                 <table cellpadding="0px" cellspacing="0px" style="width: 100%; text-align: center; border-collapse: collapse;">
                                     <tr>
                                         <td>
-                                            <div v-if="player.headerDisplay['crystalsDisplayHeader']&&player.headerDisplayUnlocked['crystalsDisplayHeader']" style="font-size: 10pt;">You have <num-text data="td" :val="formatWhole(player.crystals)" label="time crystals"></num-text>.</div>
+                                            <div v-if="player.headerDisplay['crystalsDisplayHeader']&&player.headerDisplayUnlocked['crystalsDisplayHeader']" style="font-size: 10pt;">You have <num-text data="t" :val="formatWhole(player.crystals)" label="time crystals"></num-text>.</div>
                                         </td>
                                     </tr>
                                     <tr>
@@ -227,49 +227,93 @@
                     </div>
                 </div>
                 <div id="timeTab" class="pageTab" v-bind:style="[(player.tab=='timeTab') ? { display: 'block' } : { display: 'none' }]">
-                    <sub-nav data="t" :ids="['dims', 'upgs']" :active="player.subTabs['t']"></sub-nav>
-                    <table style="width: 75%; margin: auto auto; text-align: center;">
+                    <sub-nav data="t" :ids="['refinery', 'upgs']" :active="player.subTabs['t']"></sub-nav>
+                    <table style="width: 75%; margin: auto; text-align: center;">
                         <tr>
                             <div id="timePresContainer" style="text-align: center; margin-top: 25px;">
-                                <prestige-button data="td"></prestige-button><br>
-                                <input type="checkbox" id="respecOnSac" class="timeCheckbox" v-model="respecNextSac"> Respec slider on next sacrifice
+                                <prestige-button data="t"></prestige-button><br>
+                                <input type="checkbox" id="respecOnSac" class="timeCheckbox" v-model="respecNextSac"> Respec emitters on next sacrifice
                             </div>
                         </tr>
                         <tr style="height: 15px;">
                             <div style="height: 100%;"></div>
                         </tr>
                         <tr>
-                            <td colspan="3">
-                                <div style="width: 100%;">You have <num-text data="td" :val="formatWhole(player.crystals)" label="time crystals"></num-text></div>
+                            <td >
+                                <div style="width: 100%; font-size: 18pt;">You have <num-text data="t" :val="formatWhole(player.crystals)" label="time crystals"></num-text>.</div>
+                                <div style="width: 100%; font-size: 18pt;">Your Refinery is level <num-text data="t" :val="formatWhole(player.refLevel)" label=""></num-text> and contains <num-text data="t" :val="formatWhole(player.totalEmitters)" label="Time Emitters"></num-text>.</div>
                             </td>
-                        </tr>
-                        <tr>
-                            <td width="100px;">
-                                <div class="timeLabelLeft">TRUE<br>TIME</div>
-                                <div><span id="trueTimeAmt" style="color: #006ba0; font-weight: bold; font-variant-numeric: tabular-nums;" v-html="formatUnitRow(player.trueEssence)"></span><br>essence</span><br>+<span id="trueTimeGain" style="color: #006ba0; font-weight: bold; font-variant-numeric: tabular-nums;" v-html="formatUnitRow(getEssenceProdAfterSlider('true', true))"></span><br>per <span v-html="player.displayRealTime ? 'real sec' : 'sec'"></span></div>
-                            </td>
-                            <td><div id="trueTooltip" v-bind:class="{ tooltip: player.tooltipsEnabled }" style="width: 43%; margin-left: 40px; float: left;" data-title="boost: 1 + log(x)/nerf&#xA;nerf: log(x)^0.2">Your True Time Essence speeds up normal time by<br><span id="trueTimeBuff" style="font-size: 16pt; font-variant-numeric: tabular-nums;" v-html="formatDefault2(getTrueTimeBuff())"></span>x<br> <span v-if="hasGUpgrade(4, 41) && hasUpgrade(4, 22)" id="antiNerfTimesText">and it multiplies</span><span v-else id="antiNerfDivText">but it divides</span> the Anti Time Essence effect by<br><span id="trueTimeNerf" style="font-size: 16pt; font-variant-numeric: tabular-nums;" v-html="formatDefault2(getTrueTimeNerf())"></span></div>
-                                <div id="antiTooltip" v-bind:class="{ tooltip: player.tooltipsEnabled }" style="width: 43%; margin-right: 40px; float: right;" data-title="boost: 1 + 2*log(x)/nerf&#xA;nerf: log(x)^0.2">Your Anti Time Essence speeds up astral time by<br><span id="antiTimeBuff" style="font-size: 16pt; font-variant-numeric: tabular-nums;" v-html="formatDefault2(getAntiTimeBuff())"></span>x<br> <span v-if="hasGUpgrade(4, 41) && hasUpgrade(4, 22)" id="trueNerfTimesText">and it multiplies</span><span v-else id="trueNerfDivText">but it divides</span> the True Time Essence effect by<br><span id="antiTimeNerf" style="font-size: 16pt; font-variant-numeric: tabular-nums;" v-html="formatDefault2(getAntiTimeNerf())"></span></div>
-                            </td>
-                            <td width="100px;">
-                                <div class="timeLabelRight">ANTI<br>TIME</div>
-                                <div><span id="antiTimeAmt" style="color: #006ba0; font-weight: bold; font-variant-numeric: tabular-nums;" v-html="formatUnitRow(player.antiEssence)"></span><br>essence</span><br>+<span id="antiTimeGain" style="color: #006ba0; font-weight: bold; font-variant-numeric: tabular-nums;" v-html="formatUnitRow(getEssenceProdAfterSlider('anti', true))"></span><br>per <span v-html="player.displayRealTime ? 'real sec' : 'sec'"></span></div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td>Time Dimensions are not affected by the astral enslavement time nerf or either Time Essence boost.
-                            <td></td>
                         </tr>
                     </table>
-                    <div id="timeDimSubTab" class="timeSubTab" v-bind:style="[(player.subTabs['t']=='timeDimSubTab') ? { display: 'block' } : { display: 'none' }]">
-                        <table style="width: 75%; margin: auto; margin-top: 20px; text-align: center;">
+                    <div id="refinerySubTab" class="timeSubTab" v-bind:style="[(player.subTabs['t']=='refinerySubTab') ? { display: 'block' } : { display: 'none' }]">
+                        <table style="width: 75%; margin: auto; margin-top: 20px; text-align: center;" cellpadding="0">
+                            <tr>
+                                <td>
+                                    <div style="min-height: 5px;"></div>
+                                    <div style="min-width: 320px;">
+                                        <div class="timeLabelLeft">TRUE<br>TIME</div><br>
+                                    </div>
+                                </td>
+                                <td>
+                                    <button v-bind:class="{ refineryBut: true, can: canAffordRefinery(), cant: !canAffordRefinery() }" v-on:click="upgradeRefinery()"><span style="font-size: 16pt;">Increase refinery level</span><br><span style="font-size: 10pt;">You will gain {{ formatWhole(getEmittersPerLevel()) }} additional emitters.</span><br>Cost: {{ formatUR(getRefineryCost(), 0) }} time crystals</button>
+                                    <layer-button data="t" :width="300" :text="(player.timeLocked ? 'Respec emitters - forces sacrifice' : 'Lock in and begin time production')" :cancl="true" fname="timeLockRespec"></layer-button>
+                                </td>
+                                <td>
+                                    <div style="min-width: 320px;">
+                                        <div class="timeLabelRight">ANTI<br>TIME</div><br>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3">
+                                    <table style="width: 320px; float: left; text-align: center;">
+                                        <tr>
+                                            <td>
+                                                <div id="trueTooltip" v-bind:class="{ tooltip: player.tooltipsEnabled }" style="width: 80%; margin: auto;" data-title="boost: 1 + log(x)/nerf&#xA;nerf: log(x)^0.2">Your True Time Emitters speed up normal time by<br><span id="trueTimeBuff" style="font-size: 16pt; font-variant-numeric: tabular-nums;" v-html="formatDefault2(getTrueTimeBuff())"></span>x<br> <span v-if="hasGUpgrade(4, 41) && hasUpgrade(4, 22)" id="antiNerfTimesText">and they multiply</span><span v-else id="antiNerfDivText">but they divide</span> the Anti Time effect by<br><span id="trueTimeNerf" style="font-size: 16pt; font-variant-numeric: tabular-nums;" v-html="formatDefault2(getTrueTimeNerf())"></span></div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div style="margin: auto;">Assign <num-text data="t" :val="formatWhole(trueSliderVal)" label="of your emitters"></num-text> to True Time.</div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="slidecontainer" style="text-align: center;">
+                                                    <input type="range" min="0" :max="player.totalEmitters" v-model="trueSliderVal" v-on:change="updateOnTrueChange()" :class="player.timeLocked ? 'sliderLocked' : 'slider'" id="trueSlider" :disabled="player.timeLocked">
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <table style="width: 320px; float: right; text-align: center;">
+                                        <tr>
+                                            <td>
+                                                <div id="antiTooltip" v-bind:class="{ tooltip: player.tooltipsEnabled }" style="width: 80%; margin: auto;" data-title="boost: 1 + 2*log(x)/nerf&#xA;nerf: log(x)^0.2">Your Anti Time Emitters speed up astral time by<br><span id="antiTimeBuff" style="font-size: 16pt; font-variant-numeric: tabular-nums;" v-html="formatDefault2(getAntiTimeBuff())"></span>x<br> <span v-if="hasGUpgrade(4, 41) && hasUpgrade(4, 22)" id="trueNerfTimesText">and they multiply</span><span v-else id="trueNerfDivText">but they divide</span> the True Time effect by<br><span id="antiTimeNerf" style="font-size: 16pt; font-variant-numeric: tabular-nums;" v-html="formatDefault2(getAntiTimeNerf())"></span></div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div style="margin: auto;">Assign <num-text data="t" :val="formatWhole(antiSliderVal)" label="of your emitters"></num-text> to Anti Time.</div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">
+                                                <div class="slidecontainer" style="text-align: center;">
+                                                    <input type="range" min="0" :max="player.totalEmitters" v-model="antiSliderVal" v-on:change="updateOnAntiChange()" :class="player.timeLocked ? 'sliderLocked' : 'slider'" id="antiSlider" :disabled="player.timeLocked">
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                        <!--<table style="width: 75%; margin: auto; margin-top: 20px; text-align: center;">
                             <tr>
                                 <td width="10%">
                                     <div style="float: left;"><span id="sliderValueLeft" style="font-size: 16pt;" v-html="formatWhole(100-sliderVal)"></span>%</div>
                                 </td>
                                 <td width="80%">
-                                    <div><layer-button data="td" :width="300" :text="(player.timeLocked ? 'Respec slider - forces sacrifice' : 'Lock in and begin time production')" fname="timeLockRespec"></layer-button><!--<button id="lockInTimeBut" class="timeSliderBut" onclick="lockInTime()">Lock in and begin time production</button>--></div>
+                                    <div><layer-button data="t" :width="300" :text="(player.timeLocked ? 'Respec slider - forces sacrifice' : 'Lock in and begin time production')" fname="timeLockRespec"></layer-button></div>
                                 </td>
                                 <td width="10%">
                                     <div style="float: right;"><span id="sliderValueRight" style="font-size: 16pt;" v-html="formatWhole(sliderVal)"></span>%</div>
@@ -286,12 +330,12 @@
                                 <div style="height: 100%;"></div>
                             </tr>
                         </table>
-                        <dimension-table data="td"></dimension-table>
+                        <dimension-table data="t"></dimension-table>-->
                     </div>
                     <div id="timeUpgSubTab" class="timeSubTab" v-bind:style="[(player.subTabs['t']=='timeUpgSubTab') ? { display: 'block' } : { display: 'none' }]">
                         <div v-if="hasMilestone(6)" id="extraColsNotice" style="text-align: center; margin: 10px auto;">The two additional columns of upgrades from milestone 6 are never reset.</div>
-                        <div v-if="hasMilestone(6)" id="timeUpgBuyerDiv" style="text-align: center; margin: auto;"><layer-button data="td" :width="300" :text="'Time Upgrade Cols 1-3 Autobuyer: ' + (player.autobuyers['time']['on'] ? 'ON' : 'OFF')" fname="toggleTimeUpgBuyer"></layer-button></div>
-                        <time-upg-table data="tu"></time-upg-table>
+                        <div v-if="hasMilestone(6)" id="timeUpgBuyerDiv" style="text-align: center; margin: auto;"><layer-button data="t" :width="300" :text="'Time Upgrade Cols 1-3 Autobuyer: ' + (player.autobuyers['time']['on'] ? 'ON' : 'OFF')" :cancl="true" fname="toggleTimeUpgBuyer"></layer-button></div>
+                        <time-upg-table data="t"></time-upg-table>
                     </div>
                 </div>
                 <div id="galaxyTab" class="pageTab" v-bind:style="[(player.tab=='galaxyTab') ? { display: 'block' } : { display: 'none' }]">

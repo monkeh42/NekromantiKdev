@@ -1769,29 +1769,27 @@ option:active, option.active {
 }
 
 .timeLabelLeft {
-    width: 100px;
+    width: 200px;
     height: 100px;
     line-height: 50px;
     border: 1px solid #006ba0;
-    margin-bottom: 5px;
+    margin: 5px auto;
     color: #006ba0;
     font-size: 22pt;
     font-weight: bold;
     text-align: center;
-    float: left;
 }
 
 .timeLabelRight {
-    width: 100px;
+    width: 200px;
     height: 100px;
     line-height: 50px;
     border: 1px solid #006ba0;
-    margin-bottom: 5px;
+    margin: 5px auto;
     color: #006ba0;
     font-size: 22pt;
     font-weight: bold;
     text-align: center;
-    float: right;
 }
 
 .slider {
@@ -1860,16 +1858,46 @@ option:active, option.active {
     width: 70%;
 }
 
-.timeBut {
+.refineryBut {
     color: white;
+    font-weight: bold;
+    font-size: 12pt;
+    width: 300px;
+    height: 80px;
+    border-radius: 4px;
+    font-family: 'Cinzel', serif;
+    margin: 5px;
+}
+
+.refineryBut.can {
     background-color: #006ba0;
-    font-style: bold;
-    height: 35px;
     border: 1px solid white;
     cursor: pointer;
+}
+
+.refineryBut.cant {
+    border: 1px solid #4b4b4b;
+    background-color: #4b4b4b;
+}
+
+.timeBut {
+    color: white;
+    font-style: bold;
+    height: 35px;
     border-radius: 4px;
     margin: 5px;
     font-family: 'Cinzel', serif;
+}
+
+.timeBut.can {
+    background-color: #006ba0;
+    border: 1px solid white;
+    cursor: pointer;
+}
+
+.timeBut.cant {
+    border: 1px solid #4b4b4b;
+    background-color: #4b4b4b;
 }
 
 .timeSliderBut {
@@ -1883,7 +1911,7 @@ option:active, option.active {
     border-radius: 4px;
 }
 
-.timeSliderBut:hover, .timeBut:hover {
+.timeSliderBut:hover, .timeBut.can:hover, .refineryBut.can:hover {
     background-color: white;
     color: #006ba0;
 }

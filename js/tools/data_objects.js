@@ -114,7 +114,7 @@ var START_PLAYER = {
         6: new Decimal(0),
     },
 
-    timeDims: {
+    /*timeDims: {
         1: {
             unlocked: true,
             amount: new Decimal(0),
@@ -155,7 +155,7 @@ var START_PLAYER = {
             amount: new Decimal(0),
             bought: new Decimal(0)
         },
-    },
+    },*/
 
     timeUpgs: {
         11: false,
@@ -432,12 +432,16 @@ var START_PLAYER = {
 
     crystals: new Decimal(0),
     milesCrystals: new Decimal(11111),
-    trueEssence: new Decimal(0),
-    truePercent: 50,
-    antiPercent: 50,
-    antiEssence: new Decimal(0),
+    //trueEssence: new Decimal(0),
+    //truePercent: 50,
+    //antiPercent: 50,
+    //antiEssence: new Decimal(0),
     timeResets: new Decimal(0),
     timeLocked: false,
+    refLevel: 0,
+    totalEmitters: 0,
+    trueEmitters: 0,
+    antiEmitters: 0,
 
     galaxies: new Decimal(0),
     spentGalaxies: new Decimal(0),
@@ -647,7 +651,7 @@ var START_PLAYER = {
         'prestigeBuyer': false,
         'advancedBuyer': false,
         'ascensionBuyer': false,
-        'timeDimBuyer': false,
+        //'timeDimBuyer': false,
         'buildings': false,
         'factory': false,
         'factoryRow2': false,
@@ -662,7 +666,7 @@ var START_PLAYER = {
         'time': false,
         'timeUpgrades': false,
         'timeUpgrades2': false,
-        'timeDims2': false,
+        //'timeDims2': false,
         'galaxies': false,
         'research': false,
         'infResearch': false,
@@ -854,7 +858,7 @@ var START_PLAYER = {
         't': {
             notify: false,
             indirect: false,
-            'd': {
+            'r': {
                 notify: false,
                 indirect: false,
             },
@@ -919,7 +923,7 @@ var START_PLAYER = {
     favGalaxies: [[], [], []],
     favGalNames: ['Slot 1', 'Slot 2', 'Slot 3'],
     help: false,
-    version: 'v1.1.1',
+    version: 'v1.2.0_d.1',
 }
 
 var STAT_KEYS = {
@@ -1466,7 +1470,7 @@ var AUTOBUYERS_DATA = {
                     htm: function() { return 'at x galaxies:'; }
                 },
             },
-            34: {
+            /*34: {
                 1: {
                     id: 1,
                     boxID: 12,
@@ -1509,7 +1513,7 @@ var AUTOBUYERS_DATA = {
                     klass: function() { return ''; },
                     htm: function() { return ''; }
                 },
-            },
+            },*/
         },
     },
 }
@@ -1558,15 +1562,15 @@ var TABS_DATA = {
         },
     },
     't': {
-        title: 'TIME WARP',
+        title: 'REFINERY',
         pid: 'timeTab',
         condition: function() { return player.spaceResets.gte(3); },
         unlocked: function() { return player.unlocks['time']; },
         subUnlocked: function() { return player.unlocks['timeUpgrades'] },
         subTabs: {
-            dims: {
-                title: 'TIME DIMENSIONS',
-                pid: 'timeDimSubTab',
+            refinery: {
+                title: 'TIME REFINERY',
+                pid: 'refinerySubTab',
                 condition: function() { return player.spaceResets.gte(3); },
                 unlocked: function() { return true; },
             },
@@ -1875,8 +1879,8 @@ var ACH_DATA = {
         }
     },
     13: {
-        title: 'Wait, This Sounds Familiar...',
-        desc: 'Unlock Time Warp.',
+        title: 'Shiny Crystals',
+        desc: 'Unlock the Refinery.',
         secret: false,
         hint: '',
         reward: 'You start all resets with 10 corpses.',
@@ -1958,7 +1962,7 @@ var ACH_DATA = {
     },
     22: {
         title: 'Inter-Dimensional Nekro-Cable',
-        desc: 'Buy one 4th Time Dimension.',
+        desc: 'Get your Refinery to level 3.',
         secret: false,
         hint: '',
         reward: '',
@@ -1966,7 +1970,7 @@ var ACH_DATA = {
         showEffect: false,
         divID: 'ach22',
         canUnlock: function() {
-            return player.timeDims[4].bought.gt(0);
+            return player.refLevel>2;
         },
         effect: function() {
             return new Decimal(1);
@@ -2191,7 +2195,7 @@ var ACH_DATA = {
     },
     44: {
         title: 'That\'s Pretty Darn Fast',
-        desc: 'Have your zombie corpse multiplier over 10,000 before unlocking Time Warp in this ascension.',
+        desc: 'Have your zombie corpse multiplier over 10,000 before unlocking the Refinery in this ascension.',
         secret: false,
         hint: '',
         reward: '',
@@ -2570,7 +2574,7 @@ var UNLOCKS_DATA = {
             return (player.units[7].bought.gt(0)&&player.spaceResets.gt(2));
         },
     },
-    dimensions: {
+    /*dimensions: {
         1: function() {
             return true;
         },
@@ -2595,7 +2599,7 @@ var UNLOCKS_DATA = {
         8: function() {
             return (player.timeDims[7].bought.gt(0)&&player.unlocks['timeDims2']);
         },
-    },
+    },*/
     main: {
         'units': {
             condition: function() {
@@ -2664,14 +2668,14 @@ var UNLOCKS_DATA = {
                 return;
             },
         },
-        'timeDimBuyer': {
+        /*'timeDimBuyer': {
             condition: function() {
                 return hasMilestone(5);
             },
             onUnlock: function() {
                 return;
             },
-        },
+        },*/
         'buildings': {
             notify: 'b',
             shouldNotify: function() {
@@ -2826,7 +2830,7 @@ var UNLOCKS_DATA = {
                 player.tabNotify[this.indirect][this.notify].notify = true;
             },
         },
-        'timeDims2': {
+        /*'timeDims2': {
             //idsToShow: ['dimBuyer5Cell', 'dimBuyer6Cell', 'dimBuyer7Cell', 'dimBuyer8Cell', 'spacer1', 'spacer2', 'spacer3', 'spacer4'], //'timeRow5', 'timeRow6', 'timeRow7', 'timeRow8', 
             condition: function() {
                 return hasUpgrade(4, 23);
@@ -2834,7 +2838,7 @@ var UNLOCKS_DATA = {
             onUnlock: function() {
                 return;
             },
-        },
+        },*/
         'galaxies': {
             notify: 'g',
             condition: function() {
@@ -3161,7 +3165,7 @@ function fixResetBug() {
         6: new Decimal(0),
     });
 
-    copyData(START_PLAYER.timeDims, {
+    /*copyData(START_PLAYER.timeDims, {
         1: {
             unlocked: true,
             amount: new Decimal(0),
@@ -3202,7 +3206,7 @@ function fixResetBug() {
             amount: new Decimal(0),
             bought: new Decimal(0)
         },
-    });
+    });*/
 
     copyData(START_PLAYER.timeUpgs, {
         11: false,
@@ -3284,7 +3288,7 @@ function fixResetBug() {
             'fast': false,
             'amount': new Decimal(1),
         },
-        12: {
+        /*12: {
             1: false,
             2: false,
             3: false,
@@ -3293,7 +3297,7 @@ function fixResetBug() {
             6: false,
             7: false,
             8: false,
-        },
+        },*/
         'time': {
             'on': false,
         },
@@ -3598,12 +3602,16 @@ function fixResetBug() {
 
     START_PLAYER.crystals = new Decimal(0);
     START_PLAYER.milesCrystals = new Decimal(11111);
-    START_PLAYER.trueEssence = new Decimal(0);
-    START_PLAYER.truePercent = 50;
-    START_PLAYER.antiPercent = 50;
-    START_PLAYER.antiEssence = new Decimal(0);
+    //START_PLAYER.trueEssence = new Decimal(0);
+    //START_PLAYER.truePercent = 50;
+    //START_PLAYER.antiPercent = 50;
+    //START_PLAYER.antiEssence = new Decimal(0);
     START_PLAYER.timeResets = new Decimal(0);
     START_PLAYER.timeLocked = false;
+    START_PLAYER.refLevel = 0;
+    START_PLAYER.trueEmitters = 0;
+    START_PLAYER.antiEmitters = 0;
+    START_PLAYER.totalEmitters = 0;
 
     START_PLAYER.galaxies = new Decimal(0);
     START_PLAYER.spentGalaxies = new Decimal(0);
@@ -3682,7 +3690,7 @@ function fixResetBug() {
         'prestigeBuyer': false,
         'advancedBuyer': false,
         'ascensionBuyer': false,
-        'timeDimBuyer': false,
+        //'timeDimBuyer': false,
         'buildings': false,
         'factory': false,
         'factoryRow2': false,
@@ -3697,7 +3705,7 @@ function fixResetBug() {
         'time': false,
         'timeUpgrades': false,
         'timeUpgrades2': false,
-        'timeDims2': false,
+        //'timeDims2': false,
         'galaxies': false,
         'research': false,
         'infResearch': false,
@@ -3884,7 +3892,7 @@ function fixResetBug() {
         't': {
             notify: false,
             indirect: false,
-            'd': {
+            'r': {
                 notify: false,
                 indirect: false,
             },
@@ -3949,7 +3957,7 @@ function fixResetBug() {
     START_PLAYER.favGalaxies = [[], [], []];
     START_PLAYER.favGalNames = ['Slot 1', 'Slot 2', 'Slot 3'];
     START_PLAYER.help = false;
-    START_PLAYER.version = 'v1.1.1';
+    START_PLAYER.version = 'v1.2.0_d.1';
 
     DATA.sp = {};
     copyData(DATA.sp, START_PLAYER);

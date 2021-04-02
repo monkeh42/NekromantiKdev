@@ -582,7 +582,7 @@ var UNITS_DATA = {
     prestige: {
         className: 'spacePrestige',
         heading: 'This world is dead and empty...',
-        desc: 'Give up all your units and corpses to exterminate a new world. You gain a boost to corpse gain based on total exterminated worlds.',
+        desc: function() { return `Give up all your units and corpses to exterminate a new world. You get a boost to corpse production based on total exterminated worlds.<br>This world prestige will unlock ${(player.spaceResets.eq(0) ? 'Buildings' : (player.spaceResets.eq(1) ? 'Construction' : 'the Refinery'))} and a new unit tier.` },
         confirmPopText: 'This will reset ALL of your corpses, units, and astral bricks.<br><span style="font-size: 11pt;">(These confirmations can be disabled in options)</span>',
         displayDesc: function() { return !player.spaceResets.gt(2); },
         displayTooltip: false,

@@ -695,7 +695,7 @@ function galaxyPrestigeReset(respec=false, startingResearch=false) {
             player.unlocks['time'] = false;
             player.unlocks['timeUpgrades'] = false;
             player.unlocks['timeUpgrades2'] = false;
-            player.unlocks['timeDims'] = false;
+            //player.unlocks['timeDims'] = false;
         }
         else { player.unlocks['time'] = false; }
     }
@@ -710,7 +710,7 @@ function galaxyPrestigeReset(respec=false, startingResearch=false) {
     player.corpses = (hasAchievement(41)&&!startingResearch) ? new Decimal(DATA.sp.corpsesAch41) : (hasAchievement(13) ? new Decimal(DATA.sp.corpsesAch13) : new Decimal(DATA.sp.corpses))
     if (!hasAchievement(42)) { player.subTabs['u'] = 'unitsSubTab'; }
     if (!hasMilestone(1)) { player.subTabs['b'] = 'buildingsSubTab'; }
-    if (!hasAchievement(43)) { player.subTabs['t'] = 'timeDimSubTab'; }
+    if (!hasAchievement(43)) { player.subTabs['t'] = 'refinerySubTab'; }
     if (startingResearch) { resLockGalaxies(); }
     save();
     startInterval();
@@ -720,11 +720,11 @@ function galaxyPrestigeReset(respec=false, startingResearch=false) {
 function resetTimeCounts(startingResearch=false) {
     player.timeResets = new Decimal(DATA.sp.timeResets);
     player.crystals = new Decimal((hasMilestone(4)&&!startingResearch) ? DATA.sp.milesCrystals : DATA.sp.crystals);
-    player.trueEssence = new Decimal(DATA.sp.trueEssence);
-    player.antiEssence = new Decimal(DATA.sp.antiEssence);
+    //player.trueEssence = new Decimal(DATA.sp.trueEssence);
+    //player.antiEssence = new Decimal(DATA.sp.antiEssence);
     if (!player.dontResetSlider) {
-        player.truePercent = new Decimal(DATA.sp.truePercent);
-        player.antiPercent = new Decimal(DATA.sp.antiPercent);
+        player.trueEmitters = new Decimal(DATA.sp.trueEmitters);
+        player.antiEmitters = new Decimal(DATA.sp.antiEmitters);
     }
     copyData(player.stats['thisAscStats'], DATA.sp.stats['thisAscStats']);
     player.stats['thisAscStats'].bestCrystals = player.crystals;
@@ -750,7 +750,7 @@ function researchReset(proj) {
     resetUnits();
     copyData(player.buildings, DATA.sp.buildings);
     copyData(player.construction, DATA.sp.construction);
-    resetTimeDims();
+    //resetTimeDims();
     copyData(player.timeUpgs, DATA.sp.timeUpgs);
     player.corpses = new Decimal(DATA.sp.corpsesAch13);
     player.bricks = new Decimal(DATA.sp.bricks);
@@ -758,8 +758,8 @@ function researchReset(proj) {
     player.worlds = new Decimal(DATA.sp.worlds);
     player.spaceResets = new Decimal(DATA.sp.spaceResets);
     player.timeResets = new Decimal(DATA.sp.timeResets);
-    player.trueEssence = new Decimal(DATA.sp.trueEssence);
-    player.antiEssence = new Decimal(DATA.sp.antiEssence);
+    //player.trueEssence = new Decimal(DATA.sp.trueEssence);
+   // player.antiEssence = new Decimal(DATA.sp.antiEssence);
     player.nextSpaceReset = new Array(1, 5);
     copyData(player.stats['thisSacStats'], DATA.sp.stats['thisSacStats']);
     copyData(player.stats['thisAscStats'], DATA.sp.stats['thisAscStats']);
@@ -1731,7 +1731,7 @@ GALAXIES_DATA[0] = {
     prestige: {
         className: 'galaxyPrestige',
         heading: 'ASCENSION',
-        desc: 'Ascend your mortal form and gain true infernal might - gather your exterminated worlds and form a Depleted Galaxy to rule.<br>This resets everything that sacrifice does, plus time crystals, Time Dimensions, and Time Upgrades.',
+        desc: function() { 'Ascend your mortal form and gain true infernal might - gather your exterminated worlds and form a Depleted Galaxy to rule.<br>This resets everything that sacrifice does, plus refinery level, emitters, and Time Upgrades.' },
         confirmPopText: 'This will reset ALL of your progress up to unlocking Galaxies.<br><span style="font-size: 11pt;">(These confirmations can be disabled in options)</span>',
         displayDesc: function() { return true; },
         displayTooltip: true,
@@ -1908,7 +1908,7 @@ GALAXIES_DATA[1] = {
             id: 32,
             tier: 1,
             title: '1.32',
-            desc: function() { return 'The square root of the anti time essence boost affects time dimensions while in astral enslavement.' },
+            desc: function() { return 'The square root of the anti time emitter boost affects time dimensions while in astral enslavement.' },
             resource: 'galaxies',
             requires: [22],
             isBought: function() { return player.galaxyUpgs[this.tier][this.id].bought; },
@@ -2173,7 +2173,7 @@ GALAXIES_DATA[2] = {
             id: 41,
             tier: 2,
             title: '2.41',
-            desc: function() { return 'First time dimensions also produce Sun Eaters at a greatly reduced rate.' },
+            desc: function() { return '<span style="text-decoration: line-through;">First time dimensions also produce Sun Eaters at a greatly reduced rate.</span><br>????' },
             resource: 'galaxies',
             requires: [31, 32],
             isBought: function() { return player.galaxyUpgs[this.tier][this.id].bought; },
@@ -2184,7 +2184,7 @@ GALAXIES_DATA[2] = {
             locked: function() { return player.galaxyUpgs[this.tier][this.id].locked; },
             row: 4,
             position: 0,
-            displayEffect: true,
+            displayEffect: false,
             displaySuffix: '/sec',
             displayTooltip: true,
             displayFormula: function() { return `${hasUpgrade(4, 13) ? "ln(x)" : "log(x)"}` },
@@ -2199,7 +2199,7 @@ GALAXIES_DATA[2] = {
                 return (player.isInResearch ? 3*c : c);
             },
             effect: function() {
-                return (hasUpgrade(4, 13) && (!player.isInResearch || hasEUpgrade(13))) ? getEssenceProdPerSecond().ln() : getEssenceProdPerSecond().log10();
+                return new Decimal(1);//(hasUpgrade(4, 13) && (!player.isInResearch || hasEUpgrade(13))) ? getEssenceProdPerSecond().ln() : getEssenceProdPerSecond().log10();
             },
             effectString: function() {
                 return formatDefault2(this.effect()) + '/sec<br>(real time)';
@@ -2445,7 +2445,7 @@ GALAXIES_DATA[4] = {
             id: 11,
             tier: 4,
             title: '4.11',
-            desc: function() { return 'Your total galaxies multiply time essence production.' },
+            desc: function() { return '<span style="text-decoration: line-through;">Your total galaxies multiply time essence production.</span><br>????' },
             resource: 'galaxies',
             requires: [],
             isBought: function() { return player.galaxyUpgs[this.tier][this.id].bought; },
@@ -2469,8 +2469,9 @@ GALAXIES_DATA[4] = {
                 return (player.isInResearch ? 3*c : c);
             },
             effect: function() {
-                let e = new Decimal(player.galaxies.plus(player.spentGalaxies));
-                return getGalaxyUpgSoftcap(e.plus(1));
+                //let e = new Decimal(player.galaxies.plus(player.spentGalaxies));
+                //return getGalaxyUpgSoftcap(e.plus(1));
+                return new Decimal(1);
             },
             effectString: function() {
                 return formatDefault2(this.effect()) + 'x';
@@ -2516,7 +2517,7 @@ GALAXIES_DATA[4] = {
             id: 22,
             tier: 4,
             title: '4.22',
-            desc: function() { return 'The square root of the true time essence boost affects time dimensions outside of astral enslavement.' },
+            desc: function() { return 'The square root of the true time emitter boost affects time dimensions outside of astral enslavement.' },
             resource: 'galaxies',
             requires: [11],
             isBought: function() { return player.galaxyUpgs[this.tier][this.id].bought; },
@@ -2552,7 +2553,7 @@ GALAXIES_DATA[4] = {
             id: 31,
             tier: 4,
             title: '4.31',
-            desc: function() { return 'Both time essence boosts are based on log(x)^2 instead of log(x).' },
+            desc: function() { return '<span style="text-decoration: line-through;">Both time essence boosts are based on log(x)^2 instead of log(x).</span><br>????' },
             resource: 'galaxies',
             requires: [21],
             isBought: function() { return player.galaxyUpgs[this.tier][this.id].bought; },
@@ -2578,7 +2579,7 @@ GALAXIES_DATA[4] = {
                 return (player.isInResearch ? 3*c : c);
             },
             effect: function() {
-                return new Decimal(2);
+                return new Decimal(1);//2);
             },
             effectString: function() {
                 return '';
@@ -2624,7 +2625,7 @@ GALAXIES_DATA[4] = {
             id: 41,
             tier: 4,
             title: '4.41',
-            desc: function() { return 'True and anti time essence no longer nerf the other\'s effect.' },
+            desc: function() { return 'True and anti time emitters no longer nerf the other\'s effect.' },
             resource: 'galaxies',
             requires: [31, 32],
             isBought: function() { return player.galaxyUpgs[this.tier][this.id].bought; },

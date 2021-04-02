@@ -2,12 +2,12 @@
 
 const GAME_DATA = {
     author: 'monkeh42',
-    version: 'v1.1.1',
+    version: 'v1.2.0_d.1',
 }
 
 const NUM_UNITS = 8;
 
-const NUM_TIMEDIMS = 8;
+//const NUM_TIMEDIMS = 8;
 
 const NUM_ACHS = 25;
 
@@ -99,6 +99,15 @@ function loadGame() {
         player.activeGalaxies[2] = '2';
     }
 
+    //REPLACE THIS STUFF
+    //!!!!!!!!!!!!!!!
+
+    player.timeUpgs[54] = false;
+    player.buildings[2].upgrades[22] = false;
+    if (player.totalEmitters < 2*player.refLevel) { player.totalEmitters = 2*player.refLevel; }
+
+    //^^^REPLACE^^^
+
     player.help = false;
     if (player.win&&!player.continue) { player.continue = true; }
 
@@ -141,8 +150,8 @@ function setupData() {
     for (let i=1; i<=4; i++) { addData('b'+i.toString(), BUILDS_DATA[i].id, BUILDS_DATA[i]); }
     addData('c', 'construction', CONSTR_DATA);
     addData('t', 'time', TIME_DATA);
-    addData('tu', 'time upgrades', TIME_UPGRADES);
-    addData('td', 'time dimensions', TIME_DIMENSIONS);
+    //addData('tu', 'time upgrades', TIME_UPGRADES);
+    //addData('td', 'time dimensions', TIME_DIMENSIONS);
     addData('g', 'galaxies', GALAXIES_DATA[0]);
     for (let j=1; j<=4; j++) { addData('g'+j.toString(), GALAXIES_DATA[j].name, GALAXIES_DATA[j]); }
     addData('a', 'ark', ARK_DATA);
@@ -205,7 +214,7 @@ function gameLoop(diff=new Decimal(0), offline=false) {
     var realDiff = new Decimal(diff);
     var trueDiff = new Decimal(realDiff);
     diff = diff.times(timeBuff);
-    if (hasGUpgrade(1, 32) || hasGUpgrade(4, 22)) { realDiff = diff.times(timeBuff.sqrt()); } 
+    //if (hasGUpgrade(1, 32) || hasGUpgrade(4, 22)) { realDiff = diff.times(timeBuff.sqrt()); } 
     
     if (player.astralFlag) {
         gain = getBricksPerSecond().times(diff.div(1000));
@@ -253,7 +262,7 @@ function gameLoop(diff=new Decimal(0), offline=false) {
     }
     if (hasGUpgrade(2, 41)) { player.units[8].amount = player.units[8].amount.plus(getUnitProdPerSecond(i).times(realDiff.div(1000))); }
     
-    if (player.timeLocked) {
+    /*if (player.timeLocked) {
         for (var i=1; i<=NUM_TIMEDIMS; i++) {
             if (i==1) {
                 player.trueEssence = player.trueEssence.plus(getEssenceProdPerSecond().times(realDiff.div(1000)).times(player.truePercent/100));
@@ -261,7 +270,7 @@ function gameLoop(diff=new Decimal(0), offline=false) {
             } 
             else if (i<=4 || hasUpgrade(4, 23)) { player.timeDims[i-1].amount = player.timeDims[i-1].amount.plus(getTimeDimProdPerSecond(i).times(realDiff.div(1000))); }
         }
-    }
+    }*/
     
     for (let b=1; b<=4; b++) {
         if (isBuilt(b)) {
@@ -304,8 +313,6 @@ function gameLoop(diff=new Decimal(0), offline=false) {
         player.lastUpdate = currentUpdate;
     
         player.dontResetSlider = app.dontRespec;
-        player.truePercent = 100 - Number(app.sliderVal);
-        player.antiPercent = Number(app.sliderVal);
     
         popupTimers(trueDiff);
     }
@@ -327,11 +334,11 @@ function autobuyerTick(slow) {
     if (player.autobuyers[9]['on'] && (player.autobuyers[9]['fast'] || slow)) { if (isAutoSacTriggered()) { timePrestigeNoConfirm(); } }
     if (player.autobuyers[10]['on'] && (player.autobuyers[10]['fast'] || slow)) { if (canSpacePrestige() && (player.spaceResets.lt(player.autobuyers[10]['max']) || player.autobuyers[10]['max'] == 0)) { spacePrestigeNoConfirm(); } }
     if (player.autobuyers[11]['on'] && (player.autobuyers[11]['fast'] || slow)) { if (canGalaxyPrestige() && calculateGalaxyGain().gte(player.autobuyers[11]['amount'])) { galaxyPrestigeNoConfirm(); } }
-    for (let i=NUM_TIMEDIMS; i>0; i--) {
+    /*for (let i=NUM_TIMEDIMS; i>0; i--) {
         if (i<=4 || hasUpgrade(4, 23)) {
             if (player.autobuyers[12][i]) { buyMaxTime(i); }
         }
-    }
+    }*/
     if (player.autobuyers['time']['on']) {
         for (let x=1; x<=3; x++) {
             for (let y=1; y<=4; y++) {
@@ -365,8 +372,8 @@ function calculateOfflineTime(seconds) {
     var startArms = new Decimal(player.buildings[1].amount);
     var startAcolytes = new Decimal(player.buildings[2].amount);
     var startPhotons = new Decimal(player.buildings[3].amount);
-    var startTrue = new Decimal(player.trueEssence);
-    var startAnti = new Decimal(player.antiEssence);
+    //var startTrue = new Decimal(player.trueEssence);
+    //var startAnti = new Decimal(player.antiEssence);
     var startGalaxies = new Decimal(player.galaxies);
     var startResearch = new Decimal(player.research);
 
@@ -420,14 +427,14 @@ function calculateOfflineTime(seconds) {
     } else {
         document.getElementById('offlinePhoton').style.display = 'none';
     }
-    if (player.trueEssence.gt(startTrue) || player.antiEssence.gt(startAnti)) {
+    /*if (player.trueEssence.gt(startTrue) || player.antiEssence.gt(startAnti)) {
         document.getElementById('offlineTrueGain').innerHTML = formatDefault(player.trueEssence.minus(startTrue).gte(1) ? player.trueEssence.minus(startTrue) : '0');
         document.getElementById('offlineAntiGain').innerHTML = formatDefault(player.antiEssence.minus(startAnti).gte(1) ? player.antiEssence.minus(startAnti) : '0');
         document.getElementById('offlineEssence').style.display = 'block';
         allZero = false;
     } else {
         document.getElementById('offlineEssence').style.display = 'none';
-    }
+    }*/
     if (player.galaxies.gt(startGalaxies)) {
         document.getElementById('offlineGalaxyGain').innerHTML = formatDefault(player.galaxies.minus(startGalaxies));
         document.getElementById('offlineGalaxy').style.display = 'block';
@@ -474,8 +481,10 @@ function importSave() {
     var imported = app.exportTextArea;
     if (imported !== undefined) {
         try {
-            copyData(player, JSON.parse(window.atob(imported)));
-            if (Object.keys(player).length == 0) { copyData(player, DATA.sp); }
+            if (Object.keys(JSON.parse(window.atob(imported))).length != 0) {
+                player = {};
+                copyData(player, JSON.parse(window.atob(imported)));
+            }
         } catch(e) {
             return;
         }

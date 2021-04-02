@@ -186,9 +186,7 @@ function loadVue() {
 		props: ['data', 'id', 'active'],
 		methods: {
 			isNotify(tab, sub) {
-				if (sub.slice(0,5)=='timeU') { return player.tabNotify[tab]['u'].notify }
-				else if (sub.slice(0,5)=='timeD') { return player.tabNotify[tab]['d'].notify }
-				else { return player.tabNotify[tab][sub.slice(0,1)].notify }
+				return player.tabNotify[tab][sub.slice(0,1)].notify; 
 			},
 		},
 		template: `
@@ -224,9 +222,10 @@ function loadVue() {
 		props: ['data', 'val', 'label'],
 		methods: {
 			plural(d, str) {
+				if (d=='infinity') { return str }
 				d = new Decimal(d.replace(',', ''));
 				if (str.slice(-3)=='ies') { return (d.eq(1) ? (str.slice(0, -3)+'y') : str); }
-				else if (str=='research'||str=='void research') { return str; }
+				else if (str=='research'||str=='void research'||str=='') { return str; }
 				else { return (d.eq(1) ? str.slice(0, -1) : str); }
 			},
 		},
@@ -239,10 +238,10 @@ function loadVue() {
 		props: ['val', 'label'],
 		methods: {
 			plural(d, str) {
+				if (d=='infinity') { return str }
 				d = new Decimal(d.replace(',', ''));
-				if (str=='galaxies') { return (d.eq(1) ? 'galaxy' : str); }
-				else if (str=='depleted galaxies') { return (d.eq(1) ? 'depleted galaxy' : str); }
-				else if (str=='research'||str=='void research') { return str; }
+				if (str.slice(-3)=='ies') { return (d.eq(1) ? (str.slice(0, -3)+'y') : str); }
+				else if (str=='research'||str=='void research'||str=='') { return str; }
 				else { return (d.eq(1) ? str.slice(0, -1) : str); }
 			},
 		},
@@ -290,7 +289,7 @@ function loadVue() {
         <div class="dimTable">
 		<dimension-header :data="data"></dimension-header>
 			<div v-for="tier in DATA[data].numTiers">
-				<div v-if="(data=='u'&&player.units[tier].unlocked)||(data=='td'&&player.timeDims[tier].unlocked)">
+				<div v-if="(data=='u'&&player.units[tier].unlocked)">
 					<dimension :data="data" :id="tier"></dimension>
 				</div>
 			</div>
@@ -527,7 +526,7 @@ function loadVue() {
 		<div class="prestigeContainer">
 			<button v-on:click="DATA[data].prestige.doReset()" v-bind:class="{ [DATA[data].prestige.className]: true, cant: !DATA[data].prestige.canReset(), can: DATA[data].prestige.canReset(), tooltip: (player.tooltipsEnabled&&DATA[data].prestige.displayTooltip)}" v-bind:data-title="DATA[data].prestige.displayFormula()">
 				<div v-html="DATA[data].prestige.heading" style="font-weight: 900; font-size: 17pt; margin: 5px 0px;"></div>
-				<div v-if="DATA[data].prestige.displayDesc()" style="margin: 5px 0px;" v-html="DATA[data].prestige.desc"></div>
+				<div v-if="DATA[data].prestige.displayDesc()" style="margin: 5px 0px;" v-html="DATA[data].prestige.desc()"></div>
 				<div v-if="DATA[data].prestige.canReset()" style="font-size: 15pt; margin: 0px;">Reset for <num-text-plain :val="formatWhole(DATA[data].prestige.getGain())" :label="DATA[data].prestige.gainResource"></num-text-plain></div>
 				<div v-if="!DATA[data].prestige.canReset()" style="font-size: 15pt; margin: 0px;">Requires {{ DATA[data].prestige.getReqAmount() }} {{ DATA[data].prestige.getReqResource() }}</div>
 				<div v-if="DATA[data].prestige.canReset()&&DATA[data].prestige.showNextAt" style="font-size: 15pt; margin: 0px;">Next at {{ formatWhole(DATA[data].prestige.getNextAt()) }} {{ DATA[data].prestige.getReqResource() }}</div>
@@ -1148,7 +1147,7 @@ function loadVue() {
 			getNumAchRows,
 			getAchievementEffect,
 			getAchievementBoost,
-			getEssenceProdAfterSlider,
+			//getEssenceProdAfterSlider,
 			getTrueTimeBuff,
 			getAntiTimeBuff,
 			getResearchPerSecond,
@@ -1161,6 +1160,11 @@ function loadVue() {
 			generateLastSac,
 			generateSacAvgs,
 			generateSacString,
+			updateOnAntiChange,
+			updateOnTrueChange,
+			canAffordRefinery,
+			getRefineryCost,
+			getEmittersPerLevel,
 			galSelected: player.activeGalaxies[0],
 			isOffline: false,
 			allBuyersRadio: 'all',
@@ -1168,6 +1172,8 @@ function loadVue() {
 			respecNextSac: false,
 			dontRespec: player.dontResetSlider,
 			sliderVal: player.antiPercent,
+			trueSliderVal: player.trueEmitters,
+			antiSliderVal: player.antiEmitters,
 			shadowStyle: '',
 			devSpeed: 1,
 			showHelp: false,
