@@ -916,7 +916,7 @@ var START_PLAYER = {
     tooltipsEnabled: false,
     displayRealTime: false,
     tab: 'unitsTab',
-    subTabs: { 'u': 'unitsSubTab', 'b': 'buildingsSubTab', 't': 'timeDimSubTab', 'g': 'galaxiesSubTab', 's': 'statSubTab' },
+    subTabs: { 'u': 'unitsSubTab', 'b': 'buildingsSubTab', 't': 'refinerySubTab', 'g': 'galaxiesSubTab', 's': 'statSubTab' },
     activeGalaxies: ['4', '1', '2'],
     hotkeysOn: true,
     dontResetSlider: false,
@@ -1044,7 +1044,7 @@ var AUTOBUYERS_DATA = {
         headerText: 'Ascension',
         prefixText: 'ascension',
     },
-    12: {
+    /*12: {
         headerText: 'Time Dimensions',
         prefixText: 'timeDim',
         1: 'first:',
@@ -1055,7 +1055,7 @@ var AUTOBUYERS_DATA = {
         6: 'sixth:',
         7: 'seventh:',
         8: 'eighth:',
-    },
+    },*/
     multi: {
         rows: 3,
         cols: 4,
@@ -1069,7 +1069,7 @@ var AUTOBUYERS_DATA = {
             if (i<33) { return true; }
             else {
                 if (i==33) { return player.unlocks['ascensionBuyer']; }
-                else if (i==34) { return player.unlocks['timeDimBuyer']; }
+                //else if (i==34) { return player.unlocks['timeDimBuyer']; }
             }
         },
         showEl: function(id, i) {
@@ -3950,7 +3950,7 @@ function fixResetBug() {
     START_PLAYER.tooltipsEnabled = false;
     START_PLAYER.displayRealTime = false;
     START_PLAYER.tab = 'unitsTab';
-    START_PLAYER.subTabs = { 'u': 'unitsSubTab', 'b': 'buildingsSubTab', 't': 'timeDimSubTab', 'g': 'galaxiesSubTab', 's': 'statSubTab' };
+    START_PLAYER.subTabs = { 'u': 'unitsSubTab', 'b': 'buildingsSubTab', 't': 'refinerySubTab', 'g': 'galaxiesSubTab', 's': 'statSubTab' };
     START_PLAYER.activeGalaxies = new Array('4', '1', '2');
     START_PLAYER.hotkeysOn = true;
     START_PLAYER.dontResetSlider = false;
