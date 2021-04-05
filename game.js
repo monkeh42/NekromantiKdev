@@ -2,7 +2,7 @@
 
 const GAME_DATA = {
     author: 'monkeh42',
-    version: 'v1.2.0_d.1',
+    version: 'v1.2.0_d.2',
 }
 
 const NUM_UNITS = 8;
@@ -260,7 +260,7 @@ function gameLoop(diff=new Decimal(0), offline=false) {
     for (var i=1; i<NUM_UNITS; i++) {
         player.units[i].amount = player.units[i].amount.plus(getUnitProdPerSecond(i).times(diff.div(1000)));
     }
-    if (hasGUpgrade(2, 41)) { player.units[8].amount = player.units[8].amount.plus(getUnitProdPerSecond(i).times(realDiff.div(1000))); }
+    //if (hasGUpgrade(2, 41)) { player.units[8].amount = player.units[8].amount.plus(getUnitProdPerSecond(i).times(realDiff.div(1000))); }
     
     /*if (player.timeLocked) {
         for (var i=1; i<=NUM_TIMEDIMS; i++) {
@@ -313,6 +313,8 @@ function gameLoop(diff=new Decimal(0), offline=false) {
         player.lastUpdate = currentUpdate;
     
         player.dontResetSlider = app.dontRespec;
+        player.emittersPercent = app.newEmitters;
+        player.emittersAuto = app.autoEmitters;
     
         popupTimers(trueDiff);
     }

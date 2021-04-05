@@ -913,6 +913,9 @@ var START_PLAYER = {
         },
     },
 
+    emittersPercent: 'single',
+    emittersAmount: 0,
+    emittersAuto: 'none',
     tooltipsEnabled: false,
     displayRealTime: false,
     tab: 'unitsTab',
@@ -923,7 +926,7 @@ var START_PLAYER = {
     favGalaxies: [[], [], []],
     favGalNames: ['Slot 1', 'Slot 2', 'Slot 3'],
     help: false,
-    version: 'v1.2.0_d.1',
+    version: 'v1.2.0_d.2',
 }
 
 var STAT_KEYS = {
@@ -3947,6 +3950,9 @@ function fixResetBug() {
         },
     });
 
+    START_PLAYER.emittersPercent = 'single';
+    START_PLAYER.emittersAmount = 0;
+    START_PLAYER.emittersAuto = 'none';
     START_PLAYER.tooltipsEnabled = false;
     START_PLAYER.displayRealTime = false;
     START_PLAYER.tab = 'unitsTab';
@@ -3957,7 +3963,7 @@ function fixResetBug() {
     START_PLAYER.favGalaxies = [[], [], []];
     START_PLAYER.favGalNames = ['Slot 1', 'Slot 2', 'Slot 3'];
     START_PLAYER.help = false;
-    START_PLAYER.version = 'v1.2.0_d.1';
+    START_PLAYER.version = 'v1.2.0_d.2';
 
     DATA.sp = {};
     copyData(DATA.sp, START_PLAYER);

@@ -791,7 +791,7 @@ function researchReset(proj) {
     
     player.subTabs['u'] = 'unitsSubTab';
     player.subTabs['b'] = 'buildingsSubTab';
-    player.subTabs['t'] = 'timeDimSubTab';
+    player.subTabs['t'] = 'refinerySubTab';
     save();
     //loadStyles();
     startInterval();

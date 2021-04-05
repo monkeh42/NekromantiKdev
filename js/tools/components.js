@@ -191,7 +191,7 @@ function loadVue() {
 		},
 		template: `
 		<div v-if="DATA.tabs[data].subTabs[id].unlocked()">
-			<button v-bind:class="{ subTabBut: true, tabButSelected: (active==DATA.tabs[data].subTabs[id].pid), tabButNotify: isNotify(data, id), timeUnlockedNotify: (id=='dims'&&!player.timeLocked) }" v-bind:style="[(isResearchCompleted(6)&&(id=='research')) ? { 'text-decoration': 'line-through' } : {}]" v-on:click="subTabButtonClick(data, id)" v-html="DATA.tabs[data].subTabs[id].title"></button>
+			<button v-bind:class="{ subTabBut: true, tabButSelected: (active==DATA.tabs[data].subTabs[id].pid), tabButNotify: isNotify(data, id), timeUnlockedNotify: (id=='refinery'&&!player.timeLocked) }" v-bind:style="[(isResearchCompleted(6)&&(id=='research')) ? { 'text-decoration': 'line-through' } : {}]" v-on:click="subTabButtonClick(data, id)" v-html="DATA.tabs[data].subTabs[id].title"></button>
 		</div>
 		`
 	}) 
@@ -527,7 +527,7 @@ function loadVue() {
 			<button v-on:click="DATA[data].prestige.doReset()" v-bind:class="{ [DATA[data].prestige.className]: true, cant: !DATA[data].prestige.canReset(), can: DATA[data].prestige.canReset(), tooltip: (player.tooltipsEnabled&&DATA[data].prestige.displayTooltip)}" v-bind:data-title="DATA[data].prestige.displayFormula()">
 				<div v-html="DATA[data].prestige.heading" style="font-weight: 900; font-size: 17pt; margin: 5px 0px;"></div>
 				<div v-if="DATA[data].prestige.displayDesc()" style="margin: 5px 0px;" v-html="DATA[data].prestige.desc()"></div>
-				<div v-if="DATA[data].prestige.canReset()" style="font-size: 15pt; margin: 0px;">Reset for <num-text-plain :val="formatWhole(DATA[data].prestige.getGain())" :label="DATA[data].prestige.gainResource"></num-text-plain></div>
+				<div v-if="DATA[data].prestige.canReset()" style="font-size: 15pt; margin: 0px;">Reset for <num-text-plain :val="formatPrestige(DATA[data].prestige.getGain())" :label="DATA[data].prestige.gainResource"></num-text-plain></div>
 				<div v-if="!DATA[data].prestige.canReset()" style="font-size: 15pt; margin: 0px;">Requires {{ DATA[data].prestige.getReqAmount() }} {{ DATA[data].prestige.getReqResource() }}</div>
 				<div v-if="DATA[data].prestige.canReset()&&DATA[data].prestige.showNextAt" style="font-size: 15pt; margin: 0px;">Next at {{ formatWhole(DATA[data].prestige.getNextAt()) }} {{ DATA[data].prestige.getReqResource() }}</div>
 			</button>
@@ -1100,6 +1100,7 @@ function loadVue() {
 			formatUnitRow,
 			formatUnitRow2,
 			formatWholeUnitRow,
+			formatPrestige,
 			formatTime,
 			buyBUpg,
 			buyTUpg,
@@ -1165,6 +1166,11 @@ function loadVue() {
 			canAffordRefinery,
 			getRefineryCost,
 			getEmittersPerLevel,
+			updateEmitterAmount,
+			autoEmitters: player.emittersAuto,
+			emittersError: false,
+			emitterAmount: player.emittersAmount,
+			newEmitters: player.emittersPercent,
 			galSelected: player.activeGalaxies[0],
 			isOffline: false,
 			allBuyersRadio: 'all',

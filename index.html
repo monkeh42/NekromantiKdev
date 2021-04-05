@@ -250,60 +250,98 @@
                             <tr>
                                 <td>
                                     <div style="min-height: 5px;"></div>
-                                    <div style="min-width: 320px;">
-                                        <div class="timeLabelLeft">TRUE<br>TIME</div><br>
-                                    </div>
+                                    
                                 </td>
                                 <td>
                                     <button v-bind:class="{ refineryBut: true, can: canAffordRefinery(), cant: !canAffordRefinery() }" v-on:click="upgradeRefinery()"><span style="font-size: 16pt;">Increase refinery level</span><br><span style="font-size: 10pt;">You will gain {{ formatWhole(getEmittersPerLevel()) }} additional emitters.</span><br>Cost: {{ formatUR(getRefineryCost(), 0) }} time crystals</button>
-                                    <layer-button data="t" :width="300" :text="(player.timeLocked ? 'Respec emitters - forces sacrifice' : 'Lock in and begin time production')" :cancl="true" fname="timeLockRespec"></layer-button>
+                                    <layer-button v-bind:class="{ timeUnlockedButtonNotify: !player.timeLocked }" data="t" :width="300" :text="(player.timeLocked ? 'Respec emitters - forces sacrifice' : 'Lock in and begin time production')" :cancl="true" fname="timeLockRespec"></layer-button>
                                 </td>
                                 <td>
-                                    <div style="min-width: 320px;">
-                                        <div class="timeLabelRight">ANTI<br>TIME</div><br>
-                                    </div>
+                                    
                                 </td>
                             </tr>
                             <tr>
-                                <td colspan="3">
+                                <td>
                                     <table style="width: 320px; float: left; text-align: center;">
                                         <tr>
                                             <td>
+                                                <div style="min-width: 320px;">
+                                                    <div class="timeLabelLeft">TRUE<br>TIME</div><br>
+                                                </div>
                                                 <div id="trueTooltip" v-bind:class="{ tooltip: player.tooltipsEnabled }" style="width: 80%; margin: auto;" data-title="boost: 1 + log(x)/nerf&#xA;nerf: log(x)^0.2">Your True Time Emitters speed up normal time by<br><span id="trueTimeBuff" style="font-size: 16pt; font-variant-numeric: tabular-nums;" v-html="formatDefault2(getTrueTimeBuff())"></span>x<br> <span v-if="hasGUpgrade(4, 41) && hasUpgrade(4, 22)" id="antiNerfTimesText">and they multiply</span><span v-else id="antiNerfDivText">but they divide</span> the Anti Time effect by<br><span id="trueTimeNerf" style="font-size: 16pt; font-variant-numeric: tabular-nums;" v-html="formatDefault2(getTrueTimeNerf())"></span></div>
                                             </td>
                                         </tr>
                                         <tr>
                                             <td>
-                                                <div style="margin: auto;">Assign <num-text data="t" :val="formatWhole(trueSliderVal)" label="of your emitters"></num-text> to True Time.</div>
+                                                <div style="margin: auto;">You have <num-text data="t" :val="formatWhole(player.trueEmitters)" label="True Time Emitters"></num-text>.</div>
                                             </td>
                                         </tr>
-                                        <tr>
+                                        <!--<tr>
                                             <td>
                                                 <div class="slidecontainer" style="text-align: center;">
                                                     <input type="range" min="0" :max="player.totalEmitters" v-model="trueSliderVal" v-on:change="updateOnTrueChange()" :class="player.timeLocked ? 'sliderLocked' : 'slider'" id="trueSlider" :disabled="player.timeLocked">
                                                 </div>
                                             </td>
+                                        </tr>-->
+                                    </table>
+                                </td>
+                                <td>
+                                    <h3>Assign Emitters:</h3>
+                                    <h2>You have <num-text data="t" :val="formatWhole(player.totalEmitters-player.trueEmitters-player.antiEmitters)" label=""></num-text> unassigned.</h2>
+                                    <table>
+                                        <tr>
+                                            <td>
+                                                <a class="emitterArrows" href="javascript:assignTrue()">&lArr;</a>
+                                                <div style="min-height: 45px;"></div>
+                                            </td>
+                                            <td width="75%">
+                                                <div><input type="radio" id="singleRadio" name="newEmittersRadio" class="timeCheckbox" value="single" v-model="newEmitters"><label for="singleRadio">single</label></div>
+                                                <div><input type="radio" id="tenRadio" name="newEmittersRadio" class="timeCheckbox" value="ten" v-model="newEmitters"><label for="tenRadio">10%</label>
+                                                <input type="radio" id="twentyFiveRadio" name="newEmittersRadio" class="timeCheckbox" value="twentyfive" v-model="newEmitters"><label for="twentyFiveRadio">25%</label><br>
+                                                <input type="radio" id="fiftyRadio" name="newEmittersRadio" class="timeCheckbox" value="fifty" v-model="newEmitters"><label for="fiftyRadio">50%</label>
+                                                <input type="radio" id="allRadio" name="newEmittersRadio" class="timeCheckbox" value="all" v-model="newEmitters"><label for="allRadio">100%</label></div>
+                                                <div><input type="radio" id="customRadio" name="newEmittersRadio" class="timeCheckbox" value="custom" v-model="newEmitters"><label for="customRadio">this many:</label><input v-model="emitterAmount" v-on:change="updateEmitterAmount()" type="text" id="emittersTextbox" name="emittersTextbox" class="buyerTextT"></div>
+                                                <div style="min-height: 36px;"><div style="font-size: 10pt;" v-if="emittersError">invalid entry. value set to last good value: {{ player.emittersAmount }}</div></div>
+                                                <div>auto-assign to:</div>
+                                                <div><input type="radio" id="trueRadio" name="autoEmittersRadio" class="timeCheckbox" value="true" v-model="autoEmitters"><label for="trueRadio">true</label>
+                                                <input type="radio" id="antiRadio" name="autoEmittersRadio" class="timeCheckbox" value="anti" v-model="autoEmitters"><label for="antiRadio">anti</label><br>
+                                                <input type="radio" id="noneRadio" name="autoEmittersRadio" class="timeCheckbox" value="none" v-model="autoEmitters"><label for="noneRadio">none</label></div>
+                                            </td>
+                                            <td>
+                                                <a class="emitterArrows" href="javascript:assignAnti()">&rArr;</a>
+                                                <div style="min-height: 45px;"></div>
+                                            </td>
                                         </tr>
                                     </table>
+                                </td>
+                                <td>
                                     <table style="width: 320px; float: right; text-align: center;">
                                         <tr>
                                             <td>
+                                                <div style="min-width: 320px;">
+                                                    <div class="timeLabelRight">ANTI<br>TIME</div><br>
+                                                </div>
                                                 <div id="antiTooltip" v-bind:class="{ tooltip: player.tooltipsEnabled }" style="width: 80%; margin: auto;" data-title="boost: 1 + 2*log(x)/nerf&#xA;nerf: log(x)^0.2">Your Anti Time Emitters speed up astral time by<br><span id="antiTimeBuff" style="font-size: 16pt; font-variant-numeric: tabular-nums;" v-html="formatDefault2(getAntiTimeBuff())"></span>x<br> <span v-if="hasGUpgrade(4, 41) && hasUpgrade(4, 22)" id="trueNerfTimesText">and they multiply</span><span v-else id="trueNerfDivText">but they divide</span> the True Time effect by<br><span id="antiTimeNerf" style="font-size: 16pt; font-variant-numeric: tabular-nums;" v-html="formatDefault2(getAntiTimeNerf())"></span></div>
                                             </td>
                                         </tr>
                                         <tr>
                                             <td>
-                                                <div style="margin: auto;">Assign <num-text data="t" :val="formatWhole(antiSliderVal)" label="of your emitters"></num-text> to Anti Time.</div>
+                                                <div style="margin: auto;">You have <num-text data="t" :val="formatWhole(player.antiEmitters)" label="Anti Time Emitters"></num-text>.</div>
                                             </td>
                                         </tr>
-                                        <tr>
+                                        <!--<tr>
                                             <td colspan="2">
                                                 <div class="slidecontainer" style="text-align: center;">
                                                     <input type="range" min="0" :max="player.totalEmitters" v-model="antiSliderVal" v-on:change="updateOnAntiChange()" :class="player.timeLocked ? 'sliderLocked' : 'slider'" id="antiSlider" :disabled="player.timeLocked">
                                                 </div>
                                             </td>
-                                        </tr>
+                                        </tr>-->
                                     </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3">
+                                    <div style="font-size: 10pt;">(auto-assign only works when a percentage is checked)</div>
                                 </td>
                             </tr>
                         </table>

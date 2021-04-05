@@ -185,11 +185,14 @@ function upgradeRefinery() {
         player.crystals = player.crystals.minus(getRefineryCost());
         player.refLevel++;
         player.totalEmitters += 2;
-        if (player.timeLocked) {
-            app.antiSliderVal++;
-            app.trueSliderVal++;
-            player.trueEmitters++;
-            player.antiEmitters++;
+        if (player.timeLocked && player.emittersPercent!='single' && player.emittersPercent!='custom') {
+            if (player.emittersAuto =='true') {
+                assignTrue();
+                player.antiEmitters += (player.totalEmitters - player.trueEmitters - player.antiEmitters);
+            } else if (player.emittersAuto =='anti') {
+                assignAnti();
+                player.trueEmitters += (player.totalEmitters - player.trueEmitters - player.antiEmitters);
+            } 
         }
     }
 }
@@ -344,8 +347,6 @@ function timePrestigeNoConfirm() {
 function lockInTime() {
     if (!player.timeLocked) {
         player.timeLocked = true;
-        player.trueEmitters = parseInt(app.trueSliderVal);
-        player.antiEmitters = parseInt(app.antiSliderVal);
     }
 }
 

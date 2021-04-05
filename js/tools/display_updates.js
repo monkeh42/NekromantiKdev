@@ -4,6 +4,68 @@ function updateShadow() {
     app.shadowStyle = (player.isInResearch ? (getActiveResearch()==7 ? 'inset 0px 0px 20px 10px #613227' : 'inset 0px 0px 20px 10px #e34805') : '') + (player.isInResearch && player.astralFlag ? ', ' : '') + (player.astralFlag ? 'inset 0px 0px 30px 20px #1c8a2e' : '');
 }
 
+function updateEmitterAmount() {
+    Vue.nextTick(function() {
+        if (app.emitterAmount != '') {
+            try {
+                player.emittersAmount = new Decimal(app.emitterAmount);
+                app.emittersError = false;
+            }
+            catch(err) {
+                app.emittersError = true;
+            }
+        }
+    })
+}
+
+function assignTrue() {
+    if ((player.totalEmitters - player.trueEmitters - player.antiEmitters)>0) {
+        switch (app.newEmitters) {
+            case 'single':
+                player.trueEmitters++;
+                break;
+            case 'ten':
+                player.trueEmitters += Math.ceil(0.1*(player.totalEmitters - player.trueEmitters - player.antiEmitters));
+                break;
+            case 'twentyfive':
+                player.trueEmitters += Math.ceil(0.25*(player.totalEmitters - player.trueEmitters - player.antiEmitters));
+                break;
+            case 'fifty':
+                player.trueEmitters += Math.ceil(0.5*(player.totalEmitters - player.trueEmitters - player.antiEmitters));
+                break;
+            case 'all':
+                player.trueEmitters += (player.totalEmitters - player.trueEmitters - player.antiEmitters);
+                break;
+            case 'custom':
+                player.trueEmitters += player.emittersAmount;
+        }
+    }
+}
+
+function assignAnti() {
+    if ((player.totalEmitters - player.trueEmitters - player.antiEmitters)>0) {
+        switch (app.newEmitters) {
+            case 'single':
+                player.antiEmitters++;
+                break;
+            case 'ten':
+                player.antiEmitters += Math.ceil(0.1*(player.totalEmitters - player.trueEmitters - player.antiEmitters));
+                break;
+            case 'twentyfive':
+                player.antiEmitters += Math.ceil(0.25*(player.totalEmitters - player.trueEmitters - player.antiEmitters));
+                break;
+            case 'fifty':
+                player.antiEmitters += Math.ceil(0.5*(player.totalEmitters - player.trueEmitters - player.antiEmitters));
+                break;
+            case 'all':
+                player.antiEmitters += (player.totalEmitters - player.trueEmitters - player.antiEmitters);
+                break;
+            case 'custom':
+                player.antiEmitters += player.emittersAmount;
+        }
+    }
+}
+
 function updateSingleBuyer(id, option) {
     player.autobuyers[id][option] = !player.autobuyers[id][option];
 }
