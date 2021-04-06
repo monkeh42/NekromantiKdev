@@ -160,7 +160,7 @@
             <div id="game">
                 <div id="unitsTab" class="pageTab" v-bind:style="[(player.tab=='unitsTab') ? { display: 'block' } : { display: 'none' }]">
                     <sub-nav data="u" :ids="['units', 'autobuyers']" :active="player.subTabs['u']"></sub-nav>
-                    <div id="unitsSubTab" class="unitSubTab" v-bind:style="[(player.subTabs['u']=='unitsSubTab') ? { display: 'block' } : { display: 'none' }]">
+                    <div id="unitsSubTab" class="unitSubTab" v-bind:style="[(player.subTabs['u']=='unitsSubTab' && player.tab=='unitsTab') ? { display: 'block' } : { display: 'none' }]">
                         <div style="width: 350px; margin: 10px auto;">
                             <button v-bind:class="{ zapBut: true, can: true, }" onClick="zap()">UNLEASH DEATH<br><span style="font-size: 14pt;">gain <num-text data="sp" :val="formatWhole(getZapGain())" label="corpses"></num-text></span><br><span style="font-size: 10pt; font-weight: 400;">(square root of your zombies, rounded down)</span></button>
                         </div>
@@ -215,14 +215,14 @@
                             </td>
                         </tr>
                     </table>
-                    <div id="buildingsSubTab" class="buildingSubTab" v-bind:style="[(player.subTabs['b']=='buildingsSubTab') ? { display: 'block' } : { display: 'none' }]">
+                    <div id="buildingsSubTab" class="buildingSubTab" v-bind:style="[(player.subTabs['b']=='buildingsSubTab' && player.tab=='buildingsTab') ? { display: 'block' } : { display: 'none' }]">
                         <building data="b1"></building><br>
                         <building data="b2"></building><br>
                         <building data="b3"></building><br>
                         <building data="b4"></building><br>
                         <div style="min-height: 25px;"></div>
                     </div>
-                    <div id="constructionSubTab" class="buildingSubTab" v-bind:style="[(player.subTabs['b']=='constructionSubTab') ? { display: 'block' } : { display: 'none' }]">
+                    <div id="constructionSubTab" class="buildingSubTab" v-bind:style="[(player.subTabs['b']=='constructionSubTab' && player.tab=='buildingsTab') ? { display: 'block' } : { display: 'none' }]">
                         <construction data="c"></construction>
                     </div>
                 </div>
@@ -245,7 +245,7 @@
                             </td>
                         </tr>
                     </table>
-                    <div id="refinerySubTab" class="timeSubTab" v-bind:style="[(player.subTabs['t']=='refinerySubTab') ? { display: 'block' } : { display: 'none' }]">
+                    <div id="refinerySubTab" class="timeSubTab" v-bind:style="[(player.subTabs['t']=='refinerySubTab' && player.tab=='timeTab') ? { display: 'block' } : { display: 'none' }]">
                         <table style="width: 75%; margin: auto; margin-top: 20px; text-align: center;" cellpadding="0">
                             <tr>
                                 <td>
@@ -287,7 +287,7 @@
                                 </td>
                                 <td>
                                     <h3>Assign Emitters:</h3>
-                                    <h2>You have <num-text data="t" :val="formatWhole(player.totalEmitters-player.trueEmitters-player.antiEmitters)" label=""></num-text> unassigned.</h2>
+                                    <h2 v-bind:class="{ timeUnlockedButtonNotify: ((player.totalEmitters-player.antiEmitters-player.trueEmitters)>0) }">You have <num-text data="t" :val="formatWhole(player.totalEmitters-player.trueEmitters-player.antiEmitters)" label=""></num-text> unassigned.</h2>
                                     <table>
                                         <tr>
                                             <td>
@@ -370,7 +370,7 @@
                         </table>
                         <dimension-table data="t"></dimension-table>-->
                     </div>
-                    <div id="timeUpgSubTab" class="timeSubTab" v-bind:style="[(player.subTabs['t']=='timeUpgSubTab') ? { display: 'block' } : { display: 'none' }]">
+                    <div id="timeUpgSubTab" class="timeSubTab" v-bind:style="[(player.subTabs['t']=='timeUpgSubTab' && player.tab=='timeTab') ? { display: 'block' } : { display: 'none' }]">
                         <div v-if="hasMilestone(6)" id="extraColsNotice" style="text-align: center; margin: 10px auto;">The two additional columns of upgrades from milestone 6 are never reset.</div>
                         <div v-if="hasMilestone(6)" id="timeUpgBuyerDiv" style="text-align: center; margin: auto;"><layer-button data="t" :width="300" :text="'Time Upgrade Cols 1-3 Autobuyer: ' + (player.autobuyers['time']['on'] ? 'ON' : 'OFF')" :cancl="true" fname="toggleTimeUpgBuyer"></layer-button></div>
                         <time-upg-table data="t"></time-upg-table>
@@ -394,7 +394,7 @@
                             </td>
                         </tr>
                     </table>
-                    <div id="galaxiesSubTab" class="galaxySubTab" v-bind:style="[(player.subTabs['g']=='galaxiesSubTab') ? { display: 'block' } : { display: 'none' }]">
+                    <div id="galaxiesSubTab" class="galaxySubTab" v-bind:style="[(player.subTabs['g']=='galaxiesSubTab' && player.tab=='galaxyTab') ? { display: 'block' } : { display: 'none' }]">
                         <div style="text-align: center; width: 100%; margin: auto;">
                             <span style="font-size: 17pt; font-weight: bold; color: #e32d05;">There must be loss in exchange for true power.</span><br>
                             All galaxy upgrades have a base cost of <span style="font-size: 17pt;"> 1 </span> depleted galaxy, but when you buy one, all others on rows below it increase in cost by 1.<br>
@@ -410,7 +410,7 @@
                         
                         <galaxies-table ref="gtable" data="g"></galaxies-table>
                     </div>
-                    <div id="researchSubTab" class="galaxySubTab" v-bind:style="[(player.subTabs['g']=='researchSubTab') ? { display: 'block' } : { display: 'none' }]">
+                    <div id="researchSubTab" class="galaxySubTab" v-bind:style="[(player.subTabs['g']=='researchSubTab' && player.tab=='galaxyTab') ? { display: 'block' } : { display: 'none' }]">
                         <div v-if="(player.isInResearch&&!isResearchActive(7))" id="researchDisplayDiv">
                             You have <num-text data="e" :val="formatUnitRow(player.research)" label="void research"></num-text>.<br>
                             You are producing <num-text data="e" :val="formatUnitRow(getResearchPerSecond(true))" label="void research"></num-text>/<span v-html="player.displayRealTime ? 'real sec' : 'sec'"></span>. <span v-if="player.astralFlag" id="infResearchAstralNotice">(@ <span id="astralNerfInfResearch" v-html="getAstralNerf()"></span>x slower time speed)</span><br>
@@ -429,7 +429,7 @@
                         </div>
                         <multi-boxes data="r"></multi-boxes>
                     </div>
-                    <div id="infResearchSubTab" class="galaxySubTab" v-bind:style="[(player.subTabs['g']=='infResearchSubTab') ? { display: 'block' } : { display: 'none' }]">
+                    <div id="infResearchSubTab" class="galaxySubTab" v-bind:style="[(player.subTabs['g']=='infResearchSubTab' && player.tab=='galaxyTab') ? { display: 'block' } : { display: 'none' }]">
                         <div v-if="isResearchActive(7)" id="infResearchDisplayDiv">
                             You have <num-text data="e" :val="formatUnitRow(player.research)" label="void research"></num-text>.<br>
                             You are producing <num-text data="e" :val="formatUnitRow(getResearchPerSecond(true))" label="void research"></num-text>/<span v-html="player.displayRealTime ? 'real sec' : 'sec'"></span>. <span v-if="player.astralFlag" id="infResearchAstralNotice">(@ <span id="astralNerfInfResearch" v-html="getAstralNerf()"></span>x slower time speed)</span><br>
@@ -450,7 +450,7 @@
                         <multi-box data="e" :id="11"></multi-box>
                         <eth-upg-table data="e"></eth-upg-table>
                     </div>
-                    <div id="arkSubTab" class="galaxySubTab" v-bind:style="[(player.subTabs['g']=='arkSubTab') ? { display: 'block' } : { display: 'none' }]">
+                    <div id="arkSubTab" class="galaxySubTab" v-bind:style="[(player.subTabs['g']=='arkSubTab' && player.tab=='galaxyTab') ? { display: 'block' } : { display: 'none' }]">
                         <div v-if="player.win" id="winDescription" style="text-align: center; width: 100%; font-size: 32pt; color: #661503; font-weight: bold; -webkit-text-stroke-width: 1px; -webkit-text-stroke-color: white;">YOU HAVE GONE BEYOND.</div>
                         <div v-if="!player.win" id="arkDescription" style="text-align: center; width: 100%;">
                             <span style="font-size: 17pt; font-weight: bold; color: #e32d05;">You receive a message from beyond.</span><br>
@@ -482,16 +482,16 @@
                 </div>
                 <div id="statsTab" class="pageTab" v-bind:style="[(player.tab=='statsTab') ? { display: 'block' } : { display: 'none' }]">
                     <sub-nav data="s" :ids="['stats', 'lastTen', 'lastTenA', 'achievements']" :active="player.subTabs['s']"></sub-nav>
-                    <div id="statSubTab" class="statSubTab" v-bind:style="[(player.subTabs['s']=='statSubTab') ? { display: 'block' } : { display: 'none' }]">
+                    <div id="statSubTab" class="statSubTab" v-bind:style="[(player.subTabs['s']=='statSubTab' && player.tab=='statsTab') ? { display: 'block' } : { display: 'none' }]">
                         <stats-page></stats-page>
                     </div>
-                    <div id="last10SubTab" class="statSubTab" v-bind:style="[(player.subTabs['s']=='last10SubTab') ? { display: 'block' } : { display: 'none' }]">
+                    <div id="last10SubTab" class="statSubTab" v-bind:style="[(player.subTabs['s']=='last10SubTab' && player.tab=='statsTab') ? { display: 'block' } : { display: 'none' }]">
                         <ten-sac></ten-sac>
                     </div>
-                    <div id="last10AscSubTab" class="statSubTab" v-bind:style="[(player.subTabs['s']=='last10AscSubTab') ? { display: 'block' } : { display: 'none' }]">
+                    <div id="last10AscSubTab" class="statSubTab" v-bind:style="[(player.subTabs['s']=='last10AscSubTab' && player.tab=='statsTab') ? { display: 'block' } : { display: 'none' }]">
                         <ten-asc></ten-asc>
                     </div>
-                    <div id="achSubTab" class="statSubTab" v-bind:style="[(player.subTabs['s']=='achSubTab') ? { display: 'block' } : { display: 'none' }]">
+                    <div id="achSubTab" class="statSubTab" v-bind:style="[(player.subTabs['s']=='achSubTab' && player.tab=='statsTab') ? { display: 'block' } : { display: 'none' }]">
                         <div id="achievementsInfo" style="text-align: center; margin-top: 20px;">
                             Your achievements and achievement rewards are permanent. They persist through <span style="font-size: 14pt;">ALL</span> resets.<br>
                             Achievements with a '+' have an additional reward; hover to view requirements and rewards.<br>

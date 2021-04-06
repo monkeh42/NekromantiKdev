@@ -757,9 +757,9 @@ BUILDS_DATA[2] = {
         22: {
             id: 22,
             tier: 2,
-            title: 'Astral Time Machine',
-            desc: function() { return '<span style="text-decoration: line-through;">Boost time essence production based on astral bricks.</span><br>????'; },
-            cost: function() { return new Decimal("Infinity") },
+            title: 'Astral Fusion',
+            desc: function() { return `Get free time emitters based on your best astral bricks${player.unlocks['galaxies'] ? ' this ascension.' : '.' }` }, //<span style="text-decoration: line-through;">Boost time essence production based on astral bricks.</span><br>????'; },
+            cost: function() { return new Decimal(1e12) },
             resource: 'astral bricks',
             isBought: function() {
                 return player.buildings[2].upgrades[this.id]
@@ -771,22 +771,22 @@ BUILDS_DATA[2] = {
             locked: function() { return false; },
             buttonID: 'necropolisUpg22',
             displayEffect: true,
-            displaySuffix: 'x',
+            displaySuffix: '',
             displayTooltip: true,
-            displayFormula: function() { return hasUpgrade(4, 13) ? (hasUpgrade(3, 21) ? '1 + ln(x)^4' : '1 + ln(x)^2') : (hasUpgrade(3, 21) ? '1 + log(x)^4' : '1 + log(x)^2') },
+            displayFormula: function() { return hasUpgrade(4, 13) ? (hasUpgrade(3, 21) ? 'floor(ln(x)^0.5)' : 'floor(ln(x)^0.25)') : (hasUpgrade(3, 21) ? 'floor(log(x)^0.5)' : 'floor(log(x)^0.25)') },
             effect: function() {
                 if (hasUpgrade(3, 21)) {
-                    var b = Decimal.max(player.bricks, 1);
-                    b = (hasUpgrade(4, 13) && (!player.isInResearch || hasEUpgrade(13))) ? Decimal.pow(b.ln(), 4) : Decimal.pow(b.log10(), 4);
+                    var b = Decimal.max(player.stats['thisAscStats'].bestBricks, 1);
+                    b = (hasUpgrade(4, 13) && (!player.isInResearch || hasEUpgrade(13))) ? Decimal.floor(Decimal.pow(b.ln(), 0.5)) : Decimal.floor(Decimal.pow(b.log10(), 0.5));
                 } else {
-                    var b = Decimal.max(player.bricks, 1);
-                    b = (hasUpgrade(4, 13) && (!player.isInResearch || hasEUpgrade(13))) ? Decimal.pow(b.ln(), 2) : Decimal.pow(b.log10(), 2);
+                    var b = Decimal.max(player.stats['thisAscStats'].bestBricks, 1);
+                    b = (hasUpgrade(4, 13) && (!player.isInResearch || hasEUpgrade(13))) ? Decimal.floor(Decimal.pow(b.ln(), 0.25)) : Decimal.floor(Decimal.pow(b.log10(), 0.25));
                 }
 
-                return b.plus(1);
+                return b.toNumber();
             },
             effectString: function() {
-                return formatDefault2(this.effect()) + 'x';
+                return '+' + formatWhole(this.effect());
             },
         },
         23: {
@@ -1225,7 +1225,7 @@ BUILDS_DATA[4] = {
             id: 22,
             tier: 4,
             title: 'Evil Particle Collider',
-            desc: function() { return '<span style="font-size: 115%;">THIS IS GETTING NERFED.</span><br>If you have galaxy upgrade 4.41, true and anti time emitters boost each other\'s effects instead of nerfing them.'; },
+            desc: function() { return 'The true time boost is multiplied by the number of anti time emitters, and vice versa.'; },
             cost: function() { return new Decimal(1000) },
             resource: 'black holes',
             isBought: function() {
@@ -1237,10 +1237,10 @@ BUILDS_DATA[4] = {
             unlocked: function() { return DATA['b'+this.tier.toString()].secondRowUnlocked(); },
             locked: function() { return false; },
             buttonID: 'vortexUpg22',
-            displayEffect: false,
+            displayEffect: true,
             displaySuffix: '',
-            displayTooltip: false,
-            displayFormula: function() { return '' },
+            displayTooltip: true,
+            displayFormula: function() { return '1+x' },
             onBuy: function() {
                 return;
             },
@@ -1248,14 +1248,14 @@ BUILDS_DATA[4] = {
                 return new Decimal(1);
             },
             effectString: function() {
-                return '';
+                return (formatWhole(1+player.antiEmitters) + 'x to true, ' + formatWhole(1+player.trueEmitters) + 'x to anti');
             },
         },
         23: {
             id: 23,
             tier: 4,
             title: 'Break Arbitrary',
-            desc: function() { return '<span style="text-decoration: line-through;">Unlock the next four time dimensions, and</span> ??? crystal gain and brick production are raised ^1.2 while you have more than 2.5e309 corpses.'; },
+            desc: function() { return 'Crystal gain and brick production are raised ^1.2 while you have more than 2.5e309 corpses.'; },
             cost: function() { return new Decimal(5000) },
             resource: 'black holes',
             isBought: function() {

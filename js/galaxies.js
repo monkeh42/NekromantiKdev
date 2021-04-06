@@ -565,9 +565,11 @@ function respecGalaxiesKey() {
 }
 
 function respecGalaxiesAch() {
-    if (getBoughtGUpgs() == 0 && !hasAchievement(52)) { unlockAchievement(52); }
     if (canGalaxyPrestige()) { galaxyPrestigeNoConfirm(true); }
-    else { galaxyPrestigeReset(true); }
+    else {
+        if (getBoughtGUpgs() == 0 && !hasAchievement(52)) { unlockAchievement(52); }
+        galaxyPrestigeReset(true);
+    }
 }
 
 function respecGalaxies() {
@@ -686,6 +688,8 @@ function galaxyPrestigeReset(respec=false, startingResearch=false) {
 
     resetTime(startingResearch);
     resetTimeCounts(startingResearch);
+    player.refLevel = 0;
+    player.totalEmitters = getNumEmitters();
     resetUnits(true);
     resetBuildingResources(false, true, startingResearch);
     resetBuildings(true, startingResearch);
@@ -1908,7 +1912,7 @@ GALAXIES_DATA[1] = {
             id: 32,
             tier: 1,
             title: '1.32',
-            desc: function() { return 'The square root of the anti time emitter boost affects time dimensions while in astral enslavement.' },
+            desc: function() { return 'Your refinery level multiplies the anti time effect.' },
             resource: 'galaxies',
             requires: [22],
             isBought: function() { return player.galaxyUpgs[this.tier][this.id].bought; },
@@ -1921,8 +1925,8 @@ GALAXIES_DATA[1] = {
             position: 1,
             displayEffect: true,
             displaySuffix: 'x',
-            displayTooltip: false,
-            displayFormula: function() {return ''},
+            displayTooltip: true,
+            displayFormula: function() {return '1 + x'},
             buttonID: 'galaxyUpg1.32',
             lockImageID: 'skull1.32',
             textID: 'text1.32',
@@ -1934,10 +1938,10 @@ GALAXIES_DATA[1] = {
                 return (player.isInResearch ? 3*c : c);
             },
             effect: function() {
-                return player.astralFlag ? getAntiTimeBuff().sqrt() : new Decimal(1);
+                return (player.refLevel + 1);
             },
             effectString: function() {
-                return formatDefault2(this.effect()) + 'x';
+                return formatWhole(this.effect()) + 'x';
             },
         },
         41: {
@@ -2173,7 +2177,7 @@ GALAXIES_DATA[2] = {
             id: 41,
             tier: 2,
             title: '2.41',
-            desc: function() { return '<span style="text-decoration: line-through;">First time dimensions also produce Sun Eaters at a greatly reduced rate.</span><br>????' },
+            desc: function() { return 'Zombies also produce Sun Eaters at a very greatly reduced rate (sqrt(log)).<br>Effects that apply to "corpse production" don\'t affect this.' },
             resource: 'galaxies',
             requires: [31, 32],
             isBought: function() { return player.galaxyUpgs[this.tier][this.id].bought; },
@@ -2184,10 +2188,10 @@ GALAXIES_DATA[2] = {
             locked: function() { return player.galaxyUpgs[this.tier][this.id].locked; },
             row: 4,
             position: 0,
-            displayEffect: false,
+            displayEffect: true,
             displaySuffix: '/sec',
             displayTooltip: true,
-            displayFormula: function() { return `${hasUpgrade(4, 13) ? "ln(x)" : "log(x)"}` },
+            displayFormula: function() { return `${hasUpgrade(4, 13) ? "sqrt(ln(x))" : "sqrt(log(x))"}` },
             buttonID: 'galaxyUpg2.41',
             lockImageID: '',
             textID: 'text2.41',
@@ -2199,10 +2203,10 @@ GALAXIES_DATA[2] = {
                 return (player.isInResearch ? 3*c : c);
             },
             effect: function() {
-                return new Decimal(1);//(hasUpgrade(4, 13) && (!player.isInResearch || hasEUpgrade(13))) ? getEssenceProdPerSecond().ln() : getEssenceProdPerSecond().log10();
+                return (hasUpgrade(4, 13) && (!player.isInResearch || hasEUpgrade(13))) ? Decimal.sqrt(getUnitProdPerSecond(0).ln()) : Decimal.sqrt(getUnitProdPerSecond(0).log());
             },
             effectString: function() {
-                return formatDefault2(this.effect()) + '/sec<br>(real time)';
+                return formatDefault2(this.effect().times(player.displayRealTime ? getRealTimeMultiplier() : 1)) + '/sec' + (player.displayRealTime ? '<br>(real time)' : '');
             },
         },
     },
@@ -2445,7 +2449,7 @@ GALAXIES_DATA[4] = {
             id: 11,
             tier: 4,
             title: '4.11',
-            desc: function() { return '<span style="text-decoration: line-through;">Your total galaxies multiply time essence production.</span><br>????' },
+            desc: function() { return 'Even-numbered refinery levels give one additional emitter.' },
             resource: 'galaxies',
             requires: [],
             isBought: function() { return player.galaxyUpgs[this.tier][this.id].bought; },
@@ -2456,10 +2460,10 @@ GALAXIES_DATA[4] = {
             locked: function() { return player.galaxyUpgs[this.tier][this.id].locked; },
             row: 1,
             position: 0,
-            displayEffect: true,
-            displaySuffix: 'x',
-            displayTooltip: true,
-            displayFormula: function() { return `1 + x` },
+            displayEffect: false,
+            displaySuffix: '',
+            displayTooltip: false,
+            displayFormula: function() { return '' },
             buttonID: 'galaxyUpg4.11',
             lockImageID: '',
             textID: 'text4.11',
@@ -2481,7 +2485,7 @@ GALAXIES_DATA[4] = {
             id: 21,
             tier: 4,
             title: '4.21',
-            desc: function() { return 'Quadruple your time crystal gain.' },
+            desc: function() { return 'The square root of your total galaxies multiplies both time boosts.' },
             resource: 'galaxies',
             requires: [11],
             isBought: function() { return player.galaxyUpgs[this.tier][this.id].bought; },
@@ -2492,10 +2496,10 @@ GALAXIES_DATA[4] = {
             locked: function() { return player.galaxyUpgs[this.tier][this.id].locked; },
             row: 2,
             position: -1,
-            displayEffect: false,
-            displaySuffix: '',
-            displayTooltip: false,
-            displayFormula: function() {return ''},
+            displayEffect: true,
+            displaySuffix: 'x',
+            displayTooltip: true,
+            displayFormula: function() {return '1 + sqrt(x)'},
             buttonID: 'galaxyUpg4.21',
             lockImageID: 'skull4.21',
             textID: 'text4.21',
@@ -2507,17 +2511,18 @@ GALAXIES_DATA[4] = {
                 return (player.isInResearch ? 3*c : c);
             },
             effect: function() {
-                return new Decimal(4);
+                let e = new Decimal(player.stats['allTimeStats'].totalGalaxies.sqrt());
+                return getGalaxyUpgSoftcap(e.plus(1));
             },
             effectString: function() {
-                return '';
+                return formatDefault2(this.effect()) + 'x';
             },
         },
         22: {
             id: 22,
             tier: 4,
             title: '4.22',
-            desc: function() { return 'The square root of the true time emitter boost affects time dimensions outside of astral enslavement.' },
+            desc: function() { return 'Your refinery level multiplies the true time effect.' },
             resource: 'galaxies',
             requires: [11],
             isBought: function() { return player.galaxyUpgs[this.tier][this.id].bought; },
@@ -2530,8 +2535,8 @@ GALAXIES_DATA[4] = {
             position: 1,
             displayEffect: true,
             displaySuffix: 'x',
-            displayTooltip: false,
-            displayFormula: function() {return ''},
+            displayTooltip: true,
+            displayFormula: function() {return '1 + x'},
             buttonID: 'galaxyUpg4.22',
             lockImageID: 'skull4.22',
             textID: 'text4.22',
@@ -2543,17 +2548,17 @@ GALAXIES_DATA[4] = {
                 return (player.isInResearch ? 3*c : c);
             },
             effect: function() {
-                return player.astralFlag ? new Decimal(1) : getTrueTimeBuff().sqrt()
+                return player.refLevel + 1;
             },
             effectString: function() {
-                return formatDefault2(this.effect()) + 'x';
+                return formatWhole(this.effect()) + 'x';
             },
         },
         31: {
             id: 31,
             tier: 4,
             title: '4.31',
-            desc: function() { return '<span style="text-decoration: line-through;">Both time essence boosts are based on log(x)^2 instead of log(x).</span><br>????' },
+            desc: function() { return 'Quadruple your time crystal gain.' },
             resource: 'galaxies',
             requires: [21],
             isBought: function() { return player.galaxyUpgs[this.tier][this.id].bought; },
@@ -2579,7 +2584,7 @@ GALAXIES_DATA[4] = {
                 return (player.isInResearch ? 3*c : c);
             },
             effect: function() {
-                return new Decimal(1);//2);
+                return new Decimal(4);
             },
             effectString: function() {
                 return '';

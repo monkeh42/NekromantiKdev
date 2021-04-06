@@ -927,6 +927,7 @@ var START_PLAYER = {
     favGalNames: ['Slot 1', 'Slot 2', 'Slot 3'],
     help: false,
     version: 'v1.2.0_d.2',
+    isv2: true,
 }
 
 var STAT_KEYS = {
@@ -2556,25 +2557,25 @@ var UNLOCKS_DATA = {
             return true;
         },
         2: function() {
-            return player.units[1].bought.gt(0);
+            return (player.units[1].bought.gt(0) || player.stats['allTimeStats'].totalAscensions.gt(0));
         },
         3: function() {
-            return player.units[2].bought.gt(0);
+            return (player.units[2].bought.gt(0) || player.stats['allTimeStats'].totalAscensions.gt(0));
         },
         4: function() {
-            return player.units[3].bought.gt(0);
+            return (player.units[3].bought.gt(0) || player.stats['allTimeStats'].totalAscensions.gt(0));
         },
         5: function() {
-            return player.units[4].bought.gt(0);
+            return (player.units[4].bought.gt(0) || player.stats['allTimeStats'].totalAscensions.gt(0));
         },
         6: function() {
-            return (player.units[5].bought.gt(0)&&player.spaceResets.gt(0));
+            return ((player.units[5].bought.gt(0)&&player.spaceResets.gt(0)) || player.stats['allTimeStats'].totalAscensions.gt(0));
         },
         7: function() {
-            return (player.units[6].bought.gt(0)&&player.spaceResets.gt(1));
+            return ((player.units[6].bought.gt(0)&&player.spaceResets.gt(1)) || player.stats['allTimeStats'].totalAscensions.gt(0));
         },
         8: function() {
-            return (player.units[7].bought.gt(0)&&player.spaceResets.gt(2));
+            return ((player.units[7].bought.gt(0)&&player.spaceResets.gt(2)) || player.stats['allTimeStats'].totalAscensions.gt(0));
         },
     },
     /*dimensions: {
@@ -3964,6 +3965,7 @@ function fixResetBug() {
     START_PLAYER.favGalNames = ['Slot 1', 'Slot 2', 'Slot 3'];
     START_PLAYER.help = false;
     START_PLAYER.version = 'v1.2.0_d.2';
+    START_PLAYER.isv2 = true;
 
     DATA.sp = {};
     copyData(DATA.sp, START_PLAYER);

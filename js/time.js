@@ -50,7 +50,7 @@ function canAffordRefinery() {
 }
 
 function getEmittersPerLevel() {
-    return 2;
+    return (hasTUpgrade(31) ? 2 : 1);
 }
 
 //production/calculation
@@ -69,7 +69,7 @@ function calculateCrystalGain() {
         var ret = Decimal.floor(Decimal.pow(10, (player.stats['thisSacStats'].bestCorpses.e/div) - 0.65));
         if (hasTUpgrade(21)) { ret = ret.times(2); }
         if (hasTUpgrade(33)) { ret = ret.times(getTUpgEffect(33)); }
-        if (hasGUpgrade(4, 21)) { ret = ret.times(getGUpgEffect(4, 21)); }
+        if (hasGUpgrade(4, 31)) { ret = ret.times(getGUpgEffect(4, 31)); }
         if (hasTUpgrade(53)) { ret = ret.times(getTUpgEffect(53)); }
         if (hasUpgrade(4, 23) && !player.isInResearch && player.corpses.gt("2.5e309")) { ret = ret.pow(1.2); }
         if (isResearchCompleted(6)) { ret = ret.pow(getTheoremBoostC()); }
@@ -123,6 +123,16 @@ function getEssenceProdAfterSlider(t, disp=false) {
     return (t=='true' ? getEssenceProdPerSecond(disp).times(player.truePercent/100) : getEssenceProdPerSecond(disp).times(player.antiPercent/100))
 }*/
 
+function getNumEmitters() {
+    let em = player.refLevel*getEmittersPerLevel();
+    if (hasGUpgrade(4, 11)) {
+        if (player.refLevel % 2 == 1) { em += (em-1)/2 }
+        else { em += em/2 }
+    }
+    if (hasUpgrade(2, 22)) { em += getUpgEffect(2, 22); }
+    return em;
+}
+
 function getTrueTimeBuff() {
     if (!player.timeLocked) { return new Decimal(1); }
     /*var b = new Decimal(Decimal.max(player.trueEssence, 1).log10());
@@ -133,8 +143,11 @@ function getTrueTimeBuff() {
     return b;*/
     let b = new Decimal(player.trueEmitters);
     b = b.pow(1.5);
-    if (hasGUpgrade(4, 41) && hasUpgrade(4, 22) && !player.isInResearch) { b = b.times(getAntiTimeNerf()).times(hasAchievement(71) ? 2 : 1); }
+    if (hasGUpgrade(4, 21)) { b = b.pow(getGUpgEffect(4, 21)); }
+    if (hasGUpgrade(4, 22)) { b = b.pow(getGUpgEffect(4, 22)); }
+    if (hasGUpgrade(4, 41)) { b = b.times(hasAchievement(71) ? 2 : 1); }
     else { b = b.div(getAntiTimeNerf()).times(hasAchievement(71) ? 2 : 1); }
+    if (hasUpgrade(4, 22) && !player.isInResearch) { b = b.times(player.antiEmitters+1) }
     return Decimal.add(b, 1);
 }
 
@@ -149,8 +162,11 @@ function getAntiTimeBuff() {
     return b;*/
     let b = new Decimal(player.antiEmitters);
     b = b.pow(1.5);
-    if (hasGUpgrade(4, 41) && hasUpgrade(4, 22) && !player.isInResearch) { b = b.times(getTrueTimeNerf()).times(2); }
+    if (hasGUpgrade(4, 21)) { b = b.pow(getGUpgEffect(4, 21)); }
+    if (hasGUpgrade(1, 32)) { b = b.pow(getGUpgEffect(1, 32)); }
+    if (hasGUpgrade(4, 41)) { b = b.times(2); }
     else { b = b.div(getTrueTimeNerf()).times(2); }
+    if (hasUpgrade(4, 22) && !player.isInResearch) { b = b.times(player.trueEmitters+1) }
     b = b.plus(1);
     if (isResearchCompleted(4) && b.eq(1)) { b = getTrueTimeBuff(); }
     return b;
@@ -184,7 +200,8 @@ function upgradeRefinery() {
     if (canAffordRefinery()) {
         player.crystals = player.crystals.minus(getRefineryCost());
         player.refLevel++;
-        player.totalEmitters += 2;
+        player.totalEmitters += getEmittersPerLevel();
+        if (hasGUpgrade(4, 11) && (player.refLevel%2 == 0)) { player.totalEmitters++; }
         if (player.timeLocked && player.emittersPercent!='single' && player.emittersPercent!='custom') {
             if (player.emittersAuto =='true') {
                 assignTrue();
@@ -271,8 +288,12 @@ function timeLockRespec() {
 
 function respecTimeClick() {
     if (player.timeLocked) {
-        if (player.confirmations['timeRespec']['click']) { confirmation(DATA.t.prestige.confirmPopText, 'respecTime'); }
-        else { respecTime() }
+        if (hasTUpgrade(54)) {
+            respecTimeNoReset();
+        } else {
+            if (player.confirmations['timeRespec']['click']) { confirmation(DATA.t.prestige.confirmPopText, 'respecTime'); }
+            else { respecTime() }
+        }
     }
 }
 
@@ -281,6 +302,12 @@ function respecTimeKey() {
         if (player.confirmations['timeRespec']['key']) { confirmation(DATA.t.prestige.confirmPopText, 'respecTime'); }
         else { respecTime() }
     }
+}
+
+function respecTimeNoReset() {
+    player.timeLocked = false;
+    player.trueEmitters = 0;
+    player.antiEmitters = 0;
 }
 
 function respecTime() {
@@ -319,6 +346,8 @@ function timePrestige() {
         player.stats['allTimeStats'].totalTimeResets = player.stats['allTimeStats'].totalTimeResets.plus(1);
         if (app.respecNextSac) {
             player.timeLocked = false;
+            player.trueEmitters = 0;
+            player.antiEmitters = 0;
             app.respecNextSac = false;
         }
         timePrestigeReset();
@@ -338,6 +367,8 @@ function timePrestigeNoConfirm() {
         player.stats['allTimeStats'].totalTimeResets = player.stats['allTimeStats'].totalTimeResets.plus(1);
         if (app.respecNextSac) {
             player.timeLocked = false;
+            player.trueEmitters = 0;
+            player.antiEmitters = 0;
             app.respecNextSac = false;
         }
         timePrestigeReset();
@@ -374,6 +405,7 @@ function timePrestigeReset() {
     if (!hasTUpgrade(12)) { player.subTabs['b'] = 'buildingsSubTab'; }
     //for (var i=1; i<=NUM_TIMEDIMS; i++) { player.timeDims[i].amount = player.timeDims[i].bought; }
     if (timeUpgUnlocked) { player.buildings[3].upgrades[13] = true; }
+    player.totalEmitters = getNumEmitters();
     save();
     startInterval()
 }
@@ -989,8 +1021,8 @@ var TIME_DATA = {
         },
         31: {
             id: 31,
-            title: 'Time Boost',
-            desc: function() { return 'Time dimension multipliers get a boost based on unspent time crystals.' },
+            title: 'Refinery Efficiency',
+            desc: function() { return 'Increase base emitters gained per refinery level from 1 -> 2.' },
             cost: function() { return new Decimal(20000) },
             resource: 'time crystals',
             isBought: function() {
@@ -1002,14 +1034,12 @@ var TIME_DATA = {
             requires: [],
             locked: function() { return false; },
             buttonID: 'timeUpg31',
-            displaySuffix: 'x',
-            displayEffect: true,
-            displayTooltip: true,
-            displayFormula: function() { return hasUpgrade(4, 13) ? '1 + 10*ln(x)' : '1 + 10*log(x)' },
+            displaySuffix: '',
+            displayEffect: false,
+            displayTooltip: false,
+            displayFormula: function() { return '' },
             effect: function() {
-                var e = player.crystals;
-                e = (player.crystals.eq(0) ? player.crystals : (hasUpgrade(4, 13) && (!player.isInResearch || hasEUpgrade(13))) ? new Decimal(e.ln()*10) : new Decimal(e.log10()*10))
-                return e.plus(1);
+                return new Decimal(1);
             },
             unlocked: function() { return true },
             effectString: function() {
@@ -1308,7 +1338,7 @@ var TIME_DATA = {
         54: {
             id: 54,
             title: 'Sacrificial',
-            desc: function() { return '<span style="text-decoration: line-through;">Sacrifice no longer resets your time essence.</span><br>????' },
+            desc: function() { return 'Repeccing time emitters no longer forces a sacrifice reset.' },
             cost: function() { return new Decimal("Infinity") },
             resource: 'time crystals',
             isBought: function() {

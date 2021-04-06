@@ -99,15 +99,6 @@ function loadGame() {
         player.activeGalaxies[2] = '2';
     }
 
-    //REPLACE THIS STUFF
-    //!!!!!!!!!!!!!!!
-
-    player.timeUpgs[54] = false;
-    player.buildings[2].upgrades[22] = false;
-    if (player.totalEmitters < 2*player.refLevel) { player.totalEmitters = 2*player.refLevel; }
-
-    //^^^REPLACE^^^
-
     player.help = false;
     if (player.win&&!player.continue) { player.continue = true; }
 
@@ -260,7 +251,7 @@ function gameLoop(diff=new Decimal(0), offline=false) {
     for (var i=1; i<NUM_UNITS; i++) {
         player.units[i].amount = player.units[i].amount.plus(getUnitProdPerSecond(i).times(diff.div(1000)));
     }
-    //if (hasGUpgrade(2, 41)) { player.units[8].amount = player.units[8].amount.plus(getUnitProdPerSecond(i).times(realDiff.div(1000))); }
+    if (hasGUpgrade(2, 41)) { player.units[8].amount = player.units[8].amount.plus(getGUpgEffect(2, 41).times(realDiff.div(1000))); }
     
     /*if (player.timeLocked) {
         for (var i=1; i<=NUM_TIMEDIMS; i++) {
@@ -286,6 +277,8 @@ function gameLoop(diff=new Decimal(0), offline=false) {
             else { player.buildings[b].amount = player.buildings[b].amount.plus(getBuildingProdPerSec(b).times(diff.div(1000))); }
         }
     }
+
+    if (getNumEmitters()>player.totalEmitters) { player.totalEmitters = getNumEmitters(); }
     
     if (!offline) {
         updateUnlocks();
