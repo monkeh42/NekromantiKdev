@@ -1034,7 +1034,7 @@ var TIME_DATA = {
         31: {
             id: 31,
             title: 'Refinery Efficiency',
-            desc: function() { return 'Unlock the world prestige autobuyer permanently' },
+            desc: function() { return 'Unlock the world prestige autobuyer permanently.' },
             cost: function() { return new Decimal(20000) },
             resource: 'time crystals',
             isBought: function() {
