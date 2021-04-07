@@ -918,7 +918,7 @@ var START_PLAYER = {
     favGalaxies: [[], [], []],
     favGalNames: ['Slot 1', 'Slot 2', 'Slot 3'],
     help: false,
-    version: 'v1.2.0_d.3',
+    version: 'v1.2.0_d.4',
 }
 
 var STAT_KEYS = {
@@ -1747,7 +1747,7 @@ var MILES_DATA = {
     5: {
         id: 5,
         reqText: 'Own four 3rd row upgrades.',
-        rewardText: 'Unlock a fourth building and the time dimension autobuyer.',
+        rewardText: 'Unlock a fourth building and the refinery level autobuyer.',
         canUnlock: function() {
             return getBoughtGUpgsByRow(3) == 4;
         },
@@ -3918,7 +3918,7 @@ function fixResetBug() {
     START_PLAYER.favGalaxies = [[], [], []];
     START_PLAYER.favGalNames = ['Slot 1', 'Slot 2', 'Slot 3'];
     START_PLAYER.help = false;
-    START_PLAYER.version = 'v1.2.0_d.3';
+    START_PLAYER.version = 'v1.2.0_d.4';
 
     DATA.sp = {};
     copyData(DATA.sp, START_PLAYER);
