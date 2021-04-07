@@ -580,57 +580,59 @@ function updateVersion() {
     copyData(player, DATA.sp);
     updateVersionData(player, tempPlayer);
     player.version = GAME_DATA.version;
-    if (tempPlayer.unlocks['unitsTab']['mainTab']) { player.unlocks['units'] = true; }
-    if (tempPlayer.unlocks['unitsTab']['spacePrestige']) { player.unlocks['spacePrestige'] = true; }
-    if (tempPlayer.unlocks['unitsTab']['autobuyers']) { player.unlocks['autobuyers'] = true; }
-    if (tempPlayer.unlocks['unitsTab']['fastBuyers']) { player.unlocks['fastBuyers'] = true; }
-    if (tempPlayer.unlocks['unitsTab']['BulkBuyers'] || tempPlayer.unlocks['unitsTab']['bulkBuyers']) { player.unlocks['bulkBuyers'] = true; }
-    if (tempPlayer.unlocks['unitsTab']['prestigeBuyer']) { player.unlocks['prestigeBuyer'] = true; }
-    if (tempPlayer.unlocks['unitsTab']['advancedBuyer']) { player.unlocks['advancedBuyer'] = true; }
-    if (tempPlayer.unlocks['unitsTab']['ascensionBuyer']) { player.unlocks['ascensionBuyer'] = true; }
-    if (tempPlayer.unlocks['unitsTab']['timeDimBuyer']) { player.unlocks['timeDimBuyer'] = true; }
-    if (tempPlayer.unlocks['buildingsTab']['factory']) { player.unlocks['factory'] = true; }
-    if (tempPlayer.unlocks['buildingsTab']['factoryRow2']) { player.unlocks['factoryRow2'] = true; }
-    if (tempPlayer.unlocks['buildingsTab']['necropolis']) { player.unlocks['necropolis'] = true; }
-    if (tempPlayer.unlocks['buildingsTab']['necropolisRow2']) { player.unlocks['necropolisRow2'] = true; }
-    if (tempPlayer.unlocks['buildingsTab']['sun']) { player.unlocks['sun'] = true; }
-    if (tempPlayer.unlocks['buildingsTab']['sunRow2']) { player.unlocks['sunRow2'] = true; }
-    if (tempPlayer.unlocks['buildingsTab']['constructionSubTab']) { player.unlocks['construction'] = true; }
-    if (tempPlayer.unlocks['buildingsTab']['constructionRow2']) { player.unlocks['constructionRow2'] = true; }
-    if (tempPlayer.unlocks['buildingsTab']['vortexTable']) { player.unlocks['vortexTable'] = true; }
-    if (tempPlayer.unlocks['buildingsTab']['vortex']) { player.unlocks['vortex'] = true; }
-    if (tempPlayer.unlocks['buildingsTab']['vortexRow2']) { player.unlocks['vortexRow2'] = true; }
-    if (tempPlayer.unlocks['timeTab']['mainTab']) { player.unlocks['time'] = true; }
-    if (tempPlayer.unlocks['timeTab']['timeUpgrades']) { player.unlocks['timeUpgrades'] = true; }
-    if (tempPlayer.unlocks['timeTab']['timeUpgrades2']) { player.unlocks['timeUpgrades2'] = true; }
-    if (tempPlayer.unlocks['timeTab']['timeDims2']) { player.unlocks['timeDims2'] = true; }
-    if (tempPlayer.unlocks['galaxyTab']['mainTab']) { player.unlocks['galaxies'] = true; }
-    if (tempPlayer.unlocks['galaxyTab']['researchTab']) { player.unlocks['research'] = true; }
-    if (tempPlayer.unlocks['galaxyTab']['arkTab']) { player.unlocks['ark'] = true; }
-    if (isResearchCompleted(6)) { player.unlocks['infResearch'] = true; }
+    if (tempPlayer.version != GAME_DATA.version && tempPlayer.version.slice(0,4)=='v1.0') {
+        if (tempPlayer.unlocks['unitsTab']['mainTab']) { player.unlocks['units'] = true; }
+        if (tempPlayer.unlocks['unitsTab']['spacePrestige']) { player.unlocks['spacePrestige'] = true; }
+        if (tempPlayer.unlocks['unitsTab']['autobuyers']) { player.unlocks['autobuyers'] = true; }
+        if (tempPlayer.unlocks['unitsTab']['fastBuyers']) { player.unlocks['fastBuyers'] = true; }
+        if (tempPlayer.unlocks['unitsTab']['BulkBuyers'] || tempPlayer.unlocks['unitsTab']['bulkBuyers']) { player.unlocks['bulkBuyers'] = true; }
+        if (tempPlayer.unlocks['unitsTab']['prestigeBuyer']) { player.unlocks['prestigeBuyer'] = true; }
+        if (tempPlayer.unlocks['unitsTab']['advancedBuyer']) { player.unlocks['advancedBuyer'] = true; }
+        if (tempPlayer.unlocks['unitsTab']['ascensionBuyer']) { player.unlocks['ascensionBuyer'] = true; }
+        if (tempPlayer.unlocks['unitsTab']['timeDimBuyer']) { player.unlocks['timeDimBuyer'] = true; }
+        if (tempPlayer.unlocks['buildingsTab']['factory']) { player.unlocks['factory'] = true; }
+        if (tempPlayer.unlocks['buildingsTab']['factoryRow2']) { player.unlocks['factoryRow2'] = true; }
+        if (tempPlayer.unlocks['buildingsTab']['necropolis']) { player.unlocks['necropolis'] = true; }
+        if (tempPlayer.unlocks['buildingsTab']['necropolisRow2']) { player.unlocks['necropolisRow2'] = true; }
+        if (tempPlayer.unlocks['buildingsTab']['sun']) { player.unlocks['sun'] = true; }
+        if (tempPlayer.unlocks['buildingsTab']['sunRow2']) { player.unlocks['sunRow2'] = true; }
+        if (tempPlayer.unlocks['buildingsTab']['constructionSubTab']) { player.unlocks['construction'] = true; }
+        if (tempPlayer.unlocks['buildingsTab']['constructionRow2']) { player.unlocks['constructionRow2'] = true; }
+        if (tempPlayer.unlocks['buildingsTab']['vortexTable']) { player.unlocks['vortexTable'] = true; }
+        if (tempPlayer.unlocks['buildingsTab']['vortex']) { player.unlocks['vortex'] = true; }
+        if (tempPlayer.unlocks['buildingsTab']['vortexRow2']) { player.unlocks['vortexRow2'] = true; }
+        if (tempPlayer.unlocks['timeTab']['mainTab']) { player.unlocks['time'] = true; }
+        if (tempPlayer.unlocks['timeTab']['timeUpgrades']) { player.unlocks['timeUpgrades'] = true; }
+        if (tempPlayer.unlocks['timeTab']['timeUpgrades2']) { player.unlocks['timeUpgrades2'] = true; }
+        if (tempPlayer.unlocks['timeTab']['timeDims2']) { player.unlocks['timeDims2'] = true; }
+        if (tempPlayer.unlocks['galaxyTab']['mainTab']) { player.unlocks['galaxies'] = true; }
+        if (tempPlayer.unlocks['galaxyTab']['researchTab']) { player.unlocks['research'] = true; }
+        if (tempPlayer.unlocks['galaxyTab']['arkTab']) { player.unlocks['ark'] = true; }
+        if (isResearchCompleted(6)) { player.unlocks['infResearch'] = true; }
 
-    for (let k in tempPlayer.allTimeStats) {
-        if (k!='displayStats' && k!='label' && k!='wentAstral' && k!='hasGoneAstral') {
-            player.stats['allTimeStats'][k] = new Decimal(tempPlayer.allTimeStats[k]);
+        for (let k in tempPlayer.allTimeStats) {
+            if (k!='displayStats' && k!='label' && k!='wentAstral' && k!='hasGoneAstral') {
+                player.stats['allTimeStats'][k] = new Decimal(tempPlayer.allTimeStats[k]);
+            }
         }
-    }
-    for (let m in tempPlayer.thisSacStats) {
-        if (m!='displayStats' && m!='label' && m!='wentAstral' && m!='hasGoneAstral') {
-            player.stats['thisSacStats'][m] = new Decimal(tempPlayer.thisSacStats[m]);
+        for (let m in tempPlayer.thisSacStats) {
+            if (m!='displayStats' && m!='label' && m!='wentAstral' && m!='hasGoneAstral') {
+                player.stats['thisSacStats'][m] = new Decimal(tempPlayer.thisSacStats[m]);
+            }
         }
-    }
-    for (let n in tempPlayer.thisAscStats) {
-        if (n!='displayStats' && n!='label' && n!='wentAstral' && n!='hasGoneAstral') {
-            player.stats['thisAscStats'][n] = new Decimal(tempPlayer.thisAscStats[n]);
+        for (let n in tempPlayer.thisAscStats) {
+            if (n!='displayStats' && n!='label' && n!='wentAstral' && n!='hasGoneAstral') {
+                player.stats['thisAscStats'][n] = new Decimal(tempPlayer.thisAscStats[n]);
+            }
         }
-    }
 
-    for (let key in player.unlocks) {
-        if (player.unlocks[key]) {
-            DATA.ul.main[key].onUnlock();
+        for (let key in player.unlocks) {
+            if (player.unlocks[key]) {
+                DATA.ul.main[key].onUnlock();
+            }
         }
+        copyData(player.tabNotify, DATA.sp.tabNotify);
     }
-    copyData(player.tabNotify, DATA.sp.tabNotify);
     tempPlayer = {};
 }
 
