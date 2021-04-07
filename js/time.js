@@ -143,8 +143,8 @@ function getTrueTimeBuff() {
     return b;*/
     let b = new Decimal(player.trueEmitters);
     b = b.pow(1.5);
-    if (hasGUpgrade(4, 21)) { b = b.pow(getGUpgEffect(4, 21)); }
-    if (hasGUpgrade(4, 22)) { b = b.pow(getGUpgEffect(4, 22)); }
+    if (hasGUpgrade(4, 21)) { b = b.times(getGUpgEffect(4, 21)); }
+    if (hasGUpgrade(4, 22)) { b = b.times(getGUpgEffect(4, 22)); }
     if (hasGUpgrade(4, 41)) { b = b.times(hasAchievement(71) ? 2 : 1); }
     else { b = b.div(getAntiTimeNerf()).times(hasAchievement(71) ? 2 : 1); }
     if (hasUpgrade(4, 22) && !player.isInResearch) { b = b.times(player.antiEmitters+1) }
@@ -162,8 +162,8 @@ function getAntiTimeBuff() {
     return b;*/
     let b = new Decimal(player.antiEmitters);
     b = b.pow(1.5);
-    if (hasGUpgrade(4, 21)) { b = b.pow(getGUpgEffect(4, 21)); }
-    if (hasGUpgrade(1, 32)) { b = b.pow(getGUpgEffect(1, 32)); }
+    if (hasGUpgrade(4, 21)) { b = b.times(getGUpgEffect(4, 21)); }
+    if (hasGUpgrade(1, 32)) { b = b.times(getGUpgEffect(1, 32)); }
     if (hasGUpgrade(4, 41)) { b = b.times(2); }
     else { b = b.div(getTrueTimeNerf()).times(2); }
     if (hasUpgrade(4, 22) && !player.isInResearch) { b = b.times(player.trueEmitters+1) }
