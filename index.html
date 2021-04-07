@@ -389,7 +389,7 @@
                         <tr>
                             <td>
                                 <div id="galaxyAmountDisplay" style="font-size: 18pt;">You have <num-text data="g" :val="formatWhole(player.galaxies)" label="depleted galaxies"></num-text> out of <span id="totalGalaxyAmount" class="galNum" v-html="formatWhole(player.stats.allTimeStats.totalGalaxies)"></span> total formed.</div>
-                                <div id="ascensionAmountDisplay" style="font-size: 18pt;">You have achieved <num-text data="g" :val="formatWhole(player.ascensions)" label="ascensions"></num-text>.</div>
+                                <div id="ascensionAmountDisplay" style="font-size: 18pt;">You have achieved <num-text data="g" :val="formatWhole(player.stats['allTimeStats'].totalAscensions)" label="ascensions"></num-text>.</div>
                                 <div v-if="!hasAchievement(64)" id="softcapMainDisplay" style="font-size: 16pt;" v-bind:class="{ tooltip: player.tooltipsEnabled }" data-title="cube root exponent: effect = x*(10^cbrt(log(y))) where x=effect at limit, y=(effect before softcap)/x">All effects based on total galaxies are softcapped at <num-text data="g" :val="formatWhole(1000*(2**getNumCompletedProj()))" label="galaxies"></num-text>.</div>
                             </td>
                         </tr>
