@@ -2649,7 +2649,7 @@ var UNLOCKS_DATA = {
         },
         'prestigeBuyer': {
             condition: function() {
-                return hasTUpgrade(34);
+                return hasTUpgrade(31);
             },
             onUnlock: function() {
                 return;

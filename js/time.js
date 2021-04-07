@@ -50,7 +50,7 @@ function canAffordRefinery() {
 }
 
 function getEmittersPerLevel() {
-    return (hasTUpgrade(31) ? 2 : 1);
+    return (hasTUpgrade(34) ? 2 : 1);
 }
 
 //production/calculation
@@ -1034,7 +1034,7 @@ var TIME_DATA = {
         31: {
             id: 31,
             title: 'Refinery Efficiency',
-            desc: function() { return 'Increase base emitters gained per refinery level from 1 -> 2.' },
+            desc: function() { return 'Unlock the world prestige autobuyer permanently' },
             cost: function() { return new Decimal(20000) },
             resource: 'time crystals',
             isBought: function() {
@@ -1117,7 +1117,7 @@ var TIME_DATA = {
         34: {
             id: 34,
             title: 'Supernova',
-            desc: function() { return 'Unlock the world prestige autobuyer permanently and the second row of Dead Sun upgrades.' },
+            desc: function() { return 'Unlock the second row of Dead Sun upgrades, and increase base emitters gained per refinery level from 1 -> 2.' },
             cost: function() { return new Decimal(1000000) },
             resource: 'time crystals',
             isBought: function() {
