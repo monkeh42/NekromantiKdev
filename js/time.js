@@ -406,6 +406,18 @@ function timePrestigeReset() {
     //for (var i=1; i<=NUM_TIMEDIMS; i++) { player.timeDims[i].amount = player.timeDims[i].bought; }
     if (timeUpgUnlocked) { player.buildings[3].upgrades[13] = true; }
     player.totalEmitters = getNumEmitters();
+    if ((player.antiEmitters+player.trueEmitters)>player.totalEmitters) {
+        let extra = (player.antiEmitters+player.trueEmitters) - player.totalEmitters;
+        let trueExtra;
+        if (extra%2==1) {
+            trueExtra = (extra-1)/2 + 1;
+        } else {
+            trueExtra = extra/2;
+        }
+        player.trueEmitters -= Math.min(trueExtra, player.trueEmitters);
+        extra = (player.antiEmitters+player.trueEmitters) - player.totalEmitters;
+        if (extra>0) { player.antiEmitters -= extra; }
+    }
     save();
     startInterval()
 }
