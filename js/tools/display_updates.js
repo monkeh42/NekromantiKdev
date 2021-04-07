@@ -6,63 +6,33 @@ function updateShadow() {
 
 function updateEmitterAmount() {
     Vue.nextTick(function() {
-        if (app.emitterAmount != '') {
-            try {
-                player.emittersAmount = new Decimal(app.emitterAmount);
+        if (app.emitterAmount != '' && !isNaN(app.emitterAmount)) {
+            if (Number(app.emitterAmount)<0) { app.emittersError = true; }
+            else {
+                player.emittersAmount = Number(app.emitterAmount);
                 app.emittersError = false;
             }
-            catch(err) {
-                app.emittersError = true;
-            }
+        } else {
+            app.emittersError = true;
         }
     })
 }
 
-function assignTrue() {
-    if ((player.totalEmitters - player.trueEmitters - player.antiEmitters)>0) {
-        switch (app.newEmitters) {
-            case 'single':
-                player.trueEmitters++;
-                break;
-            case 'ten':
-                player.trueEmitters += Math.ceil(0.1*(player.totalEmitters - player.trueEmitters - player.antiEmitters));
-                break;
-            case 'twentyfive':
-                player.trueEmitters += Math.ceil(0.25*(player.totalEmitters - player.trueEmitters - player.antiEmitters));
-                break;
-            case 'fifty':
-                player.trueEmitters += Math.ceil(0.5*(player.totalEmitters - player.trueEmitters - player.antiEmitters));
-                break;
-            case 'all':
-                player.trueEmitters += (player.totalEmitters - player.trueEmitters - player.antiEmitters);
-                break;
-            case 'custom':
-                player.trueEmitters += player.emittersAmount;
-        }
+function assignTrue(num) {
+    let ems = (player.totalEmitters - player.trueEmitters - player.antiEmitters);
+    if (ems>0) {
+        if (num==1) { player.trueEmitters++; }
+        else if (num==0) { player.trueEmitters += Math.min(player.emittersAmount, ems); }
+        else { player.trueEmitters += Math.min(Math.ceil((num/100)*ems), ems); }
     }
 }
 
-function assignAnti() {
-    if ((player.totalEmitters - player.trueEmitters - player.antiEmitters)>0) {
-        switch (app.newEmitters) {
-            case 'single':
-                player.antiEmitters++;
-                break;
-            case 'ten':
-                player.antiEmitters += Math.ceil(0.1*(player.totalEmitters - player.trueEmitters - player.antiEmitters));
-                break;
-            case 'twentyfive':
-                player.antiEmitters += Math.ceil(0.25*(player.totalEmitters - player.trueEmitters - player.antiEmitters));
-                break;
-            case 'fifty':
-                player.antiEmitters += Math.ceil(0.5*(player.totalEmitters - player.trueEmitters - player.antiEmitters));
-                break;
-            case 'all':
-                player.antiEmitters += (player.totalEmitters - player.trueEmitters - player.antiEmitters);
-                break;
-            case 'custom':
-                player.antiEmitters += player.emittersAmount;
-        }
+function assignAnti(num) {
+    let ems = (player.totalEmitters - player.trueEmitters - player.antiEmitters);
+    if (ems>0) {
+        if (num==1) { player.antiEmitters++; }
+        else if (num==0) { player.antiEmitters += Math.min(player.emittersAmount, ems); }
+        else { player.antiEmitters += Math.min(Math.ceil((num/100)*ems), ems); }
     }
 }
 

@@ -2258,7 +2258,14 @@ option:active, option.active {
     background-color: black;
     color: white;
     border: 1px solid #460573;
-    margin-top: 10px;
+}
+
+.buyerTextPHalf {
+    width: 40px;
+    text-align: center;
+    background-color: black;
+    color: white;
+    border: 1px solid #460573;
 }
 
 .buyerTextT {
@@ -2267,7 +2274,6 @@ option:active, option.active {
     background-color: black;
     color: white;
     border: 1px solid #006ba0;
-    margin: 10px;
 }
 
 .buyerList {
@@ -3584,5 +3590,28 @@ a.whiteLink {
 a.emitterArrows {
     text-decoration: none;
     color: #006ba0;
-    font-size: 48pt;
+    font-size: 22pt;
+    line-height: 40px;
+}
+
+.emitterRowDiv {
+    min-width: 115px;
+    line-height: 40px;
+    font-size: 14pt;
+    text-align: center;
+    display: inline-block;
+}
+
+.emitterRowText {
+    min-width: 115px;
+    font-size: 12pt;
+    text-align: center;
+    display: inline-block;
+    margin-top: 5px;
+}
+
+.emittersHR {
+    border-color: #006ba0;
+    width: 165px;
+    margin: 0px auto;
 }

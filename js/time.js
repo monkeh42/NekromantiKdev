@@ -202,7 +202,7 @@ function upgradeRefinery() {
         player.refLevel++;
         player.totalEmitters += getEmittersPerLevel();
         if (hasGUpgrade(4, 11) && (player.refLevel%2 == 0)) { player.totalEmitters++; }
-        if (player.timeLocked && player.emittersPercent!='single' && player.emittersPercent!='custom') {
+        /*if (player.timeLocked && player.emittersPercent!='single' && player.emittersPercent!='custom') {
             if (player.emittersAuto =='true') {
                 assignTrue();
                 player.antiEmitters += (player.totalEmitters - player.trueEmitters - player.antiEmitters);
@@ -210,7 +210,7 @@ function upgradeRefinery() {
                 assignAnti();
                 player.trueEmitters += (player.totalEmitters - player.trueEmitters - player.antiEmitters);
             } 
-        }
+        }*/
     }
 }
 

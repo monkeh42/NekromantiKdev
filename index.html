@@ -253,11 +253,16 @@
                                     
                                 </td>
                                 <td>
-                                    <button v-bind:class="{ refineryBut: true, can: canAffordRefinery(), cant: !canAffordRefinery() }" v-on:click="upgradeRefinery()"><span style="font-size: 16pt;">Increase refinery level</span><br><span style="font-size: 10pt;">You will gain {{ formatWhole(getEmittersPerLevel()) }} additional emitters.</span><br>Cost: {{ formatUR(getRefineryCost(), 0) }} time crystals</button>
+                                    <button v-bind:class="{ refineryBut: true, can: canAffordRefinery(), cant: !canAffordRefinery() }" v-on:click="upgradeRefinery()" style="margin: 10px;"><span style="font-size: 16pt;">Increase refinery level</span><br><span style="font-size: 10pt;">You will gain {{ formatWhole(getEmittersPerLevel()) }} additional emitters.</span><br>Cost: {{ formatUR(getRefineryCost(), 0) }} time crystals</button>
                                     <layer-button v-bind:class="{ timeUnlockedButtonNotify: !player.timeLocked }" data="t" :width="300" :text="(player.timeLocked ? 'Respec emitters - forces sacrifice' : 'Lock in and begin time production')" :cancl="true" fname="timeLockRespec"></layer-button>
                                 </td>
                                 <td>
                                     
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3">
+                                    <div v-bind:class="{ timeUnlockedButtonNotify: ((player.totalEmitters-player.antiEmitters-player.trueEmitters)>0) }" style="display: inline-block; margin: 20px; padding: 0px 5px;"><h3 style="margin: 0px;">You have <num-text data="t" :val="formatWhole(player.totalEmitters-player.trueEmitters-player.antiEmitters)" label=""></num-text> unassigned emitters.</h3></div>
                                 </td>
                             </tr>
                             <tr>
@@ -286,33 +291,24 @@
                                     </table>
                                 </td>
                                 <td>
-                                    <h3>Assign Emitters:</h3>
-                                    <h2 v-bind:class="{ timeUnlockedButtonNotify: ((player.totalEmitters-player.antiEmitters-player.trueEmitters)>0) }">You have <num-text data="t" :val="formatWhole(player.totalEmitters-player.trueEmitters-player.antiEmitters)" label=""></num-text> unassigned.</h2>
-                                    <table>
-                                        <tr>
-                                            <td>
-                                                <a class="emitterArrows" href="javascript:assignTrue()">&lArr;</a>
-                                                <div style="min-height: 45px;"></div>
-                                            </td>
-                                            <td width="75%">
-                                                <div><input type="radio" id="singleRadio" name="newEmittersRadio" class="timeCheckbox" value="single" v-model="newEmitters"><label for="singleRadio">single</label></div>
-                                                <div><input type="radio" id="tenRadio" name="newEmittersRadio" class="timeCheckbox" value="ten" v-model="newEmitters"><label for="tenRadio">10%</label>
-                                                <input type="radio" id="twentyFiveRadio" name="newEmittersRadio" class="timeCheckbox" value="twentyfive" v-model="newEmitters"><label for="twentyFiveRadio">25%</label><br>
-                                                <input type="radio" id="fiftyRadio" name="newEmittersRadio" class="timeCheckbox" value="fifty" v-model="newEmitters"><label for="fiftyRadio">50%</label>
-                                                <input type="radio" id="allRadio" name="newEmittersRadio" class="timeCheckbox" value="all" v-model="newEmitters"><label for="allRadio">100%</label></div>
-                                                <div><input type="radio" id="customRadio" name="newEmittersRadio" class="timeCheckbox" value="custom" v-model="newEmitters"><label for="customRadio">this many:</label><input v-model="emitterAmount" v-on:change="updateEmitterAmount()" type="text" id="emittersTextbox" name="emittersTextbox" class="buyerTextT"></div>
-                                                <div style="min-height: 36px;"><div style="font-size: 10pt;" v-if="emittersError">invalid entry. value set to last good value: {{ player.emittersAmount }}</div></div>
-                                                <div>auto-assign to:</div>
-                                                <div><input type="radio" id="trueRadio" name="autoEmittersRadio" class="timeCheckbox" value="true" v-model="autoEmitters"><label for="trueRadio">true</label>
-                                                <input type="radio" id="antiRadio" name="autoEmittersRadio" class="timeCheckbox" value="anti" v-model="autoEmitters"><label for="antiRadio">anti</label><br>
-                                                <input type="radio" id="noneRadio" name="autoEmittersRadio" class="timeCheckbox" value="none" v-model="autoEmitters"><label for="noneRadio">none</label></div>
-                                            </td>
-                                            <td>
-                                                <a class="emitterArrows" href="javascript:assignAnti()">&rArr;</a>
-                                                <div style="min-height: 45px;"></div>
-                                            </td>
-                                        </tr>
-                                    </table>
+                                    <h2>Assign Emitters:</h2>
+                                    <div><a class="emitterArrows" href="javascript:assignTrue(1)">&lArr;</a><div class="emitterRowDiv">single</div><a class="emitterArrows" href="javascript:assignAnti(1)">&rArr;</a></div>
+                                    <hr class="emittersHR">
+                                    <div><a class="emitterArrows" href="javascript:assignTrue(10)">&lArr;</a><div class="emitterRowDiv">10%</div><a class="emitterArrows" href="javascript:assignAnti(10)">&rArr;</a></div>
+                                    <hr class="emittersHR">
+                                    <div><a class="emitterArrows" href="javascript:assignTrue(25)">&lArr;</a><div class="emitterRowDiv">25%</div><a class="emitterArrows" href="javascript:assignAnti(25)">&rArr;</a></div>
+                                    <hr class="emittersHR">
+                                    <div><a class="emitterArrows" href="javascript:assignTrue(50)">&lArr;</a><div class="emitterRowDiv">50%</div><a class="emitterArrows" href="javascript:assignAnti(50)">&rArr;</a></div>
+                                    <hr class="emittersHR">
+                                    <div><a class="emitterArrows" href="javascript:assignTrue(100)">&lArr;</a><div class="emitterRowDiv">100%</div><a class="emitterArrows" href="javascript:assignAnti(100)">&rArr;</a></div>
+                                    <hr class="emittersHR">
+                                    <!--<div style="font-size: 12pt;">this many:</div>-->
+                                    <div><a class="emitterArrows" href="javascript:assignTrue(0)">&lArr;</a><div class="emitterRowText">this many:<br><input v-model="emitterAmount" v-on:change="updateEmitterAmount()" type="text" id="emittersTextbox" name="emittersTextbox" class="buyerTextT"></div><a class="emitterArrows" href="javascript:assignAnti(0)">&rArr;</a></div>
+                                    <div style="min-height: 32px;"><div style="font-size: 10pt;" v-if="emittersError">invalid entry. amount set to last good value: {{ player.emittersAmount }}</div></div>
+                                    <!--<div>auto-assign to:</div>
+                                    <div><input type="radio" id="trueRadio" name="autoEmittersRadio" class="timeCheckbox" value="true" v-model="autoEmitters"><label for="trueRadio">true</label>
+                                    <input type="radio" id="antiRadio" name="autoEmittersRadio" class="timeCheckbox" value="anti" v-model="autoEmitters"><label for="antiRadio">anti</label><br>
+                                    <input type="radio" id="noneRadio" name="autoEmittersRadio" class="timeCheckbox" value="none" v-model="autoEmitters"><label for="noneRadio">none</label></div>-->
                                 </td>
                                 <td>
                                     <table style="width: 320px; float: right; text-align: center;">
@@ -339,11 +335,11 @@
                                     </table>
                                 </td>
                             </tr>
-                            <tr>
+                            <!--<tr>
                                 <td colspan="3">
                                     <div style="font-size: 10pt;">(auto-assign only works when a percentage is checked)</div>
                                 </td>
-                            </tr>
+                            </tr>-->
                         </table>
                         <!--<table style="width: 75%; margin: auto; margin-top: 20px; text-align: center;">
                             <tr>

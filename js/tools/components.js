@@ -2,7 +2,37 @@ var app;
 
 function loadVue() {
 
-	
+	Vue.component('buyer-amount-emitters', {
+		props: [],
+		data() {
+			return {
+				emitAmount: player.autobuyers[12].amount,
+				emitError: false,
+			}
+		},
+		methods: {
+			updateAmount() {
+				if (this.emitAmount != '' && !isNaN(this.emitAmount)) {
+					if (Number(this.emitAmount)<0 || Number(this.emitAmount)>100) { this.emitError = true; }
+					else {
+						player.autobuyers[12].amount = Number(this.emitAmount);
+						this.emitError = false;
+					}
+				} else {
+					this.emitError = true;
+				}
+			},
+		},
+		template: `
+		<div>
+			<div>when time is locked in,</div>
+			<div>auto-assign <input v-model="emitAmount" v-on:change="updateAmount()" type="text" id="emitPercent" name="emitPercent" class="buyerTextPHalf">%</div>
+			<div>of new emitters to true time</div>
+			<div>(and the rest to anti time)</div>
+			<span v-if="emitError"><br>invalid input. value set to last valid input: {{ formatWholeNoComma(player.autobuyers[12].amount) }}</span>
+		</div>
+		`
+	})
 
 	Vue.component('buyer-amount', {
 		props: ['id'],
@@ -326,11 +356,11 @@ function loadVue() {
 				<component v-else-if="(DATA[data].multi.dataLists[id][i].tag=='button')&&data=='e'" :is="DATA[data].multi.dataLists[id][i].tag" v-bind:class="{ completedInfResearchBut: isResearchCompleted(DATA[data].multi.dataLists[id][i].boxID), infResearchButton: (canCompleteResearch(7)||!player.isInResearch), progressInfResearchButton: (isResearchActive(7)&&!canCompleteResearch(7)), unclickInfResearchBut: (player.isInResearch&&!isResearchActive(7)) }"
 							v-bind:style="((player.isInResearch&&!isResearchActive(7)) ? {'text-decoration': 'line-through'} : {})" v-on:click="researchButtonClick(7)"
 							v-html="(player.isInResearch ? (isResearchActive(7) ? (canCompleteResearch(7) ? 'COMPLETE<br>PROJECT' : 'IN PROGRESS') : 'BEGIN') : 'BEGIN')"></component>
+				<component v-else-if="(DATA[data].multi.dataLists[id][i].tag=='buyer-amount-emitters')" :is="DATA[data].multi.dataLists[id][i].tag"></component>
 				<component v-else-if="DATA[data].multi.showEl(id, i)" :is="DATA[data].multi.dataLists[id][i].tag" v-bind:class="{ [DATA[data].multi.dataLists[id][i].klass()]: true }" 
 							v-bind:style="(DATA[data].multi.dataLists[id][i].style !== undefined) ? DATA[data].multi.dataLists[id][i].style() : {}" 
 							v-html="DATA[data].multi.dataLists[id][i].htm()" 
-							v-on:click="function() { if(DATA[data].multi.dataLists[id][i].click!==undefined) { DATA[data].multi.dataLists[id][i].click() } }">
-				</component>
+							v-on:click="function() { if(DATA[data].multi.dataLists[id][i].click!==undefined) { DATA[data].multi.dataLists[id][i].click() } }"></component>
 			</div>
 		</div>
 		`
@@ -1167,10 +1197,8 @@ function loadVue() {
 			getRefineryCost,
 			getEmittersPerLevel,
 			updateEmitterAmount,
-			autoEmitters: player.emittersAuto,
 			emittersError: false,
 			emitterAmount: player.emittersAmount,
-			newEmitters: player.emittersPercent,
 			galSelected: player.activeGalaxies[0],
 			isOffline: false,
 			allBuyersRadio: 'all',

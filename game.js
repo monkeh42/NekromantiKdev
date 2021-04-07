@@ -306,8 +306,6 @@ function gameLoop(diff=new Decimal(0), offline=false) {
         player.lastUpdate = currentUpdate;
     
         player.dontResetSlider = app.dontRespec;
-        player.emittersPercent = app.newEmitters;
-        player.emittersAuto = app.autoEmitters;
     
         popupTimers(trueDiff);
     }
@@ -329,6 +327,15 @@ function autobuyerTick(slow) {
     if (player.autobuyers[9]['on'] && (player.autobuyers[9]['fast'] || slow)) { if (isAutoSacTriggered()) { timePrestigeNoConfirm(); } }
     if (player.autobuyers[10]['on'] && (player.autobuyers[10]['fast'] || slow)) { if (canSpacePrestige() && (player.spaceResets.lt(player.autobuyers[10]['max']) || player.autobuyers[10]['max'] == 0)) { spacePrestigeNoConfirm(); } }
     if (player.autobuyers[11]['on'] && (player.autobuyers[11]['fast'] || slow)) { if (canGalaxyPrestige() && calculateGalaxyGain().gte(player.autobuyers[11]['amount'])) { galaxyPrestigeNoConfirm(); } }
+    if (player.autobuyers[12]['on']) {
+        if (canAffordRefinery()) { upgradeRefinery(); }
+        let ems = (player.totalEmitters - player.trueEmitters - player.antiEmitters);
+        if (ems>0 && player.timeLocked) {
+            player.trueEmitters += Math.ceil((player.autobuyers[12].amount/100)*ems);
+            ems -= Math.ceil((player.autobuyers[12].amount/100)*ems);
+            player.antiEmitters += ems;
+        }
+    } 
     /*for (let i=NUM_TIMEDIMS; i>0; i--) {
         if (i<=4 || hasUpgrade(4, 23)) {
             if (player.autobuyers[12][i]) { buyMaxTime(i); }
@@ -757,7 +764,7 @@ document.onkeydown = function(e) {
     var ctrlDown = e.ctrlKey;
     var shiftDown = e.shiftKey;
     var metaDown = e.metaKey;
-    if (DATA.hk[HOTKEY_KEYS[key]] !== undefined && !ctrlDown && !metaDown && !(document.activeElement.id == 'ascensionBuyerAmount' || document.activeElement.id == 'maxPrestige' || document.activeElement.id == 'sacrificeBuyerAmount')) {
+    if (DATA.hk[HOTKEY_KEYS[key]] !== undefined && !ctrlDown && !metaDown && !(document.activeElement.id == 'ascensionBuyerAmount' || document.activeElement.id == 'maxPrestige' || document.activeElement.id == 'sacrificeBuyerAmount' || document.activeElement.id == 'emitPercent')) {
         if (isNaN(key)) { DATA.hk[HOTKEY_KEYS[key]].onPress(shiftDown); }
         else { DATA.hk.units[key].onPress(shiftDown); }
     }

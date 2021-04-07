@@ -238,14 +238,8 @@ var START_PLAYER = {
             'amount': new Decimal(1),
         },
         12: {
-            1: false,
-            2: false,
-            3: false,
-            4: false,
-            5: false,
-            6: false,
-            7: false,
-            8: false,
+            'on': false,
+            'amount': 0,
         },
         'time': {
             'on': false,
@@ -651,7 +645,7 @@ var START_PLAYER = {
         'prestigeBuyer': false,
         'advancedBuyer': false,
         'ascensionBuyer': false,
-        //'timeDimBuyer': false,
+        'refineryBuyer': false,
         'buildings': false,
         'factory': false,
         'factoryRow2': false,
@@ -913,9 +907,7 @@ var START_PLAYER = {
         },
     },
 
-    emittersPercent: 'single',
     emittersAmount: 0,
-    emittersAuto: 'none',
     tooltipsEnabled: false,
     displayRealTime: false,
     tab: 'unitsTab',
@@ -1047,18 +1039,10 @@ var AUTOBUYERS_DATA = {
         headerText: 'Ascension',
         prefixText: 'ascension',
     },
-    /*12: {
-        headerText: 'Time Dimensions',
-        prefixText: 'timeDim',
-        1: 'first:',
-        2: 'second:',
-        3: 'third:',
-        4: 'fourth:',
-        5: 'fifth:',
-        6: 'sixth:',
-        7: 'seventh:',
-        8: 'eighth:',
-    },*/
+    12: {
+        headerText: 'Refinery Levels',
+        prefixText: 'refinery',
+    },
     multi: {
         rows: 3,
         cols: 4,
@@ -1072,7 +1056,7 @@ var AUTOBUYERS_DATA = {
             if (i<33) { return true; }
             else {
                 if (i==33) { return player.unlocks['ascensionBuyer']; }
-                //else if (i==34) { return player.unlocks['timeDimBuyer']; }
+                else if (i==34) { return player.unlocks['refineryBuyer']; }
             }
         },
         showEl: function(id, i) {
@@ -1473,50 +1457,29 @@ var AUTOBUYERS_DATA = {
                     htm: function() { return 'at x galaxies:'; }
                 },
             },
-            /*34: {
+            34: {
                 1: {
                     id: 1,
                     boxID: 12,
                     tag: 'h2',
                     klass: function() { return ''; },
-                    htm: function() { return 'Time Dimensions'; }
+                    htm: function() { return 'Refinery Levels'; }
                 },
                 2: {
                     id: 2,
                     boxID: 12,
-                    tag: 'dim-buyer-buttons',
+                    tag: 'unit-buyer-button',
                     klass: function() { return ''; },
-                    htm: function() { return ''; }
+                    htm: function() { return 'on'; }
                 },
                 3: {
                     id: 3,
                     boxID: 12,
-                    tag: 'dim-buyer-buttons',
+                    tag: 'buyer-amount-emitters',
                     klass: function() { return ''; },
                     htm: function() { return ''; }
                 },
-                4: {
-                    id: 4,
-                    boxID: 12,
-                    tag: 'dim-buyer-buttons',
-                    klass: function() { return ''; },
-                    htm: function() { return ''; }
-                },
-                5: {
-                    id: 5,
-                    boxID: 12,
-                    tag: 'dim-buyer-buttons',
-                    klass: function() { return ''; },
-                    htm: function() { return ''; }
-                },
-                6: {
-                    id: 6,
-                    boxID: 12,
-                    tag: 'dim-buyer-buttons',
-                    klass: function() { return ''; },
-                    htm: function() { return ''; }
-                },
-            },*/
+            },
         },
     },
 }
@@ -2671,14 +2634,14 @@ var UNLOCKS_DATA = {
                 return;
             },
         },
-        /*'timeDimBuyer': {
+        'refineryBuyer': {
             condition: function() {
                 return hasMilestone(5);
             },
             onUnlock: function() {
                 return;
             },
-        },*/
+        },
         'buildings': {
             notify: 'b',
             shouldNotify: function() {
@@ -3291,16 +3254,10 @@ function fixResetBug() {
             'fast': false,
             'amount': new Decimal(1),
         },
-        /*12: {
-            1: false,
-            2: false,
-            3: false,
-            4: false,
-            5: false,
-            6: false,
-            7: false,
-            8: false,
-        },*/
+        12: {
+            'on': false,
+            'amount': 0,
+        },
         'time': {
             'on': false,
         },
@@ -3693,7 +3650,7 @@ function fixResetBug() {
         'prestigeBuyer': false,
         'advancedBuyer': false,
         'ascensionBuyer': false,
-        //'timeDimBuyer': false,
+        'refineryBuyer': false,
         'buildings': false,
         'factory': false,
         'factoryRow2': false,
@@ -3950,9 +3907,7 @@ function fixResetBug() {
         },
     });
 
-    START_PLAYER.emittersPercent = 'single';
     START_PLAYER.emittersAmount = 0;
-    START_PLAYER.emittersAuto = 'none';
     START_PLAYER.tooltipsEnabled = false;
     START_PLAYER.displayRealTime = false;
     START_PLAYER.tab = 'unitsTab';
