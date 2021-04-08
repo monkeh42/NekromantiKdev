@@ -331,27 +331,47 @@ function autobuyerTick(slow) {
         if (canAffordRefinery()) { upgradeRefinery(); }
         if (player.timeLocked && player.autobuyers[12]['auto']) {
             let ems = (player.totalEmitters - player.trueEmitters - player.antiEmitters);
+            let added = '';
+            let addedAmount = 0;
             if (Math.ceil((player.autobuyers[12]['amount']/100)*(player.thisSacTotalAuto+ems)) > player.thisSacTrueAuto || (ems>0 && player.thisSacTotalAuto==0 && player.autobuyers[12]['amount']>0)) {
-                let dif = (Math.ceil((player.autobuyers[12]['amount']/100)*player.thisSacTotalAuto+ems) - player.thisSacTrueAuto);
+                let dif = (Math.ceil((player.autobuyers[12]['amount']/100)*(player.thisSacTotalAuto+ems)) - player.thisSacTrueAuto);
                 player.trueEmitters += Math.min(dif, ems);
                 player.thisSacTrueAuto += Math.min(dif, ems);
                 player.thisSacTotalAuto += Math.min(dif, ems);
+                addedAmount = Math.min(dif, ems);
+                ems -= Math.min(dif, ems);
+                added = 'true';
             } else if (Math.floor((1 - player.autobuyers[12]['amount']/100)*(player.thisSacTotalAuto+ems)) > player.thisSacAntiAuto || (ems>0 && player.thisSacTotalAuto==0 && player.autobuyers[12]['amount']<100)) {
-                let dif = (Math.floor((1 - player.autobuyers[12]['amount']/100)*player.thisSacTotalAuto+ems) - player.thisSacAntiAuto);
+                let dif = (Math.floor((1 - player.autobuyers[12]['amount']/100)*(player.thisSacTotalAuto+ems)) - player.thisSacAntiAuto);
                 player.antiEmitters += Math.min(dif, ems);
                 player.thisSacAntiAuto += Math.min(dif, ems);
                 player.thisSacTotalAuto += Math.min(dif, ems);
+                addedAmount = Math.min(dif, ems);
+                ems -= Math.min(dif, ems);
+                added = 'anti';
             }
-            if ((player.totalEmitters - player.trueEmitters - player.antiEmitters)>0) {
-                let ems = (player.totalEmitters - player.trueEmitters - player.antiEmitters);
-                player.trueEmitters += Math.ceil((player.autobuyers[12]['amount']/100)*ems);
-                player.thisSacTrueAuto += Math.ceil((player.autobuyers[12]['amount']/100)*ems);
-                player.thisSacTotalAuto += ems;
-                ems -= Math.ceil((player.autobuyers[12]['amount']/100)*ems);
-                if (ems>0) {
-                    player.antiEmitters += ems;
-                    player.thisSacAntiAuto += ems;
+            if (ems>0) {
+                if (added=='' || added=='anti') {
+                    player.trueEmitters += Math.ceil((player.autobuyers[12]['amount']/100)*(ems+addedAmount));
+                    player.thisSacTrueAuto += Math.ceil((player.autobuyers[12]['amount']/100)*(ems+addedAmount));
+                    player.thisSacTotalAuto += ems;
+                    ems -= Math.ceil((player.autobuyers[12]['amount']/100)*(ems+addedAmount));
+                    if (ems>0) {
+                        player.antiEmitters += ems;
+                        player.thisSacAntiAuto += ems;
+                    }
+                } else {
+                    player.antiEmitters += Math.floor((1 - player.autobuyers[12]['amount']/100)*(ems+addedAmount));
+                    player.thisSacAntiAuto += Math.floor((1 - player.autobuyers[12]['amount']/100)*(ems+addedAmount));
+                    player.thisSacTotalAuto += ems;
+                    ems -= Math.floor((1 - player.autobuyers[12]['amount']/100)*(ems+addedAmount));
+                    if (ems>0) {
+                        player.trueEmitters += ems;
+                        player.thisSacAntiAuto += ems;
+                    }
                 }
+                added = '';
+                addedAmount = 0;
             }
         }
     } 
