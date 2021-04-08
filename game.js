@@ -341,7 +341,9 @@ function autobuyerTick(slow) {
                 player.antiEmitters += Math.min(dif, ems);
                 player.thisSacAntiAuto += Math.min(dif, ems);
                 player.thisSacTotalAuto += Math.min(dif, ems);
-            } else if (ems>0) {
+            }
+            if ((player.totalEmitters - player.trueEmitters - player.antiEmitters)>0) {
+                let ems = (player.totalEmitters - player.trueEmitters - player.antiEmitters);
                 player.trueEmitters += Math.ceil((player.autobuyers[12]['amount']/100)*ems);
                 player.thisSacTrueAuto += Math.ceil((player.autobuyers[12]['amount']/100)*ems);
                 player.thisSacTotalAuto += ems;
