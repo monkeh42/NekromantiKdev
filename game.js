@@ -331,12 +331,12 @@ function autobuyerTick(slow) {
         if (canAffordRefinery()) { upgradeRefinery(); }
         if (player.timeLocked && player.autobuyers[12]['auto']) {
             let ems = (player.totalEmitters - player.trueEmitters - player.antiEmitters);
-            if (Math.ceil((player.autobuyers[12]['amount']/100)*(player.thisSacTotalAuto+ems)) > player.thisSacTrueAuto || (ems>0 && player.thisSacTotalAuto==0)) {
+            if (Math.ceil((player.autobuyers[12]['amount']/100)*(player.thisSacTotalAuto+ems)) > player.thisSacTrueAuto || (ems>0 && player.thisSacTotalAuto==0 && player.autobuyers[12]['amount']>0)) {
                 let dif = (Math.ceil((player.autobuyers[12]['amount']/100)*player.thisSacTotalAuto+ems) - player.thisSacTrueAuto);
                 player.trueEmitters += Math.min(dif, ems);
                 player.thisSacTrueAuto += Math.min(dif, ems);
                 player.thisSacTotalAuto += Math.min(dif, ems);
-            } else if (Math.floor((1 - player.autobuyers[12]['amount']/100)*(player.thisSacTotalAuto+ems)) > player.thisSacAntiAuto || (ems>0 && player.thisSacTotalAuto==0)) {
+            } else if (Math.floor((1 - player.autobuyers[12]['amount']/100)*(player.thisSacTotalAuto+ems)) > player.thisSacAntiAuto || (ems>0 && player.thisSacTotalAuto==0 && player.autobuyers[12]['amount']<100)) {
                 let dif = (Math.floor((1 - player.autobuyers[12]['amount']/100)*player.thisSacTotalAuto+ems) - player.thisSacAntiAuto);
                 player.antiEmitters += Math.min(dif, ems);
                 player.thisSacAntiAuto += Math.min(dif, ems);
