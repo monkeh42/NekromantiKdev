@@ -324,15 +324,15 @@ function autobuyerTick(slow) {
             }
         }
     }
-    if (player.autobuyers[9]['on'] && (player.autobuyers[9]['fast'] || slow)) { if (isAutoSacTriggered()) { timePrestigeNoConfirm(); } }
+    if (player.autobuyers[9]['on'] && player.unlocks['time'] && (player.autobuyers[9]['fast'] || slow)) { if (isAutoSacTriggered()) { timePrestigeNoConfirm(); } }
     if (player.autobuyers[10]['on'] && (player.autobuyers[10]['fast'] || slow)) { if (canSpacePrestige() && (player.spaceResets.lt(player.autobuyers[10]['max']) || player.autobuyers[10]['max'] == 0)) { spacePrestigeNoConfirm(); } }
-    if (player.autobuyers[11]['on'] && (player.autobuyers[11]['fast'] || slow)) { if (canGalaxyPrestige() && calculateGalaxyGain().gte(player.autobuyers[11]['amount'])) { galaxyPrestigeNoConfirm(); } }
-    if (player.autobuyers[12]['on']) {
+    if (player.autobuyers[11]['on'] && player.unlocks['galaxies'] && (player.autobuyers[11]['fast'] || slow)) { if (canGalaxyPrestige() && calculateGalaxyGain().gte(player.autobuyers[11]['amount'])) { galaxyPrestigeNoConfirm(); } }
+    if (player.autobuyers[12]['on'] && player.unlocks['time']) {
         if (canAffordRefinery()) { upgradeRefinery(); }
         let ems = (player.totalEmitters - player.trueEmitters - player.antiEmitters);
-        if (ems>0 && player.timeLocked) {
-            player.trueEmitters += Math.ceil((player.autobuyers[12].amount/100)*ems);
-            ems -= Math.ceil((player.autobuyers[12].amount/100)*ems);
+        if (ems>0 && player.timeLocked && player.autobuyers[12]['auto']) {
+            player.trueEmitters += Math.ceil((player.autobuyers[12]['amount']/100)*ems);
+            ems -= Math.ceil((player.autobuyers[12]['amount']/100)*ems);
             player.antiEmitters += ems;
         }
     } 

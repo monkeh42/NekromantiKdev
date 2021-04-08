@@ -2025,7 +2025,6 @@ option:active, option.active {
     color: white;
     background-color: #1f1f1f;
     font-style: bold;
-    margin: 0 auto 20px;
     width: 125px;
     height: 40px;
     border: 1px solid #525252;
@@ -2095,7 +2094,6 @@ option:active, option.active {
     color: white;
     background-color: #1f1f1f;
     font-style: bold;
-    margin: 0 auto 20px;
     width: 125px;
     height: 40px;
     border: 1px solid #525252;
@@ -2133,7 +2131,6 @@ option:active, option.active {
     color: white;
     background-color: #1f1f1f;
     font-style: bold;
-    margin: 0 auto 20px;
     width: 125px;
     height: 40px;
     border: 1px solid #525252;
@@ -2209,11 +2206,12 @@ option:active, option.active {
 
 .buyerOptionsContainerHalf {
     width: 50%;
+    margin: 0 auto;
 }
 
 .buyerOptionsContainer {
-    width: 170px;
-    margin: 0px auto;
+    width: 100%;
+    margin: 0 auto 20px;
     text-align: center;
 }
 
@@ -2390,8 +2388,13 @@ option:active, option.active {
 .priorityContainer {
     text-align: center;
     position: relative;
-    bottom: 7px;
     margin: 5px auto;
+}
+
+.buyerErrorContainer {
+    position: absolute;
+    left: 0;
+    bottom: 0;
 }
 
 .confBut {

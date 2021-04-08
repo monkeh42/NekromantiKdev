@@ -414,7 +414,7 @@ function timePrestigeReset() {
         } else {
             trueExtra = extra/2;
         }
-        player.trueEmitters -= Math.min(trueExtra, player.trueEmitters);
+        if (player.trueEmitters>=trueExtra) { player.trueEmitters -= Math.min(trueExtra, player.trueEmitters); }
         extra = (player.antiEmitters+player.trueEmitters) - player.totalEmitters;
         if (extra>0) { player.antiEmitters -= extra; }
     }

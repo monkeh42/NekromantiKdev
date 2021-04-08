@@ -24,12 +24,12 @@ function loadVue() {
 			},
 		},
 		template: `
-		<div>
+		<div class="buyerOptionsContainer">
 			<div>when time is locked in,</div>
 			<div>auto-assign <input v-model="emitAmount" v-on:change="updateAmount()" type="text" id="emitPercent" name="emitPercent" class="buyerTextPHalf">%</div>
 			<div>of new emitters to true time</div>
 			<div>(and the rest to anti time)</div>
-			<span v-if="emitError"><br>invalid input. value set to last valid input: {{ formatWholeNoComma(player.autobuyers[12].amount) }}</span>
+			<span v-if="emitError" class="buyerErrorContainer">invalid input. value set to last good input: {{ formatWholeNoComma(player.autobuyers[12].amount) }}</span>
 		</div>
 		`
 	})
@@ -71,16 +71,16 @@ function loadVue() {
 		template: `
 		<div v-if="id==32">
 			<div class="buyerOptionsContainer priorityContainer">
-				<label for="maxPrestige">{{ DATA.ab.multi.dataLists[id][4].htm() }}</label><input v-model="prestAmount" v-on:change="updatePrestige()" type="text" id="maxPrestige" name="maxPrestige" class="buyerTextP">
+				<label for="maxPrestige">{{ DATA.ab.multi.dataLists[id][4].htm() }}</label><br><input v-model="prestAmount" v-on:change="updatePrestige()" type="text" id="maxPrestige" name="maxPrestige" class="buyerTextP">
 			</div>
 			<span>(set to 0 for unlimited)</span><br>
-			<span v-if="prestError">invalid input. value set to last valid input: {{ formatWholeNoComma(player.autobuyers[10]['max']) }}</span>
+			<span v-if="prestError" class="buyerErrorContainer">invalid input. value set to last good input: {{ formatWholeNoComma(player.autobuyers[10]['max']) }}</span>
 		</div>
 		<div v-else-if="id==33">
 			<div class="buyerOptionsContainer priorityContainer">
-				<label for="ascensionBuyerAmount">{{ DATA.ab.multi.dataLists[id][4].htm() }}</label><input v-model="ascAmount" v-on:change="updateAsc()" type="text" id="ascensionBuyerAmount" name="ascensionBuyerAmount" class="buyerTextP">
+				<label for="ascensionBuyerAmount">{{ DATA.ab.multi.dataLists[id][4].htm() }}</label><br><input v-model="ascAmount" v-on:change="updateAsc()" type="text" id="ascensionBuyerAmount" name="ascensionBuyerAmount" class="buyerTextP">
 			</div>
-			<span v-if="ascError">invalid input. value set to last valid input: {{ formatWholeNoComma(player.autobuyers[11]['amount']) }}</span>
+			<span v-if="ascError" class="buyerErrorContainer">invalid input. value set to last good input: {{ formatWholeNoComma(player.autobuyers[11]['amount']) }}</span>
 		</div>
 		`
 	})
@@ -127,7 +127,7 @@ function loadVue() {
 				</div>
 				<div v-if="!player.unlocks['advancedBuyer']" class="buyerAdvancedContainer"></div>
 			</div>
-			<span v-if="sacError">invalid input. value set to last valid input: {{ formatWholeNoComma(player.autobuyers[9]['amount']) }}</span>
+			<span v-if="sacError" class="buyerErrorContainer">invalid input. value set to last good input: {{ formatWholeNoComma(player.autobuyers[9]['amount']) }}</span>
 		</div>
 		`
 	})
@@ -162,38 +162,30 @@ function loadVue() {
 		template: `
 		<div v-if="method=='on'">
 			<div class="buyerOptionsContainer">
-				<label :for="DATA.ab[data].prefixText + 'EnabledBut'">on/off:</label><!-- --><button v-on:click="updateSingleBuyer(data, 'on')" :id="DATA.ab[data].prefixText + 'EnabledBut'" class="buyerEnabledBut" v-html="player.autobuyers[data]['on'] ? 'ON' : 'OFF'"></button><!-- -->	
+				<label :for="DATA.ab[data].prefixText + 'EnabledBut'">on/off:</label><br><!-- --><button v-on:click="updateSingleBuyer(data, 'on')" :id="DATA.ab[data].prefixText + 'EnabledBut'" class="buyerEnabledBut" v-html="player.autobuyers[data]['on'] ? 'ON' : 'OFF'"></button><!-- -->	
 			</div>
 		</div>
 		<div v-else-if="method=='fast'">
 			<div class="buyerOptionsContainer">
-				<label :for="DATA.ab[data].prefixText + 'SpeedBut'">speed:</label><!-- --><button v-on:click="updateSingleBuyer(data, 'fast')" :id="DATA.ab[data].prefixText + 'SpeedBut'" class="buyerSpeedBut" v-html="player.autobuyers[data]['fast'] ? 'FAST' : 'SLOW'" :disabled="!player.unlocks['fastBuyers']"></button><!-- -->
+				<label :for="DATA.ab[data].prefixText + 'SpeedBut'">speed:</label><br><!-- --><button v-on:click="updateSingleBuyer(data, 'fast')" :id="DATA.ab[data].prefixText + 'SpeedBut'" class="buyerSpeedBut" v-html="player.autobuyers[data]['fast'] ? 'FAST' : 'SLOW'" :disabled="!player.unlocks['fastBuyers']"></button><!-- -->
 				<div v-if="!player.unlocks['fastBuyers']" class="buyerSpeedLock"></div>
 			</div>
 		</div>
 		<div v-else-if="method=='max'">
 			<div class="buyerOptionsContainer">
-				<label :for="DATA.ab[data].prefixText + 'BulkBut'">amount:</label><!-- --><button v-on:click="updateSingleBuyer(data, 'bulk')" :id="DATA.ab[data].prefixText + 'BulkBut'" class="buyerBulkBut" v-html="player.autobuyers[data]['bulk'] ? 'MAX' : 'SINGLE'" :disabled="!player.unlocks['bulkBuyers']"></button><!-- -->
+				<label :for="DATA.ab[data].prefixText + 'BulkBut'">amount:</label><br><!-- --><button v-on:click="updateSingleBuyer(data, 'bulk')" :id="DATA.ab[data].prefixText + 'BulkBut'" class="buyerBulkBut" v-html="player.autobuyers[data]['bulk'] ? 'MAX' : 'SINGLE'" :disabled="!player.unlocks['bulkBuyers']"></button><!-- -->
 				<div v-if="!player.unlocks['bulkBuyers']" class="buyerBulkLock"></div>
 			</div>
 		</div>
 		`
 	})
 
-	Vue.component('dim-buyer-buttons', {
+	Vue.component('auto-emitter-button', {
 		props: ['data'],
 		template: `
-		<div v-if="data==0">
-			<button v-on:click="toggleAllTimeBuyers()" name="timeDimAllBut" id="timeDimAllBut" class="timeDimBuyerAllEnabledBut">TOGGLE ALL</button>
-		</div>
-		<div v-else>
-			<div class="dimBuyerButtonRow">
-				<div class="dimBuyerButtonCell">
-					<label :for="'timeDim' + data + 'But'">{{ DATA.ab[12][data] }}</label><br><button v-on:click="updateDimBuyer(data)" :name="'timeDim' + data + 'But'" :id="'timeDim' + data + 'But'" class="timeDimBuyerEnabledBut" v-html="player.autobuyers[12][data] ? 'ON' : 'OFF'"></button>
-				</div>
-				<div v-if="player.unlocks['timeDims2']" class="dimBuyerButtonCell">
-					<label :for="'timeDim' + (data+4) + 'But'">{{ DATA.ab[12][data+4] }}</label><br><button v-on:click="updateDimBuyer(data+4)" :name="'timeDim' + (data+4) + 'But'" :id="'timeDim' + (data+4) + 'But'" class="timeDimBuyerEnabledBut" v-html="player.autobuyers[12][data+4] ? 'ON' : 'OFF'"></button>
-				</div>
+		<div>
+			<div class="buyerOptionsContainer priorityContainer">
+				<label :for="DATA.ab[data].prefixText + 'EnabledBut'">enable auto-emitters:</label><!-- --><button v-on:click="updateSingleBuyer(data, 'auto')" :id="DATA.ab[data].prefixText + 'EnabledBut'" class="buyerEnabledBut" v-html="player.autobuyers[data]['auto'] ? 'ON' : 'OFF'"></button><!-- -->	
 			</div>
 		</div>
 		`
@@ -345,7 +337,7 @@ function loadVue() {
 		template: `
 		<div v-bind:class="{ [DATA[data].multi.klass()]: true }">
 			<div v-for="i in DATA[data].multi.numElsByBox(id)">
-				<component v-if="(DATA[data].multi.dataLists[id][i].tag=='dim-buyer-buttons')&&DATA[data].multi.showEl(id, i)" :is="DATA[data].multi.dataLists[id][i].tag" :data="i-2"></component>
+				<component v-if="(DATA[data].multi.dataLists[id][i].tag=='auto-emitter-button')&&DATA[data].multi.showEl(id, i)" :is="DATA[data].multi.dataLists[id][i].tag" :data="12"></component>
 				<component v-else-if="(DATA[data].multi.dataLists[id][i].tag=='sacrifice-buyer-options')&&DATA[data].multi.showEl(id, i)" :is="DATA[data].multi.dataLists[id][i].tag"></component>
 				<component v-else-if="(DATA[data].multi.dataLists[id][i].tag=='buyer-amount')&&DATA[data].multi.showEl(id, i)" :is="DATA[data].multi.dataLists[id][i].tag" :id="id"></component>
 				<component v-else-if="(DATA[data].multi.dataLists[id][i].tag=='unit-buyer-button')&&DATA[data].multi.showEl(id, i)" :is="DATA[data].multi.dataLists[id][i].tag" :data="DATA[data].multi.dataLists[id][i].boxID" :method="(DATA[data].multi.dataLists[id][i].htm())"></component>

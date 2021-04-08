@@ -689,8 +689,6 @@ function galaxyPrestigeReset(respec=false, startingResearch=false) {
     resetTime(startingResearch);
     resetTimeCounts(startingResearch);
     player.refLevel = 0;
-    player.trueEmitters = 0;
-    player.antiEmitters = 0;
     player.totalEmitters = getNumEmitters();
     resetUnits(true);
     resetBuildingResources(false, true, startingResearch);
@@ -728,10 +726,8 @@ function resetTimeCounts(startingResearch=false) {
     player.crystals = new Decimal((hasMilestone(4)&&!startingResearch) ? DATA.sp.milesCrystals : DATA.sp.crystals);
     //player.trueEssence = new Decimal(DATA.sp.trueEssence);
     //player.antiEssence = new Decimal(DATA.sp.antiEssence);
-    if (!player.dontResetSlider) {
-        player.trueEmitters = new Decimal(DATA.sp.trueEmitters);
-        player.antiEmitters = new Decimal(DATA.sp.antiEmitters);
-    }
+    player.trueEmitters = new Decimal(DATA.sp.trueEmitters);
+    player.antiEmitters = new Decimal(DATA.sp.antiEmitters);
     copyData(player.stats['thisAscStats'], DATA.sp.stats['thisAscStats']);
     player.stats['thisAscStats'].bestCrystals = player.crystals;
     player.stats['thisAscStats'].totalCrystals = player.crystals;

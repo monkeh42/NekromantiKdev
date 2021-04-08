@@ -239,6 +239,7 @@ var START_PLAYER = {
         },
         12: {
             'on': false,
+            'auto': false,
             'amount': 0,
         },
         'time': {
@@ -1476,6 +1477,13 @@ var AUTOBUYERS_DATA = {
                     id: 3,
                     boxID: 12,
                     tag: 'buyer-amount-emitters',
+                    klass: function() { return ''; },
+                    htm: function() { return ''; }
+                },
+                4: {
+                    id: 4,
+                    boxID: 12,
+                    tag: 'auto-emitter-button',
                     klass: function() { return ''; },
                     htm: function() { return ''; }
                 },
@@ -3256,6 +3264,7 @@ function fixResetBug() {
         },
         12: {
             'on': false,
+            'auto': false,
             'amount': 0,
         },
         'time': {
