@@ -329,11 +329,28 @@ function autobuyerTick(slow) {
     if (player.autobuyers[11]['on'] && player.unlocks['galaxies'] && (player.autobuyers[11]['fast'] || slow)) { if (canGalaxyPrestige() && calculateGalaxyGain().gte(player.autobuyers[11]['amount'])) { galaxyPrestigeNoConfirm(); } }
     if (player.autobuyers[12]['on'] && player.unlocks['time']) {
         if (canAffordRefinery()) { upgradeRefinery(); }
-        let ems = (player.totalEmitters - player.trueEmitters - player.antiEmitters);
-        if (ems>0 && player.timeLocked && player.autobuyers[12]['auto']) {
-            player.trueEmitters += Math.ceil((player.autobuyers[12]['amount']/100)*ems);
-            ems -= Math.ceil((player.autobuyers[12]['amount']/100)*ems);
-            player.antiEmitters += ems;
+        if (player.timeLocked && player.autobuyers[12]['auto']) {
+            let ems = (player.totalEmitters - player.trueEmitters - player.antiEmitters);
+            if (Math.ceil((player.autobuyers[12]['amount']/100)*(player.thisSacTotalAuto+ems)) > player.thisSacTrueAuto || (ems>0 && player.thisSacTotalAuto==0)) {
+                let dif = (Math.ceil((player.autobuyers[12]['amount']/100)*player.thisSacTotalAuto+ems) - player.thisSacTrueAuto);
+                player.trueEmitters += Math.min(dif, ems);
+                player.thisSacTrueAuto += Math.min(dif, ems);
+                player.thisSacTotalAuto += Math.min(dif, ems);
+            } else if (Math.floor((1 - player.autobuyers[12]['amount']/100)*(player.thisSacTotalAuto+ems)) > player.thisSacAntiAuto || (ems>0 && player.thisSacTotalAuto==0)) {
+                let dif = (Math.floor((1 - player.autobuyers[12]['amount']/100)*player.thisSacTotalAuto+ems) - player.thisSacAntiAuto);
+                player.antiEmitters += Math.min(dif, ems);
+                player.thisSacAntiAuto += Math.min(dif, ems);
+                player.thisSacTotalAuto += Math.min(dif, ems);
+            } else if (ems>0) {
+                player.trueEmitters += Math.ceil((player.autobuyers[12]['amount']/100)*ems);
+                player.thisSacTrueAuto += Math.ceil((player.autobuyers[12]['amount']/100)*ems);
+                player.thisSacTotalAuto += ems;
+                ems -= Math.ceil((player.autobuyers[12]['amount']/100)*ems);
+                if (ems>0) {
+                    player.antiEmitters += ems;
+                    player.thisSacAntiAuto += ems;
+                }
+            }
         }
     } 
     /*for (let i=NUM_TIMEDIMS; i>0; i--) {

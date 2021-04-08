@@ -438,6 +438,10 @@ var START_PLAYER = {
     trueEmitters: 0,
     antiEmitters: 0,
 
+    thisSacTotalAuto: 0,
+    thisSacTrueAuto: 0,
+    thisSacAntiAuto: 0,
+
     galaxies: new Decimal(0),
     spentGalaxies: new Decimal(0),
     ascensions: new Decimal(0),
@@ -3581,6 +3585,10 @@ function fixResetBug() {
     START_PLAYER.trueEmitters = 0;
     START_PLAYER.antiEmitters = 0;
     START_PLAYER.totalEmitters = 0;
+
+    START_PLAYER.thisSacTotalAuto = 0;
+    START_PLAYER.thisSacTrueAuto = 0;
+    START_PLAYER.thisSacAntiAuto = 0;
 
     START_PLAYER.galaxies = new Decimal(0);
     START_PLAYER.spentGalaxies = new Decimal(0);

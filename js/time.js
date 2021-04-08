@@ -126,8 +126,8 @@ function getEssenceProdAfterSlider(t, disp=false) {
 function getNumEmitters() {
     let em = player.refLevel*getEmittersPerLevel();
     if (hasGUpgrade(4, 11)) {
-        if (player.refLevel % 2 == 1) { em += (em-1)/2 }
-        else { em += em/2 }
+        if (player.refLevel % 2 == 1) { em += (player.refLevel-1)/2 }
+        else { em += player.refLevel/2 }
     }
     if (hasUpgrade(2, 22)) { em += getUpgEffect(2, 22); }
     return em;
@@ -418,6 +418,9 @@ function timePrestigeReset() {
         extra = (player.antiEmitters+player.trueEmitters) - player.totalEmitters;
         if (extra>0) { player.antiEmitters -= extra; }
     }
+    player.thisSacTotalAuto = 0;
+    player.thisSacTrueAuto = 0;
+    player.thisSacAntiAuto = 0;
     save();
     startInterval()
 }

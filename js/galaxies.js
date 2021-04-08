@@ -716,6 +716,9 @@ function galaxyPrestigeReset(respec=false, startingResearch=false) {
     if (!hasMilestone(1)) { player.subTabs['b'] = 'buildingsSubTab'; }
     if (!hasAchievement(43)) { player.subTabs['t'] = 'refinerySubTab'; }
     if (startingResearch) { resLockGalaxies(); }
+    player.thisSacTotalAuto = 0;
+    player.thisSacTrueAuto = 0;
+    player.thisSacAntiAuto = 0;
     save();
     startInterval();
     updateShadow();
@@ -726,8 +729,8 @@ function resetTimeCounts(startingResearch=false) {
     player.crystals = new Decimal((hasMilestone(4)&&!startingResearch) ? DATA.sp.milesCrystals : DATA.sp.crystals);
     //player.trueEssence = new Decimal(DATA.sp.trueEssence);
     //player.antiEssence = new Decimal(DATA.sp.antiEssence);
-    player.trueEmitters = new Decimal(DATA.sp.trueEmitters);
-    player.antiEmitters = new Decimal(DATA.sp.antiEmitters);
+    player.trueEmitters = DATA.sp.trueEmitters;
+    player.antiEmitters = DATA.sp.antiEmitters;
     copyData(player.stats['thisAscStats'], DATA.sp.stats['thisAscStats']);
     player.stats['thisAscStats'].bestCrystals = player.crystals;
     player.stats['thisAscStats'].totalCrystals = player.crystals;

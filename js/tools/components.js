@@ -6,7 +6,7 @@ function loadVue() {
 		props: [],
 		data() {
 			return {
-				emitAmount: player.autobuyers[12].amount,
+				emitAmount: player.autobuyers[12]['amount'],
 				emitError: false,
 			}
 		},
@@ -15,7 +15,7 @@ function loadVue() {
 				if (this.emitAmount != '' && !isNaN(this.emitAmount)) {
 					if (Number(this.emitAmount)<0 || Number(this.emitAmount)>100) { this.emitError = true; }
 					else {
-						player.autobuyers[12].amount = Number(this.emitAmount);
+						player.autobuyers[12]['amount'] = Number(this.emitAmount);
 						this.emitError = false;
 					}
 				} else {
@@ -29,7 +29,7 @@ function loadVue() {
 			<div>auto-assign <input v-model="emitAmount" v-on:change="updateAmount()" type="text" id="emitPercent" name="emitPercent" class="buyerTextPHalf">%</div>
 			<div>of new emitters to true time</div>
 			<div>(and the rest to anti time)</div>
-			<span v-if="emitError" class="buyerErrorContainer">invalid input. value set to last good input: {{ formatWholeNoComma(player.autobuyers[12].amount) }}</span>
+			<span v-if="emitError" class="buyerErrorContainer">invalid input. value set to last good input: {{ formatWholeNoComma(player.autobuyers[12]['amount']) }}</span>
 		</div>
 		`
 	})
