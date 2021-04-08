@@ -689,6 +689,8 @@ function galaxyPrestigeReset(respec=false, startingResearch=false) {
     resetTime(startingResearch);
     resetTimeCounts(startingResearch);
     player.refLevel = 0;
+    player.trueEmitters = 0;
+    player.antiEmitters = 0;
     player.totalEmitters = getNumEmitters();
     resetUnits(true);
     resetBuildingResources(false, true, startingResearch);
