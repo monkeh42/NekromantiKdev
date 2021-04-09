@@ -81,7 +81,7 @@
                         </tr>
                         <tr>
                             <td colspan="3">
-                                <div v-if="player.headerDisplay['galaxiesBonusDisplay']&&player.headerDisplayUnlocked['galaxiesBonusDisplay']" style="font-size: 10pt;">You have formed <num-text data="sp" :val="formatWhole(player.stats.allTimeStats.totalGalaxies)" label="depleted galaxies"></num-text>, giving a <span style="font-size: 125%; font-variant-numeric: tabular-nums;">{{ formatUnitRow2(getGalaxiesBonus()) }}</span>x bonus to corpse gain.<span v-if="!hasAchievement(64)"> (softcapped at <text-num data="sp" :val="formatWhole(1000*(2**getNumCompletedProj()))" label="galaxies"></text-num>)</span></div>
+                                <div v-if="player.headerDisplay['galaxiesBonusDisplay']&&player.headerDisplayUnlocked['galaxiesBonusDisplay']" style="font-size: 10pt;">You have formed <num-text data="sp" :val="formatWhole(player.stats.allTimeStats.totalGalaxies)" label="depleted galaxies"></num-text>, giving a <span style="font-size: 125%; font-variant-numeric: tabular-nums;">{{ formatUnitRow2(getGalaxiesBonus()) }}</span>x bonus to corpse gain.<span v-if="!hasAchievement(64)"> (softcapped at <num-text data="sp" :val="formatWhole(1000*(2**getNumCompletedProj()))" label="galaxies"></num-text>)</span></div>
                             </td>
                         </tr>
                         <tr>
