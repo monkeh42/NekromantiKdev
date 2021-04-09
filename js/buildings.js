@@ -343,7 +343,7 @@ BUILDS_DATA[1] = {
         return player.buildings[this.tier].amount.gte(this.upgrades[upg].cost());
     },
     canAffordBuild: function() {
-        return player.bricks.gte(this.cost);
+        return (player.bricks.gte(this.cost)&&!isInResearch(2));
     },
     secondRowUnlocked: function() {
         return hasUpgrade(3, 11);

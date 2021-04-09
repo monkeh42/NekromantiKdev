@@ -401,7 +401,7 @@ function loadVue() {
 		template: `
 		<div v-if="DATA[data].unlocked()" class="buildingsTable">
 			<div v-if="!player.buildings[DATA[data].tier].built">
-				<button v-on:click="buyBuilding(data)" v-bind:class="{ buildBut: (DATA[data].canAffordBuild()&&!isResearchActive(2)), unclickableBuildBut: ((!DATA[data].canAffordBuild())&&!isResearchActive(2)), lockedFactory: isResearchActive(2) }">
+				<button v-on:click="buyBuilding(data)" v-bind:class="{ buildBut: DATA[data].canAffordBuild(), unclickableBuildBut: !DATA[data].canAffordBuild(), lockedFactory: isResearchActive(2) }">
 					Build the<h3 v-html="DATA[data].id"></h3>Cost: <span v-html="formatWhole(DATA[data].cost)"></span> astral bricks
 				</button>
 			</div>

@@ -1054,16 +1054,6 @@ option:active, option.active {
 }
 
 .lockedFactory {
-    color: white;
-    background-color: #4b4b4b;
-    font-style: bold;
-    width: 350px;
-    height: 100px;
-    border: 1px solid #4b4b4b;
-    margin: 10px;
-    font-family: 'Cinzel', serif;
-    font-size: 13pt;
-    border-radius: 4px;
     text-decoration: line-through;
 }
 
